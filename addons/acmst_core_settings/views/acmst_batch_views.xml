@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Batch Tree View -->
+        <record id="view_acmst_batch_tree" model="ir.ui.view">
+            <field name="name">acmst.batch.tree</field>
+            <field name="model">acmst.batch</field>
+            <field name="arch" type="xml">
+                <tree string="Batches" decoration-info="not active" decoration-success="state == 'in_progress'" decoration-warning="state == 'open'">
+                    <field name="sequence" widget="handle"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="program_id"/>
+                    <field name="academic_year_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="max_students"/>
+                    <field name="current_students"/>
+                    <field name="state"/>
+                    <field name="is_full" invisible="1"/>
+                    <field name="active" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Batch Form View -->
+        <record id="view_acmst_batch_form" model="ir.ui.view">
+            <field name="name">acmst.batch.form</field>
+            <field name="model">acmst.batch</field>
+            <field name="arch" type="xml">
+                <form string="Batch">
+                    <header>
+                        <button name="action_view_students" type="object" string="View Students" class="btn-primary" invisible="not current_students"/>
+                        <button name="action_open_registration" type="object" string="Open Registration" class="btn-success" invisible="state != 'draft'"/>
+                        <button name="action_start_batch" type="object" string="Start Batch" class="btn-primary" invisible="state != 'open'"/>
+                        <button name="action_complete_batch" type="object" string="Complete Batch" class="btn-warning" invisible="state != 'in_progress'"/>
+                        <button name="action_cancel_batch" type="object" string="Cancel Batch" class="btn-danger" invisible="state not in ['draft', 'open']"/>
+                        <field name="active" widget="boolean_toggle"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
+                                <field name="current_students" widget="statinfo" string="Students"/>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Batch Name"/>
+                                <span class="badge badge-success" invisible="state != 'in_progress'">In Progress</span>
+                                <span class="badge badge-warning" invisible="state != 'open'">Open</span>
+                                <span class="badge badge-info" invisible="state != 'completed'">Completed</span>
+                                <span class="badge badge-danger" invisible="state != 'cancelled'">Cancelled</span>
+                                <span class="badge badge-secondary" invisible="state != 'draft'">Draft</span>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="program_id" options="{'no_create': True}"/>
+                                <field name="academic_year_id" options="{'no_create': True}"/>
+                                <field name="state"/>
+                            </group>
+                            <group>
+                                <field name="college_id" readonly="1"/>
+                                <field name="university_id" readonly="1"/>
+                                <field name="program_type_id" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="actual_end_date" invisible="state != 'completed'"/>
+                                <field name="duration_days" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="registration_start_date"/>
+                                <field name="registration_end_date"/>
+                                <field name="is_registration_open" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="max_students"/>
+                                <field name="current_students" readonly="1"/>
+                                <field name="enrolled_students" readonly="1"/>
+                                <field name="graduated_students" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="is_full" readonly="1"/>
+                                <field name="progress_percentage" readonly="1" widget="progressbar"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Description" name="description">
+                                <field name="description" nolabel="1"/>
+                            </page>
+                            
+                            <!-- Students page will be available when student module is implemented -->
+                            <!--
+                            <page string="Students" name="students" invisible="not current_students">
+                                <field name="student_ids" readonly="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="student_id"/>
+                                        <field name="email"/>
+                                        <field name="phone"/>
+                                        <field name="state"/>
+                                        <field name="active"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            -->
+                            
+                            <page string="Statistics" name="statistics">
+                                <group>
+                                    <group>
+                                        <field name="current_students" readonly="1"/>
+                                        <field name="enrolled_students" readonly="1"/>
+                                        <field name="graduated_students" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="max_students" readonly="1"/>
+                                        <field name="is_full" readonly="1"/>
+                                        <field name="progress_percentage" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Batch Search View -->
+        <record id="view_acmst_batch_search" model="ir.ui.view">
+            <field name="name">acmst.batch.search</field>
+            <field name="model">acmst.batch</field>
+            <field name="arch" type="xml">
+                <search string="Search Batches">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="program_id"/>
+                    <field name="academic_year_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <separator/>
+                    <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                    <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Open" name="open" domain="[('state', '=', 'open')]"/>
+                    <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                    <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                    <separator/>
+                    <filter string="Full" name="full" domain="[('is_full', '=', True)]"/>
+                    <filter string="Registration Open" name="registration_open" domain="[('is_registration_open', '=', True)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Program" name="group_program" context="{'group_by': 'program_id'}"/>
+                        <filter string="Academic Year" name="group_academic_year" context="{'group_by': 'academic_year_id'}"/>
+                        <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Start Date" name="group_start_date" context="{'group_by': 'start_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Batch Kanban View -->
+        <record id="view_acmst_batch_kanban" model="ir.ui.view">
+            <field name="name">acmst.batch.kanban</field>
+            <field name="model">acmst.batch</field>
+            <field name="arch" type="xml">
+                <kanban string="Batches" class="o_kanban_small_column">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="program_id"/>
+                    <field name="academic_year_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="max_students"/>
+                    <field name="current_students"/>
+                    <field name="state"/>
+                    <field name="is_full"/>
+                    <field name="is_registration_open"/>
+                    <field name="active"/>
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                                <span class="badge badge-success" invisible="state != 'in_progress'">In Progress</span>
+                                                <span class="badge badge-warning" invisible="state != 'open'">Open</span>
+                                                <span class="badge badge-info" invisible="state != 'completed'">Completed</span>
+                                                <span class="badge badge-danger" invisible="state != 'cancelled'">Cancelled</span>
+                                                <span class="badge badge-secondary" invisible="state != 'draft'">Draft</span>
+                                            </strong>
+                                            <div class="o_kanban_record_subtitle">
+                                                <field name="code"/> - <field name="program_id"/>
+                                            </div>
+                                        </div>
+                                        <div class="o_kanban_record_body">
+                                            <div class="o_kanban_record_bottom">
+                                                <div class="oe_kanban_bottom_left">
+                                                    <span class="o_kanban_inline_block">
+                                                        <i class="fa fa-users"/> <field name="current_students"/>/<field name="max_students"/>
+                                                    </span>
+                                                    <span class="o_kanban_inline_block">
+                                                        <i class="fa fa-calendar"/> <field name="academic_year_id"/>
+                                                    </span>
+                                                </div>
+                                                <div class="oe_kanban_bottom_right">
+                                                    <span class="badge badge-info" invisible="not is_registration_open">Registration Open</span>
+                                                    <span class="badge badge-warning" invisible="not is_full">Full</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Batch Action -->
+        <record id="action_acmst_batch" model="ir.actions.act_window">
+            <field name="name">Batches</field>
+            <field name="res_model">acmst.batch</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first batch!
+                </p>
+                <p>
+                    Batches represent groups of students enrolled in a program for a specific academic year.
+                    Each batch has a start date, end date, and maximum student capacity.
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

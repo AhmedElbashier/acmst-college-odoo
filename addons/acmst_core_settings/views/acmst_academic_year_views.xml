@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Academic Year Tree View -->
+        <record id="view_acmst_academic_year_tree" model="ir.ui.view">
+            <field name="name">acmst.academic.year.tree</field>
+            <field name="model">acmst.academic.year</field>
+            <field name="arch" type="xml">
+                <tree string="Academic Years" decoration-info="not active" decoration-success="is_current">
+                    <field name="sequence" widget="handle"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="duration_days"/>
+                    <field name="semester_count"/>
+                    <field name="batch_count"/>
+                    <field name="student_count"/>
+                    <field name="is_current" invisible="not is_current"/>
+                    <field name="is_future" invisible="not is_future"/>
+                    <field name="is_past" invisible="not is_past"/>
+                    <field name="active" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Academic Year Form View -->
+        <record id="view_acmst_academic_year_form" model="ir.ui.view">
+            <field name="name">acmst.academic.year.form</field>
+            <field name="model">acmst.academic.year</field>
+            <field name="arch" type="xml">
+                <form string="Academic Year">
+                    <header>
+                        <button name="action_view_batches" type="object" string="View Batches" class="btn-primary" invisible="not batch_count"/>
+                        <button name="action_view_semesters" type="object" string="View Semesters" class="btn-secondary" invisible="not semester_count"/>
+                        <button name="action_view_students" type="object" string="View Students" class="btn-secondary" invisible="not student_count"/>
+                        <button name="action_create_semesters" type="object" string="Create Semesters" class="btn-info" invisible="semester_count == 0"/>
+                        <field name="active" widget="boolean_toggle"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_batches" type="object" class="oe_stat_button" icon="fa-calendar">
+                                <field name="batch_count" widget="statinfo" string="Batches"/>
+                            </button>
+                            <button name="action_view_semesters" type="object" class="oe_stat_button" icon="fa-calendar-o">
+                                <field name="semester_count" widget="statinfo" string="Semesters"/>
+                            </button>
+                            <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
+                                <field name="student_count" widget="statinfo" string="Students"/>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Academic Year"/>
+                                <span class="badge badge-success" invisible="not is_current">Current</span>
+                                <span class="badge badge-info" invisible="not is_future">Future</span>
+                                <span class="badge badge-secondary" invisible="not is_past">Past</span>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="short_name"/>
+                                <field name="is_current"/>
+                                <field name="is_future" invisible="1"/>
+                                <field name="is_past" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="duration_days" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="semester_count"/>
+                                <field name="progress_percentage" readonly="1" widget="progressbar"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Batches" name="batches" invisible="not batch_count">
+                                <field name="batch_ids" readonly="1">
+                                    <tree>
+                                        <field name="code"/>
+                                        <field name="name"/>
+                                        <field name="program_id"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="max_students"/>
+                                        <field name="current_students"/>
+                                        <field name="state"/>
+                                        <field name="active"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <!-- Semesters page will be available when semester module is implemented -->
+                            <!--
+                            <page string="Semesters" name="semesters" invisible="not semester_count">
+                                <field name="semester_ids" readonly="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="sequence"/>
+                                        <field name="active"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            -->
+                            
+                            <page string="Statistics" name="statistics">
+                                <group>
+                                    <group>
+                                        <field name="batch_count" readonly="1"/>
+                                        <field name="semester_count" readonly="1"/>
+                                        <field name="student_count" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="duration_days" readonly="1"/>
+                                        <field name="progress_percentage" readonly="1"/>
+                                        <field name="is_current" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Academic Year Search View -->
+        <record id="view_acmst_academic_year_search" model="ir.ui.view">
+            <field name="name">acmst.academic.year.search</field>
+            <field name="model">acmst.academic.year</field>
+            <field name="arch" type="xml">
+                <search string="Search Academic Years">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="short_name"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <separator/>
+                    <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                    <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                    <filter string="Current" name="current" domain="[('is_current', '=', True)]"/>
+                    <filter string="Future" name="future" domain="[('is_future', '=', True)]"/>
+                    <filter string="Past" name="past" domain="[('is_past', '=', True)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Start Date" name="group_start_date" context="{'group_by': 'start_date'}"/>
+                        <filter string="End Date" name="group_end_date" context="{'group_by': 'end_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Academic Year Kanban View -->
+        <record id="view_acmst_academic_year_kanban" model="ir.ui.view">
+            <field name="name">acmst.academic.year.kanban</field>
+            <field name="model">acmst.academic.year</field>
+            <field name="arch" type="xml">
+                <kanban string="Academic Years" class="o_kanban_small_column">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="duration_days"/>
+                    <field name="semester_count"/>
+                    <field name="batch_count"/>
+                    <field name="student_count"/>
+                    <field name="is_current"/>
+                    <field name="is_future"/>
+                    <field name="is_past"/>
+                    <field name="active"/>
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                                <span class="badge badge-success" invisible="not is_current">Current</span>
+                                                <span class="badge badge-info" invisible="not is_future">Future</span>
+                                                <span class="badge badge-secondary" invisible="not is_past">Past</span>
+                                            </strong>
+                                            <div class="o_kanban_record_subtitle">
+                                                <field name="code"/> - <field name="start_date"/> to <field name="end_date"/>
+                                            </div>
+                                        </div>
+                                        <div class="o_kanban_record_body">
+                                            <div class="o_kanban_record_bottom">
+                                                <div class="oe_kanban_bottom_left">
+                                                    <span class="o_kanban_inline_block">
+                                                        <i class="fa fa-calendar"/> <field name="batch_count"/>
+                                                    </span>
+                                                    <span class="o_kanban_inline_block">
+                                                        <i class="fa fa-calendar-o"/> <field name="semester_count"/>
+                                                    </span>
+                                                    <span class="o_kanban_inline_block">
+                                                        <i class="fa fa-users"/> <field name="student_count"/>
+                                                    </span>
+                                                </div>
+                                                <div class="oe_kanban_bottom_right">
+                                                    <field name="progress_percentage" widget="progressbar"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Academic Year Action -->
+        <record id="action_acmst_academic_year" model="ir.actions.act_window">
+            <field name="name">Academic Years</field>
+            <field name="res_model">acmst.academic.year</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first academic year!
+                </p>
+                <p>
+                    Academic years define the time periods for academic activities.
+                    Each academic year can contain multiple semesters and batches.
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Batch Creation Wizard Form View -->
+        <record id="view_acmst_batch_creation_wizard_form" model="ir.ui.view">
+            <field name="name">acmst.batch.creation.wizard.form</field>
+            <field name="model">acmst.batch.creation.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Batch Creation Wizard">
+                    <header>
+                        <button name="action_preview_batches" type="object" string="Preview Batches" class="btn-info"/>
+                        <button name="action_create_batches" type="object" string="Create Batches" class="btn-primary"/>
+                        <button name="action_cancel" type="object" string="Cancel" class="btn-secondary"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Create Multiple Batches</h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="program_id" options="{'no_create': True}"/>
+                                <field name="college_id" readonly="1"/>
+                                <field name="university_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="academic_year_id" options="{'no_create': True}"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="batch_count"/>
+                                <field name="batch_prefix"/>
+                                <field name="start_number"/>
+                            </group>
+                            <group>
+                                <field name="max_students"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="duration_months"/>
+                                <field name="registration_days_before"/>
+                            </group>
+                            <group>
+                                <field name="create_sequentially"/>
+                                <field name="gap_days" invisible="not create_sequentially"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Preview" name="preview" invisible="not created_batch_ids">
+                                <field name="created_batch_ids" readonly="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="registration_start_date"/>
+                                        <field name="registration_end_date"/>
+                                        <field name="max_students"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Batch Creation Wizard Action -->
+        <record id="action_acmst_batch_creation_wizard" model="ir.actions.act_window">
+            <field name="name">Create Batches</field>
+            <field name="res_model">acmst.batch.creation.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{}</field>
+        </record>
+        
+    </data>
+</odoo>

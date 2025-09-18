@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: acmst_college
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  odoo:
+    image: odoo:17.0
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    volumes:
+      - ./addons:/mnt/extra-addons
+      - ./config:/etc/odoo
+      - ./data:/var/lib/odoo
+      - ./logs:/var/log/odoo
+      - odoo-web-data:/var/lib/odoo/filestore
+      - odoo-web-data:/var/lib/odoo/sessions
+    command: ["odoo", "--config=/etc/odoo/odoo_simple.conf"]
+    restart: unless-stopped
+
+volumes:
+  odoo-db-data:
+  odoo-web-data:

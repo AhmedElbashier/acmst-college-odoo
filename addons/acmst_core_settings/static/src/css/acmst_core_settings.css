@@ -1,0 +1,267 @@
+/* ACMST Core Settings Custom Styles */
+
+/* University and College Cards */
+.oe_kanban_card .o_kanban_record_title {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.oe_kanban_card .o_kanban_record_subtitle {
+    color: #7f8c8d;
+    font-size: 0.9em;
+}
+
+/* Badge Styles */
+.badge {
+    font-size: 0.75em;
+    padding: 0.25em 0.5em;
+    border-radius: 0.25rem;
+}
+
+.badge-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.badge-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Progress Bar Styles */
+.o_progressbar {
+    height: 20px;
+    background-color: #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.o_progressbar .o_progressbar_fill {
+    height: 100%;
+    background-color: #007bff;
+    transition: width 0.3s ease;
+}
+
+/* Statistics Boxes */
+.oe_stat_button {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+}
+
+.oe_stat_button:hover {
+    background-color: #e9ecef;
+}
+
+.oe_stat_button .o_stat_info {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #495057;
+}
+
+/* Form Enhancements */
+.o_form_view .oe_title h1 {
+    margin-bottom: 10px;
+}
+
+.o_form_view .oe_title .badge {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+/* Tree View Enhancements */
+.o_list_view .o_list_table .o_data_cell {
+    vertical-align: middle;
+}
+
+.o_list_view .o_list_table .o_column_sortable {
+    cursor: pointer;
+}
+
+/* Kanban View Enhancements */
+.o_kanban_view .o_kanban_record {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.o_kanban_view .o_kanban_record:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Search View Enhancements */
+.o_searchview .o_searchview_facet {
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin: 2px;
+}
+
+.o_searchview .o_searchview_facet .o_facet_remove {
+    color: white;
+    opacity: 0.7;
+}
+
+.o_searchview .o_searchview_facet .o_facet_remove:hover {
+    opacity: 1;
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #1e7e34;
+    border-color: #1c7430;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+    border-color: #4e555b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .oe_kanban_card .o_kanban_record_bottom {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .oe_kanban_card .oe_kanban_bottom_left,
+    .oe_kanban_card .oe_kanban_bottom_right {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+
+/* Custom Icons */
+.fa-building:before {
+    content: "\f1ad";
+}
+
+.fa-graduation-cap:before {
+    content: "\f19d";
+}
+
+.fa-users:before {
+    content: "\f0c0";
+}
+
+.fa-calendar:before {
+    content: "\f073";
+}
+
+.fa-calendar-o:before {
+    content: "\f133";
+}
+
+.fa-book:before {
+    content: "\f02d";
+}
+
+.fa-user-md:before {
+    content: "\f0f0";
+}
+
+.fa-tag:before {
+    content: "\f02b";
+}
+
+.fa-flag:before {
+    content: "\f024";
+}
+
+.fa-level-up:before {
+    content: "\f148";
+}
+
+/* Loading States */
+.o_loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Error States */
+.o_field_error {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Success States */
+.o_field_success {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}

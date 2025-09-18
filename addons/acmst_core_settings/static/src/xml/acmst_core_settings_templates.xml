@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    
+    <!-- Custom Templates for ACMST Core Settings -->
+    
+    <!-- Statistics Widget Template -->
+    <t t-name="acmst.StatisticsWidget">
+        <div class="acmst_statistics_widget">
+            <div class="row">
+                <div class="col-md-3" t-foreach="widget.statistics" t-as="stat">
+                    <div class="oe_stat_button">
+                        <div class="o_stat_info">
+                            <span class="o_stat_value" t-esc="stat.value"/>
+                            <span class="o_stat_text" t-esc="stat.text"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    
+    <!-- Dashboard Template -->
+    <t t-name="acmst.Dashboard">
+        <div class="acmst_dashboard">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>University Overview</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="oe_stat_button">
+                                        <div class="o_stat_info">
+                                            <span class="o_stat_value" t-esc="widget.university_count"/>
+                                            <span class="o_stat_text">Universities</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="oe_stat_button">
+                                        <div class="o_stat_info">
+                                            <span class="o_stat_value" t-esc="widget.college_count"/>
+                                            <span class="o_stat_text">Colleges</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Program Overview</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="oe_stat_button">
+                                        <div class="o_stat_info">
+                                            <span class="o_stat_value" t-esc="widget.program_count"/>
+                                            <span class="o_stat_text">Programs</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="oe_stat_button">
+                                        <div class="o_stat_info">
+                                            <span class="o_stat_value" t-esc="widget.batch_count"/>
+                                            <span class="o_stat_text">Batches</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    
+    <!-- Batch Creation Preview Template -->
+    <t t-name="acmst.BatchCreationPreview">
+        <div class="acmst_batch_preview">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Batch Name</th>
+                            <th>Code</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Max Students</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="widget.preview_data" t-as="batch">
+                            <td t-esc="batch.name"/>
+                            <td t-esc="batch.code"/>
+                            <td t-esc="batch.start_date"/>
+                            <td t-esc="batch.end_date"/>
+                            <td t-esc="batch.max_students"/>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </t>
+    
+    <!-- Academic Rules Template -->
+    <t t-name="acmst.AcademicRules">
+        <div class="acmst_academic_rules">
+            <div class="rule_header">
+                <h4 t-esc="widget.rule.name"/>
+                <span class="badge badge-info" t-if="widget.rule.is_mandatory">Mandatory</span>
+                <span class="badge badge-success" t-if="widget.rule.is_active">Active</span>
+            </div>
+            <div class="rule_content">
+                <p t-esc="widget.rule.description"/>
+            </div>
+            <div class="rule_details" t-if="widget.rule.rule_text">
+                <div t-raw="widget.rule.rule_text"/>
+            </div>
+        </div>
+    </t>
+    
+    <!-- Progress Bar Template -->
+    <t t-name="acmst.ProgressBar">
+        <div class="o_progressbar" t-att-data-percentage="widget.percentage">
+            <div class="o_progressbar_fill" t-att-style="'width: ' + widget.percentage + '%'"/>
+            <div class="o_progressbar_text">
+                <span t-esc="widget.percentage"/>%
+            </div>
+        </div>
+    </t>
+    
+    <!-- Notification Template -->
+    <t t-name="acmst.Notification">
+        <div class="acmst_notification alert" t-att-class="'alert-' + widget.type">
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
+            <strong t-esc="widget.title"/>
+            <p t-esc="widget.message"/>
+        </div>
+    </t>
+    
+</templates>

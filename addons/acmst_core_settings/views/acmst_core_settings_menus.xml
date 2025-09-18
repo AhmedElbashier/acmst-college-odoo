@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Main Menu -->
+        <menuitem id="menu_acmst_core_settings" 
+                  name="ACMST Core Settings" 
+                  sequence="1" 
+                  web_icon="acmst_core_settings,static/description/icon.png"/>
+        
+        <!-- Configuration Menu -->
+        <menuitem id="menu_acmst_configuration" 
+                  name="Configuration" 
+                  parent="menu_acmst_core_settings" 
+                  sequence="10"/>
+        
+        <!-- Universities Menu -->
+        <menuitem id="menu_acmst_university" 
+                  name="Universities" 
+                  parent="menu_acmst_configuration" 
+                  action="action_acmst_university" 
+                  sequence="10"/>
+        
+        <!-- Colleges Menu -->
+        <menuitem id="menu_acmst_college" 
+                  name="Colleges" 
+                  parent="menu_acmst_configuration" 
+                  action="action_acmst_college" 
+                  sequence="20"/>
+        
+        <!-- Program Types Menu -->
+        <menuitem id="menu_acmst_program_type" 
+                  name="Program Types" 
+                  parent="menu_acmst_configuration" 
+                  action="action_acmst_program_type" 
+                  sequence="30"/>
+        
+        <!-- Programs Menu -->
+        <menuitem id="menu_acmst_program" 
+                  name="Programs" 
+                  parent="menu_acmst_core_settings" 
+                  action="action_acmst_program" 
+                  sequence="20"/>
+        
+        <!-- Batches Menu -->
+        <menuitem id="menu_acmst_batch" 
+                  name="Batches" 
+                  parent="menu_acmst_core_settings" 
+                  action="action_acmst_batch" 
+                  sequence="30"/>
+        
+        <!-- Academic Years Menu -->
+        <menuitem id="menu_acmst_academic_year" 
+                  name="Academic Years" 
+                  parent="menu_acmst_core_settings" 
+                  action="action_acmst_academic_year" 
+                  sequence="40"/>
+        
+        <!-- Academic Rules Menu -->
+        <menuitem id="menu_acmst_academic_rules" 
+                  name="Academic Rules" 
+                  parent="menu_acmst_core_settings" 
+                  action="action_acmst_academic_rules" 
+                  sequence="50"/>
+        
+        <!-- Tools Menu -->
+        <menuitem id="menu_acmst_tools" 
+                  name="Tools" 
+                  parent="menu_acmst_core_settings" 
+                  sequence="60"/>
+        
+        <!-- Batch Creation Wizard Menu -->
+        <menuitem id="menu_acmst_batch_creation_wizard" 
+                  name="Create Batches" 
+                  parent="menu_acmst_tools" 
+                  action="action_acmst_batch_creation_wizard" 
+                  sequence="10"/>
+        
+        <!-- Dashboard Menu -->
+        <menuitem id="menu_acmst_dashboard" 
+                  name="Dashboard" 
+                  parent="menu_acmst_core_settings" 
+                  sequence="5"/>
+        
+        <!-- Reports Menu -->
+        <menuitem id="menu_acmst_reports" 
+                  name="Reports" 
+                  parent="menu_acmst_core_settings" 
+                  sequence="70"/>
+        
+    </data>
+</odoo>

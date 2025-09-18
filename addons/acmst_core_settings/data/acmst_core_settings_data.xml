@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Default Program Types -->
+        <record id="program_type_certificate" model="acmst.program.type">
+            <field name="name">Certificate</field>
+            <field name="code">CERT</field>
+            <field name="short_name">Cert</field>
+            <field name="level">certificate</field>
+            <field name="description">Short-term certificate programs</field>
+            <field name="duration_months">6</field>
+            <field name="is_degree">False</field>
+            <field name="sequence">10</field>
+        </record>
+        
+        <record id="program_type_diploma" model="acmst.program.type">
+            <field name="name">Diploma</field>
+            <field name="code">DIP</field>
+            <field name="short_name">Dip</field>
+            <field name="level">diploma</field>
+            <field name="description">Diploma programs</field>
+            <field name="duration_years">2.0</field>
+            <field name="is_degree">False</field>
+            <field name="sequence">20</field>
+        </record>
+        
+        <record id="program_type_bachelor" model="acmst.program.type">
+            <field name="name">Bachelor's Degree</field>
+            <field name="code">BSC</field>
+            <field name="short_name">BSc</field>
+            <field name="level">bachelor</field>
+            <field name="description">Bachelor's degree programs</field>
+            <field name="duration_years">4.0</field>
+            <field name="is_degree">True</field>
+            <field name="sequence">30</field>
+        </record>
+        
+        <record id="program_type_master" model="acmst.program.type">
+            <field name="name">Master's Degree</field>
+            <field name="code">MSC</field>
+            <field name="short_name">MSc</field>
+            <field name="level">master</field>
+            <field name="description">Master's degree programs</field>
+            <field name="duration_years">2.0</field>
+            <field name="is_degree">True</field>
+            <field name="sequence">40</field>
+        </record>
+        
+        <record id="program_type_phd" model="acmst.program.type">
+            <field name="name">Doctor of Philosophy</field>
+            <field name="code">PHD</field>
+            <field name="short_name">PhD</field>
+            <field name="level">phd</field>
+            <field name="description">Doctoral programs</field>
+            <field name="duration_years">3.0</field>
+            <field name="is_degree">True</field>
+            <field name="sequence">50</field>
+        </record>
+        
+        <!-- Default Academic Years -->
+        <record id="academic_year_2023_2024" model="acmst.academic.year">
+            <field name="name">2023-2024</field>
+            <field name="code">AY2023-24</field>
+            <field name="short_name">2023-24</field>
+            <field name="start_date">2023-09-01</field>
+            <field name="end_date">2024-08-31</field>
+            <field name="is_current">False</field>
+            <field name="semester_count">2</field>
+        </record>
+        
+        <record id="academic_year_2024_2025" model="acmst.academic.year">
+            <field name="name">2024-2025</field>
+            <field name="code">AY2024-25</field>
+            <field name="short_name">2024-25</field>
+            <field name="start_date">2024-09-01</field>
+            <field name="end_date">2025-08-31</field>
+            <field name="is_current">True</field>
+            <field name="semester_count">2</field>
+        </record>
+        
+        <record id="academic_year_2025_2026" model="acmst.academic.year">
+            <field name="name">2025-2026</field>
+            <field name="code">AY2025-26</field>
+            <field name="short_name">2025-26</field>
+            <field name="start_date">2025-09-01</field>
+            <field name="end_date">2026-08-31</field>
+            <field name="is_current">False</field>
+            <field name="semester_count">2</field>
+        </record>
+        
+        <!-- Default Academic Rules -->
+        <record id="rule_attendance_minimum" model="acmst.academic.rules">
+            <field name="name">Minimum Attendance Requirement</field>
+            <field name="code">ATT_MIN</field>
+            <field name="rule_type">attendance</field>
+            <field name="description">Minimum attendance percentage required to pass</field>
+            <field name="rule_text"><![CDATA[<p>Students must maintain a minimum attendance of <strong>75%</strong> in all courses to be eligible for final examinations.</p>]]></field>
+            <field name="effective_date" eval="time.strftime('%Y-01-01')"/>
+            <field name="is_mandatory">True</field>
+        </record>
+        
+        <record id="rule_gpa_minimum" model="acmst.academic.rules">
+            <field name="name">Minimum GPA Requirement</field>
+            <field name="code">GPA_MIN</field>
+            <field name="rule_type">grading</field>
+            <field name="description">Minimum GPA required to pass</field>
+            <field name="rule_text"><![CDATA[<p>Students must maintain a minimum Grade Point Average (GPA) of <strong>2.0</strong> to remain in good academic standing.</p>]]></field>
+            <field name="effective_date" eval="time.strftime('%Y-01-01')"/>
+            <field name="is_mandatory">True</field>
+        </record>
+        
+        <record id="rule_credit_hours_minimum" model="acmst.academic.rules">
+            <field name="name">Minimum Credit Hours</field>
+            <field name="code">CRED_MIN</field>
+            <field name="rule_type">graduation</field>
+            <field name="description">Minimum credit hours required for graduation</field>
+            <field name="rule_text"><![CDATA[<p>Students must complete a minimum of <strong>120 credit hours</strong> to be eligible for graduation.</p>]]></field>
+            <field name="effective_date" eval="time.strftime('%Y-01-01')"/>
+            <field name="is_mandatory">True</field>
+        </record>
+        
+    </data>
+</odoo>

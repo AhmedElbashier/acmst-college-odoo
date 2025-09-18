@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Program Type Tree View -->
+        <record id="view_acmst_program_type_tree" model="ir.ui.view">
+            <field name="name">acmst.program.type.tree</field>
+            <field name="model">acmst.program.type</field>
+            <field name="arch" type="xml">
+                <tree string="Program Types" decoration-info="not active">
+                    <field name="sequence" widget="handle"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="level"/>
+                    <field name="duration_years"/>
+                    <field name="min_credits"/>
+                    <field name="max_credits"/>
+                    <field name="is_degree"/>
+                    <field name="program_count"/>
+                    <field name="active" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Program Type Form View -->
+        <record id="view_acmst_program_type_form" model="ir.ui.view">
+            <field name="name">acmst.program.type.form</field>
+            <field name="model">acmst.program.type</field>
+            <field name="arch" type="xml">
+                <form string="Program Type">
+                    <header>
+                        <button name="action_view_programs" type="object" string="View Programs" class="btn-primary" invisible="not program_count"/>
+                        <button name="action_view_students" type="object" string="View Students" class="btn-secondary" invisible="not student_count"/>
+                        <field name="active" widget="boolean_toggle"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_programs" type="object" class="oe_stat_button" icon="fa-graduation-cap">
+                                <field name="program_count" widget="statinfo" string="Programs"/>
+                            </button>
+                            <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
+                                <field name="student_count" widget="statinfo" string="Students"/>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Program Type Name"/>
+                                <span class="badge badge-info" invisible="not is_degree">Degree</span>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="short_name"/>
+                                <field name="level"/>
+                                <field name="is_degree"/>
+                            </group>
+                            <group>
+                                <field name="duration_years"/>
+                                <field name="duration_months"/>
+                                <field name="min_credits"/>
+                                <field name="max_credits"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="requires_thesis"/>
+                                <field name="requires_internship"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Description" name="description">
+                                <field name="description" nolabel="1"/>
+                                <field name="requirements" nolabel="1"/>
+                                <field name="learning_outcomes" nolabel="1"/>
+                            </page>
+                            
+                            <page string="Programs" name="programs" invisible="not program_count">
+                                <field name="program_ids" readonly="1">
+                                    <tree>
+                                        <field name="code"/>
+                                        <field name="name"/>
+                                        <field name="college_id"/>
+                                        <field name="manager_id"/>
+                                        <field name="coordinator_id"/>
+                                        <field name="credits_required"/>
+                                        <field name="active"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Program Type Search View -->
+        <record id="view_acmst_program_type_search" model="ir.ui.view">
+            <field name="name">acmst.program.type.search</field>
+            <field name="model">acmst.program.type</field>
+            <field name="arch" type="xml">
+                <search string="Search Program Types">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="short_name"/>
+                    <field name="level"/>
+                    <separator/>
+                    <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                    <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                    <filter string="Degree Programs" name="degree" domain="[('is_degree', '=', True)]"/>
+                    <filter string="Certificate Programs" name="certificate" domain="[('is_degree', '=', False)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Level" name="group_level" context="{'group_by': 'level'}"/>
+                        <filter string="Degree Type" name="group_degree" context="{'group_by': 'is_degree'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Program Type Action -->
+        <record id="action_acmst_program_type" model="ir.actions.act_window">
+            <field name="name">Program Types</field>
+            <field name="res_model">acmst.program.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first program type!
+                </p>
+                <p>
+                    Program types define the academic level and structure of programs.
+                    Examples include Bachelor's Degree, Master's Degree, Diploma, etc.
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Demo University -->
+        <record id="demo_university_acmst" model="acmst.university">
+            <field name="name">ACMST College of Technology</field>
+            <field name="code">ACMST</field>
+            <field name="short_name">ACMST</field>
+            <field name="address">123 Education Street, Tech City</field>
+            <field name="city">Tech City</field>
+            <field name="zip">12345</field>
+            <field name="phone">+1-555-0123</field>
+            <field name="email">info@acmst.edu</field>
+            <field name="website">https://www.acmst-edu.com</field>
+            <field name="established_year">1995</field>
+            <field name="is_main">True</field>
+            <field name="description">A leading institution in technology and management education, committed to excellence in academic programs and student success.</field>
+        </record>
+        
+        <!-- Demo Colleges -->
+        <record id="demo_college_engineering" model="acmst.college">
+            <field name="name">College of Engineering</field>
+            <field name="code">ENG</field>
+            <field name="short_name">Engineering</field>
+            <field name="university_id" ref="demo_university_acmst"/>
+            <field name="established_year">1995</field>
+            <field name="program_types">both</field>
+            <field name="description">Leading college in engineering education with state-of-the-art facilities and industry partnerships.</field>
+            <field name="mission">To provide world-class engineering education and research opportunities.</field>
+            <field name="vision">To be the premier engineering college recognized globally for innovation and excellence.</field>
+        </record>
+        
+        <record id="demo_college_business" model="acmst.college">
+            <field name="name">College of Business Administration</field>
+            <field name="code">BUS</field>
+            <field name="short_name">Business</field>
+            <field name="university_id" ref="demo_university_acmst"/>
+            <field name="established_year">1998</field>
+            <field name="program_types">both</field>
+            <field name="description">Comprehensive business education preparing students for leadership roles in the global economy.</field>
+            <field name="mission">To develop ethical business leaders through innovative education and practical experience.</field>
+            <field name="vision">To be recognized as a top business school producing successful entrepreneurs and executives.</field>
+        </record>
+        
+        <record id="demo_college_computer_science" model="acmst.college">
+            <field name="name">College of Computer Science</field>
+            <field name="code">CS</field>
+            <field name="short_name">Computer Science</field>
+            <field name="university_id" ref="demo_university_acmst"/>
+            <field name="established_year">2000</field>
+            <field name="program_types">both</field>
+            <field name="description">Cutting-edge computer science programs preparing students for the digital future.</field>
+            <field name="mission">To advance computer science education and research in emerging technologies.</field>
+            <field name="vision">To be a leading computer science college driving technological innovation.</field>
+        </record>
+        
+        <!-- Demo Academic Years -->
+        <record id="demo_academic_year_2023_24" model="acmst.academic.year">
+            <field name="name">2023-2024</field>
+            <field name="code">AY23-24</field>
+            <field name="short_name">2023-24</field>
+            <field name="start_date">2023-09-01</field>
+            <field name="end_date">2024-08-31</field>
+            <field name="semester_count">2</field>
+            <field name="is_past">True</field>
+        </record>
+        
+        <record id="demo_academic_year_2024_25" model="acmst.academic.year">
+            <field name="name">2024-2025</field>
+            <field name="code">AY24-25</field>
+            <field name="short_name">2024-25</field>
+            <field name="start_date">2024-09-01</field>
+            <field name="end_date">2025-08-31</field>
+            <field name="semester_count">2</field>
+            <field name="is_current">True</field>
+        </record>
+        
+        <record id="demo_academic_year_2025_26" model="acmst.academic.year">
+            <field name="name">2025-2026</field>
+            <field name="code">AY25-26</field>
+            <field name="short_name">2025-26</field>
+            <field name="start_date">2025-09-01</field>
+            <field name="end_date">2026-08-31</field>
+            <field name="semester_count">2</field>
+            <field name="is_future">True</field>
+        </record>
+        
+        <!-- Demo Programs -->
+        <record id="demo_program_cs_bachelor" model="acmst.program">
+            <field name="name">Bachelor of Science in Computer Science</field>
+            <field name="code">BSCS</field>
+            <field name="short_name">BSc CS</field>
+            <field name="college_id" ref="demo_college_computer_science"/>
+            <field name="program_type_id" ref="program_type_bachelor"/>
+            <field name="credits_required">120</field>
+            <field name="duration_years">4</field>
+            <field name="is_thesis_required">True</field>
+            <field name="is_internship_required">True</field>
+            <field name="thesis_credits">6</field>
+            <field name="internship_credits">3</field>
+            <field name="description">Comprehensive computer science program covering software development, algorithms, and system design.</field>
+            <field name="objectives">To prepare students for careers in software development, system analysis, and technology leadership.</field>
+        </record>
+        
+        <record id="demo_program_engineering_bachelor" model="acmst.program">
+            <field name="name">Bachelor of Engineering in Software Engineering</field>
+            <field name="code">BESE</field>
+            <field name="short_name">BE SE</field>
+            <field name="college_id" ref="demo_college_engineering"/>
+            <field name="program_type_id" ref="program_type_bachelor"/>
+            <field name="credits_required">130</field>
+            <field name="duration_years">4</field>
+            <field name="is_thesis_required">True</field>
+            <field name="is_internship_required">True</field>
+            <field name="thesis_credits">8</field>
+            <field name="internship_credits">6</field>
+            <field name="description">Engineering-focused program emphasizing software design, development, and project management.</field>
+            <field name="objectives">To develop software engineers capable of designing and implementing complex software systems.</field>
+        </record>
+        
+        <record id="demo_program_business_bachelor" model="acmst.program">
+            <field name="name">Bachelor of Business Administration</field>
+            <field name="code">BBA</field>
+            <field name="short_name">BBA</field>
+            <field name="college_id" ref="demo_college_business"/>
+            <field name="program_type_id" ref="program_type_bachelor"/>
+            <field name="credits_required">120</field>
+            <field name="duration_years">4</field>
+            <field name="is_thesis_required">False</field>
+            <field name="is_internship_required">True</field>
+            <field name="internship_credits">3</field>
+            <field name="description">Comprehensive business administration program covering management, marketing, finance, and operations.</field>
+            <field name="objectives">To prepare students for leadership roles in business and entrepreneurship.</field>
+        </record>
+        
+        <record id="demo_program_cs_master" model="acmst.program">
+            <field name="name">Master of Science in Computer Science</field>
+            <field name="code">MSCS</field>
+            <field name="short_name">MSc CS</field>
+            <field name="college_id" ref="demo_college_computer_science"/>
+            <field name="program_type_id" ref="program_type_master"/>
+            <field name="credits_required">60</field>
+            <field name="duration_years">2</field>
+            <field name="is_thesis_required">True</field>
+            <field name="is_internship_required">False</field>
+            <field name="thesis_credits">12</field>
+            <field name="description">Advanced computer science program focusing on research and specialized areas.</field>
+            <field name="objectives">To develop advanced knowledge and research skills in computer science.</field>
+        </record>
+        
+        <!-- Demo Batches -->
+        <record id="demo_batch_cs_2024" model="acmst.batch">
+            <field name="name">CS Batch 2024</field>
+            <field name="code">BSCS-2024-01</field>
+            <field name="program_id" ref="demo_program_cs_bachelor"/>
+            <field name="academic_year_id" ref="demo_academic_year_2024_25"/>
+            <field name="start_date">2024-09-01</field>
+            <field name="end_date">2028-08-31</field>
+            <field name="registration_start_date">2024-06-01</field>
+            <field name="registration_end_date">2024-08-31</field>
+            <field name="max_students">50</field>
+            <field name="state">in_progress</field>
+            <field name="description">First year computer science students starting in 2024.</field>
+        </record>
+        
+        <record id="demo_batch_engineering_2024" model="acmst.batch">
+            <field name="name">Engineering Batch 2024</field>
+            <field name="code">BESE-2024-01</field>
+            <field name="program_id" ref="demo_program_engineering_bachelor"/>
+            <field name="academic_year_id" ref="demo_academic_year_2024_25"/>
+            <field name="start_date">2024-09-01</field>
+            <field name="end_date">2028-08-31</field>
+            <field name="registration_start_date">2024-06-01</field>
+            <field name="registration_end_date">2024-08-31</field>
+            <field name="max_students">40</field>
+            <field name="state">in_progress</field>
+            <field name="description">First year software engineering students starting in 2024.</field>
+        </record>
+        
+        <record id="demo_batch_business_2024" model="acmst.batch">
+            <field name="name">Business Batch 2024</field>
+            <field name="code">BBA-2024-01</field>
+            <field name="program_id" ref="demo_program_business_bachelor"/>
+            <field name="academic_year_id" ref="demo_academic_year_2024_25"/>
+            <field name="start_date">2024-09-01</field>
+            <field name="end_date">2028-08-31</field>
+            <field name="registration_start_date">2024-06-01</field>
+            <field name="registration_end_date">2024-08-31</field>
+            <field name="max_students">60</field>
+            <field name="state">in_progress</field>
+            <field name="description">First year business administration students starting in 2024.</field>
+        </record>
+        
+        <record id="demo_batch_cs_master_2024" model="acmst.batch">
+            <field name="name">MSc CS Batch 2024</field>
+            <field name="code">MSCS-2024-01</field>
+            <field name="program_id" ref="demo_program_cs_master"/>
+            <field name="academic_year_id" ref="demo_academic_year_2024_25"/>
+            <field name="start_date">2024-09-01</field>
+            <field name="end_date">2026-08-31</field>
+            <field name="registration_start_date">2024-06-01</field>
+            <field name="registration_end_date">2024-08-31</field>
+            <field name="max_students">25</field>
+            <field name="state">in_progress</field>
+            <field name="description">Master's in computer science students starting in 2024.</field>
+        </record>
+        
+    </data>
+</odoo>

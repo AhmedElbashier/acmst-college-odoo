@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- College Tree View -->
+        <record id="view_acmst_college_tree" model="ir.ui.view">
+            <field name="name">acmst.college.tree</field>
+            <field name="model">acmst.college</field>
+            <field name="arch" type="xml">
+                <tree string="Colleges" decoration-info="not active" decoration-success="is_main">
+                    <field name="sequence" widget="handle"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="university_id"/>
+                    <field name="dean_id"/>
+                    <field name="program_count"/>
+                    <field name="student_count"/>
+                    <field name="is_main" invisible="not is_main"/>
+                    <field name="active" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- College Form View -->
+        <record id="view_acmst_college_form" model="ir.ui.view">
+            <field name="name">acmst.college.form</field>
+            <field name="model">acmst.college</field>
+            <field name="arch" type="xml">
+                <form string="College">
+                    <header>
+                        <button name="action_view_programs" type="object" string="View Programs" class="btn-primary" invisible="not program_count"/>
+                        <button name="action_view_batches" type="object" string="View Batches" class="btn-secondary" invisible="not batch_count"/>
+                        <button name="action_view_students" type="object" string="View Students" class="btn-secondary" invisible="not student_count"/>
+                        <button name="action_view_faculty" type="object" string="View Faculty" class="btn-secondary" invisible="not faculty_count"/>
+                        <field name="active" widget="boolean_toggle"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_programs" type="object" class="oe_stat_button" icon="fa-graduation-cap">
+                                <field name="program_count" widget="statinfo" string="Programs"/>
+                            </button>
+                            <button name="action_view_batches" type="object" class="oe_stat_button" icon="fa-calendar">
+                                <field name="batch_count" widget="statinfo" string="Batches"/>
+                            </button>
+                            <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
+                                <field name="student_count" widget="statinfo" string="Students"/>
+                            </button>
+                            <button name="action_view_faculty" type="object" class="oe_stat_button" icon="fa-user-md">
+                                <field name="faculty_count" widget="statinfo" string="Faculty"/>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="College Name"/>
+                                <span class="badge badge-info" invisible="not is_main">Main College</span>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="short_name"/>
+                                <field name="university_id" options="{'no_create': True}"/>
+                                <field name="established_year"/>
+                                <field name="is_main"/>
+                            </group>
+                            <group>
+                                <field name="dean_id" options="{'no_create': True}"/>
+                                <field name="dean_email" invisible="not dean_id"/>
+                                <field name="program_types"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="phone"/>
+                                <field name="email"/>
+                                <field name="website"/>
+                            </group>
+                            <group>
+                                <field name="address" nolabel="1"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Description" name="description">
+                                <field name="description" nolabel="1"/>
+                                <field name="mission" nolabel="1"/>
+                                <field name="vision" nolabel="1"/>
+                                <field name="accreditation" nolabel="1"/>
+                            </page>
+                            
+                            <page string="Programs" name="programs" invisible="not program_count">
+                                <field name="program_ids" readonly="1">
+                                    <tree>
+                                        <field name="code"/>
+                                        <field name="name"/>
+                                        <field name="program_type_id"/>
+                                        <field name="manager_id"/>
+                                        <field name="coordinator_id"/>
+                                        <field name="credits_required"/>
+                                        <field name="batch_count"/>
+                                        <field name="active"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            
+                            <page string="Personnel" name="personnel">
+                                <group>
+                                    <group>
+                                        <field name="dean_id" readonly="1"/>
+                                        <field name="dean_name" readonly="1"/>
+                                        <field name="dean_email" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="faculty_count" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- College Search View -->
+        <record id="view_acmst_college_search" model="ir.ui.view">
+            <field name="name">acmst.college.search</field>
+            <field name="model">acmst.college</field>
+            <field name="arch" type="xml">
+                <search string="Search Colleges">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="short_name"/>
+                    <field name="university_id"/>
+                    <field name="dean_id"/>
+                    <field name="established_year"/>
+                    <separator/>
+                    <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                    <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                    <filter string="Main College" name="main" domain="[('is_main', '=', True)]"/>
+                    <separator/>
+                    <filter string="This Year" name="this_year" domain="[('established_year', '=', context_today().year)]"/>
+                    <filter string="Recent" name="recent" domain="[('established_year', '>=', context_today().year - 5)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="University" name="group_university" context="{'group_by': 'university_id'}"/>
+                        <filter string="Dean" name="group_dean" context="{'group_by': 'dean_id'}"/>
+                        <filter string="Program Types" name="group_program_types" context="{'group_by': 'program_types'}"/>
+                        <filter string="Established Year" name="group_year" context="{'group_by': 'established_year'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- College Kanban View -->
+        <record id="view_acmst_college_kanban" model="ir.ui.view">
+            <field name="name">acmst.college.kanban</field>
+            <field name="model">acmst.college</field>
+            <field name="arch" type="xml">
+                <kanban string="Colleges" class="o_kanban_small_column">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="university_id"/>
+                    <field name="dean_id"/>
+                    <field name="program_count"/>
+                    <field name="student_count"/>
+                    <field name="is_main"/>
+                    <field name="active"/>
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                                <span class="badge badge-info" invisible="not is_main">Main</span>
+                                            </strong>
+                                            <div class="o_kanban_record_subtitle">
+                                                <field name="code"/> - <field name="university_id"/>
+                                            </div>
+                                        </div>
+                                        <div class="o_kanban_record_body">
+                                            <div class="o_kanban_record_bottom">
+                                                <div class="oe_kanban_bottom_left">
+                                                    <span class="o_kanban_inline_block">
+                                                        <i class="fa fa-graduation-cap"/> <field name="program_count"/>
+                                                    </span>
+                                                    <span class="o_kanban_inline_block">
+                                                        <i class="fa fa-users"/> <field name="student_count"/>
+                                                    </span>
+                                                </div>
+                                                <div class="oe_kanban_bottom_right">
+                                                    <field name="dean_id" widget="many2one_avatar"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- College Action -->
+        <record id="action_acmst_college" model="ir.actions.act_window">
+            <field name="name">Colleges</field>
+            <field name="res_model">acmst.college</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first college!
+                </p>
+                <p>
+                    Colleges are departments within universities that offer specific programs.
+                    Each college can have multiple programs and is managed by a dean.
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>
