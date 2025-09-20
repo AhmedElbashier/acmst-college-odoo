@@ -2,16 +2,16 @@
 <odoo>
     <data>
         
-        <!-- Health Officer Dashboard View -->
-        <record id="view_acmst_health_officer_dashboard" model="ir.ui.view">
-            <field name="name">acmst.health.officer.dashboard</field>
+        <!-- Health Check Dashboard View -->
+        <record id="view_acmst_health_dashboard" model="ir.ui.view">
+            <field name="name">acmst.health.dashboard</field>
             <field name="model">acmst.health.check</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Health Officer Dashboard">
+                <form string="Health Check Dashboard">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button name="action_view_pending_health_checks" type="object" class="oe_stat_button" icon="fa-heartbeat">
+                            <button name="action_view_pending_health_checks" type="object" class="oe_stat_button" icon="fa-clock-o">
                                 <field name="pending_health_checks_count" widget="statinfo" string="Pending Health Checks"/>
                             </button>
                             <button name="action_view_approved_health_checks" type="object" class="oe_stat_button" icon="fa-check">
@@ -25,15 +25,15 @@
                             </button>
                         </div>
                         <div class="oe_title">
-                            <h1>🏥 Health Officer Dashboard</h1>
-                            <p>Medical assessment and health check management</p>
+                            <h1>🏥 Health Check Dashboard</h1>
+                            <p>Comprehensive health check management and monitoring</p>
                         </div>
                         
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="panel panel-primary">
+                                <div class="panel panel-info">
                                     <div class="panel-heading">
-                                        <h3 class="panel-title">🏥 Health Check Status</h3>
+                                        <h3 class="panel-title">📊 Health Check Overview</h3>
                                     </div>
                                     <div class="panel-body">
                                         <div class="row">
@@ -45,7 +45,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="stat-box">
-                                                    <h4>Pending</h4>
+                                                    <h4>Pending Review</h4>
                                                     <span class="stat-number"><field name="pending_health_checks_count" widget="statinfo"/></span>
                                                 </div>
                                             </div>
@@ -71,34 +71,24 @@
                             <div class="col-md-6">
                                 <div class="panel panel-success">
                                     <div class="panel-heading">
-                                        <h3 class="panel-title">👨‍⚕️ My Performance</h3>
+                                        <h3 class="panel-title">👨‍⚕️ My Health Reviews</h3>
                                     </div>
                                     <div class="panel-body">
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="stat-box">
                                                     <h4>My Health Checks</h4>
                                                     <span class="stat-number"><field name="my_health_checks_count" widget="statinfo"/></span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="stat-box">
-                                                    <h4>Completion Rate</h4>
-                                                    <span class="stat-number"><field name="health_completion_rate" widget="statinfo" string="%"/></span>
-                                                </div>
-                                            </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="stat-box">
-                                                    <h4>Today's Checks</h4>
-                                                    <span class="stat-number"><field name="today_health_checks_count" widget="statinfo"/></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="stat-box">
-                                                    <h4>This Week</h4>
-                                                    <span class="stat-number"><field name="week_health_checks_count" widget="statinfo"/></span>
+                                                    <h4>Completion Rate</h4>
+                                                    <span class="stat-number">
+                                                        <field name="health_completion_rate" widget="statinfo" string="%"/>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -107,30 +97,30 @@
                             </div>
                         </div>
                         
-                        <div class="panel panel-info">
+                        <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">⚡ Quick Actions</h3>
+                                <h3 class="panel-title">📈 Health Check Analytics</h3>
                             </div>
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <button name="action_view_pending_health_checks" type="object" class="btn btn-warning btn-block">
-                                            <i class="fa fa-heartbeat"></i> Pending Checks
+                                        <button name="action_view_health_statistics" type="object" class="btn btn-info btn-block">
+                                            <i class="fa fa-bar-chart"></i> Health Statistics
                                         </button>
                                     </div>
                                     <div class="col-md-3">
-                                        <button name="action_view_approved_health_checks" type="object" class="btn btn-success btn-block">
-                                            <i class="fa fa-check"></i> Approved
+                                        <button name="action_view_medical_fitness_stats" type="object" class="btn btn-success btn-block">
+                                            <i class="fa fa-heartbeat"></i> Fitness Analysis
                                         </button>
                                     </div>
                                     <div class="col-md-3">
-                                        <button name="action_view_rejected_health_checks" type="object" class="btn btn-danger btn-block">
-                                            <i class="fa fa-times"></i> Rejected
+                                        <button name="action_view_examiner_performance" type="object" class="btn btn-warning btn-block">
+                                            <i class="fa fa-user-md"></i> Examiner Performance
                                         </button>
                                     </div>
                                     <div class="col-md-3">
-                                        <button name="action_view_my_health_checks" type="object" class="btn btn-primary btn-block">
-                                            <i class="fa fa-user"></i> My Checks
+                                        <button name="action_view_health_trends" type="object" class="btn btn-primary btn-block">
+                                            <i class="fa fa-line-chart"></i> Health Trends
                                         </button>
                                     </div>
                                 </div>
@@ -141,57 +131,21 @@
             </field>
         </record>
 
-        <!-- Health Officer Dashboard Action -->
-        <record id="action_acmst_health_officer_dashboard" model="ir.actions.act_window">
-            <field name="name">Health Officer Dashboard</field>
+        <!-- Health Check Dashboard Action -->
+        <record id="action_acmst_health_dashboard_main" model="ir.actions.act_window">
+            <field name="name">Health Check Dashboard</field>
             <field name="res_model">acmst.health.check</field>
             <field name="view_mode">form</field>
-            <field name="view_id" ref="view_acmst_health_officer_dashboard"/>
+            <field name="view_id" ref="view_acmst_health_dashboard"/>
             <field name="context">{}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                    No health checks found
+                    Welcome to the Health Check Dashboard
                 </p>
                 <p>
-                    Overview of health checks and statistics for health officers.
+                    This dashboard provides comprehensive health check management and analytics.
                 </p>
             </field>
-        </record>
-
-        <!-- Health Officer Pending Health Checks Action -->
-        <record id="action_acmst_health_officer_pending" model="ir.actions.act_window">
-            <field name="name">Pending Health Checks</field>
-            <field name="res_model">acmst.health.check</field>
-            <field name="view_mode">tree,form</field>
-            <field name="domain">[('state', '=', 'draft')]</field>
-            <field name="context">{}</field>
-        </record>
-
-        <!-- Health Officer Approved Health Checks Action -->
-        <record id="action_acmst_health_officer_approved" model="ir.actions.act_window">
-            <field name="name">Approved Health Checks</field>
-            <field name="res_model">acmst.health.check</field>
-            <field name="view_mode">tree,form</field>
-            <field name="domain">[('examiner_id', '=', uid), ('state', '=', 'approved')]</field>
-            <field name="context">{}</field>
-        </record>
-
-        <!-- Health Officer Rejected Health Checks Action -->
-        <record id="action_acmst_health_officer_rejected" model="ir.actions.act_window">
-            <field name="name">Rejected Health Checks</field>
-            <field name="res_model">acmst.health.check</field>
-            <field name="view_mode">tree,form</field>
-            <field name="domain">[('examiner_id', '=', uid), ('state', '=', 'rejected')]</field>
-            <field name="context">{}</field>
-        </record>
-
-        <!-- Health Officer My Health Checks Action -->
-        <record id="action_acmst_health_officer_my_checks" model="ir.actions.act_window">
-            <field name="name">My Health Checks</field>
-            <field name="res_model">acmst.health.check</field>
-            <field name="view_mode">tree,form</field>
-            <field name="domain">[('examiner_id', '=', uid)]</field>
-            <field name="context">{}</field>
         </record>
 
     </data>

@@ -25,16 +25,117 @@
                             </button>
                         </div>
                         <div class="oe_title">
-                            <h1>Officer Dashboard</h1>
+                            <h1>👨‍💼 Admission Officer Dashboard</h1>
+                            <p>Ministry approval management and application processing</p>
                         </div>
-                        <group>
-                            <group string="Application Statistics">
-                                <field name="total_applications" widget="statinfo" string="Total Applications"/>
-                                <field name="new_applications_count" widget="statinfo" string="New Applications"/>
-                                <field name="ministry_pending_count" widget="statinfo" string="Ministry Pending"/>
-                                <field name="ministry_approved_count" widget="statinfo" string="Ministry Approved"/>
-                            </group>
-                        </group>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">📋 Application Processing</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>New Applications</h4>
+                                                    <span class="stat-number"><field name="new_applications_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Ministry Pending</h4>
+                                                    <span class="stat-number"><field name="ministry_pending_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Ministry Approved</h4>
+                                                    <span class="stat-number"><field name="ministry_approved_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Ministry Rejected</h4>
+                                                    <span class="stat-number"><field name="ministry_rejected_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="panel panel-success">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">📊 Processing Statistics</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Total Applications</h4>
+                                                    <span class="stat-number"><field name="total_applications" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Processing Rate</h4>
+                                                    <span class="stat-number"><field name="officer_processing_rate" widget="statinfo" string="%"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Today's Applications</h4>
+                                                    <span class="stat-number"><field name="today_applications_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>This Week</h4>
+                                                    <span class="stat-number"><field name="week_applications_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">⚡ Quick Actions</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <button name="action_view_new_applications" type="object" class="btn btn-primary btn-block">
+                                            <i class="fa fa-plus"></i> New Applications
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_ministry_pending" type="object" class="btn btn-warning btn-block">
+                                            <i class="fa fa-clock-o"></i> Ministry Pending
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_ministry_approved" type="object" class="btn btn-success btn-block">
+                                            <i class="fa fa-check"></i> Ministry Approved
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_ministry_rejected" type="object" class="btn btn-danger btn-block">
+                                            <i class="fa fa-times"></i> Ministry Rejected
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </sheet>
                 </form>
             </field>
@@ -44,12 +145,12 @@
         <record id="action_acmst_officer_dashboard" model="ir.actions.act_window">
             <field name="name">Officer Dashboard</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
-            <field name="domain">[('state', 'in', ['new', 'ministry_pending', 'ministry_approved', 'ministry_rejected'])]</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_acmst_officer_dashboard"/>
             <field name="context">{}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                    No applications found
+                    Officer Dashboard
                 </p>
                 <p>
                     Overview of admission applications and statistics for officers.

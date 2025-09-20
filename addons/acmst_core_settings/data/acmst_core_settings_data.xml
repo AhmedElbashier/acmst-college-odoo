@@ -120,5 +120,112 @@
             <field name="is_mandatory">True</field>
         </record>
         
+        <!-- Default University -->
+        <record id="university_acmst" model="acmst.university">
+            <field name="name">ACMST College</field>
+            <field name="code">ACMST</field>
+            <field name="short_name">ACMST</field>
+            <field name="website">https://www.acmst.edu.sa</field>
+            <field name="email">info@acmst.edu.sa</field>
+            <field name="phone">+966-11-123-4567</field>
+            <field name="address">Riyadh, Saudi Arabia</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Default College -->
+        <record id="college_health_sciences" model="acmst.college">
+            <field name="name">College of Health Sciences</field>
+            <field name="code">CHS</field>
+            <field name="short_name">CHS</field>
+            <field name="university_id" ref="university_acmst"/>
+            <field name="dean_name">Dr. Ahmed Al-Rashid</field>
+            <field name="email">dean@acmst.edu.sa</field>
+            <field name="phone">+966-11-123-4568</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Sample Programs -->
+        <record id="program_nursing" model="acmst.program">
+            <field name="name">Bachelor of Science in Nursing</field>
+            <field name="code">NURS-BSC</field>
+            <field name="short_name">Nursing</field>
+            <field name="college_id" ref="college_health_sciences"/>
+            <field name="university_id" ref="university_acmst"/>
+            <field name="program_type_id" ref="program_type_bachelor"/>
+            <field name="duration_years">4.0</field>
+            <field name="credits_required">132</field>
+            <field name="description">Comprehensive nursing program preparing students for professional practice</field>
+            <field name="active">True</field>
+        </record>
+        
+        <record id="program_pharmacy" model="acmst.program">
+            <field name="name">Doctor of Pharmacy</field>
+            <field name="code">PHARM-D</field>
+            <field name="short_name">Pharmacy</field>
+            <field name="college_id" ref="college_health_sciences"/>
+            <field name="university_id" ref="university_acmst"/>
+            <field name="program_type_id" ref="program_type_bachelor"/>
+            <field name="duration_years">5.0</field>
+            <field name="credits_required">160</field>
+            <field name="description">Professional pharmacy program</field>
+            <field name="active">True</field>
+        </record>
+        
+        <record id="program_medical_lab" model="acmst.program">
+            <field name="name">Bachelor of Medical Laboratory Sciences</field>
+            <field name="code">MLS-BSC</field>
+            <field name="short_name">Medical Lab</field>
+            <field name="college_id" ref="college_health_sciences"/>
+            <field name="university_id" ref="university_acmst"/>
+            <field name="program_type_id" ref="program_type_bachelor"/>
+            <field name="duration_years">4.0</field>
+            <field name="credits_required">128</field>
+            <field name="description">Medical laboratory sciences program</field>
+            <field name="active">True</field>
+        </record>
+        
+        <!-- Sample Batches -->
+        <record id="batch_nursing_2024" model="acmst.batch">
+            <field name="name">Nursing Batch 2024</field>
+            <field name="code">NURS-BSC-2024-B01</field>
+            <field name="program_id" ref="program_nursing"/>
+            <field name="academic_year_id" ref="academic_year_2024_2025"/>
+            <field name="start_date">2024-09-01</field>
+            <field name="end_date">2028-08-31</field>
+            <field name="registration_start_date">2024-06-01</field>
+            <field name="registration_end_date">2024-08-31</field>
+            <field name="max_students">50</field>
+            <field name="state">open</field>
+            <field name="description">Nursing program batch for academic year 2024-2025</field>
+        </record>
+        
+        <record id="batch_pharmacy_2024" model="acmst.batch">
+            <field name="name">Pharmacy Batch 2024</field>
+            <field name="code">PHARM-D-2024-B01</field>
+            <field name="program_id" ref="program_pharmacy"/>
+            <field name="academic_year_id" ref="academic_year_2024_2025"/>
+            <field name="start_date">2024-09-01</field>
+            <field name="end_date">2029-08-31</field>
+            <field name="registration_start_date">2024-06-01</field>
+            <field name="registration_end_date">2024-08-31</field>
+            <field name="max_students">30</field>
+            <field name="state">open</field>
+            <field name="description">Pharmacy program batch for academic year 2024-2025</field>
+        </record>
+        
+        <record id="batch_medical_lab_2024" model="acmst.batch">
+            <field name="name">Medical Lab Batch 2024</field>
+            <field name="code">MLS-BSC-2024-B01</field>
+            <field name="program_id" ref="program_medical_lab"/>
+            <field name="academic_year_id" ref="academic_year_2024_2025"/>
+            <field name="start_date">2024-09-01</field>
+            <field name="end_date">2028-08-31</field>
+            <field name="registration_start_date">2024-06-01</field>
+            <field name="registration_end_date">2024-08-31</field>
+            <field name="max_students">40</field>
+            <field name="state">open</field>
+            <field name="description">Medical Laboratory Sciences batch for academic year 2024-2025</field>
+        </record>
+        
     </data>
 </odoo>

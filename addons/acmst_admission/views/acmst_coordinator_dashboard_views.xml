@@ -25,16 +25,117 @@
                             </button>
                         </div>
                         <div class="oe_title">
-                            <h1>Coordinator Dashboard</h1>
+                            <h1>🎓 Academic Coordinator Dashboard</h1>
+                            <p>Academic review and conditional approval management</p>
                         </div>
-                        <group>
-                            <group string="Review Statistics">
-                                <field name="total_reviews" widget="statinfo" string="Total Reviews"/>
-                                <field name="pending_review_count" widget="statinfo" string="Pending Review"/>
-                                <field name="approved_count" widget="statinfo" string="Approved"/>
-                                <field name="conditional_count" widget="statinfo" string="Conditional"/>
-                            </group>
-                        </group>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">📚 Review Management</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Pending Review</h4>
+                                                    <span class="stat-number"><field name="pending_review_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Total Reviews</h4>
+                                                    <span class="stat-number"><field name="total_reviews" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Approved</h4>
+                                                    <span class="stat-number"><field name="approved_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Conditional</h4>
+                                                    <span class="stat-number"><field name="conditional_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="panel panel-success">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">📊 Performance Metrics</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>My Reviews</h4>
+                                                    <span class="stat-number"><field name="my_reviews_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Review Rate</h4>
+                                                    <span class="stat-number"><field name="coordinator_review_rate" widget="statinfo" string="%"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Active Conditions</h4>
+                                                    <span class="stat-number"><field name="active_conditions_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Overdue Conditions</h4>
+                                                    <span class="stat-number"><field name="overdue_conditions_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">⚡ Quick Actions</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <button name="action_view_pending_review" type="object" class="btn btn-warning btn-block">
+                                            <i class="fa fa-clock-o"></i> Pending Review
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_approved" type="object" class="btn btn-success btn-block">
+                                            <i class="fa fa-check"></i> Approved
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_conditional" type="object" class="btn btn-info btn-block">
+                                            <i class="fa fa-exclamation-triangle"></i> Conditional
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_my_reviews" type="object" class="btn btn-primary btn-block">
+                                            <i class="fa fa-user"></i> My Reviews
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </sheet>
                 </form>
             </field>
@@ -107,7 +208,7 @@
                                     <div class="o_kanban_record_body">
                                         <div class="o_kanban_record_bottom">
                                             <div class="oe_kanban_bottom_left">
-                                                <span class="badge badge-pill" t-attf-class="badge-#{record.state.raw_value == 'pending' and 'warning' or record.state.raw_value == 'completed' and 'success' or record.state.raw_value == 'overdue' and 'danger' or 'secondary'}">
+                                                <span class="badge badge-pill" t-att-class="'badge-' + (record.state.raw_value == 'pending' and 'warning' or record.state.raw_value == 'completed' and 'success' or record.state.raw_value == 'overdue' and 'danger' or 'secondary')">
                                                     <field name="state"/>
                                                 </span>
                                             </div>
@@ -143,21 +244,19 @@
             </field>
         </record>
 
-        <!-- Coordinator Dashboard Tree Action -->
+        <!-- Coordinator Dashboard Action -->
         <record id="action_acmst_coordinator_dashboard" model="ir.actions.act_window">
-            <field name="name">Coordinator Reviews</field>
+            <field name="name">Coordinator Dashboard</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="view_acmst_coordinator_admission_tree"/>
-            <field name="domain">[('state', 'in', ['coordinator_review', 'coordinator_approved', 'coordinator_rejected', 'coordinator_conditional'])]</field>
-            <field name="search_view_id" ref="view_acmst_coordinator_admission_search"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_acmst_coordinator_dashboard"/>
             <field name="context">{}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                    No coordinator reviews found
+                    Coordinator Dashboard
                 </p>
                 <p>
-                    Applications requiring coordinator review will appear here.
+                    Academic review and conditional approval management.
                 </p>
             </field>
         </record>

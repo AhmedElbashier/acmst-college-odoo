@@ -7,7 +7,7 @@
             <field name="name">acmst.admission.file.tree</field>
             <field name="model">acmst.admission.file</field>
             <field name="arch" type="xml">
-                <tree string="Admission Files" decoration-info="state == 'new'" decoration-success="state == 'completed'" decoration-warning="state in ['ministry_pending', 'health_required', 'coordinator_review', 'manager_review']" decoration-danger="state in ['ministry_rejected', 'health_rejected', 'coordinator_rejected', 'manager_rejected', 'cancelled']">
+                <tree string="Admission Files" decoration-info="state == 'new'" decoration-success="state == 'completed'" decoration-warning="state in ['ministry_pending', 'health_required', 'coordinator_review', 'manager_review']" decoration-danger="state in ['ministry_rejected', 'health_rejected', 'coordinator_rejected', 'manager_rejected', 'cancelled']" decoration-muted="is_processing_student == True">
                     <field name="name" string="File Number"/>
                     <field name="applicant_name" string="Applicant"/>
                     <field name="national_id" string="National ID"/>
@@ -15,6 +15,8 @@
                     <field name="email" string="Email"/>
                     <field name="program_id" string="Program"/>
                     <field name="batch_id" string="Batch"/>
+                    <field name="university_id" string="University ID"/>
+                    <field name="is_processing_student" string="Processing" widget="boolean_toggle"/>
                     <field name="state" string="State"/>
                     <field name="application_date" string="Application Date"/>
                     <field name="submission_method" string="Method"/>
@@ -41,6 +43,7 @@
                         <button name="action_create_conditions" string="Create Conditions" type="object" class="btn-info" invisible="state not in ['coordinator_review', 'coordinator_conditional']"/>
                         <button name="action_manager_approve" string="Manager Approve" type="object" class="btn-success" invisible="state != 'manager_review'"/>
                         <button name="action_manager_reject" string="Manager Reject" type="object" class="btn-danger" invisible="state != 'manager_review'"/>
+                        <button name="action_update_university_id" string="Update University ID" type="object" class="btn-info" invisible="not is_processing_student"/>
                         <button name="action_generate_student_id" string="Generate Student ID" type="object" class="btn-info" invisible="state != 'completed'"/>
                         <button name="action_send_welcome_email" string="Send Welcome Email" type="object" class="btn-primary" invisible="state != 'completed'"/>
                         <button name="action_cancel" string="Cancel" type="object" class="btn-danger" invisible="state in ['completed', 'cancelled']"/>
@@ -113,11 +116,19 @@
                                     </group>
                                 </group>
                                 <group>
+                                    <group string="University ID">
+                                        <field name="university_id"/>
+                                        <field name="is_processing_student"/>
+                                        <field name="university_id_updated_date"/>
+                                        <field name="university_id_updated_by"/>
+                                    </group>
                                     <group string="Coordinator Approval">
                                         <field name="coordinator_approval_date"/>
                                         <field name="coordinator_id"/>
                                         <field name="has_pending_conditions"/>
                                     </group>
+                                </group>
+                                <group>
                                     <group string="Manager Approval">
                                         <field name="manager_approval_date"/>
                                         <field name="manager_id"/>
@@ -175,16 +186,35 @@
                     <field name="program_id" string="Program"/>
                     <field name="batch_id" string="Batch"/>
                     <field name="state" string="State"/>
+                    <field name="university_id" string="University ID"/>
                     <separator/>
-                    <filter string="New Applications" name="new" domain="[('state', '=', 'new')]"/>
-                    <filter string="Ministry Pending" name="ministry_pending" domain="[('state', '=', 'ministry_pending')]"/>
-                    <filter string="Health Required" name="health_required" domain="[('state', '=', 'health_required')]"/>
-                    <filter string="Coordinator Review" name="coordinator_review" domain="[('state', '=', 'coordinator_review')]"/>
-                    <filter string="Manager Review" name="manager_review" domain="[('state', '=', 'manager_review')]"/>
-                    <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                    <!-- Status Filters -->
+                    <filter string="🆕 New" name="new" domain="[('state', '=', 'new')]"/>
+                    <filter string="🏛️ Ministry Pending" name="ministry_pending" domain="[('state', '=', 'ministry_pending')]"/>
+                    <filter string="✅ Ministry Approved" name="ministry_approved" domain="[('state', '=', 'ministry_approved')]"/>
+                    <filter string="❌ Ministry Rejected" name="ministry_rejected" domain="[('state', '=', 'ministry_rejected')]"/>
+                    <filter string="🏥 Health Required" name="health_required" domain="[('state', '=', 'health_required')]"/>
+                    <filter string="✅ Health Approved" name="health_approved" domain="[('state', '=', 'health_approved')]"/>
+                    <filter string="❌ Health Rejected" name="health_rejected" domain="[('state', '=', 'health_rejected')]"/>
+                    <filter string="👨‍🏫 Coordinator Review" name="coordinator_review" domain="[('state', '=', 'coordinator_review')]"/>
+                    <filter string="✅ Coordinator Approved" name="coordinator_approved" domain="[('state', '=', 'coordinator_approved')]"/>
+                    <filter string="⚠️ Conditional Approval" name="coordinator_conditional" domain="[('state', '=', 'coordinator_conditional')]"/>
+                    <filter string="👨‍💼 Manager Review" name="manager_review" domain="[('state', '=', 'manager_review')]"/>
+                    <filter string="✅ Manager Approved" name="manager_approved" domain="[('state', '=', 'manager_approved')]"/>
+                    <filter string="🎉 Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                    <filter string="🚫 Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
                     <separator/>
-                    <filter string="Portal Applications" name="portal" domain="[('submission_method', '=', 'portal')]"/>
-                    <filter string="Office Applications" name="office" domain="[('submission_method', '=', 'office')]"/>
+                    <!-- Special Filters -->
+                    <filter string="⏳ Processing Students" name="processing_students" domain="[('is_processing_student', '=', True)]"/>
+                    <separator/>
+                    <!-- Submission Method Filters -->
+                    <filter string="🌐 Portal Applications" name="portal" domain="[('submission_method', '=', 'portal')]"/>
+                    <filter string="🏢 Office Applications" name="office" domain="[('submission_method', '=', 'office')]"/>
+                    <separator/>
+                    <!-- Quick Status Groups -->
+                    <filter string="📋 All Pending" name="all_pending" domain="[('state', 'in', ['ministry_pending', 'health_required', 'coordinator_review', 'manager_review'])]"/>
+                    <filter string="✅ All Approved" name="all_approved" domain="[('state', 'in', ['ministry_approved', 'health_approved', 'coordinator_approved', 'manager_approved', 'completed'])]"/>
+                    <filter string="❌ All Rejected" name="all_rejected" domain="[('state', 'in', ['ministry_rejected', 'health_rejected', 'cancelled'])]"/>
                     <separator/>
                     <group expand="0" string="Group By">
                         <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
@@ -192,6 +222,7 @@
                         <filter string="Batch" name="group_batch" context="{'group_by': 'batch_id'}"/>
                         <filter string="Submission Method" name="group_method" context="{'group_by': 'submission_method'}"/>
                         <filter string="Application Date" name="group_date" context="{'group_by': 'application_date:day'}"/>
+                        <filter string="Processing Status" name="group_processing" context="{'group_by': 'is_processing_student'}"/>
                     </group>
                 </search>
             </field>
@@ -203,13 +234,31 @@
             <field name="res_model">acmst.admission.file</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="view_acmst_admission_file_search"/>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                    Create a new admission file
+                    No admission files found.
                 </p>
                 <p>
-                    Track and manage admission applications from submission to completion.
+                    Admission files are created automatically when portal applications are approved.
+                </p>
+            </field>
+        </record>
+
+        <!-- Processing Students Action -->
+        <record id="action_acmst_processing_students" model="ir.actions.act_window">
+            <field name="name">Processing Students (من طلاب المعالجات)</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('is_processing_student', '=', True)]</field>
+            <field name="context">{'create': False, 'search_default_processing_students': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No processing students found!
+                </p>
+                <p>
+                    Students marked as "من طلاب المعالجات" (processing students) 
+                    are those who were approved by ministry but don't have a university ID yet.
                 </p>
             </field>
         </record>

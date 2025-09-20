@@ -4,7 +4,7 @@
         
         <!-- Main Menu -->
         <menuitem id="menu_acmst_core_settings" 
-                  name="ACMST Core Settings" 
+                  name="⚙️ Core Settings" 
                   sequence="1" 
                   web_icon="acmst_core_settings,static/description/icon.png"/>
         
@@ -76,15 +76,15 @@
                   action="action_acmst_batch_creation_wizard" 
                   sequence="10"/>
         
-        <!-- Dashboard Menu -->
-        <menuitem id="menu_acmst_dashboard" 
-                  name="Dashboard" 
+        <!-- Core Dashboard Menu -->
+        <menuitem id="menu_acmst_core_dashboard" 
+                  name="📊 Core Dashboard" 
                   parent="menu_acmst_core_settings" 
                   sequence="5"/>
-        
-        <!-- Reports Menu -->
-        <menuitem id="menu_acmst_reports" 
-                  name="Reports" 
+
+        <!-- Core Reports Menu -->
+        <menuitem id="menu_acmst_core_reports" 
+                  name="📈 Core Reports" 
                   parent="menu_acmst_core_settings" 
                   sequence="70"/>
         

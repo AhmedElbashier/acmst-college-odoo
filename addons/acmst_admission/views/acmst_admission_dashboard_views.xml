@@ -11,26 +11,131 @@
                 <form string="Admission Dashboard">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button name="action_view_graph" type="object" class="oe_stat_button" icon="fa-bar-chart">
-                                <field name="id" widget="statinfo" string="Graph View"/>
+                            <button name="action_view_application_statistics" type="object" class="oe_stat_button" icon="fa-bar-chart">
+                                <field name="total_applications" widget="statinfo" string="Analytics"/>
                             </button>
-                            <button name="action_view_pivot" type="object" class="oe_stat_button" icon="fa-table">
-                                <field name="id" widget="statinfo" string="Pivot View"/>
+                            <button name="action_view_pending_review" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="pending_review" widget="statinfo" string="Pending Review"/>
+                            </button>
+                            <button name="action_view_completed" type="object" class="oe_stat_button" icon="fa-check">
+                                <field name="completed" widget="statinfo" string="Completed"/>
+                            </button>
+                            <button name="action_view_reports_dashboard" type="object" class="oe_stat_button" icon="fa-dashboard">
+                                <field name="id" widget="statinfo" string="Reports"/>
                             </button>
                         </div>
                         <div class="oe_title">
-                            <h1>Admission Dashboard</h1>
+                            <h1>🎓 Admission Management Dashboard</h1>
+                            <p>Comprehensive overview of the admission process and analytics</p>
                         </div>
-                        <group>
-                            <group string="Application Statistics">
-                                <field name="total_applications" widget="statinfo" string="Total Applications"/>
-                                <field name="pending_review" widget="statinfo" string="Pending Review"/>
-                                <field name="health_required" widget="statinfo" string="Health Required"/>
-                                <field name="coordinator_review" widget="statinfo" string="Coordinator Review"/>
-                                <field name="manager_review" widget="statinfo" string="Manager Review"/>
-                                <field name="completed" widget="statinfo" string="Completed"/>
-                            </group>
-                        </group>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">📊 Application Overview</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Total Applications</h4>
+                                                    <span class="stat-number"><field name="total_applications" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Completed</h4>
+                                                    <span class="stat-number"><field name="completed" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Pending Review</h4>
+                                                    <span class="stat-number"><field name="pending_review" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Health Required</h4>
+                                                    <span class="stat-number"><field name="health_required" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="panel panel-success">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">🔄 Process Status</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Coordinator Review</h4>
+                                                    <span class="stat-number"><field name="coordinator_review" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Manager Review</h4>
+                                                    <span class="stat-number"><field name="manager_review" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Ministry Pending</h4>
+                                                    <span class="stat-number"><field name="ministry_pending" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Rejected</h4>
+                                                    <span class="stat-number"><field name="rejected" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">📈 Quick Analytics</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <button name="action_view_application_statistics" type="object" class="btn btn-primary btn-block">
+                                            <i class="fa fa-bar-chart"></i> Application Analytics
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_program_statistics" type="object" class="btn btn-success btn-block">
+                                            <i class="fa fa-graduation-cap"></i> Program Analytics
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_health_statistics" type="object" class="btn btn-warning btn-block">
+                                            <i class="fa fa-heartbeat"></i> Health Analytics
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_conditions_statistics" type="object" class="btn btn-info btn-block">
+                                            <i class="fa fa-tasks"></i> Conditions Analytics
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </sheet>
                 </form>
             </field>
@@ -125,8 +230,8 @@
         <record id="action_acmst_application_statistics" model="ir.actions.act_window">
             <field name="name">Application Statistics</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">graph,pivot</field>
-            <field name="context">{}</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="context">{'group_by': ['state', 'create_date:month']}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No data available
@@ -141,8 +246,8 @@
         <record id="action_acmst_program_statistics" model="ir.actions.act_window">
             <field name="name">Program Statistics</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">graph,pivot</field>
-            <field name="context">{'group_by': ['program_id']}</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="context">{'group_by': ['program_id', 'state']}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No data available
@@ -157,14 +262,46 @@
         <record id="action_acmst_batch_statistics" model="ir.actions.act_window">
             <field name="name">Batch Statistics</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">graph,pivot</field>
-            <field name="context">{'group_by': ['batch_id']}</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="context">{'group_by': ['batch_id', 'state']}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No data available
                 </p>
                 <p>
                     Batch statistics will appear here.
+                </p>
+            </field>
+        </record>
+
+        <!-- Health Check Statistics Action -->
+        <record id="action_acmst_health_check_statistics" model="ir.actions.act_window">
+            <field name="name">Health Check Statistics</field>
+            <field name="res_model">acmst.health.check</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="context">{'group_by': ['state', 'medical_fitness', 'examiner_id']}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No data available
+                </p>
+                <p>
+                    Health check statistics will appear here.
+                </p>
+            </field>
+        </record>
+
+        <!-- Coordinator Conditions Statistics Action -->
+        <record id="action_acmst_conditions_statistics" model="ir.actions.act_window">
+            <field name="name">Conditions Statistics</field>
+            <field name="res_model">acmst.coordinator.condition</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="context">{'group_by': ['state', 'level', 'coordinator_id']}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No data available
+                </p>
+                <p>
+                    Coordinator conditions statistics will appear here.
                 </p>
             </field>
         </record>

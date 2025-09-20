@@ -2,380 +2,397 @@
 <odoo>
     <data>
         
-        <!-- Main Menu -->
+        <!-- ======================================== -->
+        <!-- MAIN ADMISSION MANAGEMENT MENU -->
+        <!-- ======================================== -->
         <menuitem id="menu_acmst_admission_root" 
-                  name="Admission Management" 
+                  name="🎓 Admission Management" 
                   sequence="2" 
                   web_icon="acmst_admission,static/description/icon.png"/>
 
-        <!-- Admission Files Menu -->
-        <menuitem id="menu_acmst_admission_files" 
-                  name="Admission Files" 
+        <!-- ======================================== -->
+        <!-- DASHBOARD & OVERVIEW -->
+        <!-- ======================================== -->
+        <menuitem id="menu_acmst_admission_dashboard" 
+                  name="📊 Admission Dashboard" 
                   parent="menu_acmst_admission_root" 
-                  action="action_acmst_admission_file" 
-                  sequence="10"/>
-
-        <!-- Health Checker Dashboard Menu -->
-        <menuitem id="menu_acmst_health_dashboard" 
-                  name="Health Checker Dashboard" 
-                  parent="menu_acmst_admission_root" 
-                  action="action_acmst_health_dashboard" 
-                  sequence="20"/>
-
-        <!-- Health Checker Pending Menu -->
-        <menuitem id="menu_acmst_health_pending" 
-                  name="Pending Review" 
-                  parent="menu_acmst_health_dashboard" 
-                  action="action_acmst_health_pending" 
-                  sequence="10"/>
-
-        <!-- Health Checker Approved Menu -->
-        <menuitem id="menu_acmst_health_approved" 
-                  name="Approved" 
-                  parent="menu_acmst_health_dashboard" 
-                  action="action_acmst_health_approved" 
-                  sequence="20"/>
-
-        <!-- Health Checker Rejected Menu -->
-        <menuitem id="menu_acmst_health_rejected" 
-                  name="Rejected" 
-                  parent="menu_acmst_health_dashboard" 
-                  action="action_acmst_health_rejected" 
-                  sequence="30"/>
-
-        <!-- Health Checker My Reviews Menu -->
-        <menuitem id="menu_acmst_health_my_reviews" 
-                  name="My Reviews" 
-                  parent="menu_acmst_health_dashboard" 
-                  action="action_acmst_health_my_reviews" 
-                  sequence="40"/>
-
-        <!-- Coordinator Conditions Menu -->
-        <menuitem id="menu_acmst_coordinator_conditions" 
-                  name="Coordinator Conditions" 
-                  parent="menu_acmst_admission_root" 
-                  action="action_acmst_coordinator_condition" 
-                  sequence="30"/>
-
-        <!-- Coordinator Dashboard Menu -->
-        <menuitem id="menu_acmst_coordinator_dashboard" 
-                  name="Coordinator Dashboard" 
-                  parent="menu_acmst_admission_root" 
-                  action="action_acmst_coordinator_reviews" 
-                  sequence="31"/>
-
-        <!-- Coordinator Dashboard Form Menu -->
-        <menuitem id="menu_acmst_coordinator_dashboard_form" 
-                  name="Dashboard Overview" 
-                  parent="menu_acmst_coordinator_dashboard" 
-                  action="action_acmst_coordinator_dashboard_form" 
+                  action="action_acmst_dashboard" 
                   sequence="5"/>
 
-        <!-- Coordinator Pending Review Menu -->
-        <menuitem id="menu_acmst_coordinator_pending_review" 
-                  name="Pending Review" 
-                  parent="menu_acmst_coordinator_dashboard" 
-                  action="action_acmst_coordinator_pending_review" 
+        <!-- ======================================== -->
+        <!-- APPLICATIONS MANAGEMENT -->
+        <!-- ======================================== -->
+        <menuitem id="menu_acmst_applications" 
+                  name="📋 Applications" 
+                  parent="menu_acmst_admission_root" 
                   sequence="10"/>
 
-        <!-- Coordinator Approved Menu -->
-        <menuitem id="menu_acmst_coordinator_approved" 
-                  name="Approved" 
-                  parent="menu_acmst_coordinator_dashboard" 
-                  action="action_acmst_coordinator_approved" 
+        <!-- Portal Applications -->
+        <menuitem id="menu_acmst_portal_applications" 
+                  name="🌐 Portal Applications" 
+                  parent="menu_acmst_applications" 
+                  action="action_acmst_portal_application" 
+                  sequence="10"/>
+
+        <!-- Admission Files -->
+        <menuitem id="menu_acmst_admission_files" 
+                  name="📁 Admission Files" 
+                  parent="menu_acmst_applications" 
+                  action="action_acmst_admission_file" 
                   sequence="20"/>
 
-        <!-- Coordinator Conditional Menu -->
-        <menuitem id="menu_acmst_coordinator_conditional" 
-                  name="Conditional" 
-                  parent="menu_acmst_coordinator_dashboard" 
-                  action="action_acmst_coordinator_conditional" 
+        <!-- Processing Students -->
+        <menuitem id="menu_acmst_processing_students" 
+                  name="⏳ Processing Students (من طلاب المعالجات)" 
+                  parent="menu_acmst_applications" 
+                  action="action_acmst_processing_students" 
                   sequence="30"/>
 
-        <!-- Coordinator My Reviews Menu -->
-        <menuitem id="menu_acmst_coordinator_my_reviews" 
-                  name="My Reviews" 
-                  parent="menu_acmst_coordinator_dashboard" 
-                  action="action_acmst_coordinator_my_reviews" 
+        <!-- ======================================== -->
+        <!-- HEALTH CHECK MANAGEMENT -->
+        <!-- ======================================== -->
+        <menuitem id="menu_acmst_health_management" 
+                  name="🏥 Health Check" 
+                  parent="menu_acmst_admission_root" 
+                  sequence="20"/>
+
+        <!-- Health Officer Dashboard -->
+        <menuitem id="menu_acmst_health_officer_dashboard" 
+                  name="📊 Health Officer Dashboard" 
+                  parent="menu_acmst_health_management" 
+                  action="action_acmst_health_officer_dashboard" 
+                  sequence="10"/>
+
+        <!-- Health Check Status Menus -->
+        <menuitem id="menu_acmst_health_pending" 
+                  name="⏳ Pending Review" 
+                  parent="menu_acmst_health_management" 
+                  action="action_acmst_health_pending" 
+                  sequence="20"/>
+
+        <menuitem id="menu_acmst_health_approved" 
+                  name="✅ Approved" 
+                  parent="menu_acmst_health_management" 
+                  action="action_acmst_health_approved" 
+                  sequence="30"/>
+
+        <menuitem id="menu_acmst_health_rejected" 
+                  name="❌ Rejected" 
+                  parent="menu_acmst_health_management" 
+                  action="action_acmst_health_rejected" 
                   sequence="40"/>
 
-        <!-- Coordinator Rejected Menu -->
+        <menuitem id="menu_acmst_health_my_reviews" 
+                  name="👤 My Reviews" 
+                  parent="menu_acmst_health_management" 
+                  action="action_acmst_health_my_reviews" 
+                  sequence="50"/>
+
+        <!-- ======================================== -->
+        <!-- COORDINATOR MANAGEMENT -->
+        <!-- ======================================== -->
+        <menuitem id="menu_acmst_coordinator_management" 
+                  name="👨‍🏫 Coordinator" 
+                  parent="menu_acmst_admission_root" 
+                  sequence="30"/>
+
+        <!-- Coordinator Dashboard -->
+        <menuitem id="menu_acmst_coordinator_dashboard" 
+                  name="📊 Coordinator Dashboard" 
+                  parent="menu_acmst_coordinator_management" 
+                  action="action_acmst_coordinator_dashboard" 
+                  sequence="10"/>
+
+        <!-- Coordinator Reviews by Status -->
+        <menuitem id="menu_acmst_coordinator_pending_review" 
+                  name="⏳ Pending Review" 
+                  parent="menu_acmst_coordinator_management" 
+                  action="action_acmst_coordinator_pending_review" 
+                  sequence="20"/>
+
+        <menuitem id="menu_acmst_coordinator_approved" 
+                  name="✅ Approved" 
+                  parent="menu_acmst_coordinator_management" 
+                  action="action_acmst_coordinator_approved" 
+                  sequence="30"/>
+
+        <menuitem id="menu_acmst_coordinator_conditional" 
+                  name="⚠️ Conditional" 
+                  parent="menu_acmst_coordinator_management" 
+                  action="action_acmst_coordinator_conditional" 
+                  sequence="40"/>
+
         <menuitem id="menu_acmst_coordinator_rejected" 
-                  name="Rejected" 
-                  parent="menu_acmst_coordinator_dashboard" 
+                  name="❌ Rejected" 
+                  parent="menu_acmst_coordinator_management" 
                   action="action_acmst_coordinator_rejected" 
                   sequence="50"/>
 
-        <!-- Coordinator My Conditions Menu -->
+        <menuitem id="menu_acmst_coordinator_my_reviews" 
+                  name="👤 My Reviews" 
+                  parent="menu_acmst_coordinator_management" 
+                  action="action_acmst_coordinator_my_reviews" 
+                  sequence="60"/>
+
+        <!-- Coordinator Conditions -->
+        <menuitem id="menu_acmst_coordinator_conditions" 
+                  name="📋 Conditions Management" 
+                  parent="menu_acmst_coordinator_management" 
+                  action="action_acmst_coordinator_condition" 
+                  sequence="70"/>
+
         <menuitem id="menu_acmst_coordinator_my_conditions" 
-                  name="My Conditions" 
+                  name="👤 My Conditions" 
                   parent="menu_acmst_coordinator_conditions" 
                   action="action_acmst_coordinator_my_conditions" 
                   sequence="10"/>
 
-        <!-- Coordinator Overdue Conditions Menu -->
         <menuitem id="menu_acmst_coordinator_overdue_conditions" 
-                  name="Overdue Conditions" 
+                  name="⚠️ Overdue Conditions" 
                   parent="menu_acmst_coordinator_conditions" 
                   action="action_acmst_coordinator_overdue_conditions" 
                   sequence="20"/>
 
-        <!-- Officer Dashboard Menu -->
+        <!-- ======================================== -->
+        <!-- OFFICER MANAGEMENT -->
+        <!-- ======================================== -->
+        <menuitem id="menu_acmst_officer_management" 
+                  name="👨‍💼 Officer" 
+                  parent="menu_acmst_admission_root" 
+                  sequence="40"/>
+
+        <!-- Officer Dashboard -->
         <menuitem id="menu_acmst_officer_dashboard" 
-                  name="Officer Dashboard" 
-                  parent="menu_acmst_admission_root" 
+                  name="📊 Officer Dashboard" 
+                  parent="menu_acmst_officer_management" 
                   action="action_acmst_officer_dashboard" 
-                  sequence="35"/>
+                  sequence="10"/>
 
-        <!-- Officer New Applications Menu -->
+        <!-- Officer Applications by Status -->
         <menuitem id="menu_acmst_officer_new_applications" 
-                  name="New Applications" 
-                  parent="menu_acmst_officer_dashboard" 
+                  name="🆕 New Applications" 
+                  parent="menu_acmst_officer_management" 
                   action="action_acmst_officer_new_applications" 
-                  sequence="10"/>
+                  sequence="20"/>
 
-        <!-- Officer Ministry Pending Menu -->
         <menuitem id="menu_acmst_officer_ministry_pending" 
-                  name="Ministry Pending" 
-                  parent="menu_acmst_officer_dashboard" 
+                  name="🏛️ Ministry Pending" 
+                  parent="menu_acmst_officer_management" 
                   action="action_acmst_officer_ministry_pending" 
-                  sequence="20"/>
-
-        <!-- Officer Ministry Approved Menu -->
-        <menuitem id="menu_acmst_officer_ministry_approved" 
-                  name="Ministry Approved" 
-                  parent="menu_acmst_officer_dashboard" 
-                  action="action_acmst_officer_ministry_approved" 
                   sequence="30"/>
 
-        <!-- Officer Ministry Rejected Menu -->
-        <menuitem id="menu_acmst_officer_ministry_rejected" 
-                  name="Ministry Rejected" 
-                  parent="menu_acmst_officer_dashboard" 
-                  action="action_acmst_officer_ministry_rejected" 
+        <menuitem id="menu_acmst_officer_ministry_approved" 
+                  name="✅ Ministry Approved" 
+                  parent="menu_acmst_officer_management" 
+                  action="action_acmst_officer_ministry_approved" 
                   sequence="40"/>
 
-        <!-- Health Officer Dashboard Menu -->
-        <menuitem id="menu_acmst_health_officer_dashboard" 
-                  name="Health Officer Dashboard" 
-                  parent="menu_acmst_admission_root" 
-                  action="action_acmst_health_officer_dashboard" 
-                  sequence="36"/>
+        <menuitem id="menu_acmst_officer_ministry_rejected" 
+                  name="❌ Ministry Rejected" 
+                  parent="menu_acmst_officer_management" 
+                  action="action_acmst_officer_ministry_rejected" 
+                  sequence="50"/>
 
-        <!-- Health Officer Pending Menu -->
-        <menuitem id="menu_acmst_health_officer_pending" 
-                  name="Pending Health Checks" 
-                  parent="menu_acmst_health_officer_dashboard" 
-                  action="action_acmst_health_officer_pending" 
+        <!-- ======================================== -->
+        <!-- MANAGER MANAGEMENT -->
+        <!-- ======================================== -->
+        <menuitem id="menu_acmst_manager_management" 
+                  name="👨‍💼 Manager" 
+                  parent="menu_acmst_admission_root" 
+                  sequence="50"/>
+
+        <!-- Manager Dashboard -->
+        <menuitem id="menu_acmst_manager_dashboard" 
+                  name="📊 Manager Dashboard" 
+                  parent="menu_acmst_manager_management" 
+                  action="action_acmst_manager_dashboard" 
                   sequence="10"/>
 
-        <!-- Health Officer Approved Menu -->
-        <menuitem id="menu_acmst_health_officer_approved" 
-                  name="Approved Health Checks" 
-                  parent="menu_acmst_health_officer_dashboard" 
-                  action="action_acmst_health_officer_approved" 
+        <!-- Manager Applications by Status -->
+        <menuitem id="menu_acmst_manager_pending_review" 
+                  name="⏳ Pending Review" 
+                  parent="menu_acmst_manager_management" 
+                  action="action_acmst_manager_pending_review" 
                   sequence="20"/>
 
-        <!-- Health Officer Rejected Menu -->
-        <menuitem id="menu_acmst_health_officer_rejected" 
-                  name="Rejected Health Checks" 
-                  parent="menu_acmst_health_officer_dashboard" 
-                  action="action_acmst_health_officer_rejected" 
+        <menuitem id="menu_acmst_manager_approved" 
+                  name="✅ Approved Applications" 
+                  parent="menu_acmst_manager_management" 
+                  action="action_acmst_manager_approved" 
                   sequence="30"/>
 
-        <!-- Health Officer My Checks Menu -->
-        <menuitem id="menu_acmst_health_officer_my_checks" 
-                  name="My Health Checks" 
-                  parent="menu_acmst_health_officer_dashboard" 
-                  action="action_acmst_health_officer_my_checks" 
+        <menuitem id="menu_acmst_manager_rejected" 
+                  name="❌ Rejected Applications" 
+                  parent="menu_acmst_manager_management" 
+                  action="action_acmst_manager_rejected" 
                   sequence="40"/>
 
-        <!-- Admission Manager Dashboard Menu -->
-        <menuitem id="menu_acmst_admission_manager_dashboard" 
-                  name="Admission Manager Dashboard" 
-                  parent="menu_acmst_admission_root" 
-                  action="action_acmst_admission_manager_dashboard" 
-                  sequence="37"/>
+        <menuitem id="menu_acmst_completed_applications" 
+                  name="🎉 Completed Applications" 
+                  parent="menu_acmst_manager_management" 
+                  action="action_acmst_completed_applications" 
+                  sequence="50"/>
 
-        <!-- Admission Manager All Applications Menu -->
+        <menuitem id="menu_acmst_student_records" 
+                  name="👥 Student Records" 
+                  parent="menu_acmst_manager_management" 
+                  action="action_acmst_student_records" 
+                  sequence="60"/>
+
+        <!-- Admission Manager Dashboard -->
+        <menuitem id="menu_acmst_admission_manager_dashboard" 
+                  name="📋 Admission Manager Dashboard" 
+                  parent="menu_acmst_manager_management" 
+                  action="action_acmst_admission_manager_dashboard" 
+                  sequence="70"/>
+
         <menuitem id="menu_acmst_admission_manager_all" 
-                  name="All Applications" 
+                  name="📊 All Applications" 
                   parent="menu_acmst_admission_manager_dashboard" 
                   action="action_acmst_admission_manager_all" 
                   sequence="10"/>
 
-        <!-- Admission Manager Pending Menu -->
         <menuitem id="menu_acmst_admission_manager_pending" 
-                  name="Pending Review" 
+                  name="⏳ Pending Review" 
                   parent="menu_acmst_admission_manager_dashboard" 
                   action="action_acmst_admission_manager_pending" 
                   sequence="20"/>
 
-        <!-- Admission Manager Completed Menu -->
         <menuitem id="menu_acmst_admission_manager_completed" 
-                  name="Completed Applications" 
+                  name="🎉 Completed Applications" 
                   parent="menu_acmst_admission_manager_dashboard" 
                   action="action_acmst_admission_manager_completed" 
                   sequence="30"/>
 
-        <!-- Admission Manager Rejected Menu -->
         <menuitem id="menu_acmst_admission_manager_rejected" 
-                  name="Rejected Applications" 
+                  name="❌ Rejected Applications" 
                   parent="menu_acmst_admission_manager_dashboard" 
                   action="action_acmst_admission_manager_rejected" 
                   sequence="40"/>
 
-        <!-- Manager Dashboard Menu -->
-        <menuitem id="menu_acmst_manager_dashboard" 
-                  name="Manager Dashboard" 
+        <!-- ======================================== -->
+        <!-- REPORTS & ANALYTICS -->
+        <!-- ======================================== -->
+        <menuitem id="menu_acmst_admission_reports" 
+                  name="📈 Reports &amp; Analytics" 
                   parent="menu_acmst_admission_root" 
-                  action="action_acmst_manager_dashboard" 
-                  sequence="40"/>
+                  sequence="60"/>
 
-        <!-- Manager Pending Review Menu -->
-        <menuitem id="menu_acmst_manager_pending_review" 
-                  name="Pending Review" 
-                  parent="menu_acmst_manager_dashboard" 
-                  action="action_acmst_manager_pending_review" 
-                  sequence="10"/>
-
-        <!-- Manager Approved Menu -->
-        <menuitem id="menu_acmst_manager_approved" 
-                  name="Approved Applications" 
-                  parent="menu_acmst_manager_dashboard" 
-                  action="action_acmst_manager_approved" 
-                  sequence="20"/>
-
-        <!-- Manager Rejected Menu -->
-        <menuitem id="menu_acmst_manager_rejected" 
-                  name="Rejected Applications" 
-                  parent="menu_acmst_manager_dashboard" 
-                  action="action_acmst_manager_rejected" 
-                  sequence="25"/>
-
-        <!-- Completed Applications Menu -->
-        <menuitem id="menu_acmst_completed_applications" 
-                  name="Completed Applications" 
-                  parent="menu_acmst_manager_dashboard" 
-                  action="action_acmst_completed_applications" 
-                  sequence="30"/>
-
-        <!-- Student Records Menu -->
-        <menuitem id="menu_acmst_student_records" 
-                  name="Student Records" 
-                  parent="menu_acmst_manager_dashboard" 
-                  action="action_acmst_student_records" 
-                  sequence="40"/>
-
-        <!-- Workflow Engine Menu -->
-        <menuitem id="menu_acmst_workflow_engine" 
-                  name="Workflow Engine" 
-                  parent="menu_acmst_admission_root" 
-                  action="action_acmst_workflow_engine" 
-                  sequence="50"/>
-
-        <!-- Workflow Rules Menu -->
-        <menuitem id="menu_acmst_workflow_rules" 
-                  name="Workflow Rules" 
-                  parent="menu_acmst_workflow_engine" 
-                  action="action_acmst_workflow_rule" 
-                  sequence="10"/>
-
-        <!-- Dashboard Menu -->
-        <menuitem id="menu_acmst_dashboard" 
-                  name="Dashboard" 
-                  parent="menu_acmst_admission_root" 
-                  action="action_acmst_admission_dashboard" 
+        <menuitem id="menu_acmst_reports_dashboard" 
+                  name="📊 Analytics Dashboard" 
+                  parent="menu_acmst_admission_reports" 
+                  action="action_acmst_reports_dashboard" 
                   sequence="5"/>
 
-        <!-- Pending Review Menu -->
+        <!-- Statistics -->
+        <menuitem id="menu_acmst_statistics" 
+                  name="📊 Application Statistics" 
+                  parent="menu_acmst_admission_reports" 
+                  action="action_acmst_application_statistics" 
+                  sequence="10"/>
+
+        <menuitem id="menu_acmst_program_statistics" 
+                  name="🎓 Program Statistics" 
+                  parent="menu_acmst_admission_reports" 
+                  action="action_acmst_program_statistics" 
+                  sequence="20"/>
+
+        <menuitem id="menu_acmst_batch_statistics" 
+                  name="📅 Batch Statistics" 
+                  parent="menu_acmst_admission_reports" 
+                  action="action_acmst_batch_statistics" 
+                  sequence="30"/>
+
+        <menuitem id="menu_acmst_health_check_statistics" 
+                  name="🏥 Health Check Statistics" 
+                  parent="menu_acmst_admission_reports" 
+                  action="action_acmst_health_check_statistics" 
+                  sequence="40"/>
+
+        <menuitem id="menu_acmst_conditions_statistics" 
+                  name="📋 Conditions Statistics" 
+                  parent="menu_acmst_admission_reports" 
+                  action="action_acmst_conditions_statistics" 
+                  sequence="50"/>
+
+        <!-- Dashboard Quick Access -->
         <menuitem id="menu_acmst_pending_review" 
-                  name="Pending Review" 
-                  parent="menu_acmst_dashboard" 
+                  name="⏳ Pending Review" 
+                  parent="menu_acmst_admission_dashboard" 
                   action="action_acmst_admission_file_pending" 
                   sequence="10"/>
 
-        <!-- Recent Applications Menu -->
         <menuitem id="menu_acmst_recent_applications" 
-                  name="Recent Applications" 
-                  parent="menu_acmst_dashboard" 
+                  name="🕒 Recent Applications" 
+                  parent="menu_acmst_admission_dashboard" 
                   action="action_acmst_recent_applications" 
                   sequence="20"/>
 
-        <!-- Overdue Applications Menu -->
         <menuitem id="menu_acmst_overdue_applications" 
-                  name="Overdue Applications" 
-                  parent="menu_acmst_dashboard" 
+                  name="⚠️ Overdue Applications" 
+                  parent="menu_acmst_admission_dashboard" 
                   action="action_acmst_overdue_applications" 
                   sequence="30"/>
 
-        <!-- Statistics Menu -->
-        <menuitem id="menu_acmst_statistics" 
-                  name="Statistics" 
-                  parent="menu_acmst_dashboard" 
-                  action="action_acmst_application_statistics" 
-                  sequence="40"/>
-
-        <!-- Program Statistics Menu -->
-        <menuitem id="menu_acmst_program_statistics" 
-                  name="Program Statistics" 
-                  parent="menu_acmst_statistics" 
-                  action="action_acmst_program_statistics" 
-                  sequence="10"/>
-
-        <!-- Batch Statistics Menu -->
-        <menuitem id="menu_acmst_batch_statistics" 
-                  name="Batch Statistics" 
-                  parent="menu_acmst_statistics" 
-                  action="action_acmst_batch_statistics" 
-                  sequence="20"/>
-
-        <!-- Audit Log Menu -->
-        <menuitem id="menu_acmst_audit_log" 
-                  name="Audit Log" 
-                  parent="menu_acmst_admission_root" 
-                  action="action_acmst_audit_log" 
-                  sequence="60"/>
-
-        <!-- Security Violations Menu -->
-        <menuitem id="menu_acmst_security_violations" 
-                  name="Security Violations" 
-                  parent="menu_acmst_audit_log" 
-                  action="action_acmst_security_violations" 
-                  sequence="10"/>
-
-        <!-- Anomalies Menu -->
-        <menuitem id="menu_acmst_anomalies" 
-                  name="Anomalies" 
-                  parent="menu_acmst_audit_log" 
-                  action="action_acmst_anomalies" 
-                  sequence="20"/>
-
-        <!-- Portal Applications Menu -->
-        <menuitem id="menu_acmst_portal_applications" 
-                  name="Portal Applications" 
-                  parent="menu_acmst_admission_root" 
-                  action="action_acmst_portal_application" 
-                  sequence="40"/>
-
-        <!-- Approvals Menu -->
-        <menuitem id="menu_acmst_admission_approvals" 
-                  name="Approval History" 
-                  parent="menu_acmst_admission_root" 
-                  action="action_acmst_admission_approval" 
-                  sequence="50"/>
-
-        <!-- Reports Menu -->
-        <menuitem id="menu_acmst_admission_reports" 
-                  name="Reports" 
-                  parent="menu_acmst_admission_root" 
-                  sequence="60"/>
-
-        <!-- Configuration Menu -->
-        <menuitem id="menu_acmst_admission_config" 
-                  name="Configuration" 
+        <!-- ======================================== -->
+        <!-- APPROVAL HISTORY & TRACKING -->
+        <!-- ======================================== -->
+        <menuitem id="menu_acmst_approvals" 
+                  name="✅ Approvals &amp; History" 
                   parent="menu_acmst_admission_root" 
                   sequence="70"/>
+
+        <menuitem id="menu_acmst_admission_approvals" 
+                  name="📋 Approval History" 
+                  parent="menu_acmst_approvals" 
+                  action="action_acmst_admission_approval" 
+                  sequence="10"/>
+
+        <!-- ======================================== -->
+        <!-- AUDIT & SECURITY -->
+        <!-- ======================================== -->
+        <menuitem id="menu_acmst_audit" 
+                  name="🔍 Audit &amp; Security" 
+                  parent="menu_acmst_admission_root" 
+                  sequence="80"/>
+
+        <menuitem id="menu_acmst_audit_log" 
+                  name="📝 Audit Log" 
+                  parent="menu_acmst_audit" 
+                  action="action_acmst_audit_log" 
+                  sequence="10"/>
+
+        <menuitem id="menu_acmst_security_violations" 
+                  name="🚨 Security Violations" 
+                  parent="menu_acmst_audit" 
+                  action="action_acmst_security_violations" 
+                  sequence="20"/>
+
+        <menuitem id="menu_acmst_anomalies" 
+                  name="⚠️ Anomalies" 
+                  parent="menu_acmst_audit" 
+                  action="action_acmst_anomalies" 
+                  sequence="30"/>
+
+        <!-- ======================================== -->
+        <!-- WORKFLOW & CONFIGURATION -->
+        <!-- ======================================== -->
+        <menuitem id="menu_acmst_admission_configuration" 
+                  name="⚙️ Admission Configuration" 
+                  parent="menu_acmst_admission_root" 
+                  sequence="90"/>
+
+        <menuitem id="menu_acmst_workflow_engine" 
+                  name="🔄 Workflow Engine" 
+                  parent="menu_acmst_admission_configuration" 
+                  action="action_acmst_workflow_engine" 
+                  sequence="10"/>
+
+        <menuitem id="menu_acmst_workflow_rules" 
+                  name="📋 Workflow Rules" 
+                  parent="menu_acmst_admission_configuration" 
+                  action="action_acmst_workflow_rule" 
+                  sequence="20"/>
 
     </data>
 </odoo>

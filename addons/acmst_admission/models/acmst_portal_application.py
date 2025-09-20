@@ -68,6 +68,7 @@ class AcmstPortalApplication(models.Model):
         ('submitted', 'Submitted'),
         ('under_review', 'Under Review'),
         ('approved', 'Approved'),
+        ('admission_created', 'Admission File Created'),
         ('rejected', 'Rejected'),
         ('cancelled', 'Cancelled')
     ], string='State', default='draft', tracking=True, help='Current state of the application')
@@ -250,6 +251,15 @@ class AcmstPortalApplication(models.Model):
         
         return True
 
+    def action_review(self):
+        """Mark application for review"""
+        self.ensure_one()
+        if self.state != 'submitted':
+            raise UserError(_('Only submitted applications can be marked for review.'))
+
+        self.write({'state': 'under_review'})
+        return True
+
     def action_submit_to_ministry(self):
         """Submit application to ministry for approval"""
         self.ensure_one()
@@ -298,27 +308,14 @@ class AcmstPortalApplication(models.Model):
         return True
 
     def action_approve(self):
-        """Approve application and create admission file"""
+        """Open ministry approval wizard for portal application"""
         self.ensure_one()
         if self.state not in ['submitted', 'under_review']:
             raise UserError(_('Only submitted or under review applications can be approved.'))
         
-        # Check if admission file already exists
-        if self.admission_file_id:
-            # Update existing admission file to health_required state
-            self.admission_file_id.write({'state': 'health_required'})
-            
-            # Create approval record for direct approval
-            self.env['acmst.admission.approval'].create({
-                'admission_file_id': self.admission_file_id.id,
-                'approver_id': self.env.user.id,
-                'approval_type': 'ministry',
-                'approval_date': fields.Datetime.now(),
-                'decision': 'approved',
-                'comments': 'Directly approved, sent to health check'
-            })
-        else:
-            # Create new admission file with health_required state (direct to health check)
+        # Create or get admission file first
+        if not self.admission_file_id:
+            # Create new admission file in ministry_pending state
             admission_vals = {
                 'applicant_name': self.applicant_name,
                 'national_id': self.national_id,
@@ -334,39 +331,57 @@ class AcmstPortalApplication(models.Model):
                 'emergency_phone': self.emergency_phone,
                 'previous_education': self.previous_education,
                 'submission_method': 'portal',
-                'state': 'health_required'
+                'state': 'ministry_pending',
+                'name': self.name  # Use the same name as portal application
             }
             
             admission_file = self.env['acmst.admission.file'].create(admission_vals)
-            
-            # Create approval record for direct approval
-            self.env['acmst.admission.approval'].create({
-                'admission_file_id': admission_file.id,
-                'approver_id': self.env.user.id,
-                'approval_type': 'ministry',
-                'approval_date': fields.Datetime.now(),
-                'decision': 'approved',
-                'comments': 'Directly approved, sent to health check'
-            })
-            
             self.write({'admission_file_id': admission_file.id})
+        else:
+            # Update existing admission file with current portal data and set to ministry_pending state
+            self.admission_file_id.write({
+                'applicant_name': self.applicant_name,
+                'national_id': self.national_id,
+                'phone': self.phone,
+                'email': self.email,
+                'program_id': self.program_id.id,
+                'batch_id': self.batch_id.id,
+                'birth_date': self.birth_date,
+                'gender': self.gender,
+                'nationality': self.nationality,
+                'address': self.address,
+                'emergency_contact': self.emergency_contact,
+                'emergency_phone': self.emergency_phone,
+                'previous_education': self.previous_education,
+                'state': 'ministry_pending'
+            })
         
-        self.write({'state': 'approved'})
+        # Reload the admission file to get the latest data
+        admission_file = self.env['acmst.admission.file'].browse(self.admission_file_id.id)
         
-        # Create health check record if admission file was created
-        if self.admission_file_id:
-            self.admission_file_id._create_health_check_record()
+        # Validate student data before opening wizard
+        try:
+            admission_file.validate_student_data()
+        except ValidationError as e:
+            raise UserError(_('Please fix the following data validation errors before approving:\n\n%s') % str(e))
         
-        # Send approval notification
-        self._send_approval_notification()
-        
-        return True
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Ministry Approval - Portal Application'),
+            'res_model': 'acmst.ministry.approval.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_admission_file_id': self.admission_file_id.id,
+                'default_approver_id': self.env.user.id,
+            }
+        }
 
     def action_reject(self):
         """Reject application"""
         self.ensure_one()
-        if self.state != 'submitted':
-            raise UserError(_('Only submitted applications can be rejected.'))
+        if self.state not in ['submitted', 'under_review']:
+            raise UserError(_('Only submitted or under review applications can be rejected.'))
         
         self.write({'state': 'rejected'})
         
@@ -437,13 +452,76 @@ class AcmstPortalApplication(models.Model):
         
         return self.search(domain)
 
+    def action_create_admission_file(self):
+        """Create admission file from portal application"""
+        self.ensure_one()
+        if self.state not in ['submitted', 'under_review', 'approved']:
+            raise UserError(_('Only submitted, under review, or approved applications can create admission files.'))
+
+        # Create or get admission file
+        if not self.admission_file_id:
+            # Create new admission file in ministry_pending state
+            admission_vals = {
+                'applicant_name': self.applicant_name,
+                'national_id': self.national_id,
+                'phone': self.phone,
+                'email': self.email,
+                'program_id': self.program_id.id,
+                'batch_id': self.batch_id.id,
+                'birth_date': self.birth_date,
+                'gender': self.gender,
+                'nationality': self.nationality,
+                'address': self.address,
+                'emergency_contact': self.emergency_contact,
+                'emergency_phone': self.emergency_phone,
+                'previous_education': self.previous_education,
+                'submission_method': 'portal',
+                'state': 'ministry_pending',
+                'name': self.name  # Use the same name as portal application
+            }
+
+            admission_file = self.env['acmst.admission.file'].create(admission_vals)
+            self.write({'admission_file_id': admission_file.id})
+        else:
+            # Update existing admission file with current portal data and set to ministry_pending state
+            self.admission_file_id.write({
+                'applicant_name': self.applicant_name,
+                'national_id': self.national_id,
+                'phone': self.phone,
+                'email': self.email,
+                'program_id': self.program_id.id,
+                'batch_id': self.batch_id.id,
+                'birth_date': self.birth_date,
+                'gender': self.gender,
+                'nationality': self.nationality,
+                'address': self.address,
+                'emergency_contact': self.emergency_contact,
+                'emergency_phone': self.emergency_phone,
+                'previous_education': self.previous_education,
+                'state': 'ministry_pending'
+            })
+
+        # Update portal application state
+        self.write({'state': 'admission_created'})
+
+        # Create initial approval record for ministry pending
+        self.env['acmst.admission.approval'].create({
+            'admission_file_id': self.admission_file_id.id,
+            'approval_type': 'ministry',
+            'approval_date': fields.Datetime.now(),
+            'decision': 'pending',
+            'comments': 'Admission file created from portal application'
+        })
+
+        return True
+
     @api.model
     def get_application_status(self, application_id):
         """Get application status for portal display"""
         application = self.browse(application_id)
         if not application.exists():
             return None
-        
+
         status_info = {
             'state': application.state,
             'state_display': dict(application._fields['state'].selection)[application.state],
@@ -451,5 +529,5 @@ class AcmstPortalApplication(models.Model):
             'admission_file_id': application.admission_file_id.id if application.admission_file_id else None,
             'file_number': application.admission_file_id.name if application.admission_file_id else None
         }
-        
+
         return status_info

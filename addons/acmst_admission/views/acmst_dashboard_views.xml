@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Dashboard Form View -->
+        <record id="view_acmst_dashboard_form" model="ir.ui.view">
+            <field name="name">acmst.dashboard.form</field>
+            <field name="model">acmst.dashboard</field>
+            <field name="arch" type="xml">
+                <form string="Dashboard">
+                    <div class="oe_title">
+                        <h1>🎓 Admission Management Dashboard</h1>
+                        <p>Comprehensive analytics and reporting for the admission process</p>
+                    </div>
+                    
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">📊 Application Overview</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="stat-box">
+                                        <div class="stat-number">
+                                            <field name="total_applications" widget="statinfo" string="Total Applications"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-box">
+                                        <div class="stat-number">
+                                            <field name="completed" widget="statinfo" string="Completed"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-box">
+                                        <div class="stat-number">
+                                            <field name="pending_review" widget="statinfo" string="Pending Review"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-box">
+                                        <div class="stat-number">
+                                            <field name="health_required" widget="statinfo" string="Health Required"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">🏥 Health Check Status</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="stat-box">
+                                        <div class="stat-number">
+                                            <field name="total_health_checks" widget="statinfo" string="Total Health Checks"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-box">
+                                        <div class="stat-number">
+                                            <field name="approved_health_checks_count" widget="statinfo" string="Approved"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">🎓 Coordinator Reviews</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="stat-box">
+                                        <div class="stat-number">
+                                            <field name="coordinator_pending_count" widget="statinfo" string="Pending Review"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-box">
+                                        <div class="stat-number">
+                                            <field name="coordinator_approved_count" widget="statinfo" string="Approved"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-box">
+                                        <div class="stat-number">
+                                            <field name="coordinator_conditional_count" widget="statinfo" string="Conditional"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-box">
+                                        <div class="stat-number">
+                                            <field name="my_reviews_count" widget="statinfo" string="My Reviews"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">⚡ Quick Actions</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button name="action_view_pending_review" type="object" class="btn btn-warning btn-block">
+                                        ⏳ Pending Review
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button name="action_view_approved" type="object" class="btn btn-success btn-block">
+                                        ✅ Approved
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button name="action_view_completed" type="object" class="btn btn-info btn-block">
+                                        🎯 Completed
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Dashboard Action -->
+        <record id="action_acmst_dashboard" model="ir.actions.act_window">
+            <field name="name">Admission Dashboard</field>
+            <field name="res_model">acmst.dashboard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_acmst_dashboard_form"/>
+            <field name="context">{}</field>
+        </record>
+
+    </data>
+</odoo>

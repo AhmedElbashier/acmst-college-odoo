@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- University ID Update Wizard Form View -->
+        <record id="acmst_university_id_update_wizard_form" model="ir.ui.view">
+            <field name="name">acmst.university.id.update.wizard.form</field>
+            <field name="model">acmst.university.id.update.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Update University ID">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="admission_file_id" invisible="1"/>
+                                Update University ID - <field name="applicant_name" readonly="1"/>
+                            </h1>
+                        </div>
+                        
+                        <div class="alert alert-info" role="alert">
+                            <strong>University ID Update</strong><br/>
+                            This student is currently marked as "من طلاب المعالجات" (processing student) 
+                            because no university ID was provided during ministry approval. 
+                            You can now update it with the university ID provided by the ministry.
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="applicant_name" readonly="1"/>
+                                <field name="national_id" readonly="1"/>
+                                <field name="current_university_id" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="new_university_id" required="1" placeholder="Enter the university ID provided by ministry"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <field name="comments" placeholder="Enter any comments about this update (optional)"/>
+                        </group>
+                        
+                        <footer>
+                            <button name="action_update_university_id" 
+                                    type="object" 
+                                    string="Update University ID" 
+                                    class="btn-primary"/>
+                            <button name="action_cancel" 
+                                    type="object" 
+                                    string="Cancel" 
+                                    class="btn-secondary"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- University ID Update Wizard Action -->
+        <record id="acmst_university_id_update_wizard_action" model="ir.actions.act_window">
+            <field name="name">Update University ID</field>
+            <field name="res_model">acmst.university.id.update.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="acmst_university_id_update_wizard_form"/>
+        </record>
+        
+    </data>
+</odoo>

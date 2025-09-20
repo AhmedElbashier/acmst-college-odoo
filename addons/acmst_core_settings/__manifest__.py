@@ -23,7 +23,7 @@
     """,
     'author': 'ACMST College Development Team',
     'website': 'https://www.acmst.edu',
-    'license': 'LGPL-3',
+    #'license': 'LGPL-3',
     'depends': [
         'base',
         'mail',

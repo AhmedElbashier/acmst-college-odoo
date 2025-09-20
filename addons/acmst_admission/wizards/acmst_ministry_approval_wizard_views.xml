@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Ministry Approval Wizard Form View -->
+        <record id="acmst_ministry_approval_wizard_form" model="ir.ui.view">
+            <field name="name">acmst.ministry.approval.wizard.form</field>
+            <field name="model">acmst.ministry.approval.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Ministry Approval">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="admission_file_id" invisible="1"/>
+                                Ministry Approval - <field name="applicant_name" readonly="1"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="approver_id" readonly="1"/>
+                                <field name="decision" required="1"/>
+                                <field name="data_validated" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="national_id" readonly="1"/>
+                                <field name="phone" readonly="1"/>
+                                <field name="email" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="program_id" readonly="1"/>
+                                <field name="batch_id" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Data Validation" name="validation">
+                                <div class="alert alert-info" role="alert">
+                                    <strong>Data Re-validation Required</strong><br/>
+                                    Please review and validate all student information before approval.
+                                </div>
+                                
+                                <group>
+                                    <group>
+                                        <field name="applicant_name"/>
+                                        <field name="national_id"/>
+                                        <field name="phone"/>
+                                        <field name="email"/>
+                                    </group>
+                                    <group>
+                                        <field name="program_id"/>
+                                        <field name="batch_id"/>
+                                    </group>
+                                </group>
+                                
+                                <div class="text-center" style="margin: 20px 0;">
+                                    <button name="action_validate_data" 
+                                            type="object" 
+                                            string="Validate Student Data" 
+                                            class="btn btn-primary"
+                                            invisible="data_validated == True"/>
+                                    <div class="alert alert-success" role="alert" 
+                                         invisible="data_validated == False">
+                                        <i class="fa fa-check-circle"/> Data validation completed successfully
+                                    </div>
+                                </div>
+                            </page>
+                            
+                            <page string="University ID" name="university_id">
+                                <div class="alert alert-warning" role="alert">
+                                    <strong>University ID Entry</strong><br/>
+                                    Enter the University ID provided by the ministry. If not available, 
+                                    the student will be marked as "من طلاب المعالجات" for later processing.
+                                </div>
+                                
+                                <group>
+                                    <field name="has_university_id"/>
+                                    <field name="university_id" 
+                                           required="has_university_id == True"
+                                           readonly="has_university_id == False"/>
+                                </group>
+                                
+                                <div class="alert alert-info" role="alert" 
+                                     invisible="has_university_id == True">
+                                    <i class="fa fa-info-circle"/> Student will be marked as "من طلاب المعالجات" 
+                                    and can be updated later when University ID becomes available.
+                                </div>
+                            </page>
+                            
+                            <page string="Comments" name="comments">
+                                <field name="comments" placeholder="Enter any comments about the approval decision..."/>
+                            </page>
+                        </notebook>
+                        
+                        <footer>
+                            <button name="action_approve" 
+                                    type="object" 
+                                    string="Approve" 
+                                    class="btn-primary"
+                                    invisible="decision != 'approve'"/>
+                            <button name="action_reject" 
+                                    type="object" 
+                                    string="Reject" 
+                                    class="btn-secondary"
+                                    invisible="decision != 'reject'"/>
+                            <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Ministry Approval Wizard Action -->
+        <record id="acmst_ministry_approval_wizard_action" model="ir.actions.act_window">
+            <field name="name">Ministry Approval</field>
+            <field name="res_model">acmst.ministry.approval.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="acmst_ministry_approval_wizard_form"/>
+        </record>
+        
+    </data>
+</odoo>

@@ -264,6 +264,28 @@ class AcmstAdmissionFile(models.Model):
         string='Ministry Approver',
         help='User who approved from ministry'
     )
+    
+    # University ID and Processing Status
+    university_id = fields.Char(
+        string='University ID',
+        tracking=True,
+        help='University ID provided by ministry (FRMNO)'
+    )
+    is_processing_student = fields.Boolean(
+        string='Processing Student',
+        default=False,
+        tracking=True,
+        help='Marked as من طلاب المعالجات - student without university ID'
+    )
+    university_id_updated_date = fields.Datetime(
+        string='University ID Updated Date',
+        help='Date when university ID was last updated'
+    )
+    university_id_updated_by = fields.Many2one(
+        'res.users',
+        string='Updated By',
+        help='User who last updated the university ID'
+    )
     health_check_date = fields.Date(
         string='Health Check Date',
         help='Date when health check was completed'
@@ -437,6 +459,123 @@ class AcmstAdmissionFile(models.Model):
                     _('Birth date cannot be in the future.')
                 )
 
+    @api.constrains('university_id')
+    def _check_university_id(self):
+        """Validate university ID format"""
+        for record in self:
+            if record.university_id:
+                # Basic validation for university ID (alphanumeric, reasonable length)
+                if not record.university_id.replace('-', '').replace('_', '').isalnum():
+                    raise ValidationError(
+                        _('University ID must contain only letters, numbers, hyphens, and underscores.')
+                    )
+                if len(record.university_id) < 3 or len(record.university_id) > 20:
+                    raise ValidationError(
+                        _('University ID must be between 3 and 20 characters.')
+                    )
+
+    def validate_student_data(self):
+        """Validate all student data for re-validation during ministry approval"""
+        self.ensure_one()
+        errors = []
+        
+        # Validate required fields
+        if not self.applicant_name or len(self.applicant_name.strip()) < 2:
+            errors.append(_('Applicant name must be at least 2 characters long.'))
+        
+        if not self.national_id or len(self.national_id) != 10:
+            errors.append(_('National ID must be exactly 10 digits.'))
+        
+        if not self.phone or len(self.phone.strip()) < 10:
+            errors.append(_('Phone number must be at least 10 characters long.'))
+        
+        if not self.email or '@' not in self.email:
+            errors.append(_('Please enter a valid email address.'))
+        
+        if not self.birth_date:
+            errors.append(_('Birth date is required.'))
+        elif self.birth_date > date.today():
+            errors.append(_('Birth date cannot be in the future.'))
+        
+        if not self.gender:
+            errors.append(_('Gender is required.'))
+        
+        if not self.nationality or len(self.nationality.strip()) < 2:
+            errors.append(_('Nationality must be at least 2 characters long.'))
+        
+        if not self.address or len(self.address.strip()) < 10:
+            errors.append(_('Address must be at least 10 characters long.'))
+        
+        if not self.emergency_contact or len(self.emergency_contact.strip()) < 2:
+            errors.append(_('Emergency contact name must be at least 2 characters long.'))
+        
+        if not self.emergency_phone or len(self.emergency_phone.strip()) < 10:
+            errors.append(_('Emergency phone must be at least 10 characters long. Current value: "%s" (length: %d)') % (self.emergency_phone or '', len(self.emergency_phone.strip()) if self.emergency_phone else 0))
+        
+        if not self.program_id:
+            errors.append(_('Program selection is required.'))
+        
+        if not self.batch_id:
+            errors.append(_('Batch selection is required.'))
+        
+        if errors:
+            raise ValidationError('\n'.join(errors))
+        
+        return True
+
+    def update_university_id(self, university_id, user_id=None):
+        """Update university ID and clear processing status"""
+        self.ensure_one()
+        if not user_id:
+            user_id = self.env.user.id
+        
+        self.write({
+            'university_id': university_id,
+            'is_processing_student': False,
+            'university_id_updated_date': fields.Datetime.now(),
+            'university_id_updated_by': user_id
+        })
+        
+        # Create audit log entry
+        self.env['acmst.audit.log'].create({
+            'model_name': 'acmst.admission.file',
+            'record_id': self.id,
+            'record_name': self.name,
+            'action': 'write',
+            'category': 'data_modification',
+            'old_values': '',
+            'new_values': university_id,
+            'action_description': f'University ID updated to: {university_id}'
+        })
+        
+        return True
+
+    def mark_as_processing_student(self, user_id=None):
+        """Mark student as processing (من طلاب المعالجات)"""
+        self.ensure_one()
+        if not user_id:
+            user_id = self.env.user.id
+        
+        self.write({
+            'is_processing_student': True,
+            'university_id_updated_date': fields.Datetime.now(),
+            'university_id_updated_by': user_id
+        })
+        
+        # Create audit log entry
+        self.env['acmst.audit.log'].create({
+            'model_name': 'acmst.admission.file',
+            'record_id': self.id,
+            'record_name': self.name,
+            'action': 'write',
+            'category': 'data_modification',
+            'old_values': '',
+            'new_values': 'من طلاب المعالجات',
+            'action_description': 'Student marked as processing student (من طلاب المعالجات)'
+        })
+        
+        return True
+
     def action_submit_ministry(self):
         """Submit application for ministry approval"""
         self.ensure_one()
@@ -460,28 +599,28 @@ class AcmstAdmissionFile(models.Model):
         return True
 
     def action_ministry_approve(self):
-        """Approve application by ministry"""
+        """Open ministry approval wizard"""
         self.ensure_one()
         if self.state != 'ministry_pending':
             raise UserError(_('Only ministry pending applications can be approved.'))
         
-        self.write({
-            'state': 'ministry_approved',
-            'ministry_approval_date': fields.Date.today(),
-            'ministry_approver': self.env.user.id
-        })
+        # Validate student data before opening wizard
+        try:
+            self.validate_student_data()
+        except ValidationError as e:
+            raise UserError(_('Please fix the following data validation errors before approving:\n\n%s') % str(e))
         
-        # Create approval record
-        self.env['acmst.admission.approval'].create({
-            'admission_file_id': self.id,
-            'approver_id': self.env.user.id,
-            'approval_type': 'ministry',
-            'approval_date': fields.Datetime.now(),
-            'decision': 'approved',
-            'comments': 'Approved by ministry'
-        })
-        
-        return True
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Ministry Approval'),
+            'res_model': 'acmst.ministry.approval.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_admission_file_id': self.id,
+                'default_approver_id': self.env.user.id,
+            }
+        }
 
     def action_send_to_health_check(self):
         """Send application to health check after ministry approval"""
@@ -497,7 +636,7 @@ class AcmstAdmissionFile(models.Model):
             'approver_id': self.env.user.id,
             'approval_type': 'health',
             'approval_date': fields.Datetime.now(),
-            'decision': 'required',
+            'decision': 'pending',
             'comments': 'Sent to health check'
         })
         
@@ -1001,18 +1140,18 @@ class AcmstAdmissionFile(models.Model):
         }
 
     def action_view_approved(self):
-        """Open coordinator approved applications (historical)"""
+        """Open coordinator approved applications (historical) - only truly approved, not conditional"""
         return {
             'type': 'ir.actions.act_window',
             'name': 'Coordinator Approved',
             'res_model': 'acmst.admission.file',
             'view_mode': 'tree,form',
-            'domain': [('coordinator_id', '=', self.env.user.id), ('state', 'in', ['coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'manager_rejected', 'completed'])],
+            'domain': [('coordinator_id', '=', self.env.user.id), ('state', 'in', ['coordinator_approved', 'manager_review', 'manager_approved', 'manager_rejected', 'completed'])],
             'target': 'current',
         }
 
     def action_view_conditional(self):
-        """Open conditional approvals (historical)"""
+        """Open conditional approvals (historical) - only conditional approvals"""
         return {
             'type': 'ir.actions.act_window',
             'name': 'Conditional Approvals',
@@ -1178,30 +1317,112 @@ class AcmstAdmissionFile(models.Model):
             'target': 'current',
         }
 
-    @api.depends()
+    def action_view_processing_students(self):
+        """Open processing students list (من طلاب المعالجات)"""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Processing Students (من طلاب المعالجات)',
+            'res_model': 'acmst.admission.file',
+            'view_mode': 'tree,form',
+            'domain': [('is_processing_student', '=', True)],
+            'target': 'current',
+        }
+
+    def action_update_university_id(self):
+        """Open university ID update wizard for processing students"""
+        self.ensure_one()
+        if not self.is_processing_student:
+            raise UserError(_('This action is only available for processing students.'))
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Update University ID'),
+            'res_model': 'acmst.university.id.update.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_admission_file_id': self.id,
+                'default_current_university_id': self.university_id or '',
+            }
+        }
+
     def _compute_dashboard_statistics(self):
         """Compute dashboard statistics"""
+        # Get global statistics once
+        total_applications = self.env['acmst.admission.file'].search_count([])
+        pending_review = self.env['acmst.admission.file'].search_count([('state', '=', 'ministry_pending')])
+        health_required = self.env['acmst.admission.file'].search_count([('state', '=', 'health_required')])
+        coordinator_review = self.env['acmst.admission.file'].search_count([('state', '=', 'coordinator_review')])
+        manager_review = self.env['acmst.admission.file'].search_count([('state', '=', 'manager_review')])
+        ministry_pending = self.env['acmst.admission.file'].search_count([('state', '=', 'ministry_pending')])
+        completed = self.env['acmst.admission.file'].search_count([('state', '=', 'completed')])
+        
+        # Apply to all records
         for record in self:
-            record.total_applications = self.search_count([])
-            record.pending_review = self.search_count([('state', '=', 'ministry_pending')])
-            record.health_required = self.search_count([('state', '=', 'health_required')])
-            record.coordinator_review = self.search_count([('state', '=', 'coordinator_review')])
-            record.manager_review = self.search_count([('state', '=', 'manager_review')])
-            record.ministry_pending = self.search_count([('state', '=', 'ministry_pending')])
-            record.completed = self.search_count([('state', '=', 'completed')])
+            record.total_applications = total_applications
+            record.pending_review = pending_review
+            record.health_required = health_required
+            record.coordinator_review = coordinator_review
+            record.manager_review = manager_review
+            record.ministry_pending = ministry_pending
+            record.completed = completed
 
     def _compute_coordinator_statistics(self):
         """Compute coordinator dashboard statistics"""
+        # Get global statistics once
+        pending_review_count = self.env['acmst.admission.file'].search_count([('state', '=', 'coordinator_review')])
+        total_reviews = self.env['acmst.admission.file'].search_count([('coordinator_id', '=', self.env.user.id)])
+        approved_count = self.env['acmst.admission.file'].search_count([('coordinator_id', '=', self.env.user.id), ('state', 'in', ['coordinator_approved', 'manager_review', 'manager_approved', 'manager_rejected', 'completed'])])
+        conditional_count = self.env['acmst.admission.file'].search_count([('coordinator_id', '=', self.env.user.id), ('state', 'in', ['coordinator_conditional', 'manager_review', 'manager_approved', 'manager_rejected', 'completed'])])
+        my_reviews_count = self.env['acmst.admission.file'].search_count([('coordinator_id', '=', self.env.user.id)])
+        approved = self.env['acmst.admission.file'].search_count([('state', '=', 'manager_approved')])
+        
+        # Apply to all records
         for record in self:
-            # Current pending reviews
-            record.pending_review_count = self.search_count([('state', '=', 'coordinator_review')])
+            record.pending_review_count = pending_review_count
+            record.total_reviews = total_reviews
+            record.approved_count = approved_count
+            record.conditional_count = conditional_count
+            record.my_reviews_count = my_reviews_count
+            record.approved = approved
+
+    # Coordinator Dashboard Additional Statistics
+    coordinator_review_rate = fields.Float(
+        string='Review Rate',
+        compute='_compute_coordinator_performance_stats',
+        help='Coordinator review completion rate percentage'
+    )
+    active_conditions_count = fields.Integer(
+        string='Active Conditions',
+        compute='_compute_coordinator_performance_stats',
+        help='Number of active conditions assigned to coordinator'
+    )
+    overdue_conditions_count = fields.Integer(
+        string='Overdue Conditions',
+        compute='_compute_coordinator_performance_stats',
+        help='Number of overdue conditions assigned to coordinator'
+    )
+
+    def _compute_coordinator_performance_stats(self):
+        """Compute coordinator performance statistics"""
+        for record in self:
+            # Review rate calculation
+            total_my_reviews = record.my_reviews_count
+            completed_reviews = record.approved_count + record.conditional_count
+            if total_my_reviews > 0:
+                record.coordinator_review_rate = (completed_reviews / total_my_reviews) * 100
+            else:
+                record.coordinator_review_rate = 0.0
             
-            # Historical reviews by current user
-            record.total_reviews = self.search_count([('coordinator_id', '=', self.env.user.id)])
-            record.approved_count = self.search_count([('coordinator_id', '=', self.env.user.id), ('state', 'in', ['coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'manager_rejected', 'completed'])])
-            record.conditional_count = self.search_count([('coordinator_id', '=', self.env.user.id), ('state', 'in', ['coordinator_conditional', 'manager_review', 'manager_approved', 'manager_rejected', 'completed'])])
-            record.my_reviews_count = self.search_count([('coordinator_id', '=', self.env.user.id)])
-            record.approved = self.search_count([('state', '=', 'manager_approved')])
+            # Conditions statistics
+            record.active_conditions_count = self.env['acmst.coordinator.condition'].search_count([
+                ('coordinator_id', '=', self.env.user.id),
+                ('state', 'in', ['pending', 'in_progress'])
+            ])
+            record.overdue_conditions_count = self.env['acmst.coordinator.condition'].search_count([
+                ('coordinator_id', '=', self.env.user.id),
+                ('state', '=', 'overdue')
+            ])
 
     def _compute_officer_statistics(self):
         """Compute officer dashboard statistics"""
@@ -1211,7 +1432,245 @@ class AcmstAdmissionFile(models.Model):
             record.ministry_approved_count = self.search_count([('state', '=', 'ministry_approved')])
             record.ministry_rejected_count = self.search_count([('state', '=', 'ministry_rejected')])
 
+    # Officer Dashboard Additional Statistics
+    officer_processing_rate = fields.Float(
+        string='Processing Rate',
+        compute='_compute_officer_processing_stats',
+        help='Officer processing rate percentage'
+    )
+    today_applications_count = fields.Integer(
+        string="Today's Applications",
+        compute='_compute_officer_processing_stats',
+        help='Number of applications received today'
+    )
+    week_applications_count = fields.Integer(
+        string='This Week Applications',
+        compute='_compute_officer_processing_stats',
+        help='Number of applications received this week'
+    )
+
+    def _compute_officer_processing_stats(self):
+        """Compute officer processing statistics"""
+        for record in self:
+            from datetime import datetime, timedelta
+            today = datetime.now().date()
+            week_ago = today - timedelta(days=7)
+            
+            # Today's applications
+            record.today_applications_count = self.env['acmst.admission.file'].search_count([
+                ('create_date', '>=', today.strftime('%Y-%m-%d 00:00:00')),
+                ('create_date', '<=', today.strftime('%Y-%m-%d 23:59:59'))
+            ])
+            
+            # This week's applications
+            record.week_applications_count = self.env['acmst.admission.file'].search_count([
+                ('create_date', '>=', week_ago.strftime('%Y-%m-%d 00:00:00'))
+            ])
+            
+            # Processing rate (approved + rejected / total)
+            total_processed = record.ministry_approved_count + record.ministry_rejected_count
+            if record.total_applications > 0:
+                record.officer_processing_rate = (total_processed / record.total_applications) * 100
+            else:
+                record.officer_processing_rate = 0.0
+
     def _compute_admission_manager_statistics(self):
         """Compute admission manager dashboard statistics"""
         for record in self:
             record.rejected = self.search_count([('state', 'in', ['ministry_rejected', 'health_rejected', 'coordinator_rejected', 'manager_rejected'])])
+
+    # Manager Dashboard Additional Statistics
+    manager_pending_count = fields.Integer(
+        string='Manager Pending',
+        compute='_compute_manager_statistics',
+        help='Number of applications pending manager review'
+    )
+    manager_approvals_count = fields.Integer(
+        string='My Approvals',
+        compute='_compute_manager_statistics',
+        help='Number of applications approved by current manager'
+    )
+    manager_approval_rate = fields.Float(
+        string='Approval Rate',
+        compute='_compute_manager_statistics',
+        help='Manager approval rate percentage'
+    )
+    processing_students_count = fields.Integer(
+        string='Processing Students',
+        compute='_compute_manager_statistics',
+        help='Number of processing students (من طلاب المعالجات)'
+    )
+    student_records_count = fields.Integer(
+        string='Student Records',
+        compute='_compute_manager_statistics',
+        help='Number of created student records'
+    )
+
+    def _compute_manager_statistics(self):
+        """Compute manager dashboard statistics"""
+        for record in self:
+            # Manager pending reviews
+            record.manager_pending_count = self.env['acmst.admission.file'].search_count([('state', '=', 'manager_review')])
+            
+            # Manager approvals
+            record.manager_approvals_count = self.env['acmst.admission.file'].search_count([
+                ('manager_id', '=', self.env.user.id),
+                ('state', 'in', ['manager_approved', 'completed'])
+            ])
+            
+            # Approval rate calculation
+            total_manager_reviews = self.env['acmst.admission.file'].search_count([('manager_id', '=', self.env.user.id)])
+            if total_manager_reviews > 0:
+                record.manager_approval_rate = (record.manager_approvals_count / total_manager_reviews) * 100
+            else:
+                record.manager_approval_rate = 0.0
+            
+            # Processing students
+            record.processing_students_count = self.env['acmst.admission.file'].search_count([('is_processing_student', '=', True)])
+            
+            # Student records
+            record.student_records_count = self.env['res.partner'].search_count([
+                ('is_company', '=', False),
+                ('comment', 'ilike', 'Admission File:')
+            ])
+
+    # Reports Dashboard Statistics (computed fields)
+    program_count = fields.Integer(
+        string='Programs',
+        compute='_compute_reports_statistics',
+        help='Number of active programs'
+    )
+    batch_count = fields.Integer(
+        string='Batches',
+        compute='_compute_reports_statistics',
+        help='Number of active batches'
+    )
+    health_checks_count = fields.Integer(
+        string='Health Checks',
+        compute='_compute_reports_statistics',
+        help='Total number of health checks'
+    )
+    health_approved_count = fields.Integer(
+        string='Health Approved',
+        compute='_compute_reports_statistics',
+        help='Number of approved health checks'
+    )
+    health_pending_count = fields.Integer(
+        string='Health Pending',
+        compute='_compute_reports_statistics',
+        help='Number of pending health checks'
+    )
+    health_rejected_count = fields.Integer(
+        string='Health Rejected',
+        compute='_compute_reports_statistics',
+        help='Number of rejected health checks'
+    )
+    conditions_count = fields.Integer(
+        string='Conditions',
+        compute='_compute_reports_statistics',
+        help='Total number of coordinator conditions'
+    )
+    conditions_completed_count = fields.Integer(
+        string='Conditions Completed',
+        compute='_compute_reports_statistics',
+        help='Number of completed conditions'
+    )
+    conditions_pending_count = fields.Integer(
+        string='Conditions Pending',
+        compute='_compute_reports_statistics',
+        help='Number of pending conditions'
+    )
+    conditions_overdue_count = fields.Integer(
+        string='Conditions Overdue',
+        compute='_compute_reports_statistics',
+        help='Number of overdue conditions'
+    )
+    level2_count = fields.Integer(
+        string='Level 2 Applications',
+        compute='_compute_reports_statistics',
+        help='Number of Level 2 applications'
+    )
+    level3_count = fields.Integer(
+        string='Level 3 Applications',
+        compute='_compute_reports_statistics',
+        help='Number of Level 3 applications'
+    )
+
+    def _compute_reports_statistics(self):
+        """Compute reports dashboard statistics"""
+        for record in self:
+            # Program and batch counts
+            record.program_count = self.env['acmst.program'].search_count([])
+            record.batch_count = self.env['acmst.batch'].search_count([])
+            
+            # Health check statistics
+            record.health_checks_count = self.env['acmst.health.check'].search_count([])
+            record.health_approved_count = self.env['acmst.health.check'].search_count([('state', '=', 'approved')])
+            record.health_pending_count = self.env['acmst.health.check'].search_count([('state', '=', 'draft')])
+            record.health_rejected_count = self.env['acmst.health.check'].search_count([('state', '=', 'rejected')])
+            
+            # Coordinator conditions statistics
+            record.conditions_count = self.env['acmst.coordinator.condition'].search_count([])
+            record.conditions_completed_count = self.env['acmst.coordinator.condition'].search_count([('state', '=', 'completed')])
+            record.conditions_pending_count = self.env['acmst.coordinator.condition'].search_count([('state', '=', 'pending')])
+            record.conditions_overdue_count = self.env['acmst.coordinator.condition'].search_count([('state', '=', 'overdue')])
+            
+            # Academic level statistics
+            record.level2_count = self.search_count([('academic_level', '=', 'level2')])
+            record.level3_count = self.search_count([('academic_level', '=', 'level3')])
+
+    # Reports Dashboard Action Methods
+    def action_view_application_statistics(self):
+        """Open application statistics"""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Application Statistics',
+            'res_model': 'acmst.admission.file',
+            'view_mode': 'graph,pivot,tree',
+            'context': {'group_by': ['state', 'create_date:month']},
+            'target': 'current',
+        }
+
+    def action_view_program_statistics(self):
+        """Open program statistics"""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Program Statistics',
+            'res_model': 'acmst.admission.file',
+            'view_mode': 'graph,pivot,tree',
+            'context': {'group_by': ['program_id', 'state']},
+            'target': 'current',
+        }
+
+    def action_view_health_statistics(self):
+        """Open health check statistics"""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Health Check Statistics',
+            'res_model': 'acmst.health.check',
+            'view_mode': 'graph,pivot,tree',
+            'context': {'group_by': ['state', 'medical_fitness', 'examiner_id']},
+            'target': 'current',
+        }
+
+    def action_view_conditions_statistics(self):
+        """Open conditions statistics"""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Conditions Statistics',
+            'res_model': 'acmst.coordinator.condition',
+            'view_mode': 'graph,pivot,tree',
+            'context': {'group_by': ['state', 'level', 'coordinator_id']},
+            'target': 'current',
+        }
+
+    def action_view_reports_dashboard(self):
+        """Open reports dashboard"""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Reports & Analytics Dashboard',
+            'res_model': 'acmst.admission.file',
+            'view_mode': 'form',
+            'view_id': self.env.ref('acmst_admission.view_acmst_reports_dashboard').id,
+            'target': 'current',
+        }

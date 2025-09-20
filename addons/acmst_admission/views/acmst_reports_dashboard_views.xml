@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Reports Dashboard View -->
+        <record id="view_acmst_reports_dashboard" model="ir.ui.view">
+            <field name="name">acmst.reports.dashboard</field>
+            <field name="model">acmst.admission.file</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Reports &amp; Analytics Dashboard">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_application_statistics" type="object" class="oe_stat_button" icon="fa-bar-chart">
+                                <field name="total_applications" widget="statinfo" string="Total Applications"/>
+                            </button>
+                            <button name="action_view_program_statistics" type="object" class="oe_stat_button" icon="fa-graduation-cap">
+                                <field name="program_count" widget="statinfo" string="Programs"/>
+                            </button>
+                            <button name="action_view_health_statistics" type="object" class="oe_stat_button" icon="fa-heartbeat">
+                                <field name="health_checks_count" widget="statinfo" string="Health Checks"/>
+                            </button>
+                            <button name="action_view_conditions_statistics" type="object" class="oe_stat_button" icon="fa-tasks">
+                                <field name="conditions_count" widget="statinfo" string="Conditions"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>📈 Reports &amp; Analytics Dashboard</h1>
+                            <p>Comprehensive analytics and reporting for the admission process</p>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">📊 Application Overview</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Total Applications</h4>
+                                                    <span class="stat-number"><field name="total_applications" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Completed</h4>
+                                                    <span class="stat-number"><field name="completed" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Pending Review</h4>
+                                                    <span class="stat-number"><field name="pending_review" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Health Required</h4>
+                                                    <span class="stat-number"><field name="health_required" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="panel panel-success">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">🏥 Health Check Status</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Total Health Checks</h4>
+                                                    <span class="stat-number"><field name="health_checks_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Approved</h4>
+                                                    <span class="stat-number"><field name="health_approved_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Pending</h4>
+                                                    <span class="stat-number"><field name="health_pending_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Rejected</h4>
+                                                    <span class="stat-number"><field name="health_rejected_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">📋 Coordinator Conditions</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Total Conditions</h4>
+                                                    <span class="stat-number"><field name="conditions_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Completed</h4>
+                                                    <span class="stat-number"><field name="conditions_completed_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Pending</h4>
+                                                    <span class="stat-number"><field name="conditions_pending_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Overdue</h4>
+                                                    <span class="stat-number"><field name="conditions_overdue_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">🎓 Program Distribution</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Active Programs</h4>
+                                                    <span class="stat-number"><field name="program_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Active Batches</h4>
+                                                    <span class="stat-number"><field name="batch_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Level 2 Applications</h4>
+                                                    <span class="stat-number"><field name="level2_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Level 3 Applications</h4>
+                                                    <span class="stat-number"><field name="level3_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">📈 Quick Analytics</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <button name="action_view_application_statistics" type="object" class="btn btn-info btn-block">
+                                            <i class="fa fa-bar-chart"></i> Application Statistics
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_program_statistics" type="object" class="btn btn-success btn-block">
+                                            <i class="fa fa-graduation-cap"></i> Program Statistics
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_health_statistics" type="object" class="btn btn-warning btn-block">
+                                            <i class="fa fa-heartbeat"></i> Health Statistics
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_conditions_statistics" type="object" class="btn btn-primary btn-block">
+                                            <i class="fa fa-tasks"></i> Conditions Statistics
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Reports Dashboard Action -->
+        <record id="action_acmst_reports_dashboard" model="ir.actions.act_window">
+            <field name="name">Reports &amp; Analytics Dashboard</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_acmst_reports_dashboard"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Welcome to the Reports &amp; Analytics Dashboard
+                </p>
+                <p>
+                    This dashboard provides comprehensive analytics and reporting for the admission process.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

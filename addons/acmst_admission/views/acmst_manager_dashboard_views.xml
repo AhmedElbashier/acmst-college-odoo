@@ -11,24 +11,131 @@
                 <form string="Manager Dashboard">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button name="action_view_graph" type="object" class="oe_stat_button" icon="fa-bar-chart">
-                                <field name="id" widget="statinfo" string="Graph View"/>
+                            <button name="action_view_all_applications" type="object" class="oe_stat_button" icon="fa-list">
+                                <field name="total_applications" widget="statinfo" string="All Applications"/>
                             </button>
-                            <button name="action_view_pivot" type="object" class="oe_stat_button" icon="fa-table">
-                                <field name="id" widget="statinfo" string="Pivot View"/>
+                            <button name="action_view_pending_review" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="manager_pending_count" widget="statinfo" string="Pending Review"/>
+                            </button>
+                            <button name="action_view_completed" type="object" class="oe_stat_button" icon="fa-check">
+                                <field name="completed" widget="statinfo" string="Completed"/>
+                            </button>
+                            <button name="action_view_processing_students" type="object" class="oe_stat_button" icon="fa-users">
+                                <field name="processing_students_count" widget="statinfo" string="Processing Students"/>
                             </button>
                         </div>
                         <div class="oe_title">
-                            <h1>Manager Dashboard</h1>
+                            <h1>👨‍💼 Admission Manager Dashboard</h1>
+                            <p>Final approval management and comprehensive oversight</p>
                         </div>
-                        <group>
-                            <group string="Manager Statistics">
-                                <field name="total_applications" widget="statinfo" string="Total Applications"/>
-                                <field name="pending_review" widget="statinfo" string="Pending Review"/>
-                                <field name="approved" widget="statinfo" string="Approved"/>
-                                <field name="completed" widget="statinfo" string="Completed"/>
-                            </group>
-                        </group>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">📊 Application Overview</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Total Applications</h4>
+                                                    <span class="stat-number"><field name="total_applications" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Pending Review</h4>
+                                                    <span class="stat-number"><field name="manager_pending_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Completed</h4>
+                                                    <span class="stat-number"><field name="completed" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Rejected</h4>
+                                                    <span class="stat-number"><field name="rejected" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="panel panel-success">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">🎯 Manager Performance</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>My Approvals</h4>
+                                                    <span class="stat-number"><field name="manager_approvals_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Approval Rate</h4>
+                                                    <span class="stat-number"><field name="manager_approval_rate" widget="statinfo" string="%"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Processing Students</h4>
+                                                    <span class="stat-number"><field name="processing_students_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="stat-box">
+                                                    <h4>Student Records</h4>
+                                                    <span class="stat-number"><field name="student_records_count" widget="statinfo"/></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">⚡ Quick Actions</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <button name="action_view_all_applications" type="object" class="btn btn-primary btn-block">
+                                            <i class="fa fa-list"></i> All Applications
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_pending_review" type="object" class="btn btn-warning btn-block">
+                                            <i class="fa fa-clock-o"></i> Pending Review
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_completed" type="object" class="btn btn-success btn-block">
+                                            <i class="fa fa-check"></i> Completed
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button name="action_view_processing_students" type="object" class="btn btn-info btn-block">
+                                            <i class="fa fa-users"></i> Processing Students
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </sheet>
                 </form>
             </field>
@@ -38,9 +145,9 @@
         <record id="action_acmst_manager_dashboard" model="ir.actions.act_window">
             <field name="name">Manager Dashboard</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
-            <field name="domain">[('state', 'in', ['manager_review', 'manager_approved', 'completed'])]</field>
-            <field name="context">{'search_default_manager_review': 1}</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_acmst_manager_dashboard"/>
+            <field name="context">{}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Manager Dashboard

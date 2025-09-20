@@ -174,6 +174,21 @@ class AcmstHealthCheck(models.Model):
         compute='_compute_dashboard_counts',
         help='Number of health checks assigned to current user'
     )
+    health_completion_rate = fields.Float(
+        string='Completion Rate',
+        compute='_compute_dashboard_counts',
+        help='Health check completion rate percentage'
+    )
+    today_health_checks_count = fields.Integer(
+        string="Today's Health Checks",
+        compute='_compute_dashboard_counts',
+        help='Number of health checks performed today'
+    )
+    week_health_checks_count = fields.Integer(
+        string='This Week Health Checks',
+        compute='_compute_dashboard_counts',
+        help='Number of health checks performed this week'
+    )
     other_documents = fields.Binary(
         string='Other Documents',
         help='Other medical documents'
@@ -208,15 +223,39 @@ class AcmstHealthCheck(models.Model):
             else:
                 record.bmi = 0.0
 
-    @api.depends()
     def _compute_dashboard_counts(self):
         """Compute dashboard counts for health officer"""
         for record in self:
-            record.total_health_checks = self.search_count([])
-            record.pending_health_checks_count = self.search_count([('state', '=', 'draft')])
-            record.approved_health_checks_count = self.search_count([('state', '=', 'approved')])
-            record.rejected_health_checks_count = self.search_count([('state', '=', 'rejected')])
-            record.my_health_checks_count = self.search_count([('examiner_id', '=', self.env.user.id)])
+            from datetime import datetime, timedelta
+            today = datetime.now().date()
+            week_ago = today - timedelta(days=7)
+            
+            record.total_health_checks = self.env['acmst.health.check'].search_count([])
+            record.pending_health_checks_count = self.env['acmst.health.check'].search_count([('state', '=', 'draft')])
+            record.approved_health_checks_count = self.env['acmst.health.check'].search_count([('state', '=', 'approved')])
+            record.rejected_health_checks_count = self.env['acmst.health.check'].search_count([('state', '=', 'rejected')])
+            record.my_health_checks_count = self.env['acmst.health.check'].search_count([('examiner_id', '=', self.env.user.id)])
+            
+            # Today's health checks
+            record.today_health_checks_count = self.env['acmst.health.check'].search_count([
+                ('examiner_id', '=', self.env.user.id),
+                ('check_date', '>=', today.strftime('%Y-%m-%d 00:00:00')),
+                ('check_date', '<=', today.strftime('%Y-%m-%d 23:59:59'))
+            ])
+            
+            # This week's health checks
+            record.week_health_checks_count = self.env['acmst.health.check'].search_count([
+                ('examiner_id', '=', self.env.user.id),
+                ('check_date', '>=', week_ago.strftime('%Y-%m-%d 00:00:00'))
+            ])
+            
+            # Calculate completion rate
+            total_my_checks = self.env['acmst.health.check'].search_count([('examiner_id', '=', self.env.user.id)])
+            completed_my_checks = self.env['acmst.health.check'].search_count([('examiner_id', '=', self.env.user.id), ('state', 'in', ['approved', 'rejected'])])
+            if total_my_checks > 0:
+                record.health_completion_rate = (completed_my_checks / total_my_checks) * 100
+            else:
+                record.health_completion_rate = 0.0
 
     @api.constrains('height', 'weight')
     def _check_height_weight(self):
@@ -418,4 +457,48 @@ class AcmstHealthCheck(models.Model):
             'view_mode': 'tree,form',
             'domain': [('examiner_id', '=', self.env.user.id)],
             'context': {},
+        }
+
+    def action_view_health_statistics(self):
+        """Open health check statistics"""
+        self.ensure_one()
+        return {
+            'name': _('Health Check Statistics'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'acmst.health.check',
+            'view_mode': 'graph,pivot,tree',
+            'context': {'group_by': ['state', 'medical_fitness', 'examiner_id']},
+        }
+
+    def action_view_medical_fitness_stats(self):
+        """Open medical fitness statistics"""
+        self.ensure_one()
+        return {
+            'name': _('Medical Fitness Analysis'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'acmst.health.check',
+            'view_mode': 'graph,pivot,tree',
+            'context': {'group_by': ['medical_fitness', 'blood_type']},
+        }
+
+    def action_view_examiner_performance(self):
+        """Open examiner performance statistics"""
+        self.ensure_one()
+        return {
+            'name': _('Examiner Performance'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'acmst.health.check',
+            'view_mode': 'graph,pivot,tree',
+            'context': {'group_by': ['examiner_id', 'state']},
+        }
+
+    def action_view_health_trends(self):
+        """Open health check trends"""
+        self.ensure_one()
+        return {
+            'name': _('Health Check Trends'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'acmst.health.check',
+            'view_mode': 'graph,pivot,tree',
+            'context': {'group_by': ['check_date:month', 'state']},
         }
