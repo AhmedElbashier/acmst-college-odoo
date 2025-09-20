@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Health Officer Dashboard View -->
+        <record id="view_acmst_health_officer_dashboard" model="ir.ui.view">
+            <field name="name">acmst.health.officer.dashboard</field>
+            <field name="model">acmst.health.check</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Health Officer Dashboard">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_pending_health_checks" type="object" class="oe_stat_button" icon="fa-heartbeat">
+                                <field name="pending_health_checks_count" widget="statinfo" string="Pending Health Checks"/>
+                            </button>
+                            <button name="action_view_approved_health_checks" type="object" class="oe_stat_button" icon="fa-check">
+                                <field name="approved_health_checks_count" widget="statinfo" string="Approved Health Checks"/>
+                            </button>
+                            <button name="action_view_rejected_health_checks" type="object" class="oe_stat_button" icon="fa-times">
+                                <field name="rejected_health_checks_count" widget="statinfo" string="Rejected Health Checks"/>
+                            </button>
+                            <button name="action_view_my_health_checks" type="object" class="oe_stat_button" icon="fa-user">
+                                <field name="my_health_checks_count" widget="statinfo" string="My Health Checks"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>Health Officer Dashboard</h1>
+                        </div>
+                        <group>
+                            <group string="Health Check Statistics">
+                                <field name="total_health_checks" widget="statinfo" string="Total Health Checks"/>
+                                <field name="pending_health_checks_count" widget="statinfo" string="Pending Health Checks"/>
+                                <field name="approved_health_checks_count" widget="statinfo" string="Approved Health Checks"/>
+                                <field name="rejected_health_checks_count" widget="statinfo" string="Rejected Health Checks"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Health Officer Dashboard Action -->
+        <record id="action_acmst_health_officer_dashboard" model="ir.actions.act_window">
+            <field name="name">Health Officer Dashboard</field>
+            <field name="res_model">acmst.health.check</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_acmst_health_officer_dashboard"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No health checks found
+                </p>
+                <p>
+                    Overview of health checks and statistics for health officers.
+                </p>
+            </field>
+        </record>
+
+        <!-- Health Officer Pending Health Checks Action -->
+        <record id="action_acmst_health_officer_pending" model="ir.actions.act_window">
+            <field name="name">Pending Health Checks</field>
+            <field name="res_model">acmst.health.check</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'draft')]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <!-- Health Officer Approved Health Checks Action -->
+        <record id="action_acmst_health_officer_approved" model="ir.actions.act_window">
+            <field name="name">Approved Health Checks</field>
+            <field name="res_model">acmst.health.check</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('examiner_id', '=', uid), ('state', '=', 'approved')]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <!-- Health Officer Rejected Health Checks Action -->
+        <record id="action_acmst_health_officer_rejected" model="ir.actions.act_window">
+            <field name="name">Rejected Health Checks</field>
+            <field name="res_model">acmst.health.check</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('examiner_id', '=', uid), ('state', '=', 'rejected')]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <!-- Health Officer My Health Checks Action -->
+        <record id="action_acmst_health_officer_my_checks" model="ir.actions.act_window">
+            <field name="name">My Health Checks</field>
+            <field name="res_model">acmst.health.check</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('examiner_id', '=', uid)]</field>
+            <field name="context">{}</field>
+        </record>
+
+    </data>
+</odoo>

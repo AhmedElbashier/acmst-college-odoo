@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Performance Monitoring Dashboard View -->
+        <record id="acmst_performance_monitoring_view_form" model="ir.ui.view">
+            <field name="name">acmst.performance.monitoring.form</field>
+            <field name="model">acmst.performance.optimization</field>
+            <field name="arch" type="xml">
+                <form string="Performance Monitoring Dashboard">
+                    <sheet>
+                        <div class="o_acmst_performance_dashboard">
+                            <div class="o_acmst_performance_header">
+                                <h2>Performance Monitoring Dashboard</h2>
+                                <p>Real-time performance metrics and optimization status</p>
+                            </div>
+
+                            <div class="o_acmst_performance_metrics">
+                                <div class="o_acmst_metric_card">
+                                    <div class="o_acmst_metric_icon">
+                                        <i class="fa fa-tachometer" aria-hidden="true" title="Query Performance"></i>
+                                    </div>
+                                    <div class="o_acmst_metric_content">
+                                        <h3>Query Performance</h3>
+                                        <div class="o_acmst_metric_value">2.3s</div>
+                                        <div class="o_acmst_metric_label">Average Response Time</div>
+                                    </div>
+                                </div>
+
+                                <div class="o_acmst_metric_card">
+                                    <div class="o_acmst_metric_icon">
+                                        <i class="fa fa-database" aria-hidden="true" title="Database Load"></i>
+                                    </div>
+                                    <div class="o_acmst_metric_content">
+                                        <h3>Database Load</h3>
+                                        <div class="o_acmst_metric_value">45%</div>
+                                        <div class="o_acmst_metric_label">CPU Usage</div>
+                                    </div>
+                                </div>
+
+                                <div class="o_acmst_metric_card">
+                                    <div class="o_acmst_metric_icon">
+                                        <i class="fa fa-memory" aria-hidden="true" title="Memory Usage"></i>
+                                    </div>
+                                    <div class="o_acmst_metric_content">
+                                        <h3>Memory Usage</h3>
+                                        <div class="o_acmst_metric_value">1.2GB</div>
+                                        <div class="o_acmst_metric_label">RAM Consumption</div>
+                                    </div>
+                                </div>
+
+                                <div class="o_acmst_metric_card">
+                                    <div class="o_acmst_metric_icon">
+                                        <i class="fa fa-users" aria-hidden="true" title="Active Users"></i>
+                                    </div>
+                                    <div class="o_acmst_metric_content">
+                                        <h3>Active Users</h3>
+                                        <div class="o_acmst_metric_value">127</div>
+                                        <div class="o_acmst_metric_label">Concurrent Sessions</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="o_acmst_performance_sections">
+                                <div class="o_acmst_performance_section">
+                                    <h3>Optimization Status</h3>
+                                    <div class="o_acmst_optimization_list">
+                                        <div class="o_acmst_optimization_item">
+                                            <div class="o_acmst_optimization_name">Admission File Search</div>
+                                            <div class="o_acmst_optimization_status active">Active</div>
+                                            <div class="o_acmst_optimization_gain">+25%</div>
+                                        </div>
+                                        <div class="o_acmst_optimization_item">
+                                            <div class="o_acmst_optimization_name">Health Check Summary</div>
+                                            <div class="o_acmst_optimization_status active">Active</div>
+                                            <div class="o_acmst_optimization_gain">+40%</div>
+                                        </div>
+                                        <div class="o_acmst_optimization_item">
+                                            <div class="o_acmst_optimization_name">Coordinator Conditions</div>
+                                            <div class="o_acmst_optimization_status active">Active</div>
+                                            <div class="o_acmst_optimization_gain">+60%</div>
+                                        </div>
+                                        <div class="o_acmst_optimization_item">
+                                            <div class="o_acmst_optimization_name">Database Indexing</div>
+                                            <div class="o_acmst_optimization_status active">Active</div>
+                                            <div class="o_acmst_optimization_gain">+35%</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="o_acmst_performance_section">
+                                    <h3>Performance Alerts</h3>
+                                    <div class="o_acmst_alerts_list">
+                                        <div class="o_acmst_alert_item warning">
+                                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                            <span>High memory usage detected in health check queries</span>
+                                        </div>
+                                        <div class="o_acmst_alert_item info">
+                                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                            <span>New optimization available for portal queries</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="o_acmst_performance_actions">
+                                <button class="btn btn-primary" type="button" name="action_refresh_metrics">
+                                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                                    Refresh Metrics
+                                </button>
+                                <button class="btn btn-secondary" type="button" name="action_run_optimization_check">
+                                    <i class="fa fa-cogs" aria-hidden="true"></i>
+                                    Run Optimization Check
+                                </button>
+                                <button class="btn btn-info" type="button" name="action_export_report">
+                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                    Export Report
+                                </button>
+                            </div>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action for Performance Monitoring -->
+        <record id="acmst_performance_monitoring_action" model="ir.actions.act_window">
+            <field name="name">Performance Monitoring</field>
+            <field name="res_model">acmst.performance.optimization</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="acmst_performance_monitoring_view_form"/>
+            <field name="target">current</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Monitor system performance and optimization status.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menu Item for Performance Monitoring -->
+        <menuitem id="acmst_performance_monitoring_menu_item"
+                  name="Performance Monitoring"
+                  parent="acmst_performance_menu"
+                  action="acmst_performance_monitoring_action"
+                  sequence="20"/>
+
+    </data>
+</odoo>

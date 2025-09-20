@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Portal Admission Home Template -->
+        <template id="portal_admission_home" name="Admission Portal Home">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Admission Portal - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <h1>Welcome to ACMST College Admission Portal</h1>
+                        <p>Start your journey towards academic excellence</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3>Apply for Admission</h3>
+                                </div>
+                                <p>Join ACMST College and pursue your academic dreams. Our comprehensive programs are designed to prepare you for success in your chosen field.</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>Available Programs</h5>
+                                        <ul>
+                                            <t t-foreach="programs" t-as="program">
+                                                <li t-esc="program.name"/>
+                                            </t>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Available Batches</h5>
+                                        <ul>
+                                            <t t-foreach="batches" t-as="batch">
+                                                <li t-esc="batch.name"/>
+                                            </t>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-4">
+                                    <a href="/admission/apply" class="acmst-btn acmst-btn-primary">
+                                        <i class="fa fa-edit"></i> Apply Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3>Quick Actions</h3>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <a href="/admission/apply" class="acmst-btn acmst-btn-primary">
+                                        <i class="fa fa-plus"></i> New Application
+                                    </a>
+                                    <a href="/admission/status" class="acmst-btn acmst-btn-secondary">
+                                        <i class="fa fa-search"></i> Check Status
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="acmst-card mt-3">
+                                <div class="acmst-card-header">
+                                    <h3>Contact Information</h3>
+                                </div>
+                                <p><strong>Admission Office:</strong></p>
+                                <p>Phone: +966 11 123 4567</p>
+                                <p>Email: admission@acmst.edu.sa</p>
+                                <p>Hours: Sunday - Thursday, 8:00 AM - 4:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Portal Application Form Template -->
+        <template id="portal_admission_apply" name="Admission Application Form">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Apply for Admission - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <h1>Admission Application</h1>
+                        <p>Please fill out the form below to apply for admission</p>
+                    </div>
+                    
+                    <div class="acmst-card acmst-portal-application-form">
+                        <div class="acmst-progress">
+                            <div class="acmst-progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        
+                        <form id="admission-form" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            
+                            <!-- Basic Information -->
+                            <div class="acmst-card-header">
+                                <h3>Basic Information</h3>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="acmst-form-group">
+                                        <label for="applicant_name">Full Name *</label>
+                                        <input type="text" name="applicant_name" id="applicant_name" class="form-control" required="required"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="acmst-form-group">
+                                        <label for="national_id">National ID *</label>
+                                        <input type="text" name="national_id" id="national_id" class="form-control" maxlength="10" required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="acmst-form-group">
+                                        <label for="phone">Phone Number *</label>
+                                        <input type="tel" name="phone" id="phone" class="form-control" required="required"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="acmst-form-group">
+                                        <label for="email">Email Address *</label>
+                                        <input type="email" name="email" id="email" class="form-control" required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="acmst-form-group">
+                                        <label for="program_id">Program *</label>
+                                        <select name="program_id" id="program_id" class="form-control" required="required">
+                                            <option value="">Select Program</option>
+                                            <t t-foreach="programs" t-as="program">
+                                                <option value="program.id" t-esc="program.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="acmst-form-group">
+                                        <label for="batch_id">Batch *</label>
+                                        <select name="batch_id" id="batch_id" class="form-control" required="required">
+                                            <option value="">Select Batch</option>
+                                            <t t-foreach="batches" t-as="batch">
+                                                <option value="batch.id" t-esc="batch.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Personal Information -->
+                            <div class="acmst-card-header mt-4">
+                                <h3>Personal Information</h3>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="acmst-form-group">
+                                        <label for="birth_date">Birth Date *</label>
+                                        <input type="date" name="birth_date" id="birth_date" class="form-control" required="required"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="acmst-form-group">
+                                        <label for="gender">Gender *</label>
+                                        <select name="gender" id="gender" class="form-control" required="required">
+                                            <option value="">Select Gender</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="acmst-form-group">
+                                        <label for="nationality">Nationality *</label>
+                                        <input type="text" name="nationality" id="nationality" class="form-control" value="Saudi" required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="acmst-form-group">
+                                <label for="address">Address *</label>
+                                <textarea name="address" id="address" class="form-control" rows="3" required="required"></textarea>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="acmst-form-group">
+                                        <label for="emergency_contact">Emergency Contact *</label>
+                                        <input type="text" name="emergency_contact" id="emergency_contact" class="form-control" required="required"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="acmst-form-group">
+                                        <label for="emergency_phone">Emergency Phone *</label>
+                                        <input type="tel" name="emergency_phone" id="emergency_phone" class="form-control" required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Academic Information -->
+                            <div class="acmst-card-header mt-4">
+                                <h3>Academic Information</h3>
+                            </div>
+                            
+                            <div class="acmst-form-group">
+                                <label for="previous_education">Previous Education</label>
+                                <textarea name="previous_education" id="previous_education" class="form-control" rows="3" placeholder="Please describe your previous educational background"></textarea>
+                            </div>
+                            
+                            <div class="acmst-form-group">
+                                <label for="documents">Supporting Documents</label>
+                                <div class="acmst-file-upload">
+                                    <input type="file" name="documents" id="documents" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple="multiple"/>
+                                    <div class="acmst-file-upload-icon">
+                                        <i class="fa fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <div class="acmst-file-upload-text">Click to upload documents</div>
+                                    <div class="acmst-file-upload-hint">Supported formats: PDF, DOC, DOCX, JPG, PNG (Max 10MB each)</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Terms and Conditions -->
+                            <div class="acmst-card-header mt-4">
+                                <h3>Terms and Conditions</h3>
+                            </div>
+                            
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="terms_agreement" required="required"/>
+                                <label class="form-check-label" for="terms_agreement">
+                                    I agree to the <a href="/terms" target="_blank">Terms and Conditions</a> and <a href="/privacy" target="_blank">Privacy Policy</a> *
+                                </label>
+                            </div>
+                            
+                            <!-- Submit Buttons -->
+                            <div class="text-center mt-4">
+                                <button type="button" class="acmst-btn acmst-btn-secondary" data-action="save-draft">
+                                    <i class="fa fa-save"></i> Save Draft
+                                </button>
+                                <button type="submit" class="acmst-btn acmst-btn-primary" data-action="submit">
+                                    <i class="fa fa-paper-plane"></i> Submit Application
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Portal Application Status Template -->
+        <template id="portal_admission_status" name="Admission Application Status">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Application Status - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <h1>Application Status</h1>
+                        <p>Track your admission applications</p>
+                    </div>
+                    
+                    <div class="acmst-card">
+                        <div class="acmst-card-header">
+                            <h3>Your Applications</h3>
+                        </div>
+                        
+                        <t t-if="applications">
+                            <div class="acmst-table-responsive">
+                                <table class="acmst-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Application Number</th>
+                                            <th>Program</th>
+                                            <th>Batch</th>
+                                            <th>Status</th>
+                                            <th>Submission Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="applications" t-as="application">
+                                            <tr>
+                                                <td t-esc="application.name"/>
+                                                <td t-esc="application.program_id.name"/>
+                                                <td t-esc="application.batch_id.name"/>
+                                                <td>
+                                                    <span class="acmst-status acmst-status-application.state" t-esc="application.state"/>
+                                                </td>
+                                                <td t-esc="application.submission_date"/>
+                                                <td>
+                                                    <a t-attf-href="/admission/status/#{application.id}" class="acmst-btn acmst-btn-primary btn-sm">
+                                                        <i class="fa fa-eye"></i> View Details
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="text-center py-5">
+                                <i class="fa fa-file-alt fa-3x text-muted mb-3"></i>
+                                <h4>No Applications Found</h4>
+                                <p>You haven't submitted any applications yet.</p>
+                                <a href="/admission/apply" class="acmst-btn acmst-btn-primary">
+                                    <i class="fa fa-plus"></i> Apply Now
+                                </a>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Portal Application Status Detail Template -->
+        <template id="portal_admission_status_detail" name="Admission Application Status Detail">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Application Details - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <h1>Application Details</h1>
+                        <p>Application Number: <strong t-esc="application.name"/></p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3>Application Information</h3>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Applicant:</strong> <span t-esc="application.applicant_name"/></p>
+                                        <p><strong>National ID:</strong> <span t-esc="application.national_id"/></p>
+                                        <p><strong>Phone:</strong> <span t-esc="application.phone"/></p>
+                                        <p><strong>Email:</strong> <span t-esc="application.email"/></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Program:</strong> <span t-esc="application.program_id.name"/></p>
+                                        <p><strong>Batch:</strong> <span t-esc="application.batch_id.name"/></p>
+                                        <p><strong>Submission Date:</strong> <span t-esc="application.submission_date"/></p>
+                                        <p><strong>Status:</strong> 
+                                            <span class="acmst-status acmst-status-application.state" t-esc="application.state"/>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <t t-if="application.admission_file_id">
+                                    <div class="mt-4">
+                                        <h5>Admission File</h5>
+                                        <p><strong>File Number:</strong> <span t-esc="application.admission_file_id.name"/></p>
+                                        <p><strong>File Status:</strong> 
+                                            <span class="acmst-status acmst-status-application.admission_file_id.state" t-esc="application.admission_file_id.state"/>
+                                        </p>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3>Quick Actions</h3>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <a href="/admission/apply" class="acmst-btn acmst-btn-primary">
+                                        <i class="fa fa-plus"></i> New Application
+                                    </a>
+                                    <a href="/admission/status" class="acmst-btn acmst-btn-secondary">
+                                        <i class="fa fa-list"></i> All Applications
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Portal Health Check Template -->
+        <template id="portal_admission_health_check" name="Admission Health Check">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Health Check - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <h1>Health Check Form</h1>
+                        <p>Please complete the health questionnaire</p>
+                    </div>
+                    
+                    <div class="acmst-card acmst-portal-health-check">
+                        <form id="health-check-form" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="application_id" t-att-value="application.id"/>
+                            
+                            <!-- Health Questionnaire -->
+                            <div class="acmst-card-header">
+                                <h3>Health Questionnaire</h3>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="acmst-form-group">
+                                        <label for="height">Height (cm) *</label>
+                                        <input type="number" name="height" id="height" class="form-control" step="0.1" min="100" max="250" required="required"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="acmst-form-group">
+                                        <label for="weight">Weight (kg) *</label>
+                                        <input type="number" name="weight" id="weight" class="form-control" step="0.1" min="30" max="200" required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="acmst-form-group">
+                                <label for="blood_type">Blood Type</label>
+                                <select name="blood_type" id="blood_type" class="form-control">
+                                    <option value="">Select Blood Type</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                    <option value="unknown">Unknown</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Medical History -->
+                            <div class="acmst-card-header mt-4">
+                                <h3>Medical History</h3>
+                            </div>
+                            
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" name="has_chronic_diseases" id="has_chronic_diseases"/>
+                                <label class="form-check-label" for="has_chronic_diseases">
+                                    Do you have any chronic diseases?
+                                </label>
+                            </div>
+                            <div class="acmst-form-group" style="display: none;">
+                                <label for="chronic_diseases_details">Please specify chronic diseases</label>
+                                <textarea name="chronic_diseases_details" id="chronic_diseases_details" class="form-control" rows="3"></textarea>
+                            </div>
+                            
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" name="takes_medications" id="takes_medications"/>
+                                <label class="form-check-label" for="takes_medications">
+                                    Do you take any medications?
+                                </label>
+                            </div>
+                            <div class="acmst-form-group" style="display: none;">
+                                <label for="medications_details">Please specify medications</label>
+                                <textarea name="medications_details" id="medications_details" class="form-control" rows="3"></textarea>
+                            </div>
+                            
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" name="has_allergies" id="has_allergies"/>
+                                <label class="form-check-label" for="has_allergies">
+                                    Do you have any allergies?
+                                </label>
+                            </div>
+                            <div class="acmst-form-group" style="display: none;">
+                                <label for="allergies_details">Please specify allergies</label>
+                                <textarea name="allergies_details" id="allergies_details" class="form-control" rows="3"></textarea>
+                            </div>
+                            
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" name="has_disabilities" id="has_disabilities"/>
+                                <label class="form-check-label" for="has_disabilities">
+                                    Do you have any disabilities?
+                                </label>
+                            </div>
+                            <div class="acmst-form-group" style="display: none;">
+                                <label for="disabilities_details">Please specify disabilities</label>
+                                <textarea name="disabilities_details" id="disabilities_details" class="form-control" rows="3"></textarea>
+                            </div>
+                            
+                            <!-- Medical Assessment -->
+                            <div class="acmst-card-header mt-4">
+                                <h3>Medical Assessment</h3>
+                            </div>
+                            
+                            <div class="acmst-form-group">
+                                <label for="medical_fitness">Medical Fitness *</label>
+                                <select name="medical_fitness" id="medical_fitness" class="form-control" required="required">
+                                    <option value="">Select Fitness Level</option>
+                                    <option value="fit">Fit</option>
+                                    <option value="unfit">Unfit</option>
+                                    <option value="conditional">Conditional</option>
+                                </select>
+                            </div>
+                            
+                            <div class="acmst-form-group">
+                                <label for="medical_notes">Medical Notes</label>
+                                <textarea name="medical_notes" id="medical_notes" class="form-control" rows="3" placeholder="Additional medical notes"></textarea>
+                            </div>
+                            
+                            <div class="acmst-form-group">
+                                <label for="restrictions">Restrictions</label>
+                                <textarea name="restrictions" id="restrictions" class="form-control" rows="3" placeholder="Any medical restrictions or limitations"></textarea>
+                            </div>
+                            
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" name="follow_up_required" id="follow_up_required"/>
+                                <label class="form-check-label" for="follow_up_required">
+                                    Follow-up examination required
+                                </label>
+                            </div>
+                            <div class="acmst-form-group" style="display: none;">
+                                <label for="follow_up_date">Follow-up Date</label>
+                                <input type="date" name="follow_up_date" id="follow_up_date" class="form-control"/>
+                            </div>
+                            
+                            <!-- Attachments -->
+                            <div class="acmst-card-header mt-4">
+                                <h3>Medical Documents</h3>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="acmst-form-group">
+                                        <label for="medical_reports">Medical Reports</label>
+                                        <input type="file" name="medical_reports" id="medical_reports" class="form-control" accept=".pdf,.jpg,.jpeg,.png"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="acmst-form-group">
+                                        <label for="lab_results">Lab Results</label>
+                                        <input type="file" name="lab_results" id="lab_results" class="form-control" accept=".pdf,.jpg,.jpeg,.png"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="acmst-form-group">
+                                        <label for="other_documents">Other Documents</label>
+                                        <input type="file" name="other_documents" id="other_documents" class="form-control" accept=".pdf,.jpg,.jpeg,.png"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Submit Buttons -->
+                            <div class="text-center mt-4">
+                                <button type="button" class="acmst-btn acmst-btn-secondary" data-action="save">
+                                    <i class="fa fa-save"></i> Save Draft
+                                </button>
+                                <button type="submit" class="acmst-btn acmst-btn-primary" data-action="submit">
+                                    <i class="fa fa-paper-plane"></i> Submit Health Check
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Portal Conditions Template -->
+        <template id="portal_admission_conditions" name="Admission Conditions">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Conditions - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <h1>Conditional Requirements</h1>
+                        <p>Complete the following requirements to proceed with your admission</p>
+                    </div>
+                    
+                    <div class="acmst-card">
+                        <div class="acmst-card-header">
+                            <h3>Your Conditions</h3>
+                        </div>
+                        
+                        <t t-if="conditions">
+                            <div class="row">
+                                <t t-foreach="conditions" t-as="condition">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="acmst-card">
+                                            <h5 t-esc="condition.subject_name"/>
+                                            <p><strong>Level:</strong> <span t-esc="condition.level"/></p>
+                                            <p><strong>Deadline:</strong> <span t-esc="condition.deadline"/></p>
+                                            <p><strong>Status:</strong> 
+                                                <span class="acmst-status acmst-status-condition.state" t-esc="condition.state"/>
+                                            </p>
+                                            <p t-esc="condition.description"/>
+                                            
+                                            <t t-if="condition.state == 'pending'">
+                                                <button class="acmst-btn acmst-btn-success btn-sm" 
+                                                        t-att-data-condition-id="condition.id"
+                                                        data-action="complete">
+                                                    <i class="fa fa-check"></i> Mark Complete
+                                                </button>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="text-center py-5">
+                                <i class="fa fa-check-circle fa-3x text-success mb-3"></i>
+                                <h4>No Conditions</h4>
+                                <p>You don't have any pending conditions.</p>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Portal Dashboard Widget -->
+        <template id="portal_dashboard_admission" name="Admission Dashboard Widget">
+            <div class="col-md-6">
+                <div class="acmst-card">
+                    <div class="acmst-card-header">
+                        <h3>Admission Applications</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-center">
+                                <h4 t-esc="application_count" class="text-primary"/>
+                                <p>Total Applications</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-center">
+                                <a href="/admission/apply" class="acmst-btn acmst-btn-primary btn-sm">
+                                    <i class="fa fa-plus"></i> New Application
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="/admission/status" class="acmst-btn acmst-btn-secondary btn-sm">
+                            <i class="fa fa-eye"></i> View All Applications
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Portal Menu Items -->
+        <template id="portal_menu_admission" name="Admission Menu">
+            <li>
+                <a href="/admission" class="nav-link">
+                    <i class="fa fa-graduation-cap"></i> Admission
+                </a>
+            </li>
+        </template>
+
+        <!-- Portal Footer -->
+        <template id="portal_footer_admission" name="Admission Footer">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Admission Office</h5>
+                    <p>Phone: +966 11 123 4567</p>
+                    <p>Email: admission@acmst.edu.sa</p>
+                    <p>Hours: Sunday - Thursday, 8:00 AM - 4:00 PM</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/admission/apply">Apply Now</a></li>
+                        <li><a href="/admission/status">Check Status</a></li>
+                        <li><a href="/programs">Programs</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Follow Us</h5>
+                    <div class="social-links">
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-info btn-sm me-2">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-danger btn-sm me-2">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    </data>
+</odoo>

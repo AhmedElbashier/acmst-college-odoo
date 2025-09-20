@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Admission Workflow Engine -->
+        <record id="acmst_workflow_engine_admission" model="acmst.workflow.engine">
+            <field name="name">Admission Workflow</field>
+            <field name="description">Complete admission workflow from portal application to student enrollment</field>
+            <field name="active">True</field>
+            <field name="auto_transitions">True</field>
+            <field name="notification_enabled">True</field>
+            <field name="timeout_hours">24</field>
+        </record>
+
+        <!-- Workflow Rules -->
+        
+        <!-- Portal Application to Ministry Pending -->
+        <record id="acmst_workflow_rule_portal_to_ministry" model="acmst.workflow.rule">
+            <field name="workflow_id" ref="acmst_workflow_engine_admission"/>
+            <field name="name">Portal Application to Ministry Pending</field>
+            <field name="sequence">10</field>
+            <field name="active">True</field>
+            <field name="from_state">new</field>
+            <field name="to_state">ministry_pending</field>
+            <field name="action_type">transition</field>
+            <field name="condition_type">always</field>
+            <field name="send_notification">True</field>
+        </record>
+
+        <!-- Ministry Approval -->
+        <record id="acmst_workflow_rule_ministry_approve" model="acmst.workflow.rule">
+            <field name="workflow_id" ref="acmst_workflow_engine_admission"/>
+            <field name="name">Ministry Approval</field>
+            <field name="sequence">20</field>
+            <field name="active">True</field>
+            <field name="from_state">ministry_pending</field>
+            <field name="to_state">ministry_approved</field>
+            <field name="action_type">transition</field>
+            <field name="condition_type">always</field>
+            <field name="send_notification">True</field>
+        </record>
+
+        <!-- Ministry to Health Check -->
+        <record id="acmst_workflow_rule_ministry_to_health" model="acmst.workflow.rule">
+            <field name="workflow_id" ref="acmst_workflow_engine_admission"/>
+            <field name="name">Ministry to Health Check</field>
+            <field name="sequence">30</field>
+            <field name="active">True</field>
+            <field name="from_state">ministry_approved</field>
+            <field name="to_state">health_required</field>
+            <field name="action_type">transition</field>
+            <field name="condition_type">always</field>
+            <field name="send_notification">True</field>
+        </record>
+
+        <!-- Health Check Approval -->
+        <record id="acmst_workflow_rule_health_approve" model="acmst.workflow.rule">
+            <field name="workflow_id" ref="acmst_workflow_engine_admission"/>
+            <field name="name">Health Check Approval</field>
+            <field name="sequence">40</field>
+            <field name="active">True</field>
+            <field name="from_state">health_required</field>
+            <field name="to_state">health_approved</field>
+            <field name="action_type">transition</field>
+            <field name="condition_type">always</field>
+            <field name="send_notification">True</field>
+        </record>
+
+        <!-- Health to Coordinator Review -->
+        <record id="acmst_workflow_rule_health_to_coordinator" model="acmst.workflow.rule">
+            <field name="workflow_id" ref="acmst_workflow_engine_admission"/>
+            <field name="name">Health to Coordinator Review</field>
+            <field name="sequence">50</field>
+            <field name="active">True</field>
+            <field name="from_state">health_approved</field>
+            <field name="to_state">coordinator_review</field>
+            <field name="action_type">transition</field>
+            <field name="condition_type">always</field>
+            <field name="send_notification">True</field>
+        </record>
+
+        <!-- Coordinator Approval -->
+        <record id="acmst_workflow_rule_coordinator_approve" model="acmst.workflow.rule">
+            <field name="workflow_id" ref="acmst_workflow_engine_admission"/>
+            <field name="name">Coordinator Approval</field>
+            <field name="sequence">60</field>
+            <field name="active">True</field>
+            <field name="from_state">coordinator_review</field>
+            <field name="to_state">coordinator_approved</field>
+            <field name="action_type">transition</field>
+            <field name="condition_type">always</field>
+            <field name="send_notification">True</field>
+        </record>
+
+        <!-- Coordinator to Manager Review -->
+        <record id="acmst_workflow_rule_coordinator_to_manager" model="acmst.workflow.rule">
+            <field name="workflow_id" ref="acmst_workflow_engine_admission"/>
+            <field name="name">Coordinator to Manager Review</field>
+            <field name="sequence">70</field>
+            <field name="active">True</field>
+            <field name="from_state">coordinator_approved</field>
+            <field name="to_state">manager_review</field>
+            <field name="action_type">transition</field>
+            <field name="condition_type">always</field>
+            <field name="send_notification">True</field>
+        </record>
+
+        <!-- Manager Approval -->
+        <record id="acmst_workflow_rule_manager_approve" model="acmst.workflow.rule">
+            <field name="workflow_id" ref="acmst_workflow_engine_admission"/>
+            <field name="name">Manager Approval</field>
+            <field name="sequence">80</field>
+            <field name="active">True</field>
+            <field name="from_state">manager_review</field>
+            <field name="to_state">manager_approved</field>
+            <field name="action_type">transition</field>
+            <field name="condition_type">always</field>
+            <field name="send_notification">True</field>
+        </record>
+
+        <!-- Manager to Completed -->
+        <record id="acmst_workflow_rule_manager_to_completed" model="acmst.workflow.rule">
+            <field name="workflow_id" ref="acmst_workflow_engine_admission"/>
+            <field name="name">Manager to Completed</field>
+            <field name="sequence">90</field>
+            <field name="active">True</field>
+            <field name="from_state">manager_approved</field>
+            <field name="to_state">completed</field>
+            <field name="action_type">transition</field>
+            <field name="condition_type">always</field>
+            <field name="send_notification">True</field>
+        </record>
+
+    </data>
+</odoo>

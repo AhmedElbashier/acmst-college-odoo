@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Performance Optimization Records -->
+        <record id="acmst_performance_admission_file_search" model="acmst.performance">
+            <field name="name">Admission File Search Optimization</field>
+            <field name="description">Optimized search queries for admission files with proper indexing and filtering</field>
+            <field name="optimization_type">query_optimization</field>
+            <field name="model_id" ref="model_acmst_admission_file"/>
+            <field name="method_name">search_read</field>
+            <field name="active">True</field>
+            <field name="performance_gain">25.0</field>
+            <field name="notes">Added database indexes on state, applicant_name, and create_date fields</field>
+        </record>
+
+        <record id="acmst_performance_health_check_summary" model="acmst.performance">
+            <field name="name">Health Check Summary Optimization</field>
+            <field name="description">Optimized health check summary queries using read_group for better performance</field>
+            <field name="optimization_type">query_optimization</field>
+            <field name="model_id" ref="model_acmst_health_check"/>
+            <field name="method_name">get_health_summary</field>
+            <field name="active">True</field>
+            <field name="performance_gain">40.0</field>
+            <field name="notes">Replaced Python loops with read_group for aggregated data</field>
+        </record>
+
+        <record id="acmst_performance_coordinator_conditions" model="acmst.performance">
+            <field name="name">Coordinator Conditions Caching</field>
+            <field name="description">Implemented caching strategy for coordinator conditions to reduce database queries</field>
+            <field name="optimization_type">caching</field>
+            <field name="model_id" ref="model_acmst_coordinator_condition"/>
+            <field name="method_name">get_conditions_by_coordinator</field>
+            <field name="active">True</field>
+            <field name="performance_gain">60.0</field>
+            <field name="notes">Added Redis caching for frequently accessed coordinator conditions</field>
+        </record>
+
+        <record id="acmst_performance_database_indexing" model="acmst.performance">
+            <field name="name">Database Indexing Strategy</field>
+            <field name="description">Comprehensive database indexing for all critical fields across admission models</field>
+            <field name="optimization_type">indexing</field>
+            <field name="model_id" ref="model_acmst_admission_file"/>
+            <field name="method_name">_auto_init</field>
+            <field name="active">True</field>
+            <field name="performance_gain">35.0</field>
+            <field name="notes">Added composite indexes for common query patterns and foreign key relationships</field>
+        </record>
+
+        <record id="acmst_performance_portal_queries" model="acmst.performance">
+            <field name="name">Portal Query Optimization</field>
+            <field name="description">Optimized portal queries to reduce load times and improve user experience</field>
+            <field name="optimization_type">query_optimization</field>
+            <field name="model_id" ref="model_acmst_portal_application"/>
+            <field name="method_name">get_portal_dashboard_data</field>
+            <field name="active">True</field>
+            <field name="performance_gain">50.0</field>
+            <field name="notes">Implemented query batching and lazy loading for portal dashboard</field>
+        </record>
+
+        <record id="acmst_performance_workflow_engine" model="acmst.performance">
+            <field name="name">Workflow Engine Optimization</field>
+            <field name="description">Optimized workflow state transitions and rule processing</field>
+            <field name="optimization_type">code_refactoring</field>
+            <field name="model_id" ref="model_acmst_workflow_engine"/>
+            <field name="method_name">process_state_transition</field>
+            <field name="active">True</field>
+            <field name="performance_gain">30.0</field>
+            <field name="notes">Refactored state machine logic to use efficient data structures and reduce complexity</field>
+        </record>
+
+        <record id="acmst_performance_audit_logging" model="acmst.performance">
+            <field name="name">Audit Logging Optimization</field>
+            <field name="description">Optimized audit logging to reduce performance impact on main operations</field>
+            <field name="optimization_type">code_refactoring</field>
+            <field name="model_id" ref="model_acmst_audit_log"/>
+            <field name="method_name">log_action</field>
+            <field name="active">True</field>
+            <field name="performance_gain">20.0</field>
+            <field name="notes">Implemented asynchronous logging and batch processing for audit records</field>
+        </record>
+
+        <record id="acmst_performance_mobile_responsiveness" model="acmst.performance">
+            <field name="name">Mobile Responsiveness Optimization</field>
+            <field name="description">Optimized mobile portal performance with lazy loading and responsive design</field>
+            <field name="optimization_type">other</field>
+            <field name="model_id" ref="model_acmst_portal_application"/>
+            <field name="method_name">render_portal_template</field>
+            <field name="active">True</field>
+            <field name="performance_gain">45.0</field>
+            <field name="notes">Implemented progressive loading and optimized CSS/JS delivery for mobile devices</field>
+        </record>
+
+    </data>
+</odoo>

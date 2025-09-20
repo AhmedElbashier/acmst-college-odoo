@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Application Form Wizard Template -->
+        <template id="portal_application_form_wizard" name="Application Form Wizard">
+            <div class="acmst-application-wizard">
+                <div class="wizard-header">
+                    <h3>Admission Application Form</h3>
+                    <p>Please complete all required fields to submit your application</p>
+                </div>
+                
+                <div class="wizard-steps">
+                    <div class="step active" data-step="1">
+                        <span class="step-number">1</span>
+                        <span class="step-title">Basic Info</span>
+                    </div>
+                    <div class="step" data-step="2">
+                        <span class="step-number">2</span>
+                        <span class="step-title">Personal Info</span>
+                    </div>
+                    <div class="step" data-step="3">
+                        <span class="step-number">3</span>
+                        <span class="step-title">Academic Info</span>
+                    </div>
+                    <div class="step" data-step="4">
+                        <span class="step-number">4</span>
+                        <span class="step-title">Review &amp; Submit</span>
+                    </div>
+                </div>
+                
+                <form id="application-wizard-form" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    
+                    <!-- Step 1: Basic Information -->
+                    <div class="wizard-step active" data-step="1">
+                        <div class="step-content">
+                            <h4>Basic Information</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="applicant_name">Full Name *</label>
+                                        <input type="text" name="applicant_name" id="applicant_name" class="form-control" required="required"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="national_id">National ID *</label>
+                                        <input type="text" name="national_id" id="national_id" class="form-control" maxlength="10" required="required"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="phone">Phone Number *</label>
+                                        <input type="tel" name="phone" id="phone" class="form-control" required="required"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="email">Email Address *</label>
+                                        <input type="email" name="email" id="email" class="form-control" required="required"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="program_id">Program *</label>
+                                        <select name="program_id" id="program_id" class="form-control" required="required">
+                                            <option value="">Select Program</option>
+                                            <t t-foreach="programs" t-as="program">
+                                                <option value="program.id" t-esc="program.name"/>
+                                            </t>
+                                        </select>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="batch_id">Batch *</label>
+                                        <select name="batch_id" id="batch_id" class="form-control" required="required">
+                                            <option value="">Select Batch</option>
+                                            <t t-foreach="batches" t-as="batch">
+                                                <option value="batch.id" t-esc="batch.name"/>
+                                            </t>
+                                        </select>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: Personal Information -->
+                    <div class="wizard-step" data-step="2">
+                        <div class="step-content">
+                            <h4>Personal Information</h4>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="birth_date">Birth Date *</label>
+                                        <input type="date" name="birth_date" id="birth_date" class="form-control" required="required"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="gender">Gender *</label>
+                                        <select name="gender" id="gender" class="form-control" required="required">
+                                            <option value="">Select Gender</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                        </select>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="nationality">Nationality *</label>
+                                        <input type="text" name="nationality" id="nationality" class="form-control" value="Saudi" required="required"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="address">Address *</label>
+                                <textarea name="address" id="address" class="form-control" rows="3" required="required"></textarea>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="emergency_contact">Emergency Contact *</label>
+                                        <input type="text" name="emergency_contact" id="emergency_contact" class="form-control" required="required"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="emergency_phone">Emergency Phone *</label>
+                                        <input type="tel" name="emergency_phone" id="emergency_phone" class="form-control" required="required"/>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Academic Information -->
+                    <div class="wizard-step" data-step="3">
+                        <div class="step-content">
+                            <h4>Academic Information</h4>
+                            <div class="form-group">
+                                <label for="previous_education">Previous Education</label>
+                                <textarea name="previous_education" id="previous_education" class="form-control" rows="4" placeholder="Please describe your previous educational background"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="documents">Supporting Documents</label>
+                                <div class="file-upload-area">
+                                    <input type="file" name="documents" id="documents" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple="multiple"/>
+                                    <div class="file-upload-content">
+                                        <i class="fa fa-cloud-upload-alt"></i>
+                                        <p>Click to upload or drag and drop</p>
+                                        <small>Supported formats: PDF, DOC, DOCX, JPG, PNG (Max 10MB each)</small>
+                                    </div>
+                                </div>
+                                <div class="file-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 4: Review & Submit -->
+                    <div class="wizard-step" data-step="4">
+                        <div class="step-content">
+                            <h4>Review Your Application</h4>
+                            <div class="application-summary">
+                                <div class="summary-section">
+                                    <h5>Basic Information</h5>
+                                    <div class="summary-item">
+                                        <strong>Name:</strong> <span id="summary-name"></span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <strong>National ID:</strong> <span id="summary-national-id"></span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <strong>Phone:</strong> <span id="summary-phone"></span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <strong>Email:</strong> <span id="summary-email"></span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <strong>Program:</strong> <span id="summary-program"></span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <strong>Batch:</strong> <span id="summary-batch"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="summary-section">
+                                    <h5>Personal Information</h5>
+                                    <div class="summary-item">
+                                        <strong>Birth Date:</strong> <span id="summary-birth-date"></span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <strong>Gender:</strong> <span id="summary-gender"></span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <strong>Nationality:</strong> <span id="summary-nationality"></span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <strong>Address:</strong> <span id="summary-address"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="summary-section">
+                                    <h5>Academic Information</h5>
+                                    <div class="summary-item">
+                                        <strong>Previous Education:</strong> <span id="summary-education"></span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <strong>Documents:</strong> <span id="summary-documents"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-check mt-4">
+                                <input type="checkbox" class="form-check-input" id="terms_agreement" required="required"/>
+                                <label class="form-check-label" for="terms_agreement">
+                                    I agree to the <a href="/terms" target="_blank">Terms and Conditions</a> and <a href="/privacy" target="_blank">Privacy Policy</a> *
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Wizard Navigation -->
+                    <div class="wizard-navigation">
+                        <button type="button" class="btn btn-secondary" id="prev-step" disabled="disabled">Previous</button>
+                        <button type="button" class="btn btn-primary" id="next-step">Next</button>
+                        <button type="button" class="btn btn-success" id="save-draft">Save Draft</button>
+                        <button type="submit" class="btn btn-primary" id="submit-application" style="display: none;">Submit Application</button>
+                    </div>
+                </form>
+            </div>
+        </template>
+
+    </data>
+</odoo>

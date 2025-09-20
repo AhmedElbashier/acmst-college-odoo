@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Manager Dashboard View -->
+        <record id="view_acmst_manager_dashboard" model="ir.ui.view">
+            <field name="name">acmst.manager.dashboard</field>
+            <field name="model">acmst.admission.file</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Manager Dashboard">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_graph" type="object" class="oe_stat_button" icon="fa-bar-chart">
+                                <field name="id" widget="statinfo" string="Graph View"/>
+                            </button>
+                            <button name="action_view_pivot" type="object" class="oe_stat_button" icon="fa-table">
+                                <field name="id" widget="statinfo" string="Pivot View"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>Manager Dashboard</h1>
+                        </div>
+                        <group>
+                            <group string="Manager Statistics">
+                                <field name="total_applications" widget="statinfo" string="Total Applications"/>
+                                <field name="pending_review" widget="statinfo" string="Pending Review"/>
+                                <field name="approved" widget="statinfo" string="Approved"/>
+                                <field name="completed" widget="statinfo" string="Completed"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Manager Dashboard Action -->
+        <record id="action_acmst_manager_dashboard" model="ir.actions.act_window">
+            <field name="name">Manager Dashboard</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', 'in', ['manager_review', 'manager_approved', 'completed'])]</field>
+            <field name="context">{'search_default_manager_review': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Manager Dashboard
+                </p>
+                <p>
+                    Overview of admission applications and statistics for managers.
+                </p>
+            </field>
+        </record>
+
+        <!-- Manager Review Tree View -->
+        <record id="view_acmst_manager_review_tree" model="ir.ui.view">
+            <field name="name">acmst.manager.review.tree</field>
+            <field name="model">acmst.admission.file</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Pending Manager Review" decoration-warning="state == 'manager_review'" decoration-success="state == 'manager_approved'" decoration-info="state == 'completed'">
+                    <field name="name" string="File Number"/>
+                    <field name="applicant_name" string="Applicant"/>
+                    <field name="national_id" string="National ID"/>
+                    <field name="phone" string="Phone"/>
+                    <field name="email" string="Email"/>
+                    <field name="program_id" string="Program"/>
+                    <field name="batch_id" string="Batch"/>
+                    <field name="state" string="State"/>
+                    <field name="application_date" string="Application Date"/>
+                    <field name="submission_method" string="Method"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Manager Review Form View -->
+        <record id="view_acmst_manager_review_form" model="ir.ui.view">
+            <field name="name">acmst.manager.review.form</field>
+            <field name="model">acmst.admission.file</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Pending Manager Review">
+                    <header>
+                        <button name="action_manager_approve" string="Manager Approve" type="object" class="btn-success" invisible="state != 'manager_review'"/>
+                        <button name="action_manager_reject" string="Manager Reject" type="object" class="btn-danger" invisible="state != 'manager_review'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="ministry_pending,ministry_approved,health_required,health_approved,coordinator_review,coordinator_approved,manager_review,manager_approved,completed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                                <field name="applicant_name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Application Details">
+                                <field name="program_id" readonly="1"/>
+                                <field name="batch_id" readonly="1"/>
+                                <field name="application_date" readonly="1"/>
+                                <field name="submission_method" readonly="1"/>
+                            </group>
+                            <group string="Review Status">
+                                <field name="coordinator_id" readonly="1"/>
+                                <field name="coordinator_approval_date" readonly="1"/>
+                                <field name="health_check_date" readonly="1"/>
+                                <field name="health_approver" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Personal Information">
+                                <group>
+                                    <group string="Basic Info">
+                                        <field name="national_id" readonly="1"/>
+                                        <field name="phone" readonly="1"/>
+                                        <field name="email" readonly="1"/>
+                                        <field name="birth_date" readonly="1"/>
+                                        <field name="gender" readonly="1"/>
+                                        <field name="nationality" readonly="1"/>
+                                    </group>
+                                    <group string="Address">
+                                        <field name="address" readonly="1"/>
+                                        <field name="emergency_contact" readonly="1"/>
+                                        <field name="emergency_phone" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Academic Information">
+                                <group>
+                                    <field name="previous_education" readonly="1"/>
+                                    <field name="certificates" filename="certificates_filename" readonly="1"/>
+                                    <field name="transcripts" filename="transcripts_filename" readonly="1"/>
+                                </group>
+                            </page>
+                            <page string="Health Check Results">
+                                <field name="health_check_ids" nolabel="1" readonly="1">
+                                    <tree>
+                                        <field name="check_date"/>
+                                        <field name="examiner_id"/>
+                                        <field name="medical_fitness"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Coordinator Assessment">
+                                <group>
+                                    <group string="Review Decision">
+                                        <field name="coordinator_id" readonly="1"/>
+                                        <field name="coordinator_approval_date" readonly="1"/>
+                                        <field name="coordinator_notes" readonly="1"/>
+                                    </group>
+                                    <group string="Conditions Summary">
+                                        <field name="coordinator_conditions_ids" widget="statinfo" string="Total Conditions" options="{'count_field': 'id'}"/>
+                                        <field name="coordinator_conditions_ids" widget="statinfo" string="Overdue" options="{'count_field': 'id', 'domain': [('state', '=', 'overdue')]}"/>
+                                    </group>
+                                </group>
+                                <field name="coordinator_conditions_ids" nolabel="1" readonly="1">
+                                    <tree>
+                                        <field name="subject_name"/>
+                                        <field name="level"/>
+                                        <field name="deadline"/>
+                                        <field name="days_remaining"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Approval History">
+                                <field name="approval_ids" nolabel="1" readonly="1">
+                                    <tree>
+                                        <field name="approval_date"/>
+                                        <field name="approval_type"/>
+                                        <field name="approver_name"/>
+                                        <field name="decision"/>
+                                        <field name="comments"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Manager Pending Review Action -->
+        <record id="action_acmst_manager_pending_review" model="ir.actions.act_window">
+            <field name="name">Pending Manager Review</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_acmst_manager_review_tree"/>
+            <field name="domain">[('state', '=', 'manager_review')]</field>
+            <field name="context">{'search_default_manager_review': 1, 'form_view_ref': 'acmst_admission.view_acmst_manager_review_form'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No applications pending manager review
+                </p>
+                <p>
+                    All applications have been reviewed by the manager.
+                </p>
+            </field>
+        </record>
+
+        <!-- Manager Approved Action -->
+        <record id="action_acmst_manager_approved" model="ir.actions.act_window">
+            <field name="name">Manager Approved</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('manager_id', '=', uid), ('state', 'in', ['manager_approved', 'completed'])]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No applications approved by manager
+                </p>
+                <p>
+                    Applications approved by the manager will appear here.
+                </p>
+            </field>
+        </record>
+
+        <!-- Completed Applications Action -->
+        <record id="action_acmst_completed_applications" model="ir.actions.act_window">
+            <field name="name">Completed Applications</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'completed')]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No completed applications
+                </p>
+                <p>
+                    Completed applications will appear here.
+                </p>
+            </field>
+        </record>
+
+        <!-- Student Records Action -->
+        <record id="action_acmst_student_records" model="ir.actions.act_window">
+            <field name="name">Student Records</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('is_company', '=', False), ('comment', 'ilike', 'Admission File:')]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No student records found
+                </p>
+                <p>
+                    Student records will appear here after admission completion.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

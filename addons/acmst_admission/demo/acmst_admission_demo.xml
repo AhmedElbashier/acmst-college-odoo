@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Demo Portal Applications -->
+        <record id="demo_portal_application_1" model="acmst.portal.application">
+            <field name="applicant_name">Ahmed Al-Rashid</field>
+            <field name="national_id">1234567890</field>
+            <field name="phone">+966501234567</field>
+            <field name="email">ahmed.rashid@example.com</field>
+            <field name="program_id" ref="acmst_core_settings.acmst_program_1"/>
+            <field name="batch_id" ref="acmst_core_settings.acmst_batch_1"/>
+            <field name="birth_date">1995-03-15</field>
+            <field name="gender">male</field>
+            <field name="nationality">Saudi</field>
+            <field name="address">Riyadh, Saudi Arabia</field>
+            <field name="emergency_contact">Sara Al-Rashid</field>
+            <field name="emergency_phone">+966501234568</field>
+            <field name="previous_education">Bachelor's in Computer Science from King Saud University</field>
+            <field name="state">submitted</field>
+            <field name="submission_date" eval="datetime.now()"/>
+        </record>
+
+        <record id="demo_portal_application_2" model="acmst.portal.application">
+            <field name="applicant_name">Fatima Al-Zahra</field>
+            <field name="national_id">0987654321</field>
+            <field name="phone">+966501234569</field>
+            <field name="email">fatima.zahra@example.com</field>
+            <field name="program_id" ref="acmst_core_settings.acmst_program_2"/>
+            <field name="batch_id" ref="acmst_core_settings.acmst_batch_2"/>
+            <field name="birth_date">1998-07-22</field>
+            <field name="gender">female</field>
+            <field name="nationality">Saudi</field>
+            <field name="address">Jeddah, Saudi Arabia</field>
+            <field name="emergency_contact">Mohammed Al-Zahra</field>
+            <field name="emergency_phone">+966501234570</field>
+            <field name="previous_education">Bachelor's in Business Administration from King Abdulaziz University</field>
+            <field name="state">approved</field>
+            <field name="submission_date" eval="datetime.now()"/>
+        </record>
+
+        <!-- Demo Admission Files -->
+        <record id="demo_admission_file_1" model="acmst.admission.file">
+            <field name="applicant_name">Ahmed Al-Rashid</field>
+            <field name="national_id">1234567890</field>
+            <field name="phone">+966501234567</field>
+            <field name="email">ahmed.rashid@example.com</field>
+            <field name="program_id" ref="acmst_core_settings.acmst_program_1"/>
+            <field name="batch_id" ref="acmst_core_settings.acmst_batch_1"/>
+            <field name="birth_date">1995-03-15</field>
+            <field name="gender">male</field>
+            <field name="nationality">Saudi</field>
+            <field name="address">Riyadh, Saudi Arabia</field>
+            <field name="emergency_contact">Sara Al-Rashid</field>
+            <field name="emergency_phone">+966501234568</field>
+            <field name="previous_education">Bachelor's in Computer Science from King Saud University</field>
+            <field name="state">ministry_approved</field>
+            <field name="submission_method">portal</field>
+            <field name="application_date" eval="datetime.now()"/>
+            <field name="ministry_approval_date" eval="(datetime.now() - timedelta(days=5)).date()"/>
+        </record>
+
+        <record id="demo_admission_file_2" model="acmst.admission.file">
+            <field name="applicant_name">Fatima Al-Zahra</field>
+            <field name="national_id">0987654321</field>
+            <field name="phone">+966501234569</field>
+            <field name="email">fatima.zahra@example.com</field>
+            <field name="program_id" ref="acmst_core_settings.acmst_program_2"/>
+            <field name="batch_id" ref="acmst_core_settings.acmst_batch_2"/>
+            <field name="birth_date">1998-07-22</field>
+            <field name="gender">female</field>
+            <field name="nationality">Saudi</field>
+            <field name="address">Jeddah, Saudi Arabia</field>
+            <field name="emergency_contact">Mohammed Al-Zahra</field>
+            <field name="emergency_phone">+966501234570</field>
+            <field name="previous_education">Bachelor's in Business Administration from King Abdulaziz University</field>
+            <field name="state">coordinator_review</field>
+            <field name="submission_method">portal</field>
+            <field name="application_date" eval="datetime.now()"/>
+            <field name="ministry_approval_date" eval="(datetime.now() - timedelta(days=10)).date()"/>
+            <field name="health_check_date" eval="(datetime.now() - timedelta(days=3)).date()"/>
+        </record>
+
+        <!-- Demo Health Checks -->
+        <record id="demo_health_check_1" model="acmst.health.check">
+            <field name="admission_file_id" ref="demo_admission_file_1"/>
+            <field name="check_date" eval="datetime.now()"/>
+            <field name="examiner_id" ref="base.user_admin"/>
+            <field name="has_chronic_diseases">False</field>
+            <field name="takes_medications">False</field>
+            <field name="has_allergies">False</field>
+            <field name="has_disabilities">False</field>
+            <field name="blood_type">O+</field>
+            <field name="height">175.5</field>
+            <field name="weight">70.0</field>
+            <field name="medical_fitness">fit</field>
+            <field name="medical_notes">Applicant is in good health with no medical concerns.</field>
+            <field name="state">approved</field>
+        </record>
+
+        <!-- Demo Coordinator Conditions -->
+        <record id="demo_coordinator_condition_1" model="acmst.coordinator.condition">
+            <field name="admission_file_id" ref="demo_admission_file_2"/>
+            <field name="coordinator_id" ref="base.user_admin"/>
+            <field name="condition_date" eval="datetime.now().date()"/>
+            <field name="subject_name">Mathematics Level 2</field>
+            <field name="subject_code">MATH-201</field>
+            <field name="level">level2</field>
+            <field name="description">Complete Mathematics Level 2 course with minimum grade of 70%</field>
+            <field name="deadline" eval="(datetime.now() + timedelta(days=30)).date()"/>
+            <field name="state">pending</field>
+        </record>
+
+        <!-- Demo Approval Records -->
+        <record id="demo_approval_1" model="acmst.admission.approval">
+            <field name="admission_file_id" ref="demo_admission_file_1"/>
+            <field name="approver_id" ref="base.user_admin"/>
+            <field name="approval_type">ministry</field>
+            <field name="approval_date" eval="datetime.now()"/>
+            <field name="decision">approved</field>
+            <field name="comments">Application approved by ministry after review</field>
+        </record>
+
+        <record id="demo_approval_2" model="acmst.admission.approval">
+            <field name="admission_file_id" ref="demo_admission_file_2"/>
+            <field name="approver_id" ref="base.user_admin"/>
+            <field name="approval_type">ministry</field>
+            <field name="approval_date" eval="datetime.now()"/>
+            <field name="decision">approved</field>
+            <field name="comments">Application approved by ministry</field>
+        </record>
+
+        <record id="demo_approval_3" model="acmst.admission.approval">
+            <field name="admission_file_id" ref="demo_admission_file_2"/>
+            <field name="approver_id" ref="base.user_admin"/>
+            <field name="approval_type">health</field>
+            <field name="approval_date" eval="datetime.now()"/>
+            <field name="decision">approved</field>
+            <field name="comments">Health check completed and approved</field>
+        </record>
+
+    </data>
+</odoo>

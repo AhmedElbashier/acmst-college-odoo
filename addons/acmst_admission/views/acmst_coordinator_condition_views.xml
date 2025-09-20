@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Coordinator Condition Tree View -->
+        <record id="view_acmst_coordinator_condition_tree" model="ir.ui.view">
+            <field name="name">acmst.coordinator.condition.tree</field>
+            <field name="model">acmst.coordinator.condition</field>
+            <field name="arch" type="xml">
+                <tree string="Coordinator Conditions" decoration-success="state == 'completed'" decoration-danger="state == 'overdue'" decoration-warning="state == 'pending'" decoration-info="state == 'rejected'">
+                    <field name="admission_file_id" string="File #" optional="show"/>
+                    <field name="applicant_name" string="Applicant" optional="show"/>
+                    <field name="program_name" string="Program" optional="hide"/>
+                    <field name="subject_name" string="Subject" optional="show"/>
+                    <field name="subject_code" string="Code" optional="hide"/>
+                    <field name="level" string="Level" optional="show"/>
+                    <field name="deadline" string="Deadline" optional="show"/>
+                    <field name="days_remaining" string="Days Left" optional="show"/>
+                    <field name="status" string="Status" optional="show"/>
+                    <field name="state" string="State" optional="hide"/>
+                    <field name="coordinator_id" string="Coordinator" optional="hide"/>
+                    <field name="condition_date" string="Created" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Coordinator Condition Form View -->
+        <record id="view_acmst_coordinator_condition_form" model="ir.ui.view">
+            <field name="name">acmst.coordinator.condition.form</field>
+            <field name="model">acmst.coordinator.condition</field>
+            <field name="arch" type="xml">
+                <form string="Coordinator Condition">
+                    <header>
+                        <button name="action_complete" string="Mark Complete" type="object" class="btn-success" invisible="state != 'pending'"/>
+                        <button name="action_reject" string="Reject" type="object" class="btn-danger" invisible="state != 'pending'"/>
+                        <button name="action_reset_to_pending" string="Reset to Pending" type="object" class="btn-secondary" invisible="state not in ['completed', 'rejected']"/>
+                        <field name="state" widget="statusbar" statusbar_visible="pending,completed,rejected,overdue"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="subject_name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Basic Information">
+                                <field name="admission_file_id" readonly="1"/>
+                                <field name="applicant_name" readonly="1"/>
+                                <field name="program_name" readonly="1"/>
+                                <field name="coordinator_id"/>
+                                <field name="condition_date"/>
+                            </group>
+                            <group string="Subject Details">
+                                <field name="subject_code"/>
+                                <field name="level"/>
+                                <field name="deadline"/>
+                                <field name="completion_date" readonly="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="description" nolabel="1"/>
+                        </group>
+                        <group>
+                            <field name="notes" nolabel="1"/>
+                        </group>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids"/>
+                            <field name="activity_ids"/>
+                            <field name="message_ids"/>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Coordinator Condition Search View -->
+        <record id="view_acmst_coordinator_condition_search" model="ir.ui.view">
+            <field name="name">acmst.coordinator.condition.search</field>
+            <field name="model">acmst.coordinator.condition</field>
+            <field name="arch" type="xml">
+                <search string="Search Coordinator Conditions">
+                    <field name="admission_file_id" string="Admission File"/>
+                    <field name="applicant_name" string="Applicant"/>
+                    <field name="subject_name" string="Subject"/>
+                    <field name="coordinator_id" string="Coordinator"/>
+                    <field name="level" string="Level"/>
+                    <field name="state" string="State"/>
+                    <separator/>
+                    <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                    <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                    <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                    <filter string="Overdue" name="overdue" domain="[('state', '=', 'overdue')]"/>
+                    <separator/>
+                    <filter string="Level 2" name="level2" domain="[('level', '=', 'level2')]"/>
+                    <filter string="Level 3" name="level3" domain="[('level', '=', 'level3')]"/>
+                    <separator/>
+                    <filter string="My Conditions" name="my_conditions" domain="[('coordinator_id', '=', uid)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Coordinator" name="group_coordinator" context="{'group_by': 'coordinator_id'}"/>
+                        <filter string="Level" name="group_level" context="{'group_by': 'level'}"/>
+                        <filter string="Deadline" name="group_deadline" context="{'group_by': 'deadline:day'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Coordinator Condition Action -->
+        <record id="action_acmst_coordinator_condition" model="ir.actions.act_window">
+            <field name="name">Coordinator Conditions</field>
+            <field name="res_model">acmst.coordinator.condition</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_acmst_coordinator_condition_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new coordinator condition
+                </p>
+                <p>
+                    Manage conditional requirements set by program coordinators for admission applications.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

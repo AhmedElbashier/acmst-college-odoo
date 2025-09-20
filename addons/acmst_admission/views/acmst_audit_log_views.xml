@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Audit Log Tree View -->
+        <record id="view_acmst_audit_log_tree" model="ir.ui.view">
+            <field name="name">acmst.audit.log.tree</field>
+            <field name="model">acmst.audit.log</field>
+            <field name="arch" type="xml">
+                <tree string="Audit Logs" decoration-success="severity == 'low'" decoration-warning="severity == 'medium'" decoration-danger="severity == 'high'" decoration-muted="severity == 'critical'">
+                    <field name="create_date"/>
+                    <field name="user_id"/>
+                    <field name="model_name"/>
+                    <field name="record_id"/>
+                    <field name="record_name"/>
+                    <field name="action"/>
+                    <field name="action_description"/>
+                    <field name="category"/>
+                    <field name="severity"/>
+                    <field name="is_sensitive"/>
+                    <field name="is_anomaly"/>
+                    <field name="ip_address"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Audit Log Form View -->
+        <record id="view_acmst_audit_log_form" model="ir.ui.view">
+            <field name="name">acmst.audit.log.form</field>
+            <field name="model">acmst.audit.log</field>
+            <field name="arch" type="xml">
+                <form string="Audit Log">
+                    <header>
+                        <field name="severity" widget="statusbar" statusbar_visible="low,medium,high,critical"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_related_logs" type="object" class="oe_stat_button" icon="fa-list" invisible="not related_log_ids">
+                                <field name="related_log_ids" widget="statinfo" string="Related Logs"/>
+                            </button>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="create_date" readonly="1"/>
+                                <field name="user_id" readonly="1"/>
+                                <field name="model_name" readonly="1"/>
+                                <field name="record_id" readonly="1"/>
+                                <field name="record_name" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="action" readonly="1"/>
+                                <field name="action_description" readonly="1"/>
+                                <field name="category" readonly="1"/>
+                                <field name="severity" readonly="1"/>
+                                <field name="is_sensitive" readonly="1"/>
+                                <field name="is_anomaly" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="ip_address" readonly="1"/>
+                                <field name="user_agent" readonly="1"/>
+                                <field name="session_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="tags" readonly="1"/>
+                                <field name="notes" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Data Changes">
+                                <group>
+                                    <field name="old_values" readonly="1" widget="text" invisible="not old_values"/>
+                                    <field name="new_values" readonly="1" widget="text" invisible="not new_values"/>
+                                    <field name="changed_fields" readonly="1" widget="text" invisible="not changed_fields"/>
+                                </group>
+                            </page>
+                            
+                            <page string="Anomaly Details" invisible="not is_anomaly">
+                                <group>
+                                    <field name="anomaly_reason" readonly="1"/>
+                                </group>
+                            </page>
+                            
+                            <page string="Related Logs" invisible="not related_log_ids">
+                                <field name="related_log_ids" readonly="1" nolabel="1">
+                                    <tree>
+                                        <field name="create_date"/>
+                                        <field name="user_id"/>
+                                        <field name="action"/>
+                                        <field name="action_description"/>
+                                        <field name="severity"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Audit Log Search View -->
+        <record id="view_acmst_audit_log_search" model="ir.ui.view">
+            <field name="name">acmst.audit.log.search</field>
+            <field name="model">acmst.audit.log</field>
+            <field name="arch" type="xml">
+                <search string="Search Audit Logs">
+                    <field name="user_id"/>
+                    <field name="model_name"/>
+                    <field name="record_id"/>
+                    <field name="action"/>
+                    <field name="action_description"/>
+                    <field name="category"/>
+                    <field name="severity"/>
+                    <field name="is_sensitive"/>
+                    <field name="is_anomaly"/>
+                    <field name="ip_address"/>
+                    <field name="tags"/>
+                    
+                    <filter string="Today" name="today" domain="[('create_date', '>=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"/>
+                    <filter string="This Week" name="this_week" domain="[('create_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="This Month" name="this_month" domain="[('create_date', '>=', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                    
+                    <filter string="Security Violations" name="security_violations" domain="[('action', 'in', ['security_violation', 'data_breach', 'unauthorized_access'])]"/>
+                    <filter string="Anomalies" name="anomalies" domain="[('is_anomaly', '=', True)]"/>
+                    <filter string="Sensitive Data" name="sensitive_data" domain="[('is_sensitive', '=', True)]"/>
+                    
+                    <filter string="Low Severity" name="low_severity" domain="[('severity', '=', 'low')]"/>
+                    <filter string="Medium Severity" name="medium_severity" domain="[('severity', '=', 'medium')]"/>
+                    <filter string="High Severity" name="high_severity" domain="[('severity', '=', 'high')]"/>
+                    <filter string="Critical Severity" name="critical_severity" domain="[('severity', '=', 'critical')]"/>
+                    
+                    <group expand="0" string="Group By">
+                        <filter string="User" name="group_user" context="{'group_by': 'user_id'}"/>
+                        <filter string="Model" name="group_model" context="{'group_by': 'model_name'}"/>
+                        <filter string="Action" name="group_action" context="{'group_by': 'action'}"/>
+                        <filter string="Category" name="group_category" context="{'group_by': 'category'}"/>
+                        <filter string="Severity" name="group_severity" context="{'group_by': 'severity'}"/>
+                        <filter string="Date" name="group_date" context="{'group_by': 'create_date:day'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Audit Log Graph View -->
+        <record id="view_acmst_audit_log_graph" model="ir.ui.view">
+            <field name="name">acmst.audit.log.graph</field>
+            <field name="model">acmst.audit.log</field>
+            <field name="arch" type="xml">
+                <graph string="Audit Log Statistics" type="bar">
+                    <field name="action" type="row"/>
+                    <field name="id" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Audit Log Pivot View -->
+        <record id="view_acmst_audit_log_pivot" model="ir.ui.view">
+            <field name="name">acmst.audit.log.pivot</field>
+            <field name="model">acmst.audit.log</field>
+            <field name="arch" type="xml">
+                <pivot string="Audit Log Analysis">
+                    <field name="user_id" type="row"/>
+                    <field name="action" type="col"/>
+                    <field name="severity" type="col"/>
+                    <field name="id" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Audit Log Action -->
+        <record id="action_acmst_audit_log" model="ir.actions.act_window">
+            <field name="name">Audit Logs</field>
+            <field name="res_model">acmst.audit.log</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No audit logs found
+                </p>
+                <p>
+                    Audit logs will appear here as users interact with the system.
+                </p>
+            </field>
+        </record>
+
+        <!-- Security Violations Action -->
+        <record id="action_acmst_security_violations" model="ir.actions.act_window">
+            <field name="name">Security Violations</field>
+            <field name="res_model">acmst.audit.log</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('action', 'in', ['security_violation', 'data_breach', 'unauthorized_access'])]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No security violations found
+                </p>
+                <p>
+                    Security violations will appear here if any are detected.
+                </p>
+            </field>
+        </record>
+
+        <!-- Anomalies Action -->
+        <record id="action_acmst_anomalies" model="ir.actions.act_window">
+            <field name="name">Anomalies</field>
+            <field name="res_model">acmst.audit.log</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('is_anomaly', '=', True)]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No anomalies found
+                </p>
+                <p>
+                    Anomalies will appear here if any are detected.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,855 @@
+/* ACMST Admission Module - Backend Styles */
+
+/* Status Bar Enhancements */
+.o_statusbar_status .o_statusbar_status_button {
+    border-radius: 15px;
+    padding: 5px 15px;
+    margin: 2px;
+    font-weight: 500;
+}
+
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_new {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border: 1px solid #bbdefb;
+}
+
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_ministry_pending {
+    background-color: #fff3e0;
+    color: #f57c00;
+    border: 1px solid #ffcc02;
+}
+
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_ministry_approved {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_health_required {
+    background-color: #fce4ec;
+    color: #c2185b;
+    border: 1px solid #f8bbd9;
+}
+
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_health_approved {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_coordinator_review {
+    background-color: #fff3e0;
+    color: #f57c00;
+    border: 1px solid #ffcc02;
+}
+
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_coordinator_approved {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_coordinator_conditional {
+    background-color: #fff8e1;
+    color: #f9a825;
+    border: 1px solid #ffecb3;
+}
+
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_manager_review {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border: 1px solid #bbdefb;
+}
+
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_manager_approved {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_completed {
+    background-color: #e8f5e8;
+    color: #1b5e20;
+    border: 1px solid #4caf50;
+    font-weight: 600;
+}
+
+/* Rejection States */
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_ministry_rejected,
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_health_rejected,
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_coordinator_rejected,
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_manager_rejected,
+.o_statusbar_status .o_statusbar_status_button.o_statusbar_status_cancelled {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+}
+
+/* Button Enhancements */
+.btn-primary {
+    background-color: #1976d2;
+    border-color: #1976d2;
+}
+
+.btn-success {
+    background-color: #2e7d32;
+    border-color: #2e7d32;
+}
+
+.btn-danger {
+    background-color: #c62828;
+    border-color: #c62828;
+}
+
+.btn-warning {
+    background-color: #f57c00;
+    border-color: #f57c00;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Stat Buttons */
+.oe_stat_button {
+    text-align: center;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+.oe_stat_button:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.oe_stat_button .fa {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+/* Form Enhancements */
+.o_form_view .o_form_sheet {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.o_form_view .oe_title h1 {
+    color: #1976d2;
+    font-weight: 600;
+}
+
+/* Tree View Enhancements */
+.o_list_view .o_list_table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.o_list_view .o_list_table thead th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.o_list_view .o_list_table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Search View Enhancements */
+.o_searchview {
+    border-radius: 20px;
+    border: 2px solid #e9ecef;
+}
+
+.o_searchview:focus-within {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+}
+
+/* Filter Buttons */
+.o_searchview .o_searchview_facet {
+    background-color: #1976d2;
+    color: white;
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin: 2px;
+}
+
+.o_searchview .o_searchview_facet .o_facet_remove {
+    color: white;
+}
+
+/* Group By Buttons */
+.o_group_by_menu .o_group_by_menu_item {
+    padding: 8px 15px;
+    border-radius: 5px;
+    margin: 2px;
+}
+
+.o_group_by_menu .o_group_by_menu_item:hover {
+    background-color: #e9ecef;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .o_statusbar_status .o_statusbar_status_button {
+        font-size: 12px;
+        padding: 3px 8px;
+    }
+    
+    .oe_stat_button {
+        padding: 5px;
+        margin: 2px;
+    }
+    
+    .oe_stat_button .fa {
+        font-size: 18px;
+    }
+}
+
+/* Animation Effects */
+.o_statusbar_status .o_statusbar_status_button {
+    transition: all 0.3s ease;
+}
+
+.o_statusbar_status .o_statusbar_status_button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.oe_stat_button {
+    transition: all 0.3s ease;
+}
+
+.oe_stat_button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Custom Icons */
+.fa-heartbeat {
+    color: #e91e63;
+}
+
+.fa-list {
+    color: #ff9800;
+}
+
+.fa-check {
+    color: #4caf50;
+}
+
+/* Loading States */
+.o_loading {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+}
+
+/* Error States */
+.o_field_error {
+    border-color: #c62828 !important;
+    box-shadow: 0 0 0 0.2rem rgba(198, 40, 40, 0.25) !important;
+}
+
+.o_field_error .o_input {
+    border-color: #c62828 !important;
+}
+
+/* Success States */
+.o_field_success {
+    border-color: #2e7d32 !important;
+    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25) !important;
+}
+
+.o_field_success .o_input {
+    border-color: #2e7d32 !important;
+}
+
+/* Dashboard Widgets */
+.acmst-dashboard-widget {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.dashboard-header h3 {
+    color: #1976d2;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 10px;
+    border-left: 4px solid #1976d2;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    color: #1976d2;
+    margin-right: 15px;
+}
+
+.stat-content h4 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1976d2;
+}
+
+.stat-content p {
+    margin: 5px 0 0 0;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.dashboard-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.chart-container {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.chart-container h4 {
+    color: #1976d2;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.dashboard-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.dashboard-actions .btn {
+    min-width: 150px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Health Check Summary Widget */
+.health-check-summary {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.summary-header h4 {
+    color: #1976d2;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.summary-item .label {
+    font-weight: 500;
+    color: #495057;
+}
+
+.summary-item .value {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.summary-chart {
+    text-align: center;
+}
+
+/* Coordinator Conditions Widget */
+.coordinator-conditions-widget {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.widget-header h4 {
+    color: #1976d2;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.conditions-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.condition-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.condition-stat .label {
+    font-weight: 500;
+    color: #495057;
+}
+
+.condition-stat .value {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.conditions-list h5 {
+    color: #1976d2;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.condition-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.condition-item .condition-info {
+    flex: 1;
+}
+
+.condition-item .condition-status {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.condition-item .status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.condition-item .status-completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.condition-item .status-overdue {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Progress Tracking Widget */
+.acmst-progress-tracking {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.progress-header h4 {
+    margin: 0;
+    color: #1976d2;
+    font-weight: 600;
+}
+
+.progress-percentage {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1976d2;
+}
+
+.progress-steps {
+    position: relative;
+}
+
+.progress-step {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.progress-step.completed {
+    opacity: 1;
+}
+
+.progress-step:not(.completed) {
+    opacity: 0.6;
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    transition: all 0.3s ease;
+}
+
+.progress-step.completed .step-icon {
+    background: #28a745;
+    color: white;
+}
+
+.progress-step.current .step-icon {
+    background: #1976d2;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content h5 {
+    margin: 0 0 5px 0;
+    color: #495057;
+    font-weight: 600;
+}
+
+.step-content p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.step-status {
+    font-size: 1.5rem;
+    color: #6c757d;
+}
+
+.progress-step.completed .step-status {
+    color: #28a745;
+}
+
+.progress-step.current .step-status {
+    color: #1976d2;
+}
+
+.progress-timeline {
+    position: absolute;
+    left: 25px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+.progress-step.completed + .progress-step .progress-timeline {
+    background: #28a745;
+}
+
+/* Advanced Search Widget */
+.acmst-advanced-search {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.search-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-header h4 {
+    margin: 0;
+    color: #1976d2;
+    font-weight: 600;
+}
+
+.search-filters {
+    animation: slideDown 0.3s ease;
+}
+
+.search-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+/* Mobile Navigation Widget */
+.acmst-mobile-nav {
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.mobile-nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background: #1976d2;
+    color: white;
+}
+
+.mobile-nav-toggle,
+.mobile-nav-user {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.mobile-nav-toggle:hover,
+.mobile-nav-user:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.mobile-nav-header h4 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.mobile-nav-menu {
+    padding: 20px;
+    background: #f8f9fa;
+}
+
+.nav-section {
+    margin-bottom: 20px;
+}
+
+.nav-section h5 {
+    color: #1976d2;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.nav-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-section li {
+    margin-bottom: 5px;
+}
+
+.nav-section a {
+    color: #495057;
+    text-decoration: none;
+    padding: 8px 12px;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-section a:hover {
+    background-color: #e9ecef;
+    color: #1976d2;
+}
+
+/* Quick Actions Widget */
+.acmst-quick-actions {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.quick-actions-header h4 {
+    margin: 0 0 20px 0;
+    color: #1976d2;
+    font-weight: 600;
+}
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.quick-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: #495057;
+}
+
+.quick-action-btn:hover {
+    background: #1976d2;
+    color: white;
+    border-color: #1976d2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+}
+
+.quick-action-btn i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.quick-action-btn span {
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Animations */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(25, 118, 210, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(25, 118, 210, 0);
+    }
+}
+
+/* Responsive Design for Dashboard */
+@media (max-width: 768px) {
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-charts {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .dashboard-actions .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .summary-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .conditions-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-actions-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+    
+    .progress-step {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .step-icon {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    
+    .search-actions {
+        flex-direction: column;
+    }
+    
+    .search-actions .btn {
+        width: 100%;
+    }
+}

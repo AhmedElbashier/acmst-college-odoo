@@ -1,0 +1,294 @@
+/* Performance Dashboard Styles */
+.o_acmst_performance_dashboard {
+    padding: 20px;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.o_acmst_performance_header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.o_acmst_performance_header h2 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+    font-weight: 300;
+}
+
+.o_acmst_performance_header p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.o_acmst_performance_metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.o_acmst_metric_card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.o_acmst_metric_card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+
+.o_acmst_metric_icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    font-size: 24px;
+    color: white;
+}
+
+.o_acmst_metric_card:nth-child(1) .o_acmst_metric_icon {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.o_acmst_metric_card:nth-child(2) .o_acmst_metric_icon {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.o_acmst_metric_card:nth-child(3) .o_acmst_metric_icon {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.o_acmst_metric_card:nth-child(4) .o_acmst_metric_icon {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.o_acmst_metric_content h3 {
+    color: #2c3e50;
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.o_acmst_metric_value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    line-height: 1;
+}
+
+.o_acmst_metric_label {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin: 5px 0 0 0;
+}
+
+.o_acmst_performance_sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.o_acmst_performance_section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.o_acmst_performance_section h3 {
+    color: #2c3e50;
+    margin: 0 0 20px 0;
+    font-size: 1.3rem;
+    font-weight: 500;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 10px;
+}
+
+.o_acmst_optimization_list {
+    space-y: 15px;
+}
+
+.o_acmst_optimization_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.o_acmst_optimization_item:hover {
+    background: #e9ecef;
+}
+
+.o_acmst_optimization_name {
+    font-weight: 500;
+    color: #2c3e50;
+    flex: 1;
+}
+
+.o_acmst_optimization_status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-right: 10px;
+}
+
+.o_acmst_optimization_status.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.o_acmst_optimization_status.inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.o_acmst_optimization_gain {
+    font-weight: 700;
+    color: #28a745;
+    font-size: 1.1rem;
+}
+
+.o_acmst_alerts_list {
+    space-y: 10px;
+}
+
+.o_acmst_alert_item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.o_acmst_alert_item.warning {
+    background: #fff3cd;
+    color: #856404;
+    border-left: 4px solid #ffc107;
+}
+
+.o_acmst_alert_item.info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border-left: 4px solid #17a2b8;
+}
+
+.o_acmst_alert_item i {
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+.o_acmst_performance_actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.o_acmst_performance_actions .btn {
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.o_acmst_performance_actions .btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.o_acmst_performance_actions .btn-primary:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+}
+
+.o_acmst_performance_actions .btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.o_acmst_performance_actions .btn-secondary:hover {
+    background: #545b62;
+    transform: translateY(-2px);
+}
+
+.o_acmst_performance_actions .btn-info {
+    background: #17a2b8;
+    color: white;
+}
+
+.o_acmst_performance_actions .btn-info:hover {
+    background: #138496;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .o_acmst_performance_metrics {
+        grid-template-columns: 1fr;
+    }
+    
+    .o_acmst_performance_sections {
+        grid-template-columns: 1fr;
+    }
+    
+    .o_acmst_performance_actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .o_acmst_performance_actions .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .o_acmst_performance_dashboard {
+        padding: 10px;
+    }
+    
+    .o_acmst_performance_header h2 {
+        font-size: 2rem;
+    }
+    
+    .o_acmst_metric_card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .o_acmst_metric_icon {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+}

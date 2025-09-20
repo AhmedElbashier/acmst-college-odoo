@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Health Check Report Template -->
+        <template id="health_check_report_template" name="Health Check Report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            
+                            <!-- Header -->
+                            <div class="row">
+                                <div class="col-6">
+                                    <h2>Health Check Report</h2>
+                                    <h3>ACMST College</h3>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p><strong>Report Date:</strong> <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/></p>
+                                    <p><strong>Health Check ID:</strong> <span t-esc="doc.id"/></p>
+                                </div>
+                            </div>
+                            
+                            <hr/>
+                            
+                            <!-- Applicant Information -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>Applicant Information</h4>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <td><strong>Name:</strong></td>
+                                            <td t-esc="doc.applicant_name"/>
+                                            <td><strong>Program:</strong></td>
+                                            <td t-esc="doc.program_name"/>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Check Date:</strong></td>
+                                            <td t-esc="doc.check_date"/>
+                                            <td><strong>Examiner:</strong></td>
+                                            <td t-esc="doc.examiner_id.name"/>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Physical Measurements -->
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <h4>Physical Measurements</h4>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <td><strong>Height:</strong></td>
+                                            <td><span t-esc="doc.height"/> cm</td>
+                                            <td><strong>Weight:</strong></td>
+                                            <td><span t-esc="doc.weight"/> kg</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>BMI:</strong></td>
+                                            <td t-esc="doc.bmi"/>
+                                            <td><strong>BMI Category:</strong></td>
+                                            <td t-esc="get_bmi_category(doc.bmi)"/>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Blood Type:</strong></td>
+                                            <td t-esc="doc.blood_type"/>
+                                            <td><strong>Medical Fitness:</strong></td>
+                                            <td t-esc="doc.medical_fitness_display"/>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Medical History -->
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <h4>Medical History</h4>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <td><strong>Chronic Diseases:</strong></td>
+                                            <td>
+                                                <span t-if="doc.has_chronic_diseases" class="text-danger">Yes</span>
+                                                <span t-else="" class="text-success">No</span>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="doc.has_chronic_diseases and doc.chronic_diseases_details">
+                                            <td><strong>Chronic Diseases Details:</strong></td>
+                                            <td t-esc="doc.chronic_diseases_details"/>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Medications:</strong></td>
+                                            <td>
+                                                <span t-if="doc.takes_medications" class="text-danger">Yes</span>
+                                                <span t-else="" class="text-success">No</span>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="doc.takes_medications and doc.medications_details">
+                                            <td><strong>Medications Details:</strong></td>
+                                            <td t-esc="doc.medications_details"/>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Allergies:</strong></td>
+                                            <td>
+                                                <span t-if="doc.has_allergies" class="text-danger">Yes</span>
+                                                <span t-else="" class="text-success">No</span>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="doc.has_allergies and doc.allergies_details">
+                                            <td><strong>Allergies Details:</strong></td>
+                                            <td t-esc="doc.allergies_details"/>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Disabilities:</strong></td>
+                                            <td>
+                                                <span t-if="doc.has_disabilities" class="text-danger">Yes</span>
+                                                <span t-else="" class="text-success">No</span>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="doc.has_disabilities and doc.disabilities_details">
+                                            <td><strong>Disabilities Details:</strong></td>
+                                            <td t-esc="doc.disabilities_details"/>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Medical Assessment -->
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <h4>Medical Assessment</h4>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <td><strong>Medical Fitness:</strong></td>
+                                            <td>
+                                                <span t-if="doc.medical_fitness == 'fit'" class="text-success font-weight-bold">Medically Fit</span>
+                                                <span t-elif="doc.medical_fitness == 'unfit'" class="text-danger font-weight-bold">Medically Unfit</span>
+                                                <span t-elif="doc.medical_fitness == 'conditional'" class="text-warning font-weight-bold">Conditionally Fit</span>
+                                                <span t-else="" t-esc="doc.medical_fitness"/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="doc.medical_notes">
+                                            <td><strong>Medical Notes:</strong></td>
+                                            <td t-esc="doc.medical_notes"/>
+                                        </tr>
+                                        <tr t-if="doc.restrictions">
+                                            <td><strong>Restrictions:</strong></td>
+                                            <td t-esc="doc.restrictions"/>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Follow-up Required:</strong></td>
+                                            <td>
+                                                <span t-if="doc.follow_up_required" class="text-warning">Yes</span>
+                                                <span t-else="" class="text-success">No</span>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="doc.follow_up_required and doc.follow_up_date">
+                                            <td><strong>Follow-up Date:</strong></td>
+                                            <td t-esc="doc.follow_up_date"/>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Summary -->
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h4>Summary</h4>
+                                    <div class="alert" t-attf-class="alert-#{doc.medical_fitness == 'fit' and 'success' or doc.medical_fitness == 'unfit' and 'danger' or 'warning'}">
+                                        <h5 t-esc="doc.medical_fitness_display"/>
+                                        <p t-if="doc.medical_notes" t-esc="doc.medical_notes"/>
+                                        <p t-if="doc.restrictions" t-esc="doc.restrictions"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Footer -->
+                            <div class="row mt-5">
+                                <div class="col-6">
+                                    <p><strong>Examiner Signature:</strong></p>
+                                    <br/>
+                                    <br/>
+                                    <p t-esc="doc.examiner_id.name"/>
+                                    <p>Date: <span t-esc="doc.check_date"/></p>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <p><strong>ACMST College</strong></p>
+                                    <p>Admission Office</p>
+                                    <p>Phone: +966 11 123 4567</p>
+                                    <p>Email: admission@acmst.edu.sa</p>
+                                </div>
+                            </div>
+                            
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <!-- Health Check Report Action -->
+        <record id="action_health_check_report" model="ir.actions.report">
+            <field name="name">Health Check Report</field>
+            <field name="model">acmst.health.check</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">acmst_admission.health_check_report_template</field>
+            <field name="report_file">acmst_admission.health_check_report_template</field>
+            <field name="binding_model_id" ref="model_acmst_health_check"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Admission Approval Tree View -->
+        <record id="view_acmst_admission_approval_tree" model="ir.ui.view">
+            <field name="name">acmst.admission.approval.tree</field>
+            <field name="model">acmst.admission.approval</field>
+            <field name="arch" type="xml">
+                <tree string="Admission Approvals" decoration-success="decision == 'approved'" decoration-danger="decision == 'rejected'" decoration-warning="decision == 'pending'">
+                    <field name="file_number" string="File Number"/>
+                    <field name="applicant_name" string="Applicant"/>
+                    <field name="program_name" string="Program"/>
+                    <field name="approval_type_display" string="Type"/>
+                    <field name="approver_name" string="Approver"/>
+                    <field name="approval_date" string="Date"/>
+                    <field name="decision" string="Decision"/>
+                    <field name="comments" string="Comments"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Admission Approval Form View -->
+        <record id="view_acmst_admission_approval_form" model="ir.ui.view">
+            <field name="name">acmst.admission.approval.form</field>
+            <field name="model">acmst.admission.approval</field>
+            <field name="arch" type="xml">
+                <form string="Admission Approval">
+                    <header>
+                        <button name="action_view_admission_file" string="View Admission File" type="object" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="approval_type_display" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Approval Information">
+                                <field name="admission_file_id" readonly="1"/>
+                                <field name="file_number" readonly="1"/>
+                                <field name="applicant_name" readonly="1"/>
+                                <field name="program_name" readonly="1"/>
+                            </group>
+                            <group string="Approver Details">
+                                <field name="approver_id"/>
+                                <field name="approver_name" readonly="1"/>
+                                <field name="approval_date"/>
+                                <field name="approval_type" readonly="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="decision"/>
+                        </group>
+                        <group>
+                            <field name="comments" nolabel="1"/>
+                        </group>
+                        <group string="Attachments" invisible="not attachments">
+                            <field name="attachments" filename="attachments_filename"/>
+                        </group>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids"/>
+                            <field name="activity_ids"/>
+                            <field name="message_ids"/>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Admission Approval Search View -->
+        <record id="view_acmst_admission_approval_search" model="ir.ui.view">
+            <field name="name">acmst.admission.approval.search</field>
+            <field name="model">acmst.admission.approval</field>
+            <field name="arch" type="xml">
+                <search string="Search Admission Approvals">
+                    <field name="file_number" string="File Number"/>
+                    <field name="applicant_name" string="Applicant"/>
+                    <field name="approver_id" string="Approver"/>
+                    <field name="approval_type" string="Type"/>
+                    <field name="decision" string="Decision"/>
+                    <separator/>
+                    <filter string="Approved" name="approved" domain="[('decision', '=', 'approved')]"/>
+                    <filter string="Rejected" name="rejected" domain="[('decision', '=', 'rejected')]"/>
+                    <filter string="Pending" name="pending" domain="[('decision', '=', 'pending')]"/>
+                    <filter string="Conditional" name="conditional" domain="[('decision', '=', 'conditional')]"/>
+                    <filter string="Completed" name="completed" domain="[('decision', '=', 'completed')]"/>
+                    <separator/>
+                    <filter string="Ministry" name="ministry" domain="[('approval_type', '=', 'ministry')]"/>
+                    <filter string="Health" name="health" domain="[('approval_type', '=', 'health')]"/>
+                    <filter string="Coordinator" name="coordinator" domain="[('approval_type', '=', 'coordinator')]"/>
+                    <filter string="Manager" name="manager" domain="[('approval_type', '=', 'manager')]"/>
+                    <filter string="Completion" name="completion" domain="[('approval_type', '=', 'completion')]"/>
+                    <separator/>
+                    <filter string="My Approvals" name="my_approvals" domain="[('approver_id', '=', uid)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Approval Type" name="group_type" context="{'group_by': 'approval_type'}"/>
+                        <filter string="Decision" name="group_decision" context="{'group_by': 'decision'}"/>
+                        <filter string="Approver" name="group_approver" context="{'group_by': 'approver_id'}"/>
+                        <filter string="Approval Date" name="group_date" context="{'group_by': 'approval_date:day'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Admission Approval Action -->
+        <record id="action_acmst_admission_approval" model="ir.actions.act_window">
+            <field name="name">Admission Approvals</field>
+            <field name="res_model">acmst.admission.approval</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_acmst_admission_approval_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No approval records found
+                </p>
+                <p>
+                    View the approval history for admission applications.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

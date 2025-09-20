@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Coordinator Condition Wizard Form View -->
+        <record id="view_acmst_coordinator_condition_wizard_form" model="ir.ui.view">
+            <field name="name">acmst.coordinator.condition.wizard.form</field>
+            <field name="model">acmst.coordinator.condition.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Create Conditions">
+                    <group>
+                        <field name="admission_file_id" readonly="1"/>
+                        <field name="coordinator_id"/>
+                        <field name="send_notification"/>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Conditions">
+                            <field name="condition_lines" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="subject_name"/>
+                                    <field name="subject_code"/>
+                                    <field name="level"/>
+                                    <field name="deadline"/>
+                                    <field name="description"/>
+                                    <field name="notes"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    
+                    <footer>
+                        <button name="action_create_conditions" string="Create Conditions" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Coordinator Condition Wizard Action -->
+        <record id="action_acmst_coordinator_condition_wizard" model="ir.actions.act_window">
+            <field name="name">Create Conditions</field>
+            <field name="res_model">acmst.coordinator.condition.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{}</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Coordinator Condition Wizard Form View -->
+        <record id="view_acmst_coordinator_condition_wizard_form" model="ir.ui.view">
+            <field name="name">acmst.coordinator.condition.wizard.form</field>
+            <field name="model">acmst.coordinator.condition.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Conditional Approval - Create Academic Conditions" class="o_coordinator_condition_wizard" style="width: 95vw; max-width: 1400px; margin: 0 auto;">
+                    <header>
+                        <div class="o_wizard_header" style="background: #2c3e50; color: white; padding: 20px 25px; margin: -20px -20px 20px -20px; border-radius: 8px 8px 0 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <h2 style="margin: 0; font-weight: 600; display: flex; align-items: center; font-size: 24px;">
+                                        <i class="fa fa-graduation-cap" style="margin-right: 12px; font-size: 26px; color: #3498db;"></i>
+                                        Conditional Approval - Create Academic Conditions
+                                    </h2>
+                                    <p style="margin: 8px 0 0 0; opacity: 0.9; font-size: 14px; color: #bdc3c7;">
+                                        Define specific requirements that the applicant must complete. Application will be sent to Manager Review after conditions are created.
+                                    </p>
+                                </div>
+                                <div class="col-md-3" style="text-align: right;">
+                                    <div style="background: rgba(52, 152, 219, 0.2); padding: 10px 15px; border-radius: 6px; display: inline-block; border: 1px solid rgba(52, 152, 219, 0.3);">
+                                        <i class="fa fa-check-circle" style="margin-right: 8px; color: #27ae60;"></i>
+                                        <span style="font-weight: 500; font-size: 13px;">Academic Requirements</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+                    <sheet>
+                        <!-- Application Information Section -->
+                        <div class="card" style="border: 1px solid #e1e8ed; border-radius: 8px; padding: 20px; margin-bottom: 20px; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h4 style="color: #2c3e50; margin: 0; font-weight: 600; font-size: 18px; display: flex; align-items: center;">
+                                    <i class="fa fa-file-text" style="color: #3498db; margin-right: 10px; font-size: 20px;"></i>
+                                    Application Details
+                                </h4>
+                                <div style="background: #f8f9fa; padding: 8px 12px; border-radius: 6px; border: 1px solid #e9ecef;">
+                                    <div style="display: flex; align-items: center; font-size: 12px; color: #495057; font-weight: 500;">
+                                        <i class="fa fa-envelope" style="margin-right: 6px; color: #6c757d;"></i>
+                                        <field name="send_notification" style="margin-right: 6px; transform: scale(1.2);"/>
+                                        <span>Email Notification</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <group>
+                                <group>
+                                    <field name="admission_file_id" string="Admission File *" options="{'no_create': True}"/>
+                                </group>
+                                <group>
+                                    <field name="coordinator_id" string="Coordinator *" options="{'no_create': True}"/>
+                                </group>
+                            </group>
+                            
+                            <!-- Coordinator Recommended Level Selection -->
+                            <div style="margin-top: 15px; padding: 15px; background: #fff3cd; border-radius: 6px; border: 1px solid #ffeaa7;">
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <i class="fa fa-graduation-cap" style="margin-right: 8px; color: #f39c12; font-size: 16px;"></i>
+                                    <span style="font-weight: 600; color: #856404; font-size: 14px;">Coordinator Recommendation</span>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <field name="recommended_level_by_coordinator" string="Recommended Academic Level *" widget="selection" style="width: 200px;"/>
+                                </div>
+                                <div style="margin-top: 8px; font-size: 12px; color: #856404;">
+                                    <i class="fa fa-info-circle" style="margin-right: 5px;"></i>
+                                    This is your recommendation for the applicant's academic level. All conditions will be created at this level.
+                                </div>
+                            </div>
+                            
+                            <!-- Notification Info -->
+                            <div style="margin-top: 10px; padding: 10px 12px; background: #e3f2fd; border-radius: 6px; border-left: 3px solid #2196f3;">
+                                <div style="display: flex; align-items: center; font-size: 12px; color: #1565c0;">
+                                    <i class="fa fa-info-circle" style="margin-right: 6px;"></i>
+                                    <span>Email notification will include condition details, deadlines, and submission instructions</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Academic Conditions Section -->
+                        <div class="card" style="border: 1px solid #e1e8ed; border-radius: 8px; padding: 20px; margin-bottom: 20px; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <div style="display: flex; align-items: center;">
+                                    <div style="background: #f8f9fa; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; border: 2px solid #e9ecef;">
+                                        <i class="fa fa-list-alt" style="color: #495057; font-size: 18px;"></i>
+                                    </div>
+                                    <div>
+                                        <h4 style="color: #2c3e50; margin: 0; font-weight: 600; font-size: 18px;">Academic Conditions</h4>
+                                        <p style="margin: 4px 0 0 0; color: #6c757d; font-size: 13px;">Define specific requirements the applicant must complete</p>
+                                    </div>
+                                </div>
+                                <div style="background: #fff3cd; color: #856404; padding: 8px 12px; border-radius: 6px; font-size: 12px; border: 1px solid #ffeaa7;">
+                                    <i class="fa fa-lightbulb-o" style="margin-right: 5px; color: #f39c12;"></i>
+                                    <span style="font-weight: 500;">Add conditions below</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Quick Add Section (Temporarily Disabled) -->
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #e9ecef;">
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <i class="fa fa-plus-circle" style="color: #28a745; margin-right: 8px; font-size: 14px;"></i>
+                                    <span style="font-weight: 500; color: #495057; font-size: 13px;">Quick Add Common Conditions</span>
+                                </div>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <span style="background: #e3f2fd; color: #1976d2; border: 1px solid #bbdefb; padding: 4px 8px; font-size: 11px; border-radius: 4px; cursor: not-allowed; opacity: 0.6;">+ Mathematics</span>
+                                    <span style="background: #f3e5f5; color: #7b1fa2; border: 1px solid #e1bee7; padding: 4px 8px; font-size: 11px; border-radius: 4px; cursor: not-allowed; opacity: 0.6;">+ Physics</span>
+                                    <span style="background: #e8f5e8; color: #388e3c; border: 1px solid #c8e6c9; padding: 4px 8px; font-size: 11px; border-radius: 4px; cursor: not-allowed; opacity: 0.6;">+ Chemistry</span>
+                                    <span style="background: #fff3e0; color: #f57c00; border: 1px solid #ffcc02; padding: 4px 8px; font-size: 11px; border-radius: 4px; cursor: not-allowed; opacity: 0.6;">+ English</span>
+                                </div>
+                                <div style="margin-top: 8px; font-size: 11px; color: #6c757d; font-style: italic;">
+                                    Quick add buttons will be available after module restart
+                                </div>
+                            </div>
+                            
+                            <!-- Conditions Table -->
+                            <div style="background: white; border-radius: 6px; overflow: hidden; border: 1px solid #e9ecef;">
+                                <field name="condition_lines" nolabel="1" widget="one2many">
+                                    <tree editable="bottom" create="true" delete="true" style="background: white;">
+                                        <field name="subject_name" placeholder="e.g., Mathematics, Physics, Chemistry" string="Subject Name" required="1" style="min-width: 200px;"/>
+                                        <field name="subject_code" placeholder="e.g., MATH101, PHYS201" string="Code" style="min-width: 120px;"/>
+                                        <field name="description" placeholder="Describe what needs to be completed" string="Description" required="1" style="min-width: 250px;"/>
+                                        <field name="deadline" widget="date" string="Deadline" style="min-width: 120px;"/>
+                                        <field name="notes" placeholder="Additional instructions" string="Notes" style="min-width: 150px;"/>
+                                    </tree>
+                                </field>
+                            </div>
+                            
+                            <!-- Validation Messages -->
+                            <div style="margin-top: 10px;">
+                                <div style="display: flex; align-items: center; font-size: 12px; color: #6c757d;">
+                                    <i class="fa fa-info-circle" style="margin-right: 6px; color: #17a2b8;"></i>
+                                    <span>All fields marked with * are required. Use the "Add a line" button to add more conditions.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Help & Tips Section -->
+                        <div class="card" style="border: 1px solid #d1ecf1; border-radius: 8px; padding: 20px; background: #f8f9fa; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                            <div style="display: flex; align-items: flex-start;">
+                                <div style="background: #17a2b8; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 2px 6px rgba(23, 162, 184, 0.3);">
+                                    <i class="fa fa-lightbulb-o" style="color: white; font-size: 18px;"></i>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="color: #0c5460; margin: 0 0 12px 0; font-weight: 600; font-size: 16px;">Tips for Creating Effective Conditions</div>
+                                    <div style="margin: 0; color: #495057; font-size: 13px; line-height: 1.5;">
+                                        <div style="margin-bottom: 6px; display: flex; align-items: flex-start;">
+                                            <div style="background: #17a2b8; width: 4px; height: 4px; border-radius: 50%; margin-right: 8px; margin-top: 6px; flex-shrink: 0;"></div>
+                                            <span>Be specific about what the applicant needs to complete (e.g., "Complete Calculus I with grade B or higher")</span>
+                                        </div>
+                                        <div style="margin-bottom: 6px; display: flex; align-items: flex-start;">
+                                            <div style="background: #17a2b8; width: 4px; height: 4px; border-radius: 50%; margin-right: 8px; margin-top: 6px; flex-shrink: 0;"></div>
+                                            <span>Set realistic deadlines (typically 30-90 days from today)</span>
+                                        </div>
+                                        <div style="margin-bottom: 6px; display: flex; align-items: flex-start;">
+                                            <div style="background: #17a2b8; width: 4px; height: 4px; border-radius: 50%; margin-right: 8px; margin-top: 6px; flex-shrink: 0;"></div>
+                                            <span>Include subject codes for easy identification and tracking</span>
+                                        </div>
+                                        <div style="display: flex; align-items: flex-start;">
+                                            <div style="background: #17a2b8; width: 4px; height: 4px; border-radius: 50%; margin-right: 8px; margin-top: 6px; flex-shrink: 0;"></div>
+                                            <span>Add clear, actionable descriptions that applicants can easily understand</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </sheet>
+                    <footer>
+                        <div style="background: #f8f9fa; padding: 20px 25px; margin: 20px -20px -20px -20px; border-top: 1px solid #e9ecef; border-radius: 0 0 8px 8px; box-shadow: 0 -2px 8px rgba(0,0,0,0.05);">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div style="color: #6c757d; font-size: 13px; display: flex; align-items: center; font-weight: 500;">
+                                        <div style="background: #28a745; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);">
+                                            <i class="fa fa-shield" style="color: white; font-size: 14px;"></i>
+                                        </div>
+                                        <span>Conditions will be automatically tracked and monitored</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="text-align: right;">
+                                    <button string="Cancel" class="btn btn-secondary" special="cancel" style="margin-right: 10px; padding: 10px 20px; border-radius: 6px; font-weight: 500; font-size: 13px; border: 1px solid #6c757d; background: #6c757d; color: white;"/>
+                                    <button name="action_create_conditions" string="Create Conditions &amp; Send to Manager" type="object" class="btn btn-primary" style="padding: 10px 25px; border-radius: 6px; font-weight: 600; font-size: 14px; background: #007bff; border: 1px solid #007bff; color: white; box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);"/>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Coordinator Condition Wizard Action -->
+        <record id="action_acmst_coordinator_condition_wizard" model="ir.actions.act_window">
+            <field name="name">Coordinator Condition Wizard</field>
+            <field name="res_model">acmst.coordinator.condition.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{}</field>
+            <field name="view_id" ref="view_acmst_coordinator_condition_wizard_form"/>
+        </record>
+
+    </data>
+</odoo>

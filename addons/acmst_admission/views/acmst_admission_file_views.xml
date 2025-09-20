@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Admission File Tree View -->
+        <record id="view_acmst_admission_file_tree" model="ir.ui.view">
+            <field name="name">acmst.admission.file.tree</field>
+            <field name="model">acmst.admission.file</field>
+            <field name="arch" type="xml">
+                <tree string="Admission Files" decoration-info="state == 'new'" decoration-success="state == 'completed'" decoration-warning="state in ['ministry_pending', 'health_required', 'coordinator_review', 'manager_review']" decoration-danger="state in ['ministry_rejected', 'health_rejected', 'coordinator_rejected', 'manager_rejected', 'cancelled']">
+                    <field name="name" string="File Number"/>
+                    <field name="applicant_name" string="Applicant"/>
+                    <field name="national_id" string="National ID"/>
+                    <field name="phone" string="Phone"/>
+                    <field name="email" string="Email"/>
+                    <field name="program_id" string="Program"/>
+                    <field name="batch_id" string="Batch"/>
+                    <field name="state" string="State"/>
+                    <field name="application_date" string="Application Date"/>
+                    <field name="submission_method" string="Method"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Admission File Form View -->
+        <record id="view_acmst_admission_file_form" model="ir.ui.view">
+            <field name="name">acmst.admission.file.form</field>
+            <field name="model">acmst.admission.file</field>
+            <field name="arch" type="xml">
+                <form string="Admission File">
+                    <header>
+                        <button name="action_submit_ministry" string="Submit to Ministry" type="object" class="btn-primary" invisible="state != 'new'"/>
+                        <button name="action_ministry_approve" string="Ministry Approve" type="object" class="btn-success" invisible="state != 'ministry_pending'"/>
+                        <button name="action_ministry_reject" string="Ministry Reject" type="object" class="btn-danger" invisible="state != 'ministry_pending'"/>
+                        <button name="action_send_to_health_check" string="Send to Health Check" type="object" class="btn-warning" invisible="state != 'ministry_approved'"/>
+                        <button name="action_health_approve" string="Health Approve" type="object" class="btn-success" invisible="state != 'health_required'"/>
+                        <button name="action_health_reject" string="Health Reject" type="object" class="btn-danger" invisible="state != 'health_required'"/>
+                        <button name="action_coordinator_approve" string="Coordinator Approve" type="object" class="btn-success" invisible="state != 'coordinator_review'"/>
+                        <button name="action_coordinator_reject" string="Coordinator Reject" type="object" class="btn-danger" invisible="state != 'coordinator_review'"/>
+                        <button name="action_coordinator_conditional" string="Conditional Approval" type="object" class="btn-warning" invisible="state != 'coordinator_review'"/>
+                        <button name="action_create_conditions" string="Create Conditions" type="object" class="btn-info" invisible="state not in ['coordinator_review', 'coordinator_conditional']"/>
+                        <button name="action_manager_approve" string="Manager Approve" type="object" class="btn-success" invisible="state != 'manager_review'"/>
+                        <button name="action_manager_reject" string="Manager Reject" type="object" class="btn-danger" invisible="state != 'manager_review'"/>
+                        <button name="action_generate_student_id" string="Generate Student ID" type="object" class="btn-info" invisible="state != 'completed'"/>
+                        <button name="action_send_welcome_email" string="Send Welcome Email" type="object" class="btn-primary" invisible="state != 'completed'"/>
+                        <button name="action_cancel" string="Cancel" type="object" class="btn-danger" invisible="state in ['completed', 'cancelled']"/>
+                        <field name="state" widget="statusbar" statusbar_visible="ministry_pending,ministry_approved,health_required,health_approved,coordinator_review,coordinator_approved,manager_review,manager_approved,completed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_health_checks" type="object" class="oe_stat_button" icon="fa-heartbeat" invisible="not health_check_ids">
+                                <field name="health_check_ids" widget="statinfo" string="Health Checks"/>
+                            </button>
+                            <button name="action_view_conditions" type="object" class="oe_stat_button" icon="fa-list" invisible="not coordinator_conditions_ids">
+                                <field name="coordinator_conditions_ids" widget="statinfo" string="Conditions"/>
+                            </button>
+                            <button name="action_view_approvals" type="object" class="oe_stat_button" icon="fa-check" invisible="not approval_ids">
+                                <field name="approval_ids" widget="statinfo" string="Approvals"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Basic Information">
+                                <field name="applicant_name"/>
+                                <field name="national_id"/>
+                                <field name="phone"/>
+                                <field name="email"/>
+                                <field name="application_date"/>
+                                <field name="submission_method"/>
+                            </group>
+                            <group string="Program Information">
+                                <field name="program_id"/>
+                                <field name="batch_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Personal Information">
+                                <group>
+                                    <group>
+                                        <field name="birth_date"/>
+                                        <field name="age"/>
+                                        <field name="gender"/>
+                                        <field name="nationality"/>
+                                    </group>
+                                    <group>
+                                        <field name="address"/>
+                                        <field name="emergency_contact"/>
+                                        <field name="emergency_phone"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Academic Information">
+                                <group>
+                                    <field name="previous_education"/>
+                                    <field name="certificates" filename="certificates_filename"/>
+                                    <field name="transcripts" filename="transcripts_filename"/>
+                                </group>
+                            </page>
+                            <page string="Process Tracking">
+                                <group>
+                                    <group string="Ministry Approval">
+                                        <field name="ministry_approval_date"/>
+                                        <field name="ministry_approver"/>
+                                    </group>
+                                    <group string="Health Check">
+                                        <field name="health_check_date"/>
+                                        <field name="health_approver"/>
+                                        <field name="is_health_approved"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group string="Coordinator Approval">
+                                        <field name="coordinator_approval_date"/>
+                                        <field name="coordinator_id"/>
+                                        <field name="has_pending_conditions"/>
+                                    </group>
+                                    <group string="Manager Approval">
+                                        <field name="manager_approval_date"/>
+                                        <field name="manager_id"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Health Checks" invisible="not health_check_ids">
+                                <field name="health_check_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="check_date"/>
+                                        <field name="examiner_id"/>
+                                        <field name="medical_fitness"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Conditions" invisible="not coordinator_conditions_ids">
+                                <field name="coordinator_conditions_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="subject_name"/>
+                                        <field name="level"/>
+                                        <field name="deadline"/>
+                                        <field name="status"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Approval History" invisible="not approval_ids">
+                                <field name="approval_ids" nolabel="1">
+                                    <tree>
+                                        <field name="approval_date"/>
+                                        <field name="approval_type"/>
+                                        <field name="approver_name"/>
+                                        <field name="decision"/>
+                                        <field name="comments"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Admission File Search View -->
+        <record id="view_acmst_admission_file_search" model="ir.ui.view">
+            <field name="name">acmst.admission.file.search</field>
+            <field name="model">acmst.admission.file</field>
+            <field name="arch" type="xml">
+                <search string="Search Admission Files">
+                    <field name="name" string="File Number"/>
+                    <field name="applicant_name" string="Applicant"/>
+                    <field name="national_id" string="National ID"/>
+                    <field name="email" string="Email"/>
+                    <field name="program_id" string="Program"/>
+                    <field name="batch_id" string="Batch"/>
+                    <field name="state" string="State"/>
+                    <separator/>
+                    <filter string="New Applications" name="new" domain="[('state', '=', 'new')]"/>
+                    <filter string="Ministry Pending" name="ministry_pending" domain="[('state', '=', 'ministry_pending')]"/>
+                    <filter string="Health Required" name="health_required" domain="[('state', '=', 'health_required')]"/>
+                    <filter string="Coordinator Review" name="coordinator_review" domain="[('state', '=', 'coordinator_review')]"/>
+                    <filter string="Manager Review" name="manager_review" domain="[('state', '=', 'manager_review')]"/>
+                    <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                    <separator/>
+                    <filter string="Portal Applications" name="portal" domain="[('submission_method', '=', 'portal')]"/>
+                    <filter string="Office Applications" name="office" domain="[('submission_method', '=', 'office')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Program" name="group_program" context="{'group_by': 'program_id'}"/>
+                        <filter string="Batch" name="group_batch" context="{'group_by': 'batch_id'}"/>
+                        <filter string="Submission Method" name="group_method" context="{'group_by': 'submission_method'}"/>
+                        <filter string="Application Date" name="group_date" context="{'group_by': 'application_date:day'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Admission File Action -->
+        <record id="action_acmst_admission_file" model="ir.actions.act_window">
+            <field name="name">Admission Files</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_acmst_admission_file_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new admission file
+                </p>
+                <p>
+                    Track and manage admission applications from submission to completion.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

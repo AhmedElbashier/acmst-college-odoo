@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Officer Dashboard View -->
+        <record id="view_acmst_officer_dashboard" model="ir.ui.view">
+            <field name="name">acmst.officer.dashboard</field>
+            <field name="model">acmst.admission.file</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Officer Dashboard">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_new_applications" type="object" class="oe_stat_button" icon="fa-plus">
+                                <field name="new_applications_count" widget="statinfo" string="New Applications"/>
+                            </button>
+                            <button name="action_view_ministry_pending" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="ministry_pending_count" widget="statinfo" string="Ministry Pending"/>
+                            </button>
+                            <button name="action_view_ministry_approved" type="object" class="oe_stat_button" icon="fa-check">
+                                <field name="ministry_approved_count" widget="statinfo" string="Ministry Approved"/>
+                            </button>
+                            <button name="action_view_ministry_rejected" type="object" class="oe_stat_button" icon="fa-times">
+                                <field name="ministry_rejected_count" widget="statinfo" string="Ministry Rejected"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>Officer Dashboard</h1>
+                        </div>
+                        <group>
+                            <group string="Application Statistics">
+                                <field name="total_applications" widget="statinfo" string="Total Applications"/>
+                                <field name="new_applications_count" widget="statinfo" string="New Applications"/>
+                                <field name="ministry_pending_count" widget="statinfo" string="Ministry Pending"/>
+                                <field name="ministry_approved_count" widget="statinfo" string="Ministry Approved"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Officer Dashboard Action -->
+        <record id="action_acmst_officer_dashboard" model="ir.actions.act_window">
+            <field name="name">Officer Dashboard</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', 'in', ['new', 'ministry_pending', 'ministry_approved', 'ministry_rejected'])]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No applications found
+                </p>
+                <p>
+                    Overview of admission applications and statistics for officers.
+                </p>
+            </field>
+        </record>
+
+        <!-- Officer New Applications Action -->
+        <record id="action_acmst_officer_new_applications" model="ir.actions.act_window">
+            <field name="name">New Applications</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'new')]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <!-- Officer Ministry Pending Action -->
+        <record id="action_acmst_officer_ministry_pending" model="ir.actions.act_window">
+            <field name="name">Ministry Pending</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'ministry_pending')]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <!-- Officer Ministry Approved Action -->
+        <record id="action_acmst_officer_ministry_approved" model="ir.actions.act_window">
+            <field name="name">Ministry Approved</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'ministry_approved')]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <!-- Officer Ministry Rejected Action -->
+        <record id="action_acmst_officer_ministry_rejected" model="ir.actions.act_window">
+            <field name="name">Ministry Rejected</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'ministry_rejected')]</field>
+            <field name="context">{}</field>
+        </record>
+
+    </data>
+</odoo>

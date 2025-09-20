@@ -6,14 +6,8 @@ odoo.define('acmst_core_settings.acmst_core_settings', [
     'web.ListView',
     'web.KanbanView',
     'web.Dialog'
-], function (require) {
+], function (core, FormView, ListView, KanbanView, Dialog) {
     'use strict';
-
-    var core = require('web.core');
-    var FormView = require('web.FormView');
-    var ListView = require('web.ListView');
-    var KanbanView = require('web.KanbanView');
-    var Dialog = require('web.Dialog');
 
     var _t = core._t;
 

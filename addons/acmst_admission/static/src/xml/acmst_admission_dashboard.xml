@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Admission Dashboard Widget -->
+        <template id="admission_dashboard_widget" name="Admission Dashboard Widget">
+            <div class="acmst-dashboard-widget">
+                <div class="dashboard-header">
+                    <h3>Admission Dashboard</h3>
+                    <p>Overview of admission process and statistics</p>
+                </div>
+                
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fa fa-file-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4 id="total-applications">0</h4>
+                            <p>Total Applications</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fa fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4 id="pending-applications">0</h4>
+                            <p>Pending Review</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fa fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4 id="approved-applications">0</h4>
+                            <p>Approved</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fa fa-heartbeat"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4 id="health-checks">0</h4>
+                            <p>Health Checks</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-charts">
+                    <div class="chart-container">
+                        <h4>Applications by Status</h4>
+                        <canvas id="status-chart" width="400" height="200"></canvas>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h4>Applications by Program</h4>
+                        <canvas id="program-chart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <div class="dashboard-actions">
+                    <a href="/web#action=acmst_admission.action_acmst_admission_file" class="btn btn-primary">
+                        <i class="fa fa-list"></i> View All Applications
+                    </a>
+                    <a href="/web#action=acmst_admission.action_acmst_health_check" class="btn btn-success">
+                        <i class="fa fa-heartbeat"></i> Health Checks
+                    </a>
+                    <a href="/web#action=acmst_admission.action_acmst_coordinator_condition" class="btn btn-warning">
+                        <i class="fa fa-list-check"></i> Conditions
+                    </a>
+                </div>
+            </div>
+        </template>
+
+        <!-- Health Check Summary Widget -->
+        <template id="health_check_summary_widget" name="Health Check Summary Widget">
+            <div class="health-check-summary">
+                <div class="summary-header">
+                    <h4>Health Check Summary</h4>
+                </div>
+                
+                <div class="summary-stats">
+                    <div class="summary-item">
+                        <span class="label">Total Checks:</span>
+                        <span class="value" id="total-checks">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Fit:</span>
+                        <span class="value text-success" id="fit-checks">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Unfit:</span>
+                        <span class="value text-danger" id="unfit-checks">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Conditional:</span>
+                        <span class="value text-warning" id="conditional-checks">0</span>
+                    </div>
+                </div>
+                
+                <div class="summary-chart">
+                    <canvas id="health-status-chart" width="300" height="150"></canvas>
+                </div>
+            </div>
+        </template>
+
+        <!-- Coordinator Conditions Widget -->
+        <template id="coordinator_conditions_widget" name="Coordinator Conditions Widget">
+            <div class="coordinator-conditions-widget">
+                <div class="widget-header">
+                    <h4>Coordinator Conditions</h4>
+                </div>
+                
+                <div class="conditions-stats">
+                    <div class="condition-stat">
+                        <span class="label">Total:</span>
+                        <span class="value text-info" id="total-conditions">0</span>
+                    </div>
+                    <div class="condition-stat">
+                        <span class="label">Overdue:</span>
+                        <span class="value text-danger" id="overdue-conditions">0</span>
+                    </div>
+                </div>
+                
+                <div class="conditions-list">
+                    <h5>Recent Conditions</h5>
+                    <div id="recent-conditions-list">
+                        <!-- Dynamic content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    </data>
+</odoo>

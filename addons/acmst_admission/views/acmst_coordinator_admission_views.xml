@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Coordinator Admission Tree View -->
+        <record id="view_acmst_coordinator_admission_tree" model="ir.ui.view">
+            <field name="name">acmst.coordinator.admission.tree</field>
+            <field name="model">acmst.admission.file</field>
+            <field name="arch" type="xml">
+                <tree string="Coordinator Review" decoration-success="state == 'coordinator_approved'" decoration-danger="state == 'coordinator_rejected'" decoration-warning="state == 'coordinator_review'" decoration-info="state == 'coordinator_conditional'">
+                    <field name="name" string="File #"/>
+                    <field name="applicant_name" string="Applicant"/>
+                    <field name="program_id" string="Program"/>
+                    <field name="batch_id" string="Batch"/>
+                    <field name="application_date" string="Submitted"/>
+                    <field name="health_check_date" string="Health Check"/>
+                    <field name="coordinator_id" string="Coordinator"/>
+                    <field name="state" string="Status"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Coordinator Admission Form View -->
+        <record id="view_acmst_coordinator_admission_form" model="ir.ui.view">
+            <field name="name">acmst.coordinator.admission.form</field>
+            <field name="model">acmst.admission.file</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form string="Coordinator Review">
+                    <header>
+                        <button name="action_coordinator_approve" string="Approve" type="object" class="btn-success" invisible="state != 'coordinator_review'"/>
+                        <button name="action_coordinator_reject" string="Reject" type="object" class="btn-danger" invisible="state != 'coordinator_review'"/>
+                        <button name="action_coordinator_conditional" string="Conditional Approval" type="object" class="btn-warning" invisible="state != 'coordinator_review'"/>
+                        <button name="action_create_conditions" string="Create Conditions" type="object" class="btn-info" invisible="state not in ['coordinator_review', 'coordinator_conditional']"/>
+                        <field name="state" widget="statusbar" statusbar_visible="ministry_pending,ministry_approved,health_required,health_approved,coordinator_review,coordinator_approved,manager_review,manager_approved,completed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                            <h2>
+                                <field name="applicant_name" readonly="1"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group string="Application Details">
+                                <field name="program_id" readonly="1"/>
+                                <field name="batch_id" readonly="1"/>
+                                <field name="application_date" readonly="1"/>
+                                <field name="submission_method" readonly="1"/>
+                            </group>
+                            <group string="Review Status">
+                                <field name="coordinator_id"/>
+                                <field name="coordinator_approval_date"/>
+                                <field name="health_check_date" readonly="1"/>
+                                <field name="health_approver" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Personal Information">
+                                <group>
+                                    <group string="Basic Info">
+                                        <field name="national_id" readonly="1"/>
+                                        <field name="phone" readonly="1"/>
+                                        <field name="email" readonly="1"/>
+                                        <field name="birth_date" readonly="1"/>
+                                        <field name="gender" readonly="1"/>
+                                        <field name="nationality" readonly="1"/>
+                                    </group>
+                                    <group string="Address">
+                                        <field name="address" readonly="1"/>
+                                        <field name="emergency_contact" readonly="1"/>
+                                        <field name="emergency_phone" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Academic Information">
+                                <group>
+                                    <field name="previous_education" readonly="1"/>
+                                    <field name="certificates" readonly="1"/>
+                                </group>
+                            </page>
+                            <page string="Health Check Results">
+                                <div class="o_health_check_summary" style="margin-bottom: 20px;">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                                                <h4 style="color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px;">
+                                                    <i class="fa fa-heartbeat" style="color: #e74c3c; margin-right: 8px;"></i>
+                                                    Health Check Overview
+                                                </h4>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <strong>Check Date:</strong><br/>
+                                                        <span style="color: #7f8c8d; font-size: 14px;">
+                                                            <field name="health_check_date" readonly="1" nolabel="1"/>
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <strong>Examiner:</strong><br/>
+                                                        <span style="color: #7f8c8d; font-size: 14px;">
+                                                            <field name="health_approver" readonly="1" nolabel="1"/>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                                                <h4 style="color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #27ae60; padding-bottom: 5px;">
+                                                    <i class="fa fa-check-circle" style="color: #27ae60; margin-right: 8px;"></i>
+                                                    Medical Assessment
+                                                </h4>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <strong>Fitness Status:</strong><br/>
+                                                        <span style="color: #7f8c8d; font-size: 14px;">
+                                                            <field name="health_fitness_status" readonly="1" nolabel="1"/>
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <strong>Follow-up Required:</strong><br/>
+                                                        <span style="color: #7f8c8d; font-size: 14px;">
+                                                            <field name="health_follow_up_required" readonly="1" nolabel="1"/>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Health Check Details Table -->
+                                <div class="o_health_check_details">
+                                    <h3 style="color: #2c3e50; margin-bottom: 20px; border-left: 4px solid #3498db; padding-left: 15px;">
+                                        <i class="fa fa-stethoscope" style="color: #3498db; margin-right: 8px;"></i>
+                                        Health Check Details
+                                    </h3>
+                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
+                                        <field name="health_check_ids" readonly="1" nolabel="1" widget="one2many" options="{'create': False, 'edit': False, 'delete': False}"/>
+                                    </div>
+                                </div>
+                            </page>
+                            <page string="Coordinator Assessment">
+                                <div class="o_coordinator_assessment_summary" style="margin-bottom: 20px;">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                                                <h4 style="color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px;">
+                                                    <i class="fa fa-user-check" style="color: #3498db; margin-right: 8px;"></i>
+                                                    Review Decision
+                                                </h4>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <strong>Coordinator:</strong><br/>
+                                                        <span style="color: #7f8c8d; font-size: 14px;">
+                                                            <field name="coordinator_id" nolabel="1"/>
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <strong>Approval Date:</strong><br/>
+                                                        <span style="color: #7f8c8d; font-size: 14px;">
+                                                            <field name="coordinator_approval_date" nolabel="1"/>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="margin-top: 15px;">
+                                                    <div class="col-md-12">
+                                                        <strong>Notes:</strong><br/>
+                                                        <field name="coordinator_notes" nolabel="1" placeholder="Enter coordinator assessment notes..."/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                                                <h4 style="color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #e67e22; padding-bottom: 5px;">
+                                                    <i class="fa fa-tasks" style="color: #e67e22; margin-right: 8px;"></i>
+                                                    Conditions Summary
+                                                </h4>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="stat-item" style="text-align: center; padding: 10px; background: #f8f9fa; border-radius: 6px; margin-bottom: 10px;">
+                                                            <div style="font-size: 24px; font-weight: bold; color: #2c3e50;">
+                                                                <field name="coordinator_conditions_ids" widget="statinfo" string="Total Conditions" options="{'count_field': 'id'}"/>
+                                                            </div>
+                                                            <div style="font-size: 12px; color: #7f8c8d;">Total Conditions</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="stat-item" style="text-align: center; padding: 10px; background: #f8f9fa; border-radius: 6px; margin-bottom: 10px;">
+                                                            <div style="font-size: 24px; font-weight: bold; color: #e74c3c;">
+                                                                <field name="coordinator_conditions_ids" widget="statinfo" string="Overdue" options="{'count_field': 'id', 'domain': [('state', '=', 'overdue')]}"/>
+                                                            </div>
+                                                            <div style="font-size: 12px; color: #7f8c8d;">Overdue</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Conditions Management -->
+                                <div class="o_conditions_management">
+                                    <h3 style="color: #2c3e50; margin-bottom: 20px; border-left: 4px solid #e67e22; padding-left: 15px;">
+                                        <i class="fa fa-list-check" style="color: #e67e22; margin-right: 8px;"></i>
+                                        Conditions Management
+                                    </h3>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="o_conditions_actions" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0;">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <h5 style="color: #2c3e50; margin-bottom: 10px;">
+                                                    <i class="fa fa-cogs" style="color: #e67e22; margin-right: 8px;"></i>
+                                                    Condition Actions
+                                                </h5>
+                                                <p style="color: #7f8c8d; margin-bottom: 0; font-size: 14px;">
+                                                    Create new conditions or manage existing ones for this application.
+                                                </p>
+                                            </div>
+                                            <div class="col-md-4" style="text-align: right;">
+                                                <button name="action_create_conditions" string="Add Condition" type="object" class="btn btn-primary" style="margin-right: 10px;"/>
+                                                <button name="action_view_conditions" string="Manage All" type="object" class="btn btn-info"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Conditions Table -->
+                                    <div class="card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                            <h4 style="color: #2c3e50; margin: 0; border-bottom: 2px solid #34495e; padding-bottom: 8px;">
+                                                <i class="fa fa-table" style="color: #34495e; margin-right: 8px;"></i>
+                                                Current Conditions
+                                            </h4>
+                                            <div style="background: #e8f5e8; color: #2d5a2d; padding: 6px 12px; border-radius: 4px; font-size: 12px; border: 1px solid #c3e6c3;">
+                                                <i class="fa fa-check-circle" style="margin-right: 4px;"></i>
+                                                <field name="coordinator_conditions_ids" widget="statinfo" string="conditions" options="{'count_field': 'id'}"/>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; overflow: hidden;">
+                                            <field name="coordinator_conditions_ids" readonly="1" nolabel="1" widget="one2many">
+                                                <tree decoration-success="state == 'completed'" decoration-warning="state == 'pending'" decoration-danger="state == 'overdue'" decoration-info="state == 'rejected'">
+                                                    <field name="subject_name" string="Subject" optional="show"/>
+                                                    <field name="subject_code" string="Code" optional="hide"/>
+                                                    <field name="level" string="Level" optional="show"/>
+                                                    <field name="description" string="Description" optional="hide"/>
+                                                    <field name="deadline" string="Deadline" optional="show"/>
+                                                    <field name="days_remaining" string="Days Left" optional="show"/>
+                                                    <field name="status" string="Status" optional="show"/>
+                                                    <field name="state" string="State" optional="hide"/>
+                                                    <field name="notes" string="Notes" optional="hide"/>
+                                                </tree>
+                                            </field>
+                                        </div>
+                                        
+                                        <!-- Empty State -->
+                                        <div class="o_view_nocontent" style="text-align: center; padding: 40px 20px; color: #6c757d; display: none;" id="no-conditions-message">
+                                            <i class="fa fa-tasks" style="font-size: 48px; color: #dee2e6; margin-bottom: 16px;"></i>
+                                            <h4 style="color: #6c757d; margin-bottom: 8px;">No Conditions Yet</h4>
+                                            <p style="margin: 0; font-size: 14px;">Click "Add Condition" to create academic requirements for this application.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </page>
+                            <page string="Approval History">
+                                <field name="approval_ids" readonly="1" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Coordinator Admission Search View -->
+        <record id="view_acmst_coordinator_admission_search" model="ir.ui.view">
+            <field name="name">acmst.coordinator.admission.search</field>
+            <field name="model">acmst.admission.file</field>
+            <field name="arch" type="xml">
+                <search string="Search Coordinator Reviews">
+                    <field name="name" string="File #"/>
+                    <field name="applicant_name" string="Applicant"/>
+                    <field name="program_id" string="Program"/>
+                    <field name="coordinator_id" string="Coordinator"/>
+                    <field name="state" string="Status"/>
+                    <separator/>
+                    <filter string="Pending Review" name="coordinator_review" domain="[('state', '=', 'coordinator_review')]"/>
+                    <filter string="Approved" name="coordinator_approved" domain="[('state', '=', 'coordinator_approved')]"/>
+                    <filter string="Rejected" name="coordinator_rejected" domain="[('state', '=', 'coordinator_rejected')]"/>
+                    <filter string="Conditional" name="coordinator_conditional" domain="[('state', '=', 'coordinator_conditional')]"/>
+                    <separator/>
+                    <filter string="My Reviews" name="my_reviews" domain="[('coordinator_id', '=', uid)]"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('coordinator_id', '=', False)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Coordinator" name="group_coordinator" context="{'group_by': 'coordinator_id'}"/>
+                        <filter string="Program" name="group_program" context="{'group_by': 'program_id'}"/>
+                        <filter string="Application Date" name="group_date" context="{'group_by': 'application_date:day'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Coordinator Pending Review Action -->
+        <record id="action_acmst_coordinator_pending_review" model="ir.actions.act_window">
+            <field name="name">Pending Coordinator Review</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'coordinator_review')]</field>
+            <field name="search_view_id" ref="view_acmst_coordinator_admission_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No pending coordinator reviews
+                </p>
+                <p>
+                    All applications have been reviewed by coordinators.
+                </p>
+            </field>
+        </record>
+
+        <!-- Coordinator Approved Action -->
+        <record id="action_acmst_coordinator_approved" model="ir.actions.act_window">
+            <field name="name">Coordinator Approved</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'coordinator_approved')]</field>
+            <field name="search_view_id" ref="view_acmst_coordinator_admission_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No coordinator approved applications
+                </p>
+                <p>
+                    Applications approved by coordinators will appear here.
+                </p>
+            </field>
+        </record>
+
+        <!-- Coordinator Conditional Action -->
+        <record id="action_acmst_coordinator_conditional" model="ir.actions.act_window">
+            <field name="name">Conditional Approvals</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'coordinator_conditional')]</field>
+            <field name="search_view_id" ref="view_acmst_coordinator_admission_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No conditional approvals
+                </p>
+                <p>
+                    Applications with conditional approvals will appear here.
+                </p>
+            </field>
+        </record>
+
+        <!-- Coordinator My Reviews Action -->
+        <record id="action_acmst_coordinator_my_reviews" model="ir.actions.act_window">
+            <field name="name">My Reviews</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('coordinator_id', '=', uid), ('state', 'in', ['coordinator_review', 'coordinator_approved', 'coordinator_rejected', 'coordinator_conditional'])]</field>
+            <field name="search_view_id" ref="view_acmst_coordinator_admission_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No reviews assigned to you
+                </p>
+                <p>
+                    Applications assigned to you for review will appear here.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

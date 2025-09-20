@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Workflow Engine Tree View -->
+        <record id="view_acmst_workflow_engine_tree" model="ir.ui.view">
+            <field name="name">acmst.workflow.engine.tree</field>
+            <field name="model">acmst.workflow.engine</field>
+            <field name="arch" type="xml">
+                <tree string="Workflow Engines">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="active"/>
+                    <field name="auto_transitions"/>
+                    <field name="notification_enabled"/>
+                    <field name="timeout_hours"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Workflow Engine Form View -->
+        <record id="view_acmst_workflow_engine_form" model="ir.ui.view">
+            <field name="name">acmst.workflow.engine.form</field>
+            <field name="model">acmst.workflow.engine</field>
+            <field name="arch" type="xml">
+                <form string="Workflow Engine">
+                    <header>
+                        <button name="test_workflow" string="Test Workflow" type="object" class="btn-primary"/>
+                        <button name="process_workflow_batch" string="Process Workflow" type="object" class="btn-success"/>
+                        <field name="active" widget="boolean_toggle"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_rules" type="object" class="oe_stat_button" icon="fa-cogs">
+                                <field name="workflow_rules" widget="statinfo" string="Rules"/>
+                            </button>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="sequence"/>
+                                <field name="description"/>
+                            </group>
+                            <group>
+                                <field name="auto_transitions"/>
+                                <field name="notification_enabled"/>
+                                <field name="timeout_hours"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Workflow Rules">
+                                <field name="workflow_rules" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="from_state"/>
+                                        <field name="to_state"/>
+                                        <field name="action_type"/>
+                                        <field name="condition_type"/>
+                                        <field name="active"/>
+                                        <field name="priority"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Workflow Engine Search View -->
+        <record id="view_acmst_workflow_engine_search" model="ir.ui.view">
+            <field name="name">acmst.workflow.engine.search</field>
+            <field name="model">acmst.workflow.engine</field>
+            <field name="arch" type="xml">
+                <search string="Search Workflow Engines">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                    <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Active" name="group_active" context="{'group_by': 'active'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Workflow Rule Tree View -->
+        <record id="view_acmst_workflow_rule_tree" model="ir.ui.view">
+            <field name="name">acmst.workflow.rule.tree</field>
+            <field name="model">acmst.workflow.rule</field>
+            <field name="arch" type="xml">
+                <tree string="Workflow Rules">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="workflow_id"/>
+                    <field name="from_state"/>
+                    <field name="to_state"/>
+                    <field name="action_type"/>
+                    <field name="condition_type"/>
+                    <field name="active"/>
+                    <field name="priority"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Workflow Rule Form View -->
+        <record id="view_acmst_workflow_rule_form" model="ir.ui.view">
+            <field name="name">acmst.workflow.rule.form</field>
+            <field name="model">acmst.workflow.rule</field>
+            <field name="arch" type="xml">
+                <form string="Workflow Rule">
+                    <header>
+                        <button name="action_test_rule" string="Test Rule" type="object" class="btn-primary"/>
+                        <field name="active" widget="boolean_toggle"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="workflow_id"/>
+                                <field name="name"/>
+                                <field name="sequence"/>
+                                <field name="priority"/>
+                            </group>
+                            <group>
+                                <field name="from_state"/>
+                                <field name="to_state"/>
+                                <field name="action_type"/>
+                                <field name="condition_type"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="timeout_hours" invisible="action_type != 'timeout'"/>
+                                <field name="send_notification"/>
+                                <field name="notification_template_id"/>
+                            </group>
+                            <group>
+                                <field name="error_message" invisible="action_type != 'validation'"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <field name="condition_expression" invisible="condition_type != 'custom'"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Workflow Engine Action -->
+        <record id="action_acmst_workflow_engine" model="ir.actions.act_window">
+            <field name="name">Workflow Engines</field>
+            <field name="res_model">acmst.workflow.engine</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No workflow engines found
+                </p>
+                <p>
+                    Create workflow engines to automate admission processes.
+                </p>
+            </field>
+        </record>
+
+        <!-- Workflow Rule Action -->
+        <record id="action_acmst_workflow_rule" model="ir.actions.act_window">
+            <field name="name">Workflow Rules</field>
+            <field name="res_model">acmst.workflow.rule</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No workflow rules found
+                </p>
+                <p>
+                    Create workflow rules to define automated processes.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

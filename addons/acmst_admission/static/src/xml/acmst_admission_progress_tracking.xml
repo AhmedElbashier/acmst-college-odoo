@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Progress Tracking Widget -->
+        <template id="acmst_progress_tracking_widget" name="Progress Tracking Widget">
+            <div class="acmst-progress-tracking">
+                <div class="progress-header">
+                    <h4>Admission Progress</h4>
+                    <span class="progress-percentage">0%</span>
+                </div>
+                
+                <div class="progress-steps">
+                    <div class="progress-step completed" data-step="1">
+                        <div class="step-icon">
+                            <i class="fa fa-file-alt"></i>
+                        </div>
+                        <div class="step-content">
+                            <h5>Application Submitted</h5>
+                            <p>Your application has been submitted and is under review</p>
+                        </div>
+                        <div class="step-status">
+                            <i class="fa fa-check-circle"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-step" data-step="2">
+                        <div class="step-icon">
+                            <i class="fa fa-gavel"></i>
+                        </div>
+                        <div class="step-content">
+                            <h5>Ministry Approval</h5>
+                            <p>Waiting for ministry approval</p>
+                        </div>
+                        <div class="step-status">
+                            <i class="fa fa-clock"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-step" data-step="3">
+                        <div class="step-icon">
+                            <i class="fa fa-heartbeat"></i>
+                        </div>
+                        <div class="step-content">
+                            <h5>Health Check</h5>
+                            <p>Complete health questionnaire and medical assessment</p>
+                        </div>
+                        <div class="step-status">
+                            <i class="fa fa-clock"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-step" data-step="4">
+                        <div class="step-icon">
+                            <i class="fa fa-user-graduate"></i>
+                        </div>
+                        <div class="step-content">
+                            <h5>Coordinator Review</h5>
+                            <p>Academic coordinator review and approval</p>
+                        </div>
+                        <div class="step-status">
+                            <i class="fa fa-clock"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-step" data-step="5">
+                        <div class="step-icon">
+                            <i class="fa fa-user-tie"></i>
+                        </div>
+                        <div class="step-content">
+                            <h5>Manager Approval</h5>
+                            <p>Final manager approval</p>
+                        </div>
+                        <div class="step-status">
+                            <i class="fa fa-clock"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-step" data-step="6">
+                        <div class="step-icon">
+                            <i class="fa fa-graduation-cap"></i>
+                        </div>
+                        <div class="step-content">
+                            <h5>Completed</h5>
+                            <p>Admission process completed successfully</p>
+                        </div>
+                        <div class="step-status">
+                            <i class="fa fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-timeline">
+                    <div class="timeline-line"></div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Advanced Search Widget -->
+        <template id="acmst_advanced_search_widget" name="Advanced Search Widget">
+            <div class="acmst-advanced-search">
+                <div class="search-header">
+                    <h4>Advanced Search</h4>
+                    <button class="btn btn-sm btn-outline-secondary" data-action="toggle-search">
+                        <i class="fa fa-search"></i> Toggle Search
+                    </button>
+                </div>
+                
+                <div class="search-filters" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select class="form-control" name="status">
+                                    <option value="">All Statuses</option>
+                                    <option value="new">New</option>
+                                    <option value="ministry_pending">Ministry Pending</option>
+                                    <option value="ministry_approved">Ministry Approved</option>
+                                    <option value="health_required">Health Required</option>
+                                    <option value="health_approved">Health Approved</option>
+                                    <option value="coordinator_review">Coordinator Review</option>
+                                    <option value="coordinator_approved">Coordinator Approved</option>
+                                    <option value="manager_review">Manager Review</option>
+                                    <option value="manager_approved">Manager Approved</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Program</label>
+                                <select class="form-control" name="program">
+                                    <option value="">All Programs</option>
+                                    <!-- Dynamic options will be loaded here -->
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Batch</label>
+                                <select class="form-control" name="batch">
+                                    <option value="">All Batches</option>
+                                    <!-- Dynamic options will be loaded here -->
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Date Range</label>
+                                <input type="date" class="form-control" name="date_from" placeholder="From Date"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>To Date</label>
+                                <input type="date" class="form-control" name="date_to" placeholder="To Date"/>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Applicant Name</label>
+                                <input type="text" class="form-control" name="applicant_name" placeholder="Search by name"/>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>National ID</label>
+                                <input type="text" class="form-control" name="national_id" placeholder="Search by National ID"/>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" class="form-control" name="email" placeholder="Search by email"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="search-actions">
+                        <button class="btn btn-primary" data-action="search">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                        <button class="btn btn-secondary" data-action="reset">
+                            <i class="fa fa-refresh"></i> Reset
+                        </button>
+                        <button class="btn btn-success" data-action="export">
+                            <i class="fa fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Mobile Navigation Widget -->
+        <template id="acmst_mobile_navigation_widget" name="Mobile Navigation Widget">
+            <div class="acmst-mobile-nav">
+                <div class="mobile-nav-header">
+                    <button class="mobile-nav-toggle" data-action="toggle-nav">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <h4>ACMST Admission</h4>
+                    <button class="mobile-nav-user" data-action="user-menu">
+                        <i class="fa fa-user"></i>
+                    </button>
+                </div>
+                
+                <div class="mobile-nav-menu" style="display: none;">
+                    <div class="nav-section">
+                        <h5>Applications</h5>
+                        <ul>
+                            <li><a href="/web#action=acmst_admission.action_acmst_admission_file">All Applications</a></li>
+                            <li><a href="/web#action=acmst_admission.action_acmst_portal_application">Portal Applications</a></li>
+                            <li><a href="/web#action=acmst_admission.action_acmst_admission_file_pending">Pending Review</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <h5>Health &amp; Medical</h5>
+                        <ul>
+                            <li><a href="/web#action=acmst_admission.action_acmst_health_check">Health Checks</a></li>
+                            <li><a href="/web#action=acmst_admission.action_acmst_health_check_pending">Pending Health Checks</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <h5>Coordinator</h5>
+                        <ul>
+                            <li><a href="/web#action=acmst_admission.action_acmst_coordinator_condition">Conditions</a></li>
+                            <li><a href="/web#action=acmst_admission.action_acmst_coordinator_dashboard">Dashboard</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <h5>Manager</h5>
+                        <ul>
+                            <li><a href="/web#action=acmst_admission.action_acmst_manager_dashboard">Dashboard</a></li>
+                            <li><a href="/web#action=acmst_admission.action_acmst_manager_pending_review">Pending Review</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Quick Actions Widget -->
+        <template id="acmst_quick_actions_widget" name="Quick Actions Widget">
+            <div class="acmst-quick-actions">
+                <div class="quick-actions-header">
+                    <h4>Quick Actions</h4>
+                </div>
+                
+                <div class="quick-actions-grid">
+                    <button class="quick-action-btn" data-action="new-application">
+                        <i class="fa fa-plus"></i>
+                        <span>New Application</span>
+                    </button>
+                    
+                    <button class="quick-action-btn" data-action="health-check">
+                        <i class="fa fa-heartbeat"></i>
+                        <span>Health Check</span>
+                    </button>
+                    
+                    <button class="quick-action-btn" data-action="coordinator-review">
+                        <i class="fa fa-user-graduate"></i>
+                        <span>Coordinator Review</span>
+                    </button>
+                    
+                    <button class="quick-action-btn" data-action="manager-approval">
+                        <i class="fa fa-user-tie"></i>
+                        <span>Manager Approval</span>
+                    </button>
+                    
+                    <button class="quick-action-btn" data-action="generate-report">
+                        <i class="fa fa-chart-bar"></i>
+                        <span>Generate Report</span>
+                    </button>
+                    
+                    <button class="quick-action-btn" data-action="export-data">
+                        <i class="fa fa-download"></i>
+                        <span>Export Data</span>
+                    </button>
+                </div>
+            </div>
+        </template>
+
+    </data>
+</odoo>
