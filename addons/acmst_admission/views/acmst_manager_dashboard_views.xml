@@ -310,7 +310,7 @@
             <field name="res_model">acmst.admission.file</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('manager_id', '=', uid), ('state', 'in', ['manager_approved', 'completed'])]</field>
-            <field name="context">{}</field>
+            <field name="context">{'form_view_ref': 'acmst_admission.view_acmst_manager_review_form'}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No applications approved by manager
@@ -327,7 +327,7 @@
             <field name="res_model">acmst.admission.file</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('state', '=', 'completed')]</field>
-            <field name="context">{}</field>
+            <field name="context">{'form_view_ref': 'acmst_admission.view_acmst_manager_review_form'}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No completed applications
@@ -351,6 +351,23 @@
                 </p>
                 <p>
                     Student records will appear here after admission completion.
+                </p>
+            </field>
+        </record>
+
+        <!-- Manager Rejected Action -->
+        <record id="action_acmst_manager_rejected" model="ir.actions.act_window">
+            <field name="name">Manager Rejected</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('manager_id', '=', uid), ('state', 'in', ['manager_rejected'])]</field>
+            <field name="context">{'form_view_ref': 'acmst_admission.view_acmst_manager_review_form'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No rejected applications
+                </p>
+                <p>
+                    Rejected applications will appear here.
                 </p>
             </field>
         </record>

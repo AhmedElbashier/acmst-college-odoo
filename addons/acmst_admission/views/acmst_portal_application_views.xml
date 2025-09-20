@@ -29,13 +29,13 @@
                 <form string="Portal Application">
                     <header>
                         <button name="action_submit" string="Submit Application" type="object" class="btn-primary" invisible="state != 'draft'"/>
-                        <button name="action_review" string="Review Application" type="object" class="btn-info" invisible="state != 'submitted'"/>
+                        <!-- <button name="action_review" string="Review Application" type="object" class="btn-info" invisible="state != 'submitted'"/>-->
                         <button name="action_submit_to_ministry" string="Submit to Ministry" type="object" class="btn-warning" invisible="state != 'submitted'"/>
                         <button name="action_approve" string="Approve" type="object" class="btn-success" invisible="state != 'under_review'"/>
                         <button name="action_reject" string="Reject" type="object" class="btn-danger" invisible="state != 'under_review'"/>
                         <button name="action_cancel" string="Cancel" type="object" class="btn-danger" invisible="state in ['approved', 'cancelled']"/>
                         <button name="action_reset_to_draft" string="Reset to Draft" type="object" class="btn-secondary" invisible="state not in ['submitted', 'rejected']"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,submitted,under_review,approved,admission_created,rejected,cancelled"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,submitted,under_review,approved,rejected,cancelled"/>
                         <field name="submitted_to_ministry" invisible="1"/>
                     </header>
                     <sheet>
@@ -93,6 +93,11 @@
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -116,7 +121,6 @@
                     <filter string="📤 Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
                     <filter string="👀 Under Review" name="under_review" domain="[('state', '=', 'under_review')]"/>
                     <filter string="✅ Approved" name="approved" domain="[('state', '=', 'approved')]"/>
-                    <filter string="📁 Admission Created" name="admission_created" domain="[('state', '=', 'admission_created')]"/>
                     <filter string="❌ Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
                     <filter string="🚫 Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
                     <separator/>
@@ -125,7 +129,7 @@
                     <separator/>
                     <!-- Quick Status Groups -->
                     <filter string="📋 All Pending" name="all_pending" domain="[('state', 'in', ['submitted', 'under_review'])]"/>
-                    <filter string="✅ All Approved" name="all_approved" domain="[('state', 'in', ['approved', 'admission_created'])]"/>
+                    <filter string="✅ All Approved" name="all_approved" domain="[('state', '=', 'approved')]"/>
                     <filter string="❌ All Rejected" name="all_rejected" domain="[('state', 'in', ['rejected', 'cancelled'])]"/>
                     <separator/>
                     <group expand="0" string="Group By">

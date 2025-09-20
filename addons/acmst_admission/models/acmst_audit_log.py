@@ -14,6 +14,7 @@ _logger = logging.getLogger(__name__)
 class AcmstAuditLog(models.Model):
     _name = 'acmst.audit.log'
     _description = 'Admission Audit Log'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'create_date desc'
 
     name = fields.Char(

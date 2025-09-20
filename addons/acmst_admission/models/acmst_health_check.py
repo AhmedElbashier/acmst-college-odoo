@@ -18,6 +18,12 @@ class AcmstHealthCheck(models.Model):
     _order = 'check_date desc'
 
     # Basic Information
+    name = fields.Char(
+        string='Health Check Name',
+        compute='_compute_name',
+        store=True,
+        help='Unique name for this health check'
+    )
     admission_file_id = fields.Many2one(
         'acmst.admission.file',
         string='Admission File',
@@ -212,6 +218,19 @@ class AcmstHealthCheck(models.Model):
         help='Program name'
     )
 
+    @api.depends('admission_file_id', 'check_date')
+    def _compute_name(self):
+        """Compute name for health check"""
+        for record in self:
+            if record.admission_file_id and record.check_date:
+                # Format: "Health Check - FILE001 - 2024-01-15"
+                date_str = record.check_date.strftime('%Y-%m-%d')
+                record.name = f"Health Check - {record.admission_file_id.name} - {date_str}"
+            elif record.admission_file_id:
+                record.name = f"Health Check - {record.admission_file_id.name}"
+            else:
+                record.name = "Health Check"
+
     @api.depends('height', 'weight')
     def _compute_bmi(self):
         """Compute BMI from height and weight"""
@@ -282,11 +301,13 @@ class AcmstHealthCheck(models.Model):
         self.ensure_one()
         if self.state != 'draft':
             raise UserError(_('Only draft health checks can be submitted.'))
-        
+
         if not self.medical_fitness:
             raise UserError(_('Please provide medical fitness assessment before submitting.'))
-        
+
+        _logger.info(f"Health check {self.name} submitted for review by {self.env.user.name}")
         self.write({'state': 'submitted'})
+        _logger.info(f"Health check {self.name} state changed to 'submitted'")
         return True
 
     def action_approve(self):
@@ -294,13 +315,16 @@ class AcmstHealthCheck(models.Model):
         self.ensure_one()
         if self.state != 'submitted':
             raise UserError(_('Only submitted health checks can be approved.'))
-        
+
+        _logger.info(f"Health check {self.name} approved by {self.env.user.name}")
         self.write({'state': 'approved'})
-        
+        _logger.info(f"Health check {self.name} state changed to 'approved'")
+
         # Update admission file state
+        _logger.info(f"Updating admission file {self.admission_file_id.name} to health approved")
         if self.admission_file_id.state == 'health_required':
             self.admission_file_id.action_health_approve()
-        
+
         return True
 
     def action_reject(self):
@@ -308,13 +332,16 @@ class AcmstHealthCheck(models.Model):
         self.ensure_one()
         if self.state != 'submitted':
             raise UserError(_('Only submitted health checks can be rejected.'))
-        
+
+        _logger.info(f"Health check {self.name} rejected by {self.env.user.name}")
         self.write({'state': 'rejected'})
-        
+        _logger.info(f"Health check {self.name} state changed to 'rejected'")
+
         # Update admission file state
+        _logger.info(f"Updating admission file {self.admission_file_id.name} to health rejected")
         if self.admission_file_id.state == 'health_required':
             self.admission_file_id.action_health_reject()
-        
+
         return True
 
     def action_reset_to_draft(self):

@@ -18,6 +18,10 @@ class AcmstAdmissionFile(models.Model):
     _order = 'create_date desc'
     _rec_name = 'name'
 
+    _sql_constraints = [
+        ('name_unique', 'unique(name)', 'File number must be unique!'),
+    ]
+
     # Core fields
     name = fields.Char(
         string='File Number',
@@ -120,8 +124,8 @@ class AcmstAdmissionFile(models.Model):
         compute='_compute_dashboard_statistics',
         help='Number of applications in manager review'
     )
-    ministry_pending = fields.Integer(
-        string='Ministry Pending',
+    ministry_pending_total = fields.Integer(
+        string='Ministry Pending (Total)',
         compute='_compute_dashboard_statistics',
         help='Number of applications pending ministry approval'
     )
@@ -184,8 +188,8 @@ class AcmstAdmissionFile(models.Model):
         compute='_compute_coordinator_statistics',
         help='Number of reviews assigned to current user'
     )
-    approved = fields.Integer(
-        string='Approved',
+    approved_total = fields.Integer(
+        string='Approved (Total)',
         compute='_compute_dashboard_statistics',
         help='Number of approved applications'
     )
@@ -423,12 +427,49 @@ class AcmstAdmissionFile(models.Model):
 
     @api.model
     def create(self, vals):
-        """Override create to generate file number"""
+        """Override create to generate file number and validate required fields"""
+        _logger.info(f"Creating new admission file with vals: {vals}")
+
         if vals.get('name', _('New')) == _('New'):
-            vals['name'] = self.env['ir.sequence'].next_by_code(
-                'acmst.admission.file'
-            ) or _('New')
-        return super().create(vals)
+            # Generate unique admission file number
+            sequence_code = 'acmst.admission.file'
+            while True:
+                sequence_number = self.env['ir.sequence'].next_by_code(sequence_code)
+                if sequence_number and not self.search([('name', '=', sequence_number)], limit=1):
+                    vals['name'] = sequence_number
+                    break
+                elif not sequence_number:
+                    vals['name'] = _('New')
+                    break
+            _logger.info(f"Generated admission file number: {vals['name']}")
+
+        # Validate required fields
+        required_fields = ['program_id', 'batch_id', 'applicant_name', 'national_id',
+                          'phone', 'email', 'birth_date', 'gender', 'nationality',
+                          'address', 'emergency_contact', 'emergency_phone']
+
+        missing_fields = []
+        for field in required_fields:
+            if not vals.get(field):
+                field_label = self._fields[field].string
+                missing_fields.append(field_label)
+
+        if missing_fields:
+            _logger.error(f"Missing required fields for admission file creation: {missing_fields}")
+            raise ValidationError(
+                _('The following required fields are missing: %s') % ', '.join(missing_fields)
+            )
+
+        # Create the admission file
+        admission_file = super().create(vals)
+        _logger.info(f"Admission file {admission_file.name} created successfully with state: {admission_file.state}")
+
+        # If state is health_required, create health check record
+        if vals.get('state') == 'health_required':
+            _logger.info(f"Creating health check record for admission file {admission_file.name}")
+            admission_file._create_health_check_record()
+
+        return admission_file
 
     @api.constrains('national_id')
     def _check_national_id(self):
@@ -627,10 +668,13 @@ class AcmstAdmissionFile(models.Model):
         self.ensure_one()
         if self.state != 'ministry_approved':
             raise UserError(_('Only ministry approved applications can be sent to health check.'))
-        
+
+        _logger.info(f"Sending admission file {self.name} to health check by {self.env.user.name}")
         self.write({'state': 'health_required'})
-        
+        _logger.info(f"Admission file {self.name} state changed to 'health_required'")
+
         # Create approval record
+        _logger.info(f"Creating health approval record for admission file {self.name}")
         self.env['acmst.admission.approval'].create({
             'admission_file_id': self.id,
             'approver_id': self.env.user.id,
@@ -639,13 +683,15 @@ class AcmstAdmissionFile(models.Model):
             'decision': 'pending',
             'comments': 'Sent to health check'
         })
-        
+
         # Create health check record
+        _logger.info(f"Creating health check record for admission file {self.name}")
         self._create_health_check_record()
-        
+
         # Send health check notification
+        _logger.info(f"Sending health check notification for admission file {self.name}")
         self.send_health_check_notification()
-        
+
         return True
 
     def action_ministry_reject(self):
@@ -677,8 +723,25 @@ class AcmstAdmissionFile(models.Model):
         self.ensure_one()
         if self.state != 'ministry_approved':
             raise UserError(_('Only ministry approved applications can require health check.'))
-        
+
         self.write({'state': 'health_required'})
+
+        # Create approval record
+        self.env['acmst.admission.approval'].create({
+            'admission_file_id': self.id,
+            'approver_id': self.env.user.id,
+            'approval_type': 'health',
+            'approval_date': fields.Datetime.now(),
+            'decision': 'pending',
+            'comments': 'Health check required'
+        })
+
+        # Create health check record
+        self._create_health_check_record()
+
+        # Send health check notification
+        self.send_health_check_notification()
+
         return True
 
     def action_health_approve(self):
@@ -686,14 +749,17 @@ class AcmstAdmissionFile(models.Model):
         self.ensure_one()
         if self.state != 'health_required':
             raise UserError(_('Only health required applications can be health approved.'))
-        
+
+        _logger.info(f"Health check approved for admission file {self.name} by {self.env.user.name}")
         self.write({
             'state': 'health_approved',
             'health_check_date': fields.Date.today(),
             'health_approver': self.env.user.id
         })
-        
+        _logger.info(f"Admission file {self.name} state changed to 'health_approved'")
+
         # Create approval record
+        _logger.info(f"Creating health approval record for admission file {self.name}")
         self.env['acmst.admission.approval'].create({
             'admission_file_id': self.id,
             'approver_id': self.env.user.id,
@@ -702,8 +768,9 @@ class AcmstAdmissionFile(models.Model):
             'decision': 'approved',
             'comments': 'Health check approved'
         })
-        
+
         # Automatically move to coordinator review
+        _logger.info(f"Moving admission file {self.name} to coordinator review")
         self.action_coordinator_review()
         
         return True
@@ -713,14 +780,17 @@ class AcmstAdmissionFile(models.Model):
         self.ensure_one()
         if self.state != 'health_required':
             raise UserError(_('Only health required applications can be health rejected.'))
-        
+
+        _logger.info(f"Health check rejected for admission file {self.name} by {self.env.user.name}")
         self.write({
             'state': 'health_rejected',
             'health_check_date': fields.Date.today(),
             'health_approver': self.env.user.id
         })
-        
+        _logger.info(f"Admission file {self.name} state changed to 'health_rejected'")
+
         # Create approval record
+        _logger.info(f"Creating health rejection record for admission file {self.name}")
         self.env['acmst.admission.approval'].create({
             'admission_file_id': self.id,
             'approver_id': self.env.user.id,
@@ -729,7 +799,7 @@ class AcmstAdmissionFile(models.Model):
             'decision': 'rejected',
             'comments': 'Health check rejected'
         })
-        
+
         return True
 
     def action_coordinator_review(self):
@@ -737,8 +807,10 @@ class AcmstAdmissionFile(models.Model):
         self.ensure_one()
         if self.state != 'health_approved':
             raise UserError(_('Only health approved applications can be sent to coordinator.'))
-        
+
+        _logger.info(f"Sending admission file {self.name} to coordinator review by {self.env.user.name}")
         self.write({'state': 'coordinator_review'})
+        _logger.info(f"Admission file {self.name} state changed to 'coordinator_review'")
         return True
 
     def action_coordinator_approve(self):
@@ -762,9 +834,11 @@ class AcmstAdmissionFile(models.Model):
             'decision': 'approved',
             'comments': 'Approved by coordinator'
         })
-        
-        # Automatically move to manager review
-        self.action_manager_review()
+
+        # Execute workflow engine for automatic transitions
+        workflow_engine = self.env['acmst.workflow.engine'].search([('active', '=', True)], limit=1)
+        if workflow_engine:
+            workflow_engine.execute_workflow(self)
         
         return True
 
@@ -826,23 +900,38 @@ class AcmstAdmissionFile(models.Model):
         """Send to manager for review"""
         self.ensure_one()
         if self.state not in ['coordinator_approved', 'coordinator_conditional']:
-            raise UserError(_('Only coordinator approved or conditional applications can be sent to manager.'))
-        
+            raise UserError(_('Only coordinator approved or conditional applications can be sent to manager. Current state: %s') % self.state)
+
+        _logger.info(f"Sending application {self.name} to manager review. Current state: {self.state}")
         self.write({'state': 'manager_review'})
+        _logger.info(f"Application {self.name} state changed to manager_review")
         return True
 
     def action_manager_approve(self):
         """Approve by manager"""
         self.ensure_one()
+        _logger.info(f"Manager approve called for application {self.name}. Current state: {self.state}")
+
+        # Check if method was called with context (from JavaScript)
+        context = self.env.context
+        comments = context.get('comments', '')
+        send_notification = context.get('send_notification', False)
+
         if self.state != 'manager_review':
-            raise UserError(_('Only manager review applications can be approved by manager.'))
-        
+            _logger.error(f"Cannot approve - application {self.name} is not in manager_review state. Current state: {self.state}")
+            raise UserError(_('Only manager review applications can be approved by manager. Current state: %s') % self.state)
+
+        _logger.info(f"Approving application {self.name} by manager {self.env.user.name}")
+
+        # Use comments from context if provided
+        approval_comments = comments if comments else 'Approved by manager'
+
         self.write({
             'state': 'manager_approved',
             'manager_approval_date': fields.Date.today(),
             'manager_id': self.env.user.id
         })
-        
+
         # Create approval record
         self.env['acmst.admission.approval'].create({
             'admission_file_id': self.id,
@@ -850,26 +939,42 @@ class AcmstAdmissionFile(models.Model):
             'approval_type': 'manager',
             'approval_date': fields.Datetime.now(),
             'decision': 'approved',
-            'comments': 'Approved by manager'
+            'comments': approval_comments
         })
-        
+
+        # Send notification if requested
+        if send_notification:
+            try:
+                self.send_approval_notification()
+            except Exception as e:
+                _logger.warning(f"Could not send approval notification: {e}")
+
         # Automatically complete the process
         self.action_complete()
-        
+
         return True
 
     def action_manager_reject(self):
         """Reject by manager"""
         self.ensure_one()
+
+        # Check if method was called with context (from JavaScript)
+        context = self.env.context
+        comments = context.get('comments', '')
+        send_notification = context.get('send_notification', False)
+
         if self.state != 'manager_review':
             raise UserError(_('Only manager review applications can be rejected by manager.'))
-        
+
+        # Use comments from context if provided
+        rejection_comments = comments if comments else 'Rejected by manager'
+
         self.write({
             'state': 'manager_rejected',
             'manager_approval_date': fields.Date.today(),
             'manager_id': self.env.user.id
         })
-        
+
         # Create approval record
         self.env['acmst.admission.approval'].create({
             'admission_file_id': self.id,
@@ -877,9 +982,16 @@ class AcmstAdmissionFile(models.Model):
             'approval_type': 'manager',
             'approval_date': fields.Datetime.now(),
             'decision': 'rejected',
-            'comments': 'Rejected by manager'
+            'comments': rejection_comments
         })
-        
+
+        # Send notification if requested
+        if send_notification:
+            try:
+                self.send_rejection_notification()
+            except Exception as e:
+                _logger.warning(f"Could not send rejection notification: {e}")
+
         return True
 
     def action_complete(self):
@@ -1364,7 +1476,7 @@ class AcmstAdmissionFile(models.Model):
             record.health_required = health_required
             record.coordinator_review = coordinator_review
             record.manager_review = manager_review
-            record.ministry_pending = ministry_pending
+            record.ministry_pending_total = ministry_pending
             record.completed = completed
 
     def _compute_coordinator_statistics(self):
@@ -1375,8 +1487,8 @@ class AcmstAdmissionFile(models.Model):
         approved_count = self.env['acmst.admission.file'].search_count([('coordinator_id', '=', self.env.user.id), ('state', 'in', ['coordinator_approved', 'manager_review', 'manager_approved', 'manager_rejected', 'completed'])])
         conditional_count = self.env['acmst.admission.file'].search_count([('coordinator_id', '=', self.env.user.id), ('state', 'in', ['coordinator_conditional', 'manager_review', 'manager_approved', 'manager_rejected', 'completed'])])
         my_reviews_count = self.env['acmst.admission.file'].search_count([('coordinator_id', '=', self.env.user.id)])
-        approved = self.env['acmst.admission.file'].search_count([('state', '=', 'manager_approved')])
-        
+        approved_total = self.env['acmst.admission.file'].search_count([('state', '=', 'manager_approved')])
+
         # Apply to all records
         for record in self:
             record.pending_review_count = pending_review_count
@@ -1384,7 +1496,7 @@ class AcmstAdmissionFile(models.Model):
             record.approved_count = approved_count
             record.conditional_count = conditional_count
             record.my_reviews_count = my_reviews_count
-            record.approved = approved
+            record.approved_total = approved_total
 
     # Coordinator Dashboard Additional Statistics
     coordinator_review_rate = fields.Float(
@@ -1670,7 +1782,7 @@ class AcmstAdmissionFile(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Reports & Analytics Dashboard',
             'res_model': 'acmst.admission.file',
-            'view_mode': 'form',
-            'view_id': self.env.ref('acmst_admission.view_acmst_reports_dashboard').id,
+            'view_mode': 'dashboard,graph,pivot,tree',
+            'context': {'group_by': ['state', 'create_date:month', 'program_id']},
             'target': 'current',
         }

@@ -169,6 +169,11 @@
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -250,6 +255,7 @@
             <field name="name">Processing Students (من طلاب المعالجات)</field>
             <field name="res_model">acmst.admission.file</field>
             <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_acmst_admission_file_tree"/>
             <field name="domain">[('is_processing_student', '=', True)]</field>
             <field name="context">{'create': False, 'search_default_processing_students': 1}</field>
             <field name="help" type="html">
@@ -257,11 +263,282 @@
                     No processing students found!
                 </p>
                 <p>
-                    Students marked as "من طلاب المعالجات" (processing students) 
+                    Students marked as "من طلاب المعالجات" (processing students)
                     are those who were approved by ministry but don't have a university ID yet.
+                </p>
+            </field>
+        </record>
+
+        <!-- Operational Actions for Menu Items -->
+        <!-- Pending Review Action -->
+        <record id="action_acmst_admission_file_pending" model="ir.actions.act_window">
+            <field name="name">Pending Review</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', 'in', ['ministry_pending', 'health_required', 'coordinator_review', 'manager_review'])]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No applications pending review
+                </p>
+                <p>
+                    All applications have been reviewed.
+                </p>
+            </field>
+        </record>
+
+        <!-- Recent Applications Action -->
+        <record id="action_acmst_recent_applications" model="ir.actions.act_window">
+            <field name="name">Recent Applications</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('create_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No recent applications
+                </p>
+                <p>
+                    No applications have been submitted in the last 7 days.
+                </p>
+            </field>
+        </record>
+
+        <!-- Overdue Applications Action -->
+        <record id="action_acmst_overdue_applications" model="ir.actions.act_window">
+            <field name="name">Overdue Applications</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', 'in', ['ministry_pending', 'health_required', 'coordinator_review', 'manager_review']), ('write_date', '&lt;', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No overdue applications
+                </p>
+                <p>
+                    All applications are up to date.
+                </p>
+            </field>
+        </record>
+
+        <!-- Admission Manager Operations Actions - Note: Manager-specific actions are defined in manager_dashboard_views.xml -->
+
+        <!-- Health Management Actions -->
+        <record id="action_acmst_health_pending" model="ir.actions.act_window">
+            <field name="name">Pending Health Checks</field>
+            <field name="res_model">acmst.health.check</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('admission_file_id.state', '=', 'health_required')]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No pending health checks
+                </p>
+                <p>
+                    All health checks have been completed.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_acmst_health_approved" model="ir.actions.act_window">
+            <field name="name">Health Approved</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('health_approver', '=', uid), ('state', 'in', ['health_approved', 'coordinator_review', 'coordinator_approved', 'coordinator_rejected', 'coordinator_conditional', 'manager_review', 'manager_approved', 'manager_rejected', 'completed'])]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No approved health checks
+                </p>
+                <p>
+                    Approved health checks will appear here.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_acmst_health_rejected" model="ir.actions.act_window">
+            <field name="name">Health Rejected</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('health_approver', '=', uid), ('state', 'in', ['health_rejected'])]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No rejected health checks
+                </p>
+                <p>
+                    Rejected health checks will appear here.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_acmst_health_my_reviews" model="ir.actions.act_window">
+            <field name="name">My Health Reviews</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('health_approver', '=', uid)]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No health reviews assigned
+                </p>
+                <p>
+                    Health checks assigned to you will appear here.
+                </p>
+            </field>
+        </record>
+
+        <!-- Manager Actions - Note: Manager-specific actions are defined in manager_dashboard_views.xml -->
+
+        <!-- Coordinator Condition Actions -->
+        <record id="action_acmst_coordinator_my_conditions" model="ir.actions.act_window">
+            <field name="name">My Conditions</field>
+            <field name="res_model">acmst.coordinator.condition</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('coordinator_id', '=', uid)]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No conditions assigned
+                </p>
+                <p>
+                    Coordinator conditions assigned to you will appear here.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_acmst_coordinator_overdue_conditions" model="ir.actions.act_window">
+            <field name="name">Overdue Conditions</field>
+            <field name="res_model">acmst.coordinator.condition</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '!=', 'completed'), ('deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No overdue conditions
+                </p>
+                <p>
+                    Overdue coordinator conditions will appear here.
+                </p>
+            </field>
+        </record>
+
+        <!-- Officer Actions -->
+        <record id="action_acmst_officer_new_applications" model="ir.actions.act_window">
+            <field name="name">New Applications</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', 'in', ['new', 'ministry_pending'])]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No new applications
+                </p>
+                <p>
+                    New admission applications will appear here.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_acmst_officer_ministry_pending" model="ir.actions.act_window">
+            <field name="name">Ministry Pending</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'ministry_pending')]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No applications pending ministry approval
+                </p>
+                <p>
+                    Applications waiting for ministry approval will appear here.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_acmst_officer_ministry_approved" model="ir.actions.act_window">
+            <field name="name">Ministry Approved</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', 'in', ['ministry_approved', 'health_required', 'coordinator_review', 'coordinator_approved', 'coordinator_rejected', 'coordinator_conditional', 'manager_review', 'manager_approved', 'manager_rejected', 'completed'])]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No ministry approved applications
+                </p>
+                <p>
+                    Ministry approved applications will appear here.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_acmst_officer_ministry_rejected" model="ir.actions.act_window">
+            <field name="name">Ministry Rejected</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'ministry_rejected')]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No ministry rejected applications
+                </p>
+                <p>
+                    Ministry rejected applications will appear here.
+                </p>
+            </field>
+        </record>
+
+        <!-- Health Officer Dashboard Action -->
+        <record id="action_acmst_health_officer_dashboard" model="ir.actions.act_window">
+            <field name="name">Health Officer Dashboard</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'health_required')]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No health checks pending
+                </p>
+                <p>
+                    Applications requiring health checks will appear here.
+                </p>
+            </field>
+        </record>
+
+        <!-- Coordinator Actions -->
+        <record id="action_acmst_coordinator_rejected" model="ir.actions.act_window">
+            <field name="name">Coordinator Rejected</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('coordinator_id', '=', uid), ('state', 'in', ['coordinator_rejected'])]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No coordinator rejected applications
+                </p>
+                <p>
+                    Applications rejected by coordinators will appear here.
+                </p>
+            </field>
+        </record>
+
+        <!-- Student Records Action -->
+        <record id="action_acmst_student_records" model="ir.actions.act_window">
+            <field name="name">Student Records</field>
+            <field name="res_model">acmst.admission.file</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'completed')]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No student records found
+                </p>
+                <p>
+                    Completed student records will appear here.
                 </p>
             </field>
         </record>
 
     </data>
 </odoo>
+    

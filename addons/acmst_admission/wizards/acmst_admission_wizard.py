@@ -59,8 +59,8 @@ class AcmstAdmissionWizard(models.TransientModel):
             'coordinator_approve': self.admission_file_id.action_coordinator_approve,
             'coordinator_reject': self.admission_file_id.action_coordinator_reject,
             'coordinator_conditional': self.admission_file_id.action_coordinator_conditional,
-            'manager_approve': self.admission_file_id.action_manager_approve,
-            'manager_reject': self.admission_file_id.action_manager_reject,
+            'action_manager_approve': self.admission_file_id.action_manager_approve,
+            'action_manager_reject': self.admission_file_id.action_manager_reject,
             'complete': self.admission_file_id.action_complete,
             'cancel': self.admission_file_id.action_cancel
         }

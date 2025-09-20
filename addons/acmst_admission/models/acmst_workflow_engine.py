@@ -13,6 +13,7 @@ _logger = logging.getLogger(__name__)
 class AcmstWorkflowEngine(models.Model):
     _name = 'acmst.workflow.engine'
     _description = 'Admission Workflow Engine'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'sequence, id'
 
     name = fields.Char(
@@ -205,6 +206,7 @@ class AcmstWorkflowEngine(models.Model):
     def action_view_rules(self):
         """Open workflow rules related to this workflow"""
         self.ensure_one()
+        _logger.info(f"Viewing workflow rules for workflow engine {self.name}")
         return {
             'type': 'ir.actions.act_window',
             'name': _('Workflow Rules'),
@@ -220,6 +222,7 @@ class AcmstWorkflowEngine(models.Model):
 class AcmstWorkflowRule(models.Model):
     _name = 'acmst.workflow.rule'
     _description = 'Workflow Rule'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'sequence, id'
 
     workflow_id = fields.Many2one(
@@ -413,13 +416,16 @@ class AcmstWorkflowRule(models.Model):
         self.ensure_one()
         if not self.active:
             raise UserError(_('Cannot test an inactive rule.'))
-        
+
+        _logger.info(f"Testing workflow rule {self.name} by {self.env.user.name}")
+
         # Find a test admission file to process
         test_file = self.env['acmst.admission.file'].search([
             ('state', '=', self.from_state)
         ], limit=1)
-        
+
         if not test_file:
+            _logger.warning(f"No admission files found in state '{self.from_state}' to test rule {self.name}")
             raise UserError(_('No admission files found in state "%s" to test this rule.' % self.from_state))
         
         try:

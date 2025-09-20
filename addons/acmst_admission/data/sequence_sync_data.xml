@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="0">
-        
-        <!-- Sync Portal Application Sequence with Admission File Sequence -->
-        <!-- This will update the existing sequences to have the same number_next value -->
+    <data noupdate="1">
+
+        <!-- Portal Application Sequence -->
         <record id="seq_acmst_portal_application" model="ir.sequence">
             <field name="name">Portal Application Number</field>
             <field name="code">acmst.portal.application</field>
-            <field name="prefix">ADM</field>
+            <field name="prefix">APP</field>
             <field name="padding">6</field>
-            <field name="number_next">1</field>
+            <field name="number_next">3</field>
             <field name="number_increment">1</field>
             <field name="use_date_range">False</field>
         </record>
-        
+
         <!-- Ensure Admission File Sequence is properly configured -->
         <record id="seq_acmst_admission_file" model="ir.sequence">
             <field name="name">Admission File Number</field>
             <field name="code">acmst.admission.file</field>
             <field name="prefix">ADM</field>
             <field name="padding">6</field>
-            <field name="number_next">1</field>
+            <field name="number_next">3</field>
             <field name="number_increment">1</field>
             <field name="use_date_range">False</field>
         </record>
-        
+
     </data>
 </odoo>

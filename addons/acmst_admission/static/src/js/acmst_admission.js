@@ -1,6 +1,6 @@
 /* ACMST Admission Module - Backend JavaScript */
 
-odoo.define('acmst_admission.admission', ['web.FormController', 'web.ListController', 'web.Dialog', 'web.core'], function (FormController, ListController, Dialog, core) {
+odoo.define('acmst_admission.admission', ['web.core', 'web.FormController', 'web.ListController', 'web.Dialog'], function (core, FormController, ListController, Dialog) {
     'use strict';
 
     var _t = core._t;
@@ -73,13 +73,13 @@ odoo.define('acmst_admission.admission', ['web.FormController', 'web.ListControl
                 
                 if (data.name === 'action_manager_approve') {
                     event.preventDefault();
-                    this._showApprovalDialog('Manager Approval', 'manager_approve');
+                    this._showApprovalDialog('Manager Approval', 'action_manager_approve');
                     return;
                 }
-                
+
                 if (data.name === 'action_manager_reject') {
                     event.preventDefault();
-                    this._showApprovalDialog('Manager Rejection', 'manager_reject');
+                    this._showApprovalDialog('Manager Rejection', 'action_manager_reject');
                     return;
                 }
                 

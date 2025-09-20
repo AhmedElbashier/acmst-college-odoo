@@ -186,15 +186,18 @@ class AcmstCoordinatorCondition(models.Model):
         self.ensure_one()
         if self.state != 'pending':
             raise UserError(_('Only pending conditions can be completed.'))
-        
+
+        _logger.info(f"Coordinator condition {self.name} completed by {self.env.user.name}")
         self.write({
             'state': 'completed',
             'completion_date': fields.Date.today()
         })
-        
+        _logger.info(f"Coordinator condition {self.name} state changed to 'completed'")
+
         # Check if all conditions are completed
+        _logger.info(f"Checking if all conditions are completed for admission file {self.admission_file_id.name}")
         self._check_all_conditions_completed()
-        
+
         return True
 
     def action_reject(self):
@@ -202,8 +205,10 @@ class AcmstCoordinatorCondition(models.Model):
         self.ensure_one()
         if self.state != 'pending':
             raise UserError(_('Only pending conditions can be rejected.'))
-        
+
+        _logger.info(f"Coordinator condition {self.name} rejected by {self.env.user.name}")
         self.write({'state': 'rejected'})
+        _logger.info(f"Coordinator condition {self.name} state changed to 'rejected'")
         return True
 
     def action_reset_to_pending(self):

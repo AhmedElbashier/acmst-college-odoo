@@ -74,22 +74,18 @@ class TestPortalApplication(TransactionCase):
             'emergency_contact': 'Jane Doe',
             'emergency_phone': '+966501234568'
         })
-        
+
         # Submit application
         application.action_submit()
         self.assertEqual(application.state, 'submitted')
-        
+
         # Review application
         application.action_review()
         self.assertEqual(application.state, 'under_review')
-        
-        # Approve application
-        application.action_approve()
+
+        # Approve application - this now creates the admission file
+        result = application.action_approve()
         self.assertEqual(application.state, 'approved')
-        
-        # Create admission file
-        application.action_create_admission_file()
-        self.assertEqual(application.state, 'admission_created')
         self.assertTrue(application.admission_file_id)
 
     def test_portal_application_rejection(self):
@@ -467,24 +463,20 @@ class TestPortalApplication(TransactionCase):
             'emergency_contact': 'Jane Doe',
             'emergency_phone': '+966501234568'
         })
-        
+
         # Submit application
         application.action_submit()
         self.assertEqual(application.state, 'submitted')
-        
+
         # Review application
         application.action_review()
         self.assertEqual(application.state, 'under_review')
-        
-        # Approve application
-        application.action_approve()
+
+        # Approve application - this now creates the admission file
+        result = application.action_approve()
         self.assertEqual(application.state, 'approved')
-        
-        # Create admission file
-        application.action_create_admission_file()
-        self.assertEqual(application.state, 'admission_created')
         self.assertTrue(application.admission_file_id)
-        
+
         # Check admission file details
         admission_file = application.admission_file_id
         self.assertEqual(admission_file.applicant_name, 'John Doe')
@@ -520,7 +512,7 @@ class TestPortalApplication(TransactionCase):
             application.action_reject()  # Cannot reject from draft
         
         with self.assertRaises(UserError):
-            application.action_create_admission_file()  # Cannot create admission file from draft
+            application.action_approve()  # Cannot approve from draft
 
     def test_portal_application_workflow_with_reset(self):
         """Test portal application workflow with reset"""

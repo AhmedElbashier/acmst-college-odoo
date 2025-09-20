@@ -172,7 +172,7 @@
             <field name="name">Ministry Pending</field>
             <field name="res_model">acmst.admission.file</field>
             <field name="view_mode">tree,form</field>
-            <field name="domain">[('state', '=', 'ministry_pending')]</field>
+            <field name="domain">[('state', '=', 'under_review')]</field>
             <field name="context">{}</field>
         </record>
 
