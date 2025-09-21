@@ -1221,6 +1221,214 @@
             </button>
         </template>
 
+        <!-- Analytics Dashboard Template -->
+        <template id="portal_admission_analytics" name="Admission Analytics Dashboard">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Analytics Dashboard - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-chart-line"></i> Analytics Dashboard</h1>
+                                    <p class="mb-0">Track your admission progress and performance metrics</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="analytics-controls">
+                                        <select class="form-select" id="time-period">
+                                            <option value="7">Last 7 Days</option>
+                                            <option value="30" selected>Last 30 Days</option>
+                                            <option value="90">Last 90 Days</option>
+                                            <option value="365">Last Year</option>
+                                        </select>
+                                        <button class="acmst-btn acmst-btn-outline" id="refresh-analytics">
+                                            <i class="fa fa-sync"></i> Refresh
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Key Metrics Overview -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="acmst-card metric-card">
+                                <div class="metric-icon">
+                                    <i class="fa fa-file-alt"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <div class="metric-value" id="total-applications">0</div>
+                                    <div class="metric-label">Total Applications</div>
+                                    <div class="metric-change positive" id="app-change">
+                                        <i class="fa fa-arrow-up"></i> +12%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="acmst-card metric-card">
+                                <div class="metric-icon">
+                                    <i class="fa fa-check-circle"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <div class="metric-value" id="approved-applications">0</div>
+                                    <div class="metric-label">Approved</div>
+                                    <div class="metric-change positive" id="approved-change">
+                                        <i class="fa fa-arrow-up"></i> +8%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="acmst-card metric-card">
+                                <div class="metric-icon">
+                                    <i class="fa fa-clock"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <div class="metric-value" id="pending-applications">0</div>
+                                    <div class="metric-label">Pending</div>
+                                    <div class="metric-change neutral" id="pending-change">
+                                        <i class="fa fa-minus"></i> 0%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="acmst-card metric-card">
+                                <div class="metric-icon">
+                                    <i class="fa fa-percentage"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <div class="metric-value" id="success-rate">0%</div>
+                                    <div class="metric-label">Success Rate</div>
+                                    <div class="metric-change positive" id="success-change">
+                                        <i class="fa fa-arrow-up"></i> +5%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts and Visualizations -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <!-- Application Trends Chart -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-chart-line"></i> Application Trends</h3>
+                                    <div class="chart-controls">
+                                        <button class="btn btn-sm btn-outline-primary active" data-chart="line">Line</button>
+                                        <button class="btn btn-sm btn-outline-primary" data-chart="bar">Bar</button>
+                                        <button class="btn btn-sm btn-outline-primary" data-chart="area">Area</button>
+                                    </div>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <canvas id="application-trends-chart" width="400" height="200"></canvas>
+                                </div>
+                            </div>
+                            
+                            <!-- Status Distribution Chart -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-chart-pie"></i> Status Distribution</h3>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <canvas id="status-distribution-chart" width="300" height="300"></canvas>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="status-legend" id="status-legend">
+                                                <!-- Legend items will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <!-- Recent Activity -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-history"></i> Recent Activity</h3>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <div class="activity-feed" id="activity-feed">
+                                        <!-- Activity items will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Performance Indicators -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-tachometer-alt"></i> Performance</h3>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <div class="performance-indicators">
+                                        <div class="indicator-item">
+                                            <div class="indicator-label">Application Completion</div>
+                                            <div class="indicator-bar">
+                                                <div class="indicator-fill" id="completion-bar" style="width: 85%"></div>
+                                            </div>
+                                            <div class="indicator-value">85%</div>
+                                        </div>
+                                        <div class="indicator-item">
+                                            <div class="indicator-label">Document Upload</div>
+                                            <div class="indicator-bar">
+                                                <div class="indicator-fill" id="upload-bar" style="width: 92%"></div>
+                                            </div>
+                                            <div class="indicator-value">92%</div>
+                                        </div>
+                                        <div class="indicator-item">
+                                            <div class="indicator-label">Health Check</div>
+                                            <div class="indicator-bar">
+                                                <div class="indicator-fill" id="health-bar" style="width: 78%"></div>
+                                            </div>
+                                            <div class="indicator-value">78%</div>
+                                        </div>
+                                        <div class="indicator-item">
+                                            <div class="indicator-label">Conditions Met</div>
+                                            <div class="indicator-bar">
+                                                <div class="indicator-fill" id="conditions-bar" style="width: 65%"></div>
+                                            </div>
+                                            <div class="indicator-value">65%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detailed Reports Section -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-chart-bar"></i> Detailed Reports</h3>
+                                    <div class="report-controls">
+                                        <button class="acmst-btn acmst-btn-primary" id="generate-report">
+                                            <i class="fa fa-download"></i> Generate Report
+                                        </button>
+                                        <button class="acmst-btn acmst-btn-outline" id="export-data">
+                                            <i class="fa fa-file-export"></i> Export Data
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <div class="reports-grid" id="reports-grid">
+                                        <!-- Report cards will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
         <!-- Document Management Portal Template -->
         <template id="portal_admission_documents" name="Admission Document Management Portal">
             <t t-call="web.frontend_layout">

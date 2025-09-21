@@ -3015,12 +3015,396 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
         }
     });
 
+    // Analytics Dashboard Widget
+    publicWidget.registry.PortalAnalytics = publicWidget.Widget.extend({
+        selector: '.acmst-portal-container',
+        events: {
+            'click #analytics-tab': '_onAnalyticsClick',
+        },
+
+        start: function () {
+            var self = this;
+            return this._super.apply(this, arguments).then(function () {
+                if (self.$el.find('#analytics-tab').length) {
+                    self.setupAnalyticsDashboard();
+                }
+            });
+        },
+
+        setupAnalyticsDashboard: function () {
+            var self = this;
+            
+            // Load analytics data
+            this._loadAnalyticsData();
+            
+            // Setup event handlers
+            this._setupAnalyticsEventHandlers();
+            
+            // Initialize charts
+            this._initializeCharts();
+            
+            // Setup real-time updates
+            this._setupRealTimeUpdates();
+        },
+
+        _loadAnalyticsData: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/analytics/data', 'call')
+                .then(function(result) {
+                    if (result.success) {
+                        self._updateMetrics(result.metrics);
+                        self._updateCharts(result.charts);
+                        self._updateActivityFeed(result.activities);
+                        self._updateReports(result.reports);
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error loading analytics data:', error);
+                });
+        },
+
+        _updateMetrics: function (metrics) {
+            $('#total-applications').text(metrics.total_applications || 0);
+            $('#approved-applications').text(metrics.approved_applications || 0);
+            $('#pending-applications').text(metrics.pending_applications || 0);
+            $('#success-rate').text((metrics.success_rate || 0) + '%');
+            
+            // Update change indicators
+            this._updateChangeIndicator('#app-change', metrics.app_change);
+            this._updateChangeIndicator('#approved-change', metrics.approved_change);
+            this._updateChangeIndicator('#pending-change', metrics.pending_change);
+            this._updateChangeIndicator('#success-change', metrics.success_change);
+        },
+
+        _updateChangeIndicator: function (selector, change) {
+            var $indicator = $(selector);
+            var $icon = $indicator.find('i');
+            var $text = $indicator.find('span').last();
+            
+            if (change > 0) {
+                $indicator.removeClass('negative neutral').addClass('positive');
+                $icon.removeClass('fa-arrow-down fa-minus').addClass('fa-arrow-up');
+                $text.text('+' + change + '%');
+            } else if (change < 0) {
+                $indicator.removeClass('positive neutral').addClass('negative');
+                $icon.removeClass('fa-arrow-up fa-minus').addClass('fa-arrow-down');
+                $text.text(change + '%');
+            } else {
+                $indicator.removeClass('positive negative').addClass('neutral');
+                $icon.removeClass('fa-arrow-up fa-arrow-down').addClass('fa-minus');
+                $text.text('0%');
+            }
+        },
+
+        _updateCharts: function (charts) {
+            this._updateTrendsChart(charts.trends);
+            this._updateStatusChart(charts.status);
+        },
+
+        _updateTrendsChart: function (data) {
+            var ctx = document.getElementById('application-trends-chart');
+            if (!ctx) return;
+            
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels || [],
+                    datasets: [{
+                        label: 'Applications',
+                        data: data.applications || [],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Approved',
+                        data: data.approved || [],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        },
+
+        _updateStatusChart: function (data) {
+            var ctx = document.getElementById('status-distribution-chart');
+            if (!ctx) return;
+            
+            var chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.labels || [],
+                    datasets: [{
+                        data: data.values || [],
+                        backgroundColor: [
+                            '#3b82f6',
+                            '#10b981',
+                            '#f59e0b',
+                            '#ef4444',
+                            '#8b5cf6'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // Update legend
+            this._updateStatusLegend(data.labels, data.values);
+        },
+
+        _updateStatusLegend: function (labels, values) {
+            var $legend = $('#status-legend');
+            $legend.empty();
+            
+            var colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+            
+            labels.forEach(function(label, index) {
+                var $item = $('<div class="legend-item">' +
+                    '<div class="legend-color" style="background-color: ' + colors[index] + '"></div>' +
+                    '<div class="legend-label">' + label + '</div>' +
+                    '<div class="legend-value">' + (values[index] || 0) + '</div>' +
+                '</div>');
+                $legend.append($item);
+            });
+        },
+
+        _updateActivityFeed: function (activities) {
+            var $feed = $('#activity-feed');
+            $feed.empty();
+            
+            if (activities.length === 0) {
+                $feed.html('<div class="text-center text-muted py-3">No recent activity</div>');
+                return;
+            }
+            
+            activities.forEach(function(activity) {
+                var $item = self._createActivityItem(activity);
+                $feed.append($item);
+            });
+        },
+
+        _createActivityItem: function (activity) {
+            var iconClass = 'fa-' + (activity.type === 'application' ? 'file-alt' : 
+                                    activity.type === 'document' ? 'file' :
+                                    activity.type === 'health' ? 'heartbeat' : 'check-circle');
+            
+            var $item = $('<div class="activity-item">' +
+                '<div class="activity-icon ' + activity.type + '">' +
+                    '<i class="fa ' + iconClass + '"></i>' +
+                '</div>' +
+                '<div class="activity-content">' +
+                    '<div class="activity-title">' + activity.title + '</div>' +
+                    '<div class="activity-description">' + activity.description + '</div>' +
+                    '<div class="activity-time">' + activity.time + '</div>' +
+                '</div>' +
+            '</div>');
+            
+            return $item;
+        },
+
+        _updateReports: function (reports) {
+            var $grid = $('#reports-grid');
+            $grid.empty();
+            
+            reports.forEach(function(report) {
+                var $card = self._createReportCard(report);
+                $grid.append($card);
+            });
+        },
+
+        _createReportCard: function (report) {
+            var $card = $('<div class="report-card">' +
+                '<div class="report-header">' +
+                    '<div class="report-title">' + report.title + '</div>' +
+                    '<div class="report-icon" style="background-color: ' + report.color + '">' +
+                        '<i class="fa ' + report.icon + '"></i>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="report-content">' +
+                    '<div class="report-description">' + report.description + '</div>' +
+                    '<div class="report-metrics">' +
+                        report.metrics.map(function(metric) {
+                            return '<div class="report-metric">' +
+                                '<div class="report-metric-value">' + metric.value + '</div>' +
+                                '<div class="report-metric-label">' + metric.label + '</div>' +
+                            '</div>';
+                        }).join('') +
+                    '</div>' +
+                '</div>' +
+                '<div class="report-actions">' +
+                    '<button class="btn btn-sm btn-outline-primary" data-action="view" data-report-id="' + report.id + '">View</button>' +
+                    '<button class="btn btn-sm btn-outline-secondary" data-action="download" data-report-id="' + report.id + '">Download</button>' +
+                '</div>' +
+            '</div>');
+            
+            return $card;
+        },
+
+        _setupAnalyticsEventHandlers: function () {
+            var self = this;
+            
+            // Time period change
+            $('#time-period').on('change', function() {
+                var period = $(this).val();
+                self._loadAnalyticsData(period);
+            });
+            
+            // Refresh button
+            $('#refresh-analytics').on('click', function() {
+                self._loadAnalyticsData();
+            });
+            
+            // Chart type controls
+            $('[data-chart]').on('click', function() {
+                var chartType = $(this).data('chart');
+                self._switchChartType(chartType);
+                $('[data-chart]').removeClass('active');
+                $(this).addClass('active');
+            });
+            
+            // Report actions
+            $(document).on('click', '[data-action="view"]', function(e) {
+                e.preventDefault();
+                var reportId = $(this).data('report-id');
+                self._viewReport(reportId);
+            });
+            
+            $(document).on('click', '[data-action="download"]', function(e) {
+                e.preventDefault();
+                var reportId = $(this).data('report-id');
+                self._downloadReport(reportId);
+            });
+            
+            // Generate report
+            $('#generate-report').on('click', function() {
+                self._generateReport();
+            });
+            
+            // Export data
+            $('#export-data').on('click', function() {
+                self._exportData();
+            });
+        },
+
+        _switchChartType: function (chartType) {
+            // This would switch the chart type (line, bar, area)
+            // Implementation depends on chart library being used
+            console.log('Switching to chart type:', chartType);
+        },
+
+        _viewReport: function (reportId) {
+            window.open('/admission/analytics/report/' + reportId, '_blank');
+        },
+
+        _downloadReport: function (reportId) {
+            window.open('/admission/analytics/download/' + reportId, '_blank');
+        },
+
+        _generateReport: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/analytics/generate-report', 'call')
+                .then(function(result) {
+                    if (result.success) {
+                        self._getNotificationSystem().showNotification('success', 'Report Generated', 'Your report has been generated successfully.', 'check-circle');
+                        self._loadAnalyticsData();
+                    } else {
+                        self._getNotificationSystem().showNotification('error', 'Generation Failed', 'There was an error generating the report.', 'exclamation-triangle');
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error generating report:', error);
+                    self._getNotificationSystem().showNotification('error', 'Generation Failed', 'There was an error generating the report.', 'exclamation-triangle');
+                });
+        },
+
+        _exportData: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/analytics/export-data', 'call')
+                .then(function(result) {
+                    if (result.success) {
+                        window.open(result.download_url, '_blank');
+                        self._getNotificationSystem().showNotification('success', 'Data Exported', 'Your data has been exported successfully.', 'check-circle');
+                    } else {
+                        self._getNotificationSystem().showNotification('error', 'Export Failed', 'There was an error exporting the data.', 'exclamation-triangle');
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error exporting data:', error);
+                    self._getNotificationSystem().showNotification('error', 'Export Failed', 'There was an error exporting the data.', 'exclamation-triangle');
+                });
+        },
+
+        _initializeCharts: function () {
+            // Initialize Chart.js if not already loaded
+            if (typeof Chart === 'undefined') {
+                // Load Chart.js dynamically
+                var script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+                script.onload = function() {
+                    self._loadAnalyticsData();
+                };
+                document.head.appendChild(script);
+            } else {
+                this._loadAnalyticsData();
+            }
+        },
+
+        _setupRealTimeUpdates: function () {
+            var self = this;
+            
+            // Update analytics every 5 minutes
+            setInterval(function() {
+                self._loadAnalyticsData();
+            }, 300000);
+        }
+    });
+
     // Initialize widgets
     publicWidget.registry.acmstPortalApplicationForm = PortalApplicationForm;
     publicWidget.registry.acmstPortalApplicationStatus = PortalApplicationStatus;
     publicWidget.registry.acmstPortalDocumentManagement = PortalDocumentManagement;
     publicWidget.registry.acmstPortalHealthCheck = PortalHealthCheck;
     publicWidget.registry.acmstNotificationSystem = NotificationSystem;
+    publicWidget.registry.acmstPortalAnalytics = PortalAnalytics;
 
     return {
         PortalApplicationForm: PortalApplicationForm,
