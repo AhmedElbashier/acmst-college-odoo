@@ -1,0 +1,1575 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * acmst_admission
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2025-01-01 00:00+0000\n"
+"Last-Translator: ACMST Development Team\n"
+"Language-Team: Arabic\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__name
+msgid "Admission File Number"
+msgstr "رقم ملف القبول"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__applicant_name
+msgid "Applicant Name"
+msgstr "اسم المتقدم"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__email
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__phone
+msgid "Phone"
+msgstr "الهاتف"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__nationality
+msgid "Nationality"
+msgstr "الجنسية"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__birth_date
+msgid "Birth Date"
+msgstr "تاريخ الميلاد"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__gender
+msgid "Gender"
+msgstr "الجنس"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__address
+msgid "Address"
+msgstr "العنوان"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__program_id
+msgid "Program"
+msgstr "البرنامج"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__batch_id
+msgid "Batch"
+msgstr "الدفعة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__application_date
+msgid "Application Date"
+msgstr "تاريخ التقديم"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__state
+msgid "Status"
+msgstr "الحالة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__height
+msgid "Height (cm)"
+msgstr "الطول (سم)"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__weight
+msgid "Weight (kg)"
+msgstr "الوزن (كجم)"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__blood_type
+msgid "Blood Type"
+msgstr "فصيلة الدم"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__chronic_diseases
+msgid "Chronic Diseases"
+msgstr "الأمراض المزمنة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__medications
+msgid "Current Medications"
+msgstr "الأدوية الحالية"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__allergies
+msgid "Allergies"
+msgstr "الحساسية"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__emergency_contact
+msgid "Emergency Contact"
+msgstr "جهة الاتصال في حالات الطوارئ"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__emergency_phone
+msgid "Emergency Phone"
+msgstr "هاتف الطوارئ"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_workflow_engine__name
+msgid "Workflow Name"
+msgstr "اسم سير العمل"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_workflow_engine__model_name
+msgid "Model"
+msgstr "النموذج"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_workflow_engine__state_field
+msgid "State Field"
+msgstr "حقل الحالة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_workflow_engine__active
+msgid "Active"
+msgstr "نشط"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__name
+msgid "Condition Name"
+msgstr "اسم الشرط"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__condition_type
+msgid "Condition Type"
+msgstr "نوع الشرط"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__required
+msgid "Required"
+msgstr "مطلوب"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__description
+msgid "Description"
+msgstr "الوصف"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__name
+msgid "Application Number"
+msgstr "رقم الطلب"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__applicant_name
+msgid "Full Name"
+msgstr "الاسم الكامل"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__email
+msgid "Email Address"
+msgstr "عنوان البريد الإلكتروني"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__phone
+msgid "Phone Number"
+msgstr "رقم الهاتف"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__submission_date
+msgid "Submission Date"
+msgstr "تاريخ التقديم"
+
+#. module: acmst_admission
+#: model:ir.ui.menu,name:acmst_admission.menu_acmst_admission
+msgid "ACMST Admission"
+msgstr "قبول ACMST"
+
+#. module: acmst_admission
+#: model:ir.ui.menu,name:acmst_admission.menu_acmst_admission_files
+msgid "Admission Files"
+msgstr "ملفات القبول"
+
+#. module: acmst_admission
+#: model:ir.ui.menu,name:acmst_admission.menu_acmst_health_checks
+msgid "Health Checks"
+msgstr "الفحوصات الصحية"
+
+#. module: acmst_admission
+#: model:ir.ui.menu,name:acmst_admission.menu_acmst_workflow
+msgid "Workflow Engine"
+msgstr "محرك سير العمل"
+
+#. module: acmst_admission
+#: model:ir.ui.menu,name:acmst_admission.menu_acmst_coordinator_conditions
+msgid "Coordinator Conditions"
+msgstr "شروط المنسق"
+
+#. module: acmst_admission
+#: model:ir.ui.menu,name:acmst_admission.menu_acmst_portal_applications
+msgid "Portal Applications"
+msgstr "طلبات البوابة"
+
+#. module: acmst_admission
+#: model:ir.actions.act_window,name:acmst_admission.action_acmst_admission_files
+msgid "Admission Files"
+msgstr "ملفات القبول"
+
+#. module: acmst_admission
+#: model:ir.actions.act_window,name:acmst_admission.action_acmst_health_checks
+msgid "Health Checks"
+msgstr "الفحوصات الصحية"
+
+#. module: acmst_admission
+#: model:ir.actions.act_window,name:acmst_admission.action_acmst_workflow_engines
+msgid "Workflow Engines"
+msgstr "محركات سير العمل"
+
+#. module: acmst_admission
+#: model:ir.actions.act_window,name:acmst_admission.action_acmst_coordinator_conditions
+msgid "Coordinator Conditions"
+msgstr "شروط المنسق"
+
+#. module: acmst_admission
+#: model:ir.actions.act_window,name:acmst_admission.action_acmst_portal_applications
+msgid "Portal Applications"
+msgstr "طلبات البوابة"
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_admission_file
+msgid "acmst.admission.file"
+msgstr "acmst.admission.file"
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_health_check
+msgid "acmst.health.check"
+msgstr "acmst.health.check"
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_workflow_engine
+msgid "acmst.workflow.engine"
+msgstr "acmst.workflow.engine"
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_coordinator_condition
+msgid "acmst.coordinator.condition"
+msgstr "acmst.coordinator.condition"
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_portal_application
+msgid "acmst.portal.application"
+msgstr "acmst.portal.application"
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_admission_wizard
+msgid "acmst.admission.wizard"
+msgstr "acmst.admission.wizard"
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_coordinator_condition_wizard
+msgid "acmst.coordinator.condition.wizard"
+msgstr "acmst.coordinator.condition.wizard"
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_ministry_approval_wizard
+msgid "acmst.ministry.approval.wizard"
+msgstr "acmst.ministry.approval.wizard"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__health_check_id
+msgid "Health Check"
+msgstr "الفحص الصحي"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__workflow_engine_id
+msgid "Workflow Engine"
+msgstr "محرك سير العمل"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__coordinator_condition_ids
+msgid "Coordinator Conditions"
+msgstr "شروط المنسق"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__documents_count
+msgid "Documents Count"
+msgstr "عدد الوثائق"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__notes
+msgid "Internal Notes"
+msgstr "ملاحظات داخلية"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__admission_file_id
+msgid "Admission File"
+msgstr "ملف القبول"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__check_date
+msgid "Check Date"
+msgstr "تاريخ الفحص"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__health_officer_id
+msgid "Health Officer"
+msgstr "موظف الصحة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__status
+msgid "Health Status"
+msgstr "الحالة الصحية"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_workflow_engine__description
+msgid "Description"
+msgstr "الوصف"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_workflow_engine__sequence
+msgid "Sequence"
+msgstr "التسلسل"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__admission_file_id
+msgid "Admission File"
+msgstr "ملف القبول"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__coordinator_id
+msgid "Coordinator"
+msgstr "المنسق"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__review_date
+msgid "Review Date"
+msgstr "تاريخ المراجعة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__status
+msgid "Status"
+msgstr "الحالة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__program_id
+msgid "Desired Program"
+msgstr "البرنامج المرغوب"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__batch_id
+msgid "Desired Batch"
+msgstr "الدفعة المرغوبة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__status
+msgid "Application Status"
+msgstr "حالة الطلب"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_wizard__admission_file_id
+msgid "Admission File"
+msgstr "ملف القبول"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_wizard__action_type
+msgid "Action Type"
+msgstr "نوع الإجراء"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_wizard__notes
+msgid "Notes"
+msgstr "الملاحظات"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition_wizard__condition_id
+msgid "Condition"
+msgstr "الشرط"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition_wizard__action
+msgid "Action"
+msgstr "الإجراء"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_ministry_approval_wizard__admission_file_id
+msgid "Admission File"
+msgstr "ملف القبول"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_ministry_approval_wizard__approval_type
+msgid "Approval Type"
+msgstr "نوع الموافقة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_ministry_approval_wizard__ministry_reference
+msgid "Ministry Reference"
+msgstr "مرجع الوزارة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_ministry_approval_wizard__approval_date
+msgid "Approval Date"
+msgstr "تاريخ الموافقة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_admission_file_tree
+msgid "Admission Files"
+msgstr "ملفات القبول"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_admission_file_form
+msgid "Admission File"
+msgstr "ملف القبول"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_health_check_tree
+msgid "Health Checks"
+msgstr "الفحوصات الصحية"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_health_check_form
+msgid "Health Check"
+msgstr "الفحص الصحي"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_workflow_engine_tree
+msgid "Workflow Engines"
+msgstr "محركات سير العمل"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_workflow_engine_form
+msgid "Workflow Engine"
+msgstr "محرك سير العمل"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_coordinator_condition_tree
+msgid "Coordinator Conditions"
+msgstr "شروط المنسق"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_coordinator_condition_form
+msgid "Coordinator Condition"
+msgstr "شرط المنسق"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_portal_application_tree
+msgid "Portal Applications"
+msgstr "طلبات البوابة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_portal_application_form
+msgid "Portal Application"
+msgstr "طلب البوابة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_admission_wizard_form
+msgid "Admission Wizard"
+msgstr "معالج القبول"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_coordinator_condition_wizard_form
+msgid "Coordinator Condition Wizard"
+msgstr "معالج شرط المنسق"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_ministry_approval_wizard_form
+msgid "Ministry Approval Wizard"
+msgstr "معالج موافقة الوزارة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Admission Portal - ACMST College"
+msgstr "بوابة القبول - كلية ACMST"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Welcome to ACMST College Admission Portal"
+msgstr "مرحباً بك في بوابة قبول كلية ACMST"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Start your journey towards academic excellence"
+msgstr "ابدأ رحلتك نحو التميز الأكاديمي"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Apply for Admission"
+msgstr "قدم طلب القبول"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Join ACMST College and pursue your academic dreams. Our comprehensive programs are designed to prepare you for success in your chosen field."
+msgstr "انضم إلى كلية ACMST وحقق أحلامك الأكاديمية. برامجنا الشاملة مصممة لإعدادك للنجاح في مجالك المختار."
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Available Programs"
+msgstr "البرامج المتاحة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Available Batches"
+msgstr "الدفعات المتاحة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Apply Now"
+msgstr "قدم الآن"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Application Status"
+msgstr "حالة الطلب"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Track your application progress"
+msgstr "تتبع تقدم طلبك"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Requirements"
+msgstr "المتطلبات"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "View admission requirements and documents needed"
+msgstr "عرض متطلبات القبول والوثائق المطلوبة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Contact Us"
+msgstr "اتصل بنا"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Get in touch with our admission team"
+msgstr "تواصل مع فريق القبول لدينا"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Recent News"
+msgstr "الأخبار الحديثة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Latest updates and announcements"
+msgstr "أحدث التحديثات والإعلانات"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "View All News"
+msgstr "عرض جميع الأخبار"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Important Dates"
+msgstr "تواريخ مهمة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Application Deadlines"
+msgstr "مواعيد التقديم"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Registration Periods"
+msgstr "فترات التسجيل"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Academic Calendar"
+msgstr "التقويم الأكاديمي"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "View Calendar"
+msgstr "عرض التقويم"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Quick Links"
+msgstr "روابط سريعة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Student Portal"
+msgstr "بوابة الطالب"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Academic Programs"
+msgstr "البرامج الأكاديمية"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Campus Life"
+msgstr "الحياة الجامعية"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Alumni Network"
+msgstr "شبكة الخريجين"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Career Services"
+msgstr "خدمات التوظيف"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "About ACMST"
+msgstr "عن ACMST"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Learn more about our institution"
+msgstr "تعرف المزيد عن مؤسستنا"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "ACMST College"
+msgstr "كلية ACMST"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Leading medical education institution"
+msgstr "مؤسسة رائدة في التعليم الطبي"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Excellence in Medical Education"
+msgstr "التميز في التعليم الطبي"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "State-of-the-art Facilities"
+msgstr "مرافق حديثة متطورة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Expert Faculty"
+msgstr "أعضاء هيئة تدريس خبراء"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Research Opportunities"
+msgstr "فرص البحث"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Global Recognition"
+msgstr "اعتراف عالمي"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Apply Today"
+msgstr "قدم اليوم"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Start Your Application"
+msgstr "ابدأ طلبك"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Check Requirements"
+msgstr "تحقق من المتطلبات"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Contact Admission Office"
+msgstr "اتصل بمكتب القبول"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Phone"
+msgstr "الهاتف"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Address"
+msgstr "العنوان"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "All rights reserved"
+msgstr "جميع الحقوق محفوظة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Privacy Policy"
+msgstr "سياسة الخصوصية"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Terms of Service"
+msgstr "شروط الخدمة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Site Map"
+msgstr "خريطة الموقع"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Follow Us"
+msgstr "تابعنا"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Facebook"
+msgstr "فيسبوك"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Twitter"
+msgstr "تويتر"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Instagram"
+msgstr "إنستغرام"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "LinkedIn"
+msgstr "لينكدإن"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "YouTube"
+msgstr "يوتيوب"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Submit Application"
+msgstr "إرسال الطلب"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Save Draft"
+msgstr "حفظ المسودة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Next"
+msgstr "التالي"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Previous"
+msgstr "السابق"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Upload Document"
+msgstr "رفع الوثيقة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Remove"
+msgstr "إزالة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Download"
+msgstr "تحميل"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Print"
+msgstr "طباعة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Edit"
+msgstr "تحرير"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Delete"
+msgstr "حذف"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Search"
+msgstr "بحث"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Filter"
+msgstr "تصفية"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Sort By"
+msgstr "ترتيب حسب"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Name"
+msgstr "الاسم"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Status"
+msgstr "الحالة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Action"
+msgstr "الإجراء"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Loading"
+msgstr "جار التحميل"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "No data available"
+msgstr "لا توجد بيانات متاحة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Please select"
+msgstr "يرجى الاختيار"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Required field"
+msgstr "حقل مطلوب"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Invalid input"
+msgstr "إدخال غير صحيح"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Success"
+msgstr "نجح"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Error"
+msgstr "خطأ"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Warning"
+msgstr "تحذير"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Information"
+msgstr "معلومات"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Confirmation"
+msgstr "تأكيد"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Are you sure"
+msgstr "هل أنت متأكد"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Yes"
+msgstr "نعم"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "No"
+msgstr "لا"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "OK"
+msgstr "موافق"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Save"
+msgstr "حفظ"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Submit"
+msgstr "إرسال"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Continue"
+msgstr "متابعة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Back"
+msgstr "رجوع"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Close"
+msgstr "إغلاق"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Help"
+msgstr "مساعدة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Support"
+msgstr "الدعم"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Documentation"
+msgstr "التوثيق"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Logout"
+msgstr "تسجيل الخروج"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Register"
+msgstr "تسجيل"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Forgot Password"
+msgstr "نسيت كلمة المرور"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Reset Password"
+msgstr "إعادة تعيين كلمة المرور"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Change Password"
+msgstr "تغيير كلمة المرور"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Profile"
+msgstr "الملف الشخصي"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Settings"
+msgstr "الإعدادات"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Home"
+msgstr "الرئيسية"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "About"
+msgstr "عن"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Services"
+msgstr "الخدمات"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Contact"
+msgstr "اتصل"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "More"
+msgstr "المزيد"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Show"
+msgstr "عرض"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Hide"
+msgstr "إخفاء"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Expand"
+msgstr "توسيع"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Collapse"
+msgstr "طي"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "First"
+msgstr "الأول"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Last"
+msgstr "الأخير"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Page"
+msgstr "الصفحة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "of"
+msgstr "من"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Total"
+msgstr "المجموع"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Results"
+msgstr "النتائج"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Found"
+msgstr "تم العثور"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "No results found"
+msgstr "لم يتم العثور على نتائج"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Try adjusting your search criteria"
+msgstr "جرب تعديل معايير البحث الخاصة بك"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Clear filters"
+msgstr "مسح التصفية"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Refresh"
+msgstr "تحديث"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Export"
+msgstr "تصدير"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Import"
+msgstr "استيراد"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Create"
+msgstr "إنشاء"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Update"
+msgstr "تحديث"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "View"
+msgstr "عرض"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Copy"
+msgstr "نسخ"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Archive"
+msgstr "أرشفة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Unarchive"
+msgstr "إلغاء الأرشفة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Duplicate"
+msgstr "تكرار"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Send"
+msgstr "إرسال"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Receive"
+msgstr "استقبال"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Approve"
+msgstr "موافقة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Reject"
+msgstr "رفض"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Confirm"
+msgstr "تأكيد"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "In Progress"
+msgstr "قيد التنفيذ"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Completed"
+msgstr "مكتمل"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Pending"
+msgstr "في الانتظار"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Approved"
+msgstr "معتمد"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Rejected"
+msgstr "مرفوض"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Cancelled"
+msgstr "ملغي"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Male"
+msgstr "ذكر"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Female"
+msgstr "أنثى"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Other"
+msgstr "آخر"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Single"
+msgstr "أعزب"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Married"
+msgstr "متزوج"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Divorced"
+msgstr "مطلق"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Widowed"
+msgstr "أرمل"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "January"
+msgstr "يناير"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "February"
+msgstr "فبراير"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "March"
+msgstr "مارس"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "April"
+msgstr "أبريل"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "May"
+msgstr "مايو"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "June"
+msgstr "يونيو"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "July"
+msgstr "يوليو"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "August"
+msgstr "أغسطس"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "September"
+msgstr "سبتمبر"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "October"
+msgstr "أكتوبر"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "November"
+msgstr "نوفمبر"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "December"
+msgstr "ديسمبر"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__place_of_birth
+msgid "Place of Birth"
+msgstr "مكان الميلاد"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__education_institution
+msgid "Education Institution"
+msgstr "المؤسسة التعليمية"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__education_program
+msgid "Education Program"
+msgstr "البرنامج التعليمي"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__education_college
+msgid "Education College"
+msgstr "الكلية التعليمية"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__education_major
+msgid "Education Major"
+msgstr "التخصص التعليمي"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__education_start_year
+msgid "Education Start Year"
+msgstr "سنة بدء التعليم"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__education_completion_year
+msgid "Education Completion Year"
+msgstr "سنة انتهاء التعليم"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__certificate_type
+msgid "Certificate Type"
+msgstr "نوع الشهادة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__education_duration_years
+msgid "Education Duration (Years)"
+msgstr "مدة التعليم (سنوات)"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__place_of_birth
+msgid "Place of Birth"
+msgstr "مكان الميلاد"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__education_institution
+msgid "Education Institution"
+msgstr "المؤسسة التعليمية"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__education_program
+msgid "Education Program"
+msgstr "البرنامج التعليمي"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__education_college
+msgid "Education College"
+msgstr "الكلية التعليمية"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__education_major
+msgid "Education Major"
+msgstr "التخصص التعليمي"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__education_start_year
+msgid "Education Start Year"
+msgstr "سنة بدء التعليم"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__education_completion_year
+msgid "Education Completion Year"
+msgstr "سنة انتهاء التعليم"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__certificate_type
+msgid "Certificate Type"
+msgstr "نوع الشهادة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__education_duration_years
+msgid "Education Duration (Years)"
+msgstr "مدة التعليم (سنوات)"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__admission_type__direct
+msgid "Direct Admission"
+msgstr "قبول مباشر"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__admission_type__regular
+msgid "Regular Admission"
+msgstr "قبول عادي"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__admission_type__private
+msgid "Private Admission"
+msgstr "قبول خاص"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__admission_type__transfer
+msgid "Transfer"
+msgstr "نقل"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__admission_type__bridging
+msgstr "جسري"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__admission_type__degree_holder
+msgid "Degree Holder"
+msgstr "حامل شهادة"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__admission_type__private_education_grant
+msgid "Private Education Grant"
+msgstr "منحة تعليم خاص"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__gender__male
+msgid "Male"
+msgstr "ذكر"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__gender__female
+msgid "Female"
+msgstr "أنثى"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__religion__muslim
+msgid "Muslim"
+msgstr "مسلم"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__religion__christian
+msgid "Christian"
+msgstr "مسيحي"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__religion__other
+msgid "Other"
+msgstr "أخرى"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_portal_application__nationality__sudanese
+msgid "Sudanese"
+msgstr "سوداني"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_portal_application__nationality__foreign
+msgid "Foreign"
+msgstr "أجنبي"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__certificate_type__diploma
+msgid "Diploma"
+msgstr "دبلوم"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__certificate_type__bachelor
+msgid "Bachelor"
+msgstr "بكالوريوس"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__certificate_type__master
+msgid "Master"
+msgstr "ماجستير"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__certificate_type__phd
+msgid "PhD"
+msgstr "دكتوراه"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__certificate_type__certificate
+msgid "Certificate"
+msgstr "شهادة"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__certificate_type__other
+msgid "Other"
+msgstr "أخرى"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__id_type__national_id
+msgid "National ID"
+msgstr "رقم الهوية الوطنية"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_admission_file__id_type__passport
+msgid "Passport"
+msgstr "جواز السفر"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_guardian__relationship__father
+msgid "Father"
+msgstr "أب"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_guardian__relationship__mother
+msgid "Mother"
+msgstr "أم"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_guardian__relationship__brother
+msgid "Brother"
+msgstr "أخ"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_guardian__relationship__sister
+msgid "Sister"
+msgstr "أخت"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_guardian__relationship__uncle
+msgid "Uncle"
+msgstr "عم"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_guardian__relationship__aunt
+msgid "Aunt"
+msgstr "عمة"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_guardian__relationship__grandfather
+msgid "Grandfather"
+msgstr "جد"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_guardian__relationship__grandmother
+msgid "Grandmother"
+msgstr "جدة"
+
+#. module: acmst_admission
+#: model:ir.model.fields.selection,name:acmst_admission.selection__acmst_guardian__relationship__other
+msgid "Other"
+msgstr "أخرى"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Sunday"
+msgstr "الأحد"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Monday"
+msgstr "الاثنين"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Tuesday"
+msgstr "الثلاثاء"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Wednesday"
+msgstr "الأربعاء"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Thursday"
+msgstr "الخميس"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Friday"
+msgstr "الجمعة"
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Saturday"
+msgstr "السبت"

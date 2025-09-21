@@ -23,7 +23,7 @@
                 </tree>
             </field>
         </record>
-        
+
         <!-- University Form View -->
         <record id="view_acmst_university_form" model="ir.ui.view">
             <field name="name">acmst.university.form</field>
@@ -88,12 +88,12 @@
                                 <field name="description" nolabel="1"/>
                                 <field name="accreditation" nolabel="1"/>
                             </page>
-                            
+
                             <page string="Address" name="address">
                                 <field name="address" nolabel="1"/>
                                 <field name="full_address" nolabel="1" readonly="1"/>
                             </page>
-                            
+
                             <page string="Colleges" name="colleges" invisible="not college_count">
                                 <field name="college_ids" readonly="1">
                                     <tree>
@@ -106,19 +106,7 @@
                                     </tree>
                                 </field>
                             </page>
-                            
-                            <page string="Colleges" name="colleges" invisible="not college_count">
-                                <field name="college_ids" readonly="1">
-                                    <tree>
-                                        <field name="code"/>
-                                        <field name="name"/>
-                                        <field name="dean_id"/>
-                                        <field name="phone"/>
-                                        <field name="email"/>
-                                        <field name="active"/>
-                                    </tree>
-                                </field>
-                            </page>
+
                         </notebook>
                     </sheet>
                     <div class="oe_chatter">

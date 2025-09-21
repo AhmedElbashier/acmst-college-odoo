@@ -6,3 +6,4 @@ from . import acmst_admission_wizard
 from . import acmst_coordinator_condition_wizard
 from . import acmst_ministry_approval_wizard
 from . import acmst_university_id_update_wizard
+from . import acmst_document_rejection_wizard

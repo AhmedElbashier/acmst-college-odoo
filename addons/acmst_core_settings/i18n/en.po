@@ -1,0 +1,496 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * acmst_core_settings
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2025-01-01 00:00+0000\n"
+"Last-Translator: ACMST Development Team\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__name
+msgid "University Name"
+msgstr "University Name"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__code
+msgid "University Code"
+msgstr "University Code"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__short_name
+msgid "Short Name"
+msgstr "Short Name"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__address
+msgid "Address"
+msgstr "Address"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__phone
+msgid "Phone"
+msgstr "Phone"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__email
+msgid "Email"
+msgstr "Email"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__website
+msgid "Website"
+msgstr "Website"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__established_year
+msgid "Established Year"
+msgstr "Established Year"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__city
+msgid "City"
+msgstr "City"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__is_main
+msgid "Main University"
+msgstr "Main University"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_college__name
+msgid "College Name"
+msgstr "College Name"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_college__code
+msgid "College Code"
+msgstr "College Code"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_college__dean_id
+msgid "Dean"
+msgstr "Dean"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program_type__name
+msgid "Program Type Name"
+msgstr "Program Type Name"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program_type__code
+msgid "Program Type Code"
+msgstr "Program Type Code"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program_type__description
+msgid "Description"
+msgstr "Description"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__name
+msgid "Program Name"
+msgstr "Program Name"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__code
+msgid "Program Code"
+msgstr "Program Code"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__manager_id
+msgid "Program Manager"
+msgstr "Program Manager"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__coordinator_id
+msgid "Coordinator"
+msgstr "Coordinator"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__duration_years
+msgid "Duration (Years)"
+msgstr "Duration (Years)"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__total_credits
+msgid "Total Credits"
+msgstr "Total Credits"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_batch__name
+msgid "Batch Name"
+msgstr "Batch Name"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_batch__code
+msgid "Batch Code"
+msgstr "Batch Code"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_batch__capacity
+msgid "Student Capacity"
+msgstr "Student Capacity"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_batch__start_date
+msgid "Start Date"
+msgstr "Start Date"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_batch__end_date
+msgid "End Date"
+msgstr "End Date"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_batch__registration_start
+msgid "Registration Start"
+msgstr "Registration Start"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_batch__registration_end
+msgid "Registration End"
+msgstr "Registration End"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_academic_year__name
+msgid "Year Name"
+msgstr "Year Name"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_academic_year__start_date
+msgid "Start Date"
+msgstr "Start Date"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_academic_year__end_date
+msgid "End Date"
+msgstr "End Date"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_academic_rules__name
+msgid "Rule Name"
+msgstr "Rule Name"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_academic_rules__rule_type
+msgid "Rule Type"
+msgstr "Rule Type"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_academic_rules__priority
+msgid "Priority"
+msgstr "Priority"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_academic_rules__description
+msgid "Description"
+msgstr "Description"
+
+#. module: acmst_core_settings
+#: model:ir.ui.menu,name:acmst_core_settings.menu_acmst_core_settings
+msgid "ACMST Core Settings"
+msgstr "ACMST Core Settings"
+
+#. module: acmst_core_settings
+#: model:ir.ui.menu,name:acmst_core_settings.menu_acmst_universities
+msgid "Universities"
+msgstr "Universities"
+
+#. module: acmst_core_settings
+#: model:ir.ui.menu,name:acmst_core_settings.menu_acmst_colleges
+msgid "Colleges"
+msgstr "Colleges"
+
+#. module: acmst_core_settings
+#: model:ir.ui.menu,name:acmst_core_settings.menu_acmst_programs
+msgid "Programs"
+msgstr "Programs"
+
+#. module: acmst_core_settings
+#: model:ir.ui.menu,name:acmst_core_settings.menu_acmst_batches
+msgid "Batches"
+msgstr "Batches"
+
+#. module: acmst_core_settings
+#: model:ir.ui.menu,name:acmst_core_settings.menu_acmst_academic_years
+msgid "Academic Years"
+msgstr "Academic Years"
+
+#. module: acmst_core_settings
+#: model:ir.ui.menu,name:acmst_core_settings.menu_acmst_academic_rules
+msgid "Academic Rules"
+msgstr "Academic Rules"
+
+#. module: acmst_core_settings
+#: model:ir.actions.act_window,name:acmst_core_settings.action_acmst_universities
+msgid "Universities"
+msgstr "Universities"
+
+#. module: acmst_core_settings
+#: model:ir.actions.act_window,name:acmst_core_settings.action_acmst_colleges
+msgid "Colleges"
+msgstr "Colleges"
+
+#. module: acmst_core_settings
+#: model:ir.actions.act_window,name:acmst_core_settings.action_acmst_programs
+msgid "Programs"
+msgstr "Programs"
+
+#. module: acmst_core_settings
+#: model:ir.actions.act_window,name:acmst_core_settings.action_acmst_batches
+msgid "Batches"
+msgstr "Batches"
+
+#. module: acmst_core_settings
+#: model:ir.actions.act_window,name:acmst_core_settings.action_acmst_academic_years
+msgid "Academic Years"
+msgstr "Academic Years"
+
+#. module: acmst_core_settings
+#: model:ir.actions.act_window,name:acmst_core_settings.action_acmst_academic_rules
+msgid "Academic Rules"
+msgstr "Academic Rules"
+
+#. module: acmst_core_settings
+#: model:ir.model,name:acmst_core_settings.model_acmst_university
+msgid "acmst.university"
+msgstr "acmst.university"
+
+#. module: acmst_core_settings
+#: model:ir.model,name:acmst_core_settings.model_acmst_college
+msgid "acmst.college"
+msgstr "acmst.college"
+
+#. module: acmst_core_settings
+#: model:ir.model,name:acmst_core_settings.model_acmst_program_type
+msgid "acmst.program.type"
+msgstr "acmst.program.type"
+
+#. module: acmst_core_settings
+#: model:ir.model,name:acmst_core_settings.model_acmst_program
+msgid "acmst.program"
+msgstr "acmst.program"
+
+#. module: acmst_core_settings
+#: model:ir.model,name:acmst_core_settings.model_acmst_batch
+msgid "acmst.batch"
+msgstr "acmst.batch"
+
+#. module: acmst_core_settings
+#: model:ir.model,name:acmst_core_settings.model_acmst_academic_year
+msgid "acmst.academic.year"
+msgstr "acmst.academic.year"
+
+#. module: acmst_core_settings
+#: model:ir.model,name:acmst_core_settings.model_acmst_academic_rules
+msgid "acmst.academic.rules"
+msgstr "acmst.academic.rules"
+
+#. module: acmst_core_settings
+#: model:ir.model,name:acmst_core_settings.model_acmst_batch_creation_wizard
+msgid "acmst.batch.creation.wizard"
+msgstr "acmst.batch.creation.wizard"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__college_count
+msgid "Colleges Count"
+msgstr "Colleges Count"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__program_count
+msgid "Programs Count"
+msgstr "Programs Count"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__student_count
+msgid "Students Count"
+msgstr "Students Count"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_college__program_count
+msgid "Programs Count"
+msgstr "Programs Count"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_college__batch_count
+msgid "Batches Count"
+msgstr "Batches Count"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__batch_count
+msgid "Batches Count"
+msgstr "Batches Count"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_batch__enrolled_count
+msgid "Enrolled Count"
+msgstr "Enrolled Count"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_academic_year__is_current
+msgid "Current Year"
+msgstr "Current Year"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_academic_rules__effective_date
+msgid "Effective Date"
+msgstr "Effective Date"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_academic_rules__rule_level
+msgid "Rule Level"
+msgstr "Rule Level"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_academic_rules__category
+msgid "Category"
+msgstr "Category"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_batch_creation_wizard__program_id
+msgid "Program"
+msgstr "Program"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_batch_creation_wizard__academic_year_id
+msgid "Academic Year"
+msgstr "Academic Year"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_batch_creation_wizard__batch_count
+msgid "Number of Batches"
+msgstr "Number of Batches"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_batch_creation_wizard__capacity_per_batch
+msgid "Capacity per Batch"
+msgstr "Capacity per Batch"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_university_tree
+msgid "Universities"
+msgstr "Universities"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_university_form
+msgid "University"
+msgstr "University"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_university_form
+msgid "View Colleges"
+msgstr "View Colleges"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_university_form
+msgid "View Programs"
+msgstr "View Programs"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_university_form
+msgid "View Students"
+msgstr "View Students"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_university_form
+msgid "Colleges"
+msgstr "Colleges"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_university_form
+msgid "Programs"
+msgstr "Programs"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_university_form
+msgid "Students"
+msgstr "Students"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_college_tree
+msgid "Colleges"
+msgstr "Colleges"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_college_form
+msgid "College"
+msgstr "College"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_program_type_tree
+msgid "Program Types"
+msgstr "Program Types"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_program_type_form
+msgid "Program Type"
+msgstr "Program Type"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_program_tree
+msgid "Programs"
+msgstr "Programs"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_program_form
+msgid "Program"
+msgstr "Program"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_batch_tree
+msgid "Batches"
+msgstr "Batches"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_batch_form
+msgid "Batch"
+msgstr "Batch"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_academic_year_tree
+msgid "Academic Years"
+msgstr "Academic Years"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_academic_year_form
+msgid "Academic Year"
+msgstr "Academic Year"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_academic_rules_tree
+msgid "Academic Rules"
+msgstr "Academic Rules"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_academic_rules_form
+msgid "Academic Rule"
+msgstr "Academic Rule"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_batch_creation_wizard_form
+msgid "Batch Creation Wizard"
+msgstr "Batch Creation Wizard"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_batch_creation_wizard_form
+msgid "Create Batches"
+msgstr "Create Batches"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_batch_creation_wizard_form
+msgid "Preview"
+msgstr "Preview"
+
+#. module: acmst_core_settings
+#: model_terms:ir.ui.view,arch_db:acmst_core_settings.view_acmst_batch_creation_wizard_form
+msgid "Close"
+msgstr "Close"

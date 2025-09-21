@@ -12,20 +12,21 @@
                         <div class="oe_title">
                             <h1>
                                 <field name="admission_file_id" invisible="1"/>
-                                Update University ID - <field name="applicant_name" readonly="1"/>
+                                Update University ID - <field name="applicant_name_english" readonly="1"/>
                             </h1>
                         </div>
                         
-                        <div class="alert alert-info" role="alert">
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fa fa-exclamation-triangle"></i>
+                            <strong>⚠️ SENSITIVE OPERATION</strong><br/>
                             <strong>University ID Update</strong><br/>
-                            This student is currently marked as "من طلاب المعالجات" (processing student) 
-                            because no university ID was provided during ministry approval. 
-                            You can now update it with the university ID provided by the ministry.
+                            University ID is sensitive data that should only be updated when absolutely necessary.
+                            This operation is logged and requires special permissions.
                         </div>
                         
                         <group>
                             <group>
-                                <field name="applicant_name" readonly="1"/>
+                                <field name="applicant_name_english" readonly="1"/>
                                 <field name="national_id" readonly="1"/>
                                 <field name="current_university_id" readonly="1"/>
                             </group>
@@ -37,6 +38,12 @@
                             </group>
                         </group>
                         
+                        <group>
+                            <group>
+                                <field name="acknowledge_warning" required="1"/>
+                            </group>
+                        </group>
+
                         <group>
                             <field name="comments" placeholder="Enter any comments about this update (optional)"/>
                         </group>

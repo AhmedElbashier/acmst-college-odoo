@@ -7,7 +7,7 @@
             <field name="name">acmst.admission.approval.tree</field>
             <field name="model">acmst.admission.approval</field>
             <field name="arch" type="xml">
-                <tree string="Admission Approvals" decoration-success="decision == 'approved'" decoration-danger="decision == 'rejected'" decoration-warning="decision == 'pending'">
+                <tree string="Admission Approvals" decoration-success="decision == 'approved'" decoration-danger="decision == 'rejected'" decoration-warning="decision == 'pending'" duplicate="False">
                     <field name="file_number" string="File Number"/>
                     <field name="applicant_name" string="Applicant"/>
                     <field name="program_name" string="Program"/>
@@ -20,12 +20,90 @@
             </field>
         </record>
 
+        <!-- Admission Approval Kanban View -->
+        <record id="view_acmst_admission_approval_kanban" model="ir.ui.view">
+            <field name="name">acmst.admission.approval.kanban</field>
+            <field name="model">acmst.admission.approval</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" string="Admission Approvals" duplicate="False">
+                    <field name="file_number"/>
+                    <field name="applicant_name"/>
+                    <field name="program_name"/>
+                    <field name="approval_type_display"/>
+                    <field name="approver_name"/>
+                    <field name="approval_date"/>
+                    <field name="decision"/>
+                    <field name="comments"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_details">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <strong>
+                                                <field name="file_number"/>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <field name="applicant_name"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Program:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="program_name"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Type:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="approval_type_display"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Approver:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="approver_name"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Date:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="approval_date"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Decision:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="decision" widget="badge" decoration-success="decision == 'approved'" decoration-danger="decision == 'rejected'" decoration-warning="decision == 'pending'"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
         <!-- Admission Approval Form View -->
         <record id="view_acmst_admission_approval_form" model="ir.ui.view">
             <field name="name">acmst.admission.approval.form</field>
             <field name="model">acmst.admission.approval</field>
             <field name="arch" type="xml">
-                <form string="Admission Approval">
+                <form string="Admission Approval" duplicate="False">
                     <header>
                         <button name="action_view_admission_file" string="View Admission File" type="object" class="btn-primary"/>
                     </header>
@@ -108,9 +186,9 @@
         <record id="action_acmst_admission_approval" model="ir.actions.act_window">
             <field name="name">Admission Approvals</field>
             <field name="res_model">acmst.admission.approval</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="search_view_id" ref="view_acmst_admission_approval_search"/>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No approval records found

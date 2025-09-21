@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Pending Email Tree View -->
+        <record id="view_acmst_pending_email_tree" model="ir.ui.view">
+            <field name="name">acmst.pending.email.tree</field>
+            <field name="model">acmst.pending.email</field>
+            <field name="arch" type="xml">
+                <tree string="Pending Emails" decoration-success="state == 'sent'" decoration-danger="state == 'failed'" decoration-warning="state == 'pending'" decoration-info="state == 'cancelled'">
+                    <field name="name" string="Subject"/>
+                    <field name="template_display" string="Template"/>
+                    <field name="record_name" string="Record"/>
+                    <field name="state" string="Status" widget="badge"/>
+                    <field name="priority" string="Priority" widget="priority"/>
+                    <field name="retry_count" string="Retries"/>
+                    <field name="next_retry_date" string="Next Retry"/>
+                    <field name="created_by" string="Created By"/>
+                    <field name="create_date" string="Created"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Pending Email Form View -->
+        <record id="view_acmst_pending_email_form" model="ir.ui.view">
+            <field name="name">acmst.pending.email.form</field>
+            <field name="model">acmst.pending.email</field>
+            <field name="arch" type="xml">
+                <form string="Pending Email">
+                    <header>
+                        <button name="action_retry_send" string="Retry Send" type="object" class="btn-primary" invisible="state != 'pending'"/>
+                        <button name="action_cancel" string="Cancel" type="object" class="btn-secondary" invisible="state in ['sent', 'cancelled']"/>
+                        <button name="action_reset_retry" string="Reset &amp; Retry" type="object" class="btn-warning" invisible="state == 'pending'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="pending,sent,failed,cancelled"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="template_display" readonly="1"/>
+                                <field name="record_name" readonly="1"/>
+                                <field name="priority" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="state" readonly="1"/>
+                                <field name="retry_count" readonly="1"/>
+                                <field name="max_retries" readonly="1"/>
+                                <field name="created_by" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <group>
+                                <field name="last_attempt_date" readonly="1"/>
+                                <field name="next_retry_date" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="assigned_to"/>
+                                <field name="notes"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Error Details" name="error">
+                                <field name="error_message" readonly="1" nolabel="1" widget="text"/>
+                            </page>
+                            <page string="Technical Details" name="technical">
+                                <group>
+                                    <field name="template_ref" readonly="1"/>
+                                    <field name="record_id" readonly="1"/>
+                                    <field name="model_name" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Pending Email Search View -->
+        <record id="view_acmst_pending_email_search" model="ir.ui.view">
+            <field name="name">acmst.pending.email.search</field>
+            <field name="model">acmst.pending.email</field>
+            <field name="arch" type="xml">
+                <search string="Search Pending Emails">
+                    <field name="name" string="Subject"/>
+                    <field name="template_display" string="Template"/>
+                    <field name="record_name" string="Record"/>
+                    <field name="state" string="Status"/>
+                    <field name="created_by" string="Created By"/>
+
+                    <separator/>
+                    <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                    <filter string="Sent" name="sent" domain="[('state', '=', 'sent')]"/>
+                    <filter string="Failed" name="failed" domain="[('state', '=', 'failed')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+
+                    <separator/>
+                    <filter string="High Priority" name="high_priority" domain="[('priority', 'in', ['high', 'urgent'])]"/>
+                    <filter string="Retry Now" name="retry_now" domain="[('ready_for_retry', '=', True)]"/>
+
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Priority" name="group_priority" context="{'group_by': 'priority'}"/>
+                        <filter string="Template" name="group_template" context="{'group_by': 'template_display'}"/>
+                        <filter string="Created By" name="group_user" context="{'group_by': 'created_by'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Pending Email Kanban View -->
+        <record id="view_acmst_pending_email_kanban" model="ir.ui.view">
+            <field name="name">acmst.pending.email.kanban</field>
+            <field name="model">acmst.pending.email</field>
+            <field name="arch" type="xml">
+                <kanban string="Pending Emails">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_card_header">
+                                    <div class="o_kanban_record_title">
+                                        <strong><field name="template_display"/></strong>
+                                    </div>
+                                    <div class="o_kanban_record_subtitle">
+                                        <field name="record_name"/>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_card_body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <field name="state" widget="label_selection" class="mb-2"/>
+                                            <field name="priority" widget="priority" class="mb-2"/>
+                                        </div>
+                                        <div class="col-md-6 text-right">
+                                            <field name="retry_count"/> retries
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <small class="text-muted">
+                                                <field name="next_retry_date"/>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_card_footer">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button name="action_retry_send" string="Retry" type="object" class="btn btn-sm btn-primary" invisible="state != 'pending'"/>
+                                        </div>
+                                        <div class="col-6 text-right">
+                                            <small class="text-muted">
+                                                <field name="create_date"/>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Pending Email Action -->
+        <record id="action_acmst_pending_email" model="ir.actions.act_window">
+            <field name="name">Pending Emails</field>
+            <field name="res_model">acmst.pending.email</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="view_acmst_pending_email_search"/>
+            <field name="context">{'create': False}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No pending emails found
+                </p>
+                <p>
+                    Emails that couldn't be sent immediately are queued here for later retry.
+                    The system will automatically retry sending pending emails based on the configured schedule.
+                </p>
+            </field>
+        </record>
+
+        <!-- Pending Email Menu -->
+        <record id="menu_acmst_pending_email" model="ir.ui.menu">
+            <field name="name">✉️ Pending Emails</field>
+            <field name="parent_id" ref="acmst_admission.menu_acmst_admission_root"/>
+            <field name="action" ref="action_acmst_pending_email"/>
+            <field name="sequence">80</field>
+        </record>
+
+    </data>
+</odoo>

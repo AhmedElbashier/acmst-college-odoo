@@ -95,10 +95,50 @@ After installation, configure the following security groups:
    - **Email Templates**: Configure notification templates
    - **File Upload Limits**: Set maximum file sizes
 
-### 3. Email Configuration
+### 3. Email Configuration (Required)
+**⚠️ CRITICAL: Email configuration is required for the admission system to work properly**
+
+#### Option 1: Gmail SMTP (Recommended)
 1. Go to **Settings** > **Technical** > **Email** > **Outgoing Mail Servers**
-2. Configure your SMTP server
-3. Test email delivery
+2. Create a new mail server with these settings:
+   - **Name**: ACMST College - Gmail
+   - **SMTP Server**: smtp.gmail.com
+   - **SMTP Port**: 587
+   - **Connection Security**: StartTLS
+   - **Username**: notifications@acmst.edu
+   - **Password**: Your Gmail App Password (NOT your regular password)
+3. Enable **Gmail 2-Factor Authentication**
+4. Generate an **App Password** in Gmail settings
+5. Test email delivery
+
+#### Option 2: Custom SMTP Server
+1. Use your organization's SMTP server
+2. Configure with your SMTP credentials
+3. Ensure the **From Filter** matches your email domain
+4. Test email delivery
+
+#### Option 3: Local SMTP (Development Only)
+1. Install and configure a local SMTP server (Postfix, Sendmail, etc.)
+2. Use **localhost** as SMTP Server
+3. Use port **25** (no authentication required)
+4. **⚠️ Warning**: Only use for development/testing
+
+#### Environment Configuration
+Update your `.env` file with:
+```bash
+EMAIL_FROM=noreply@acmst.edu
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SMTP_TLS=True
+SMTP_USER=notifications@acmst.edu
+SMTP_PASSWORD=your_gmail_app_password_here
+```
+
+**Common Issues:**
+- **"No mail server matches the from_filter"**: Configure a proper mail server
+- **Authentication failed**: Check SMTP credentials
+- **Connection refused**: Verify SMTP server settings
+- **SSL/TLS issues**: Match encryption settings with server requirements
 
 ### 4. Workflow Configuration
 1. Go to **Admission** > **Configuration** > **Workflow Engine**

@@ -37,32 +37,59 @@
                         </group>
                         
                         <notebook>
-                            <page string="Data Validation" name="validation">
-                                <div class="alert alert-info" role="alert">
-                                    <strong>Data Re-validation Required</strong><br/>
-                                    Please review and validate all student information before approval.
+                            <page string="Sensitive Data Review" name="sensitive_data">
+                                <div class="alert alert-warning" role="alert">
+                                    <strong>⚠️ SENSITIVE DATA REVIEW REQUIRED</strong><br/>
+                                    This form contains sensitive personal information. Please carefully review all data below before proceeding with approval.
+                                    By checking the acknowledgment box, you confirm that you have reviewed all sensitive information including:
+                                    National ID, contact details, personal information, and educational records.
                                 </div>
-                                
-                                <group>
-                                    <group>
-                                        <field name="applicant_name"/>
-                                        <field name="national_id"/>
-                                        <field name="phone"/>
-                                        <field name="email"/>
-                                    </group>
-                                    <group>
-                                        <field name="program_id"/>
-                                        <field name="batch_id"/>
-                                    </group>
+
+                                <group string="Personal Information" col="4">
+                                    <field name="applicant_name"/>
+                                    <field name="birth_date"/>
+                                    <field name="gender"/>
+                                    <field name="nationality"/>
                                 </group>
-                                
+
+                                <group string="Identification &amp; Contact" col="4">
+                                    <field name="national_id" class_="text-danger" widget="char"/>
+                                    <field name="phone" class_="text-danger" widget="phone"/>
+                                    <field name="email" class_="text-danger" widget="email"/>
+                                    <field name="address"/>
+                                </group>
+
+                                <group string="Emergency Contact" col="4">
+                                    <field name="emergency_contact"/>
+                                    <field name="emergency_phone" widget="phone"/>
+                                </group>
+
+                                <group string="Academic Information" col="4">
+                                    <field name="program_id"/>
+                                    <field name="batch_id"/>
+                                    <field name="education_institution"/>
+                                    <field name="education_program"/>
+                                </group>
+
+                                <group string="Educational Background" col="4">
+                                    <field name="certificate_type"/>
+                                    <field name="education_completion_year"/>
+                                </group>
+
+                                <group>
+                                    <field name="acknowledge_sensitive_data" required="1"/>
+                                    <div class="alert alert-info" role="alert" invisible="acknowledge_sensitive_data == False">
+                                        <i class="fa fa-info-circle"/> Thank you for acknowledging the sensitive nature of this data. You can now proceed with approval.
+                                    </div>
+                                </group>
+
                                 <div class="text-center" style="margin: 20px 0;">
-                                    <button name="action_validate_data" 
-                                            type="object" 
-                                            string="Validate Student Data" 
+                                    <button name="action_validate_data"
+                                            type="object"
+                                            string="Validate Student Data"
                                             class="btn btn-primary"
                                             invisible="data_validated == True"/>
-                                    <div class="alert alert-success" role="alert" 
+                                    <div class="alert alert-success" role="alert"
                                          invisible="data_validated == False">
                                         <i class="fa fa-check-circle"/> Data validation completed successfully
                                     </div>
@@ -96,16 +123,16 @@
                         </notebook>
                         
                         <footer>
-                            <button name="action_approve" 
-                                    type="object" 
-                                    string="Approve" 
+                            <button name="action_approve"
+                                    type="object"
+                                    string="Approve"
                                     class="btn-primary"
-                                    invisible="decision != 'approve'"/>
-                            <button name="action_reject" 
-                                    type="object" 
-                                    string="Reject" 
+                                    invisible="decision != 'approve' or not data_validated or not acknowledge_sensitive_data"/>
+                            <button name="action_reject"
+                                    type="object"
+                                    string="Reject"
                                     class="btn-secondary"
-                                    invisible="decision != 'reject'"/>
+                                    invisible="decision != 'reject' or not data_validated"/>
                             <button string="Cancel" class="btn-secondary" special="cancel"/>
                         </footer>
                     </sheet>

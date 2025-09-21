@@ -86,165 +86,331 @@
                     </div>
                     
                     <div class="acmst-card acmst-portal-application-form">
+                        <!-- Progress Bar -->
                         <div class="acmst-progress">
                             <div class="acmst-progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        
+
+                        <!-- Application Header -->
+                        <div class="acmst-application-header">
+                            <h2><i class="fa fa-edit"></i> Admission Application</h2>
+                            <p class="text-muted">Please complete all sections carefully. Fields marked with * are required.</p>
+                            <div class="alert alert-info">
+                                <i class="fa fa-info-circle"></i>
+                                <strong>Important:</strong> Ensure all information is accurate. You can save your progress and continue later.
+                            </div>
+                        </div>
+
                         <form id="admission-form" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                            
-                            <!-- Basic Information -->
-                            <div class="acmst-card-header">
-                                <h3>Basic Information</h3>
-                            </div>
+
+                            <!-- Personal Information Section -->
+                            <div class="acmst-section">
+                                <div class="acmst-section-header">
+                                    <h3><i class="fa fa-user"></i> Personal Information</h3>
+                                    <p>Basic personal details and identification</p>
+                                </div>
+                                <div class="acmst-section-content">
                             
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="acmst-form-group">
-                                        <label for="applicant_name">Full Name *</label>
-                                        <input type="text" name="applicant_name" id="applicant_name" class="form-control" required="required"/>
+                                        <label for="applicant_name_english">Full Name (English) *</label>
+                                        <input type="text" name="applicant_name_english" id="applicant_name_english" class="form-control" required="required"/>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="acmst-form-group">
-                                        <label for="national_id">National ID *</label>
-                                        <input type="text" name="national_id" id="national_id" class="form-control" maxlength="10" required="required"/>
+                                        <label for="applicant_name_arabic">Full Name (Arabic) *</label>
+                                        <input type="text" name="applicant_name_arabic" id="applicant_name_arabic" class="form-control" required="required"/>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="row">
-                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="phone">Phone Number *</label>
+                                                <input type="tel" name="phone" id="phone" class="form-control" placeholder="+966 XX XXX XXXX" required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="email">Email Address *</label>
+                                                <input type="email" name="email" id="email" class="form-control" placeholder="your.email@example.com" required="required"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Identification Section -->
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="id_type">ID Type *</label>
+                                                <select name="id_type" id="id_type" class="form-control" required="required">
+                                                    <option value="">Select ID Type</option>
+                                                    <option value="national_id">National ID</option>
+                                                    <option value="passport">Passport</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="national_id">ID Number *</label>
+                                                <input type="text" name="national_id" id="national_id" class="form-control" placeholder="Enter ID number" required="required"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Admission Details Section -->
+                            <div class="acmst-section">
+                                <div class="acmst-section-header">
+                                    <h3><i class="fa fa-graduation-cap"></i> Admission Details</h3>
+                                    <p>Program selection and admission type</p>
+                                </div>
+                                <div class="acmst-section-content">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="admission_type">Type of Admission *</label>
+                                                <select name="admission_type" id="admission_type" class="form-control" required="required">
+                                                    <option value="">Select Admission Type</option>
+                                                    <option value="direct">Direct Admission</option>
+                                                    <option value="regular">Regular Admission</option>
+                                                    <option value="private">Private Admission</option>
+                                                    <option value="transfer">Transfer</option>
+                                                    <option value="bridging">Bridging</option>
+                                                    <option value="degree_holder">Degree Holder</option>
+                                                    <option value="private_education_grant">Private Education Grant</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="program_id">Program *</label>
+                                                <select name="program_id" id="program_id" class="form-control" required="required">
+                                                    <option value="">Select Program</option>
+                                                    <t t-foreach="programs" t-as="program">
+                                                        <option value="program.id" t-esc="program.name"/>
+                                                    </t>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="batch_id">Batch *</label>
+                                                <select name="batch_id" id="batch_id" class="form-control" required="required">
+                                                    <option value="">Select Batch</option>
+                                                    <t t-foreach="batches" t-as="batch">
+                                                        <option value="batch.id" t-esc="batch.name"/>
+                                                    </t>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Personal Details Section -->
+                            <div class="acmst-section">
+                                <div class="acmst-section-header">
+                                    <h3><i class="fa fa-info-circle"></i> Personal Details</h3>
+                                    <p>Additional personal information</p>
+                                </div>
+                                <div class="acmst-section-content">
+                            
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="acmst-form-group">
+                                                <label for="birth_date">Birth Date *</label>
+                                                <input type="date" name="birth_date" id="birth_date" class="form-control" required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="acmst-form-group">
+                                                <label for="gender">Gender *</label>
+                                                <select name="gender" id="gender" class="form-control" required="required">
+                                                    <option value="">Select Gender</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="acmst-form-group">
+                                                <label for="nationality">Nationality *</label>
+                                                <select name="nationality" id="nationality" class="form-control" required="required">
+                                                    <option value="">Select Nationality</option>
+                                                    <option value="sudanese" selected="selected">Sudanese</option>
+                                                    <option value="foreign">Foreign</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="religion">Religion</label>
+                                                <select name="religion" id="religion" class="form-control">
+                                                    <option value="">Select Religion</option>
+                                                    <option value="muslim" selected="selected">Muslim</option>
+                                                    <option value="christian">Christian</option>
+                                                    <option value="other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contact Information Section -->
+                            <div class="acmst-section">
+                                <div class="acmst-section-header">
+                                    <h3><i class="fa fa-address-book"></i> Contact Information</h3>
+                                    <p>Address and emergency contact details</p>
+                                </div>
+                                <div class="acmst-section-content">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="acmst-form-group">
+                                                <label for="address">Address *</label>
+                                                <textarea name="address" id="address" class="form-control" rows="3" placeholder="Enter your full address" required="required"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="emergency_contact">Emergency Contact *</label>
+                                                <input type="text" name="emergency_contact" id="emergency_contact" class="form-control" placeholder="Name of emergency contact person" required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="emergency_phone">Emergency Phone *</label>
+                                                <input type="tel" name="emergency_phone" id="emergency_phone" class="form-control" placeholder="+966 XX XXX XXXX" required="required"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Academic Information Section -->
+                            <div class="acmst-section">
+                                <div class="acmst-section-header">
+                                    <h3><i class="fa fa-book"></i> Academic Information</h3>
+                                    <p>Previous education and supporting documents</p>
+                                </div>
+                                <div class="acmst-section-content">
+                            
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="emergency_contact">Emergency Contact *</label>
+                                                <input type="text" name="emergency_contact" id="emergency_contact" class="form-control" placeholder="Name of emergency contact person" required="required"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="emergency_phone">Emergency Phone *</label>
+                                                <input type="tel" name="emergency_phone" id="emergency_phone" class="form-control" placeholder="+966 XX XXX XXXX" required="required"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Academic Information Section -->
+                            <div class="acmst-section">
+                                <div class="acmst-section-header">
+                                    <h3><i class="fa fa-book"></i> Academic Information</h3>
+                                    <p>Previous education and supporting documents</p>
+                                </div>
+                                <div class="acmst-section-content">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="acmst-form-group">
+                                                <label for="previous_education">Previous Education</label>
+                                                <textarea name="previous_education" id="previous_education" class="form-control" rows="3" placeholder="Please describe your previous educational background, degrees, and qualifications"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="acmst-form-group">
-                                        <label for="phone">Phone Number *</label>
-                                        <input type="tel" name="phone" id="phone" class="form-control" required="required"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="acmst-form-group">
-                                        <label for="email">Email Address *</label>
-                                        <input type="email" name="email" id="email" class="form-control" required="required"/>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="acmst-form-group">
-                                        <label for="program_id">Program *</label>
-                                        <select name="program_id" id="program_id" class="form-control" required="required">
-                                            <option value="">Select Program</option>
-                                            <t t-foreach="programs" t-as="program">
-                                                <option value="program.id" t-esc="program.name"/>
-                                            </t>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="acmst-form-group">
-                                        <label for="batch_id">Batch *</label>
-                                        <select name="batch_id" id="batch_id" class="form-control" required="required">
-                                            <option value="">Select Batch</option>
-                                            <t t-foreach="batches" t-as="batch">
-                                                <option value="batch.id" t-esc="batch.name"/>
-                                            </t>
-                                        </select>
+                                        <label for="documents">Supporting Documents</label>
+                                        <div class="acmst-file-upload">
+                                            <input type="file" name="documents" id="documents" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple="multiple"/>
+                                            <div class="acmst-file-upload-icon">
+                                                <i class="fa fa-cloud-upload-alt"></i>
+                                            </div>
+                                            <div class="acmst-file-upload-text">Click to upload documents</div>
+                                            <div class="acmst-file-upload-hint">
+                                                <strong>Supported formats:</strong> PDF, DOC, DOCX, JPG, PNG<br/>
+                                                <strong>Maximum size:</strong> 10MB per file<br/>
+                                                <strong>Tip:</strong> Upload certificates, transcripts, and other supporting documents
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- Personal Information -->
-                            <div class="acmst-card-header mt-4">
-                                <h3>Personal Information</h3>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="acmst-form-group">
-                                        <label for="birth_date">Birth Date *</label>
-                                        <input type="date" name="birth_date" id="birth_date" class="form-control" required="required"/>
-                                    </div>
+
+                            <!-- Terms and Agreement Section -->
+                            <div class="acmst-section">
+                                <div class="acmst-section-header">
+                                    <h3><i class="fa fa-file-text"></i> Terms and Conditions</h3>
+                                    <p>Please review and accept the terms</p>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="acmst-form-group">
-                                        <label for="gender">Gender *</label>
-                                        <select name="gender" id="gender" class="form-control" required="required">
-                                            <option value="">Select Gender</option>
-                                            <option value="male">Male</option>
-                                            <option value="female">Female</option>
-                                        </select>
+                                <div class="acmst-section-content">
+                                    <div class="alert alert-warning">
+                                        <i class="fa fa-exclamation-triangle"></i>
+                                        <strong>Important:</strong> Please read and agree to the terms and conditions before submitting your application.
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="acmst-form-group">
-                                        <label for="nationality">Nationality *</label>
-                                        <input type="text" name="nationality" id="nationality" class="form-control" value="Saudi" required="required"/>
+
+                                    <div class="acmst-terms-container">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="terms_agreement" required="required"/>
+                                            <label class="form-check-label" for="terms_agreement">
+                                                I have read and agree to the <a href="/terms" target="_blank">Terms and Conditions</a> and <a href="/privacy" target="_blank">Privacy Policy</a> *
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="acmst-form-group">
-                                <label for="address">Address *</label>
-                                <textarea name="address" id="address" class="form-control" rows="3" required="required"></textarea>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="acmst-form-group">
-                                        <label for="emergency_contact">Emergency Contact *</label>
-                                        <input type="text" name="emergency_contact" id="emergency_contact" class="form-control" required="required"/>
+
+                            <!-- Submit Actions Section -->
+                            <div class="acmst-section">
+                                <div class="acmst-section-header">
+                                    <h3><i class="fa fa-check-circle"></i> Submit Application</h3>
+                                    <p>Review and submit your application</p>
+                                </div>
+                                <div class="acmst-section-content">
+                                    <div class="alert alert-success">
+                                        <i class="fa fa-check"></i>
+                                        <strong>Ready to submit?</strong> Make sure all information is correct and all required fields are completed.
+                                    </div>
+
+                                    <div class="acmst-submit-actions">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button type="button" class="acmst-btn acmst-btn-secondary btn-lg" data-action="save-draft">
+                                                    <i class="fa fa-save"></i> Save as Draft
+                                                </button>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button type="submit" class="acmst-btn acmst-btn-primary btn-lg" data-action="submit">
+                                                    <i class="fa fa-paper-plane"></i> Submit Application
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="acmst-form-group">
-                                        <label for="emergency_phone">Emergency Phone *</label>
-                                        <input type="tel" name="emergency_phone" id="emergency_phone" class="form-control" required="required"/>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Academic Information -->
-                            <div class="acmst-card-header mt-4">
-                                <h3>Academic Information</h3>
-                            </div>
-                            
-                            <div class="acmst-form-group">
-                                <label for="previous_education">Previous Education</label>
-                                <textarea name="previous_education" id="previous_education" class="form-control" rows="3" placeholder="Please describe your previous educational background"></textarea>
-                            </div>
-                            
-                            <div class="acmst-form-group">
-                                <label for="documents">Supporting Documents</label>
-                                <div class="acmst-file-upload">
-                                    <input type="file" name="documents" id="documents" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple="multiple"/>
-                                    <div class="acmst-file-upload-icon">
-                                        <i class="fa fa-cloud-upload-alt"></i>
-                                    </div>
-                                    <div class="acmst-file-upload-text">Click to upload documents</div>
-                                    <div class="acmst-file-upload-hint">Supported formats: PDF, DOC, DOCX, JPG, PNG (Max 10MB each)</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Terms and Conditions -->
-                            <div class="acmst-card-header mt-4">
-                                <h3>Terms and Conditions</h3>
-                            </div>
-                            
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="terms_agreement" required="required"/>
-                                <label class="form-check-label" for="terms_agreement">
-                                    I agree to the <a href="/terms" target="_blank">Terms and Conditions</a> and <a href="/privacy" target="_blank">Privacy Policy</a> *
-                                </label>
-                            </div>
-                            
-                            <!-- Submit Buttons -->
-                            <div class="text-center mt-4">
-                                <button type="button" class="acmst-btn acmst-btn-secondary" data-action="save-draft">
-                                    <i class="fa fa-save"></i> Save Draft
-                                </button>
-                                <button type="submit" class="acmst-btn acmst-btn-primary" data-action="submit">
-                                    <i class="fa fa-paper-plane"></i> Submit Application
-                                </button>
                             </div>
                         </form>
                     </div>

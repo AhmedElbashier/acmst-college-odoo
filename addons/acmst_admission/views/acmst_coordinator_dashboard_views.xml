@@ -267,7 +267,7 @@
             <field name="res_model">acmst.admission.file</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_acmst_coordinator_admission_tree"/>
-            <field name="domain">[('state', 'in', ['coordinator_review', 'coordinator_approved', 'coordinator_rejected', 'coordinator_conditional'])]</field>
+            <field name="domain">[('state', 'in', ['coordinator_review', 'coordinator_approved', 'coordinator_rejected', 'coordinator_conditional']), ('coordinator_id', '=', uid)]</field>
             <field name="search_view_id" ref="view_acmst_coordinator_admission_search"/>
             <field name="context">{
                 'form_view_ref': 'acmst_admission.view_acmst_coordinator_admission_form',
@@ -278,7 +278,7 @@
                     No coordinator reviews found
                 </p>
                 <p>
-                    Applications requiring coordinator review will appear here.
+                    Applications requiring coordinator review assigned to you will appear here.
                 </p>
             </field>
         </record>

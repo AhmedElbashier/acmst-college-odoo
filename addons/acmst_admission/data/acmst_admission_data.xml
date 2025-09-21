@@ -7,11 +7,11 @@
             <field name="name">Application Submitted</field>
             <field name="model_id" ref="model_acmst_portal_application"/>
             <field name="subject">Application Submitted - {{ object.name }}</field>
-            <field name="email_from">{{ (object.create_uid.email_formatted) }}</field>
+            <field name="email_from">${(user.email and user.email_formatted) or 'noreply@example.com'}</field>
             <field name="email_to">{{ object.email }}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
-                    <p>Dear {{ object.applicant_name }},</p>
+                    <p>Dear {{ object.applicant_name_english }},</p>
                     <p>Your application has been successfully submitted with number <strong>{{ object.name }}</strong>.</p>
                     <p>We will review your application and get back to you soon.</p>
                     <p>Thank you for your interest in ACMST College.</p>
@@ -24,11 +24,11 @@
             <field name="name">Application Approved</field>
             <field name="model_id" ref="model_acmst_portal_application"/>
             <field name="subject">Application Approved - {{ object.name }}</field>
-            <field name="email_from">{{ (object.create_uid.email_formatted) }}</field>
+            <field name="email_from">${(user.email and user.email_formatted) or 'noreply@example.com'}</field>
             <field name="email_to">{{ object.email }}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
-                    <p>Dear {{ object.applicant_name }},</p>
+                    <p>Dear {{ object.applicant_name_english }},</p>
                     <p>Congratulations! Your application <strong>{{ object.name }}</strong> has been approved.</p>
                     <p>An admission file has been created with number <strong>{{ object.admission_file_id.name }}</strong>.</p>
                     <p>You will receive further instructions about the next steps in the admission process.</p>
@@ -42,11 +42,11 @@
             <field name="name">Application Rejected</field>
             <field name="model_id" ref="model_acmst_portal_application"/>
             <field name="subject">Application Status - {{ object.name }}</field>
-            <field name="email_from">{{ (object.create_uid.email_formatted) }}</field>
+            <field name="email_from">${(user.email and user.email_formatted) or 'noreply@example.com'}</field>
             <field name="email_to">{{ object.email }}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
-                    <p>Dear {{ object.applicant_name }},</p>
+                    <p>Dear {{ object.applicant_name_english }},</p>
                     <p>Thank you for your interest in ACMST College.</p>
                     <p>After careful review, we regret to inform you that your application <strong>{{ object.name }}</strong> has not been approved for this term.</p>
                     <p>We encourage you to apply again in future admission cycles.</p>
@@ -60,11 +60,11 @@
             <field name="name">Health Check Required</field>
             <field name="model_id" ref="model_acmst_admission_file"/>
             <field name="subject">Health Check Required - {{ object.name }}</field>
-            <field name="email_from">{{ (object.create_uid.email_formatted) }}</field>
+            <field name="email_from">${(user.email and user.email_formatted) or 'noreply@example.com'}</field>
             <field name="email_to">{{ object.email }}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
-                    <p>Dear {{ object.applicant_name }},</p>
+                    <p>Dear {{ object.applicant_name_english }},</p>
                     <p>Your application <strong>{{ object.name }}</strong> has been approved by the ministry and now requires a health check.</p>
                     <p>Please complete the health questionnaire by clicking the link below:</p>
                     <p><a href="{{ object.get_portal_url() }}/admission/health-check/{{ object.id }}" class="btn btn-primary">Complete Health Check</a></p>
@@ -79,11 +79,11 @@
             <field name="name">Coordinator Conditions</field>
             <field name="model_id" ref="model_acmst_admission_file"/>
             <field name="subject">Conditional Requirements - {{ object.name }}</field>
-            <field name="email_from">{{ (object.create_uid.email_formatted) }}</field>
+            <field name="email_from">${(user.email and user.email_formatted) or 'noreply@example.com'}</field>
             <field name="email_to">{{ object.email }}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
-                    <p>Dear {{ object.applicant_name }},</p>
+                    <p>Dear {{ object.applicant_name_english }},</p>
                     <p>Your application <strong>{{ object.name }}</strong> has been conditionally approved by the program coordinator.</p>
                     <p>You need to complete the following requirements:</p>
                     <ul>
@@ -103,11 +103,11 @@
             <field name="name">Health Check Rejected</field>
             <field name="model_id" ref="model_acmst_health_check"/>
             <field name="subject">Health Check Status - {{ object.admission_file_id.name }}</field>
-            <field name="email_from">{{ (object.create_uid.email_formatted) }}</field>
+            <field name="email_from">${(user.email and user.email_formatted) or 'noreply@example.com'}</field>
             <field name="email_to">{{ object.admission_file_id.email }}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
-                    <p>Dear {{ object.admission_file_id.applicant_name }},</p>
+                    <p>Dear {{ object.admission_file_id.applicant_name_english }},</p>
                     <p>We regret to inform you that your health check for application <strong>{{ object.admission_file_id.name }}</strong> has not been approved.</p>
                     <p>Medical Assessment: <strong>{{ object.medical_fitness_display }}</strong></p>
                     <t t-if="object.medical_notes">
@@ -127,11 +127,11 @@
             <field name="name">Condition Overdue</field>
             <field name="model_id" ref="model_acmst_coordinator_condition"/>
             <field name="subject">Condition Overdue - {{ object.subject_name }}</field>
-            <field name="email_from">{{ (object.create_uid.email_formatted) }}</field>
+            <field name="email_from">${(user.email and user.email_formatted) or 'noreply@example.com'}</field>
             <field name="email_to">{{ object.admission_file_id.email }}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
-                    <p>Dear {{ object.admission_file_id.applicant_name }},</p>
+                    <p>Dear {{ object.admission_file_id.applicant_name_english }},</p>
                     <p>This is a reminder that your condition <strong>{{ object.subject_name }}</strong> for application <strong>{{ object.admission_file_id.name }}</strong> is now overdue.</p>
                     <p>Condition Details:</p>
                     <ul>
@@ -151,11 +151,11 @@
             <field name="name">Final Approval</field>
             <field name="model_id" ref="model_acmst_admission_file"/>
             <field name="subject">Congratulations! Admission Approved - {{ object.name }}</field>
-            <field name="email_from">{{ (object.create_uid.email_formatted) }}</field>
+            <field name="email_from">${(user.email and user.email_formatted) or 'noreply@example.com'}</field>
             <field name="email_to">{{ object.email }}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
-                    <p>Dear {{ object.applicant_name }},</p>
+                    <p>Dear {{ object.applicant_name_english }},</p>
                     <p>Congratulations! Your admission application <strong>{{ object.name }}</strong> has been fully approved.</p>
                     <p>Your student record has been created and you can now proceed with enrollment.</p>
                     <p>Next steps:</p>
@@ -174,12 +174,12 @@
         <record id="email_template_welcome_student" model="mail.template">
             <field name="name">Welcome Student</field>
             <field name="model_id" ref="model_acmst_admission_file"/>
-            <field name="subject">Welcome to ACMST College - {{ object.applicant_name }}</field>
-            <field name="email_from">{{ (object.create_uid.email_formatted) }}</field>
+            <field name="subject">Welcome to ACMST College - {{ object.applicant_name_english }}</field>
+            <field name="email_from">${(user.email and user.email_formatted) or 'noreply@example.com'}</field>
             <field name="email_to">{{ object.email }}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
-                    <p>Dear {{ object.applicant_name }},</p>
+                    <p>Dear {{ object.applicant_name_english }},</p>
                     <p>Welcome to ACMST College! We are excited to have you as part of our academic community.</p>
                     <p>Your admission has been completed successfully:</p>
                     <ul>

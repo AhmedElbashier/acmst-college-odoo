@@ -72,9 +72,29 @@ class AcmstWorkflowEngine(models.Model):
         for rule in applicable_rules:
             if rule.evaluate_conditions(admission_file):
                 if rule.action_type == 'transition':
+                    old_state = admission_file.state
                     admission_file.write({'state': rule.to_state})
                     _logger.info(f'Workflow transition: {current_state} -> {rule.to_state} for file {admission_file.name}')
-                    
+
+                    # Create audit log entry for workflow transition
+                    self.env['acmst.audit.log'].create({
+                        'model_name': 'acmst.admission.file',
+                        'record_id': admission_file.id,
+                        'record_name': admission_file.name,
+                        'action': 'workflow',
+                        'category': 'workflow',
+                        'old_values': f'State: {old_state}',
+                        'new_values': f'State: {admission_file.state}',
+                        'user_id': self.env.user.id,
+                        'action_description': f'Workflow transition from {old_state} to {admission_file.state} via {self.name}'
+                    })
+
+                    # Post message to chatter
+                    admission_file.message_post(
+                        body=f'Workflow transition: Status changed from {old_state} to {admission_file.state} via workflow {self.name}',
+                        message_type='comment'
+                    )
+
                     if self.notification_enabled and rule.send_notification:
                         rule.send_notification_email(admission_file)
                 
@@ -387,15 +407,43 @@ class AcmstWorkflowRule(models.Model):
     def send_notification_email(self, admission_file):
         """Send notification email"""
         self.ensure_one()
-        
+
         if not self.send_notification or not self.notification_template_id:
             return
-        
+
         try:
-            self.notification_template_id.send_mail(admission_file.id, force_send=True)
-            _logger.info(f'Notification sent for file {admission_file.name} using rule {self.name}')
+            # Check if there's an active mail server before sending
+            mail_server = self.env['ir.mail_server'].search([('active', '=', True)], order='sequence', limit=1)
+            if mail_server:
+                self.notification_template_id.send_mail(admission_file.id, force_send=True)
+                _logger.info(f'Notification sent for file {admission_file.name} using rule {self.name}')
+            else:
+                # Create pending email instead of skipping
+                _logger.warning(f'No active mail server configured. Creating pending email for workflow notification.')
+                self._create_pending_email(admission_file)
         except Exception as e:
             _logger.error(f'Error sending notification for file {admission_file.name}: {str(e)}')
+            # Create pending email for failed attempts too
+            self._create_pending_email(admission_file)
+
+    def _create_pending_email(self, admission_file):
+        """Create a pending email record for workflow notifications"""
+        try:
+            if self.notification_template_id:
+                # Create pending email record
+                self.env['acmst.pending.email'].create({
+                    'template_ref': self.notification_template_id._name,
+                    'record_id': admission_file.id,
+                    'model_name': 'acmst.admission.file',
+                    'record_name': admission_file.name or str(admission_file.id),
+                    'priority': 'medium',
+                    'retry_count': 0,
+                    'max_retries': 3,
+                    'created_by': self.env.user.id,
+                })
+                _logger.info(f'Created pending email for workflow notification on file {admission_file.name}')
+        except Exception as e:
+            _logger.error(f'Failed to create pending email for workflow notification: {str(e)}')
 
     @api.constrains('from_state', 'to_state')
     def _check_state_transition(self):

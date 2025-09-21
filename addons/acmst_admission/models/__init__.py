@@ -11,3 +11,6 @@ from . import acmst_workflow_engine
 from . import acmst_audit_log
 from . import acmst_performance
 from . import acmst_dashboard
+from . import acmst_guardian
+from . import acmst_pending_email
+from . import acmst_document

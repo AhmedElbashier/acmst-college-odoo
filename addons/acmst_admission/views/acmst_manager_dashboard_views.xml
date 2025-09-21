@@ -164,9 +164,9 @@
             <field name="model">acmst.admission.file</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="Pending Manager Review" decoration-warning="state == 'manager_review'" decoration-success="state == 'manager_approved'" decoration-info="state == 'completed'">
+                <tree string="Pending Manager Review" decoration-warning="state == 'manager_review'" decoration-success="state == 'manager_approved'" decoration-info="state == 'completed'" duplicate="False">
                     <field name="name" string="File Number"/>
-                    <field name="applicant_name" string="Applicant"/>
+                    <field name="applicant_name_english" string="Applicant"/>
                     <field name="national_id" string="National ID"/>
                     <field name="phone" string="Phone"/>
                     <field name="email" string="Email"/>
@@ -185,17 +185,18 @@
             <field name="model">acmst.admission.file</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Pending Manager Review">
+                <form string="Pending Manager Review" duplicate="False">
                     <header>
                         <button name="action_manager_approve" string="Manager Approve" type="object" class="btn-success" invisible="state != 'manager_review'"/>
                         <button name="action_manager_reject" string="Manager Reject" type="object" class="btn-danger" invisible="state != 'manager_review'"/>
+                        <button name="action_update_university_id" string="⚠️ Update University ID" type="object" class="btn-warning" invisible="state == 'cancelled'"/>
                         <field name="state" widget="statusbar" statusbar_visible="ministry_pending,ministry_approved,health_required,health_approved,coordinator_review,coordinator_approved,manager_review,manager_approved,completed"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
                             <h1>
                                 <field name="name" readonly="1"/>
-                                <field name="applicant_name" readonly="1"/>
+                                <field name="applicant_name_english" readonly="1"/>
                             </h1>
                         </div>
                         <group>
@@ -214,27 +215,85 @@
                         </group>
                         <notebook>
                             <page string="Personal Information">
+                                <!-- Basic Personal Information -->
                                 <group>
-                                    <group string="Basic Info">
-                                        <field name="national_id" readonly="1"/>
-                                        <field name="phone" readonly="1"/>
-                                        <field name="email" readonly="1"/>
+                                    <group string="Basic Information" col="2">
+                                        <field name="applicant_name_english" readonly="1"/>
+                                        <field name="applicant_name_arabic" readonly="1"/>
+                                    </group>
+                                    <group string="Birth Information" col="2">
                                         <field name="birth_date" readonly="1"/>
+                                        <field name="place_of_birth" readonly="1"/>
+                                        <field name="age" readonly="1"/>
+                                    </group>
+                                </group>
+
+                                <!-- Identity and Personal Details -->
+                                <group>
+                                    <group string="Personal Details" col="2">
                                         <field name="gender" readonly="1"/>
                                         <field name="nationality" readonly="1"/>
+                                        <field name="religion" readonly="1"/>
                                     </group>
-                                    <group string="Address">
+                                    <group string="Identification" col="2">
+                                        <field name="id_type" readonly="1"/>
+                                        <field name="national_id" readonly="1"/>
+                                        <field name="admission_type" readonly="1"/>
+                                    </group>
+                                </group>
+
+                                <!-- Contact Information -->
+                                <group>
+                                    <group string="Contact Information" col="2">
+                                        <field name="phone" readonly="1"/>
+                                        <field name="email" readonly="1"/>
+                                    </group>
+                                    <group string="Address" col="2">
                                         <field name="address" readonly="1"/>
+                                    </group>
+                                </group>
+
+                                <!-- Emergency Contact -->
+                                <group>
+                                    <group string="Emergency Contact" col="2">
                                         <field name="emergency_contact" readonly="1"/>
                                         <field name="emergency_phone" readonly="1"/>
                                     </group>
+                                    <group></group>
                                 </group>
                             </page>
                             <page string="Academic Information">
+                                <!-- Educational Background -->
                                 <group>
-                                    <field name="previous_education" readonly="1"/>
-                                    <field name="certificates" filename="certificates_filename" readonly="1"/>
-                                    <field name="transcripts" filename="transcripts_filename" readonly="1"/>
+                                    <group string="Previous Education" col="6">
+                                        <field name="previous_education" readonly="1" widget="text"/>
+                                    </group>
+                                </group>
+
+                                <!-- Institution Information -->
+                                <group>
+                                    <group string="Institution Details" col="2">
+                                        <field name="education_institution" readonly="1"/>
+                                        <field name="education_program" readonly="1"/>
+                                    </group>
+                                    <group string="Education Details" col="2">
+                                        <field name="education_college" readonly="1"/>
+                                        <field name="education_major" readonly="1"/>
+                                    </group>
+                                </group>
+
+                                <!-- Education Timeline -->
+                                <group>
+                                    <group string="Timeline" col="2">
+                                        <field name="education_start_year" readonly="1"/>
+                                        <field name="education_completion_year" readonly="1"/>
+                                        <field name="certificate_type" readonly="1"/>
+                                        <field name="education_duration_years" readonly="1"/>
+                                    </group>
+                                    <group string="Documents" col="6">
+                                        <field name="certificates" readonly="1" filename="certificates_filename"/>
+                                        <field name="transcripts" readonly="1" filename="transcripts_filename"/>
+                                    </group>
                                 </group>
                             </page>
                             <page string="Health Check Results">

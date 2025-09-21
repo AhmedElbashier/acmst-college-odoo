@@ -5,45 +5,71 @@ A comprehensive Odoo 17 module for managing university, college, and academic pr
 ## 🚀 Features
 
 ### Core Functionality
-- **University Management**: Complete university/institution management with contact information, branding, and statistics
-- **College Management**: Department/college management with dean assignment and program tracking
-- **Program Types**: Flexible program type system (Certificate, Diploma, Bachelor's, Master's, PhD)
-- **Academic Programs**: Comprehensive program management with managers and coordinators
-- **Batch Management**: Program batch creation and management with student capacity tracking
-- **Academic Years**: Academic year management with semester support
-- **Academic Rules**: Configurable academic policies and regulations system
+- **University Management** (`acmst.university`): Complete university/institution management with contact information, branding, and statistics
+- **College Management** (`acmst.college`): Department/college management with dean assignment and program tracking
+- **Program Types** (`acmst.program.type`): Flexible program type system (Certificate, Diploma, Bachelor's, Master's, PhD)
+- **Academic Programs** (`acmst.program`): Comprehensive program management with managers and coordinators
+- **Batch Management** (`acmst.batch`): Program batch creation and management with student capacity tracking
+- **Academic Years** (`acmst.academic.year`): Academic year management with semester support
+- **Academic Rules** (`acmst.academic.rules`): Configurable academic policies and regulations system
 
 ### Advanced Features
 - **Role-Based Access Control**: 5 security groups with hierarchical permissions
-- **Batch Creation Wizard**: Efficient creation of multiple batches
-- **Progress Tracking**: Visual progress indicators for batches and academic years
-- **Statistics Dashboard**: Real-time statistics and analytics
-- **Search & Filtering**: Advanced search with multiple criteria and grouping
+- **Batch Creation Wizard**: Efficient creation of multiple batches with predefined templates
+- **Automatic Code Generation**: Intelligent code generation for all entities
+- **Hierarchical Structure**: University → College → Program → Batch relationships
 - **Data Validation**: Comprehensive field validation and business rules
 - **Performance Optimization**: Database indexing and query optimization
+- **Audit Trail**: Complete tracking of all changes and modifications
 
 ## 📋 Requirements
 
-- Odoo 17.0
-- Python 3.8+
-- PostgreSQL 12+
-- Required Odoo modules: base, mail, portal, web
+- **Odoo Version**: 17.0+
+- **Python**: 3.8+
+- **PostgreSQL**: 12+
+- **Required Odoo modules**: base, mail, portal, web
+- **Memory**: Minimum 4GB RAM recommended
+- **Disk Space**: 10GB free space recommended
 
 ## 🛠️ Installation
 
-### Method 1: Manual Installation
-1. Copy the `acmst_core_settings` folder to your Odoo addons directory
-2. Update the addons list in Odoo
-3. Install the module from the Apps menu
+### Method 1: Docker Installation (Recommended)
 
-### Method 2: Docker Installation
-```bash
-# Add to your docker-compose.yml
-services:
-  odoo:
-    volumes:
-      - ./addons/acmst_core_settings:/mnt/extra-addons/acmst_core_settings
-```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/AhmedElbashier/acmst-college-odoo.git
+   cd acmst-college-odoo
+   ```
+
+2. **Start the services**:
+   ```bash
+   docker-compose up -d
+   ```
+
+3. **Access Odoo**:
+   - Open browser and go to `http://localhost:8069`
+   - Create a new database
+   - Install the ACMST Core Settings module
+
+### Method 2: Manual Installation
+
+1. **Copy the module**:
+   ```bash
+   cp -r acmst_core_settings /path/to/odoo/addons/
+   ```
+
+2. **Set proper permissions**:
+   ```bash
+   chown -R odoo:odoo /path/to/odoo/addons/acmst_core_settings
+   chmod -R 755 /path/to/odoo/addons/acmst_core_settings
+   ```
+
+3. **Install the module**:
+   - Login to Odoo as administrator
+   - Go to **Apps** menu
+   - Click **Update Apps List**
+   - Search for "ACMST Core Settings"
+   - Click **Install**
 
 ## 🔧 Configuration
 
@@ -190,17 +216,32 @@ log_level = debug
 ## 🔄 Updates
 
 ### Version History
-- **v1.0.0**: Initial release with core functionality
-- **v1.1.0**: Added batch creation wizard
-- **v1.2.0**: Enhanced security and performance
-- **v1.3.0**: Added comprehensive testing suite
+- **v17.0.1.0.0**: Current stable release
+  - Complete hierarchical structure implementation
+  - Batch creation wizard with templates
+  - Advanced security groups and permissions
+  - Comprehensive testing suite
+  - Performance optimizations and indexing
+  - Audit trail functionality
+
+### Module Structure
+```
+acmst_core_settings/
+├── models/              # Core business logic
+├── views/               # User interface views
+├── wizards/             # Interactive wizards
+├── security/            # Access rights and groups
+├── data/                # Initial data and sequences
+├── static/              # CSS, JS, and assets
+└── tests/               # Comprehensive test suite
+```
 
 ### Upgrade Process
 1. Backup your database
 2. Update the module files
-3. Run the upgrade from Odoo
-4. Verify functionality
-5. Test with your data
+3. Run the upgrade from Odoo Apps menu
+4. Verify functionality with test data
+5. Check security group assignments
 
 ## 🤝 Contributing
 

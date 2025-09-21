@@ -7,7 +7,7 @@
             <field name="name">acmst.workflow.engine.tree</field>
             <field name="model">acmst.workflow.engine</field>
             <field name="arch" type="xml">
-                <tree string="Workflow Engines">
+                <tree string="Workflow Engines" duplicate="False">
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
                     <field name="active"/>
@@ -23,7 +23,7 @@
             <field name="name">acmst.workflow.engine.form</field>
             <field name="model">acmst.workflow.engine</field>
             <field name="arch" type="xml">
-                <form string="Workflow Engine">
+                <form string="Workflow Engine" duplicate="False">
                     <header>
                         <button name="test_workflow" string="Test Workflow" type="object" class="btn-primary"/>
                         <button name="process_workflow_batch" string="Process Workflow" type="object" class="btn-success"/>
@@ -97,7 +97,7 @@
             <field name="name">acmst.workflow.rule.tree</field>
             <field name="model">acmst.workflow.rule</field>
             <field name="arch" type="xml">
-                <tree string="Workflow Rules">
+                <tree string="Workflow Rules" duplicate="False">
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
                     <field name="workflow_id"/>
@@ -116,7 +116,7 @@
             <field name="name">acmst.workflow.rule.form</field>
             <field name="model">acmst.workflow.rule</field>
             <field name="arch" type="xml">
-                <form string="Workflow Rule">
+                <form string="Workflow Rule" duplicate="False">
                     <header>
                         <button name="action_test_rule" string="Test Rule" type="object" class="btn-primary"/>
                         <field name="active" widget="boolean_toggle"/>

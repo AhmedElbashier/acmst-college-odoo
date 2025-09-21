@@ -35,7 +35,7 @@
         * Multi-language support (Arabic/English)
     """,
     'author': 'ACMST College',
-    'website': 'https://www.acmst.edu.sa',
+    'website': 'https://www.acmst-edu.com',
     'depends': [
         'base',
         'mail',
@@ -50,6 +50,9 @@
         'data/sequence_sync_data.xml',
         'data/acmst_admission_data.xml',
         'data/acmst_workflow_data.xml',
+        'data/acmst_mail_activity_data.xml',
+
+
         'views/acmst_admission_file_views.xml',
         'views/acmst_health_check_views.xml',
         'views/acmst_workflow_engine_views.xml',
@@ -67,6 +70,9 @@
         'views/acmst_audit_log_views.xml',
         'views/acmst_admission_approval_views.xml',
         'views/acmst_portal_application_views.xml',
+        'views/acmst_guardian_views.xml',
+        'views/acmst_document_views.xml',
+        'views/acmst_pending_email_views.xml',
         'views/acmst_admission_menus.xml',
         'views/acmst_performance_views.xml',
         'views/acmst_performance_monitoring_views.xml',
@@ -74,6 +80,7 @@
         'wizards/acmst_coordinator_condition_wizard_views.xml',
         'wizards/acmst_ministry_approval_wizard_views.xml',
         'wizards/acmst_university_id_update_wizard_views.xml',
+        'wizards/acmst_document_rejection_wizard_views.xml',
         'static/src/xml/acmst_admission_portal_templates.xml',
         'static/src/xml/acmst_admission_portal_dashboard.xml',
         'static/src/xml/acmst_admission_form_wizard.xml',

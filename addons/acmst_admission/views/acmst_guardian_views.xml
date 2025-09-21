@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Guardian Tree View -->
+        <record id="view_acmst_guardian_tree" model="ir.ui.view">
+            <field name="name">acmst.guardian.tree</field>
+            <field name="model">acmst.guardian</field>
+            <field name="arch" type="xml">
+                <tree string="Guardians" decoration-info="is_default == False" decoration-success="is_default == True" duplicate="False">
+                    <field name="name" string="Guardian Name"/>
+                    <field name="relationship" string="Relationship"/>
+                    <field name="phone" string="Phone"/>
+                    <field name="email" string="Email"/>
+                    <field name="is_default" string="Default" widget="toggle"/>
+                    <field name="admission_file_id" string="Admission File"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Guardian Kanban View -->
+        <record id="view_acmst_guardian_kanban" model="ir.ui.view">
+            <field name="name">acmst.guardian.kanban</field>
+            <field name="model">acmst.guardian</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" string="Guardians" duplicate="False">
+                    <field name="name"/>
+                    <field name="relationship"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                    <field name="is_default"/>
+                    <field name="admission_file_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_details">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <strong>
+                                                <field name="name"/>
+                                            </strong>
+                                            <span class="pull-right">
+                                                <field name="is_default" widget="boolean_toggle"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Relation:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="relationship"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Phone:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="phone"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Email:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="email"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <strong>Student:</strong>
+                                            <field name="admission_file_id"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Guardian Form View -->
+        <record id="view_acmst_guardian_form" model="ir.ui.view">
+            <field name="name">acmst.guardian.form</field>
+            <field name="model">acmst.guardian</field>
+            <field name="arch" type="xml">
+                <form string="Guardian Information" duplicate="False">
+                    <header>
+                        <button name="action_set_default" string="Set as Default" type="object" class="btn-primary" invisible="is_default == True"/>
+                        <button name="action_remove_default" string="Remove Default" type="object" class="btn-secondary" invisible="is_default == False"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Guardian Information">
+                                <field name="name" required="1"/>
+                                <field name="relationship" required="1"/>
+                                <field name="phone" required="1"/>
+                                <field name="email"/>
+                                <field name="is_default"/>
+                            </group>
+                            <group string="Related Information">
+                                <field name="admission_file_id" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Guardian Search View -->
+        <record id="view_acmst_guardian_search" model="ir.ui.view">
+            <field name="name">acmst.guardian.search</field>
+            <field name="model">acmst.guardian</field>
+            <field name="arch" type="xml">
+                <search string="Search Guardians">
+                    <field name="name" string="Guardian Name"/>
+                    <field name="relationship" string="Relationship"/>
+                    <field name="phone" string="Phone"/>
+                    <field name="admission_file_id" string="Admission File"/>
+                    <separator/>
+                    <!-- Filters -->
+                    <filter string="Default Guardians" name="default_guardians" domain="[('is_default', '=', True)]"/>
+                    <filter string="Regular Guardians" name="regular_guardians" domain="[('is_default', '=', False)]"/>
+                    <separator/>
+                    <!-- Group By -->
+                    <group expand="0" string="Group By">
+                        <filter string="Admission File" name="group_admission_file" context="{'group_by': 'admission_file_id'}"/>
+                        <filter string="Relationship" name="group_relationship" context="{'group_by': 'relationship'}"/>
+                        <filter string="Default Status" name="group_default" context="{'group_by': 'is_default'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Guardian Action -->
+        <record id="action_acmst_guardian" model="ir.actions.act_window">
+            <field name="name">Guardians</field>
+            <field name="res_model">acmst.guardian</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="view_acmst_guardian_search"/>
+            <field name="context">{'create': False, 'edit': True, 'delete': False}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Manage guardian information for admission files.
+                </p>
+                <p>
+                    Guardians can be marked as default contacts for students.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -65,7 +65,7 @@ class AcmstAdmissionApproval(models.Model):
     # Related fields
     applicant_name = fields.Char(
         string='Applicant Name',
-        related='admission_file_id.applicant_name',
+        related='admission_file_id.applicant_name_english',
         store=True,
         help='Name of the applicant'
     )

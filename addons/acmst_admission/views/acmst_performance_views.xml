@@ -5,10 +5,10 @@
         <field name="name">acmst.performance.optimization.tree</field>
         <field name="model">acmst.performance.optimization</field>
         <field name="arch" type="xml">
-            <tree string="Performance Optimizations" decoration-info="status == 'pending'" 
-                  decoration-success="status == 'completed'" 
-                  decoration-warning="status == 'in_progress'" 
-                  decoration-danger="status == 'failed'">
+            <tree string="Performance Optimizations" decoration-info="status == 'pending'"
+                  decoration-success="status == 'completed'"
+                  decoration-warning="status == 'in_progress'"
+                  decoration-danger="status == 'failed'" duplicate="False">
                 <field name="name"/>
                 <field name="model_name"/>
                 <field name="optimization_type"/>
@@ -34,7 +34,7 @@
         <field name="name">acmst.performance.optimization.form</field>
         <field name="model">acmst.performance.optimization</field>
         <field name="arch" type="xml">
-            <form string="Performance Optimization">
+            <form string="Performance Optimization" duplicate="False">
                 <header>
                     <button name="action_run_optimization" string="Run Optimization" 
                             type="object" class="btn-primary" 

@@ -7,7 +7,7 @@
             <field name="name">acmst.coordinator.condition.tree</field>
             <field name="model">acmst.coordinator.condition</field>
             <field name="arch" type="xml">
-                <tree string="Coordinator Conditions" decoration-success="state == 'completed'" decoration-danger="state == 'overdue'" decoration-warning="state == 'pending'" decoration-info="state == 'rejected'">
+                <tree string="Coordinator Conditions" decoration-success="state == 'completed'" decoration-danger="state == 'overdue'" decoration-warning="state == 'pending'" decoration-info="state == 'rejected'" duplicate="False">
                     <field name="admission_file_id" string="File #" optional="show"/>
                     <field name="applicant_name" string="Applicant" optional="show"/>
                     <field name="program_name" string="Program" optional="hide"/>
@@ -24,12 +24,98 @@
             </field>
         </record>
 
+        <!-- Coordinator Condition Kanban View -->
+        <record id="view_acmst_coordinator_condition_kanban" model="ir.ui.view">
+            <field name="name">acmst.coordinator.condition.kanban</field>
+            <field name="model">acmst.coordinator.condition</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" string="Coordinator Conditions" duplicate="False">
+                    <field name="admission_file_id"/>
+                    <field name="applicant_name"/>
+                    <field name="subject_name"/>
+                    <field name="level"/>
+                    <field name="deadline"/>
+                    <field name="status"/>
+                    <field name="state"/>
+                    <field name="coordinator_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_details">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <strong>
+                                                <field name="admission_file_id"/>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <field name="applicant_name"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Subject:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="subject_name"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Level:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="level"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Coordinator:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="coordinator_id"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Deadline:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="deadline"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Status:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="status" widget="badge"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>State:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="state" widget="badge" decoration-success="state == 'completed'" decoration-warning="state == 'pending'" decoration-danger="state == 'overdue'" decoration-info="state == 'rejected'"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
         <!-- Coordinator Condition Form View -->
         <record id="view_acmst_coordinator_condition_form" model="ir.ui.view">
             <field name="name">acmst.coordinator.condition.form</field>
             <field name="model">acmst.coordinator.condition</field>
             <field name="arch" type="xml">
-                <form string="Coordinator Condition">
+                <form string="Coordinator Condition" duplicate="False">
                     <header>
                         <button name="action_complete" string="Mark Complete" type="object" class="btn-success" invisible="state != 'pending'"/>
                         <button name="action_reject" string="Reject" type="object" class="btn-danger" invisible="state != 'pending'"/>
@@ -110,9 +196,9 @@
         <record id="action_acmst_coordinator_condition" model="ir.actions.act_window">
             <field name="name">Coordinator Conditions</field>
             <field name="res_model">acmst.coordinator.condition</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="search_view_id" ref="view_acmst_coordinator_condition_search"/>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Create a new coordinator condition

@@ -23,6 +23,9 @@
                             <button name="action_view_ministry_rejected" type="object" class="oe_stat_button" icon="fa-times">
                                 <field name="ministry_rejected_count" widget="statinfo" string="Ministry Rejected"/>
                             </button>
+                            <button name="action_view_processing_students" type="object" class="oe_stat_button" icon="fa-users">
+                                <field name="processing_students_count" widget="statinfo" string="Processing Students"/>
+                            </button>
                         </div>
                         <div class="oe_title">
                             <h1>👨‍💼 Admission Officer Dashboard</h1>

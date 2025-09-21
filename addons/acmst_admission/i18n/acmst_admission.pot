@@ -1,0 +1,1331 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * acmst_admission
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2025-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__name
+msgid "Admission File Number"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__applicant_name
+msgid "Applicant Name"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__email
+msgid "Email"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__phone
+msgid "Phone"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__nationality
+msgid "Nationality"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__birth_date
+msgid "Birth Date"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__gender
+msgid "Gender"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__address
+msgid "Address"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__program_id
+msgid "Program"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__batch_id
+msgid "Batch"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__application_date
+msgid "Application Date"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__state
+msgid "Status"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__height
+msgid "Height (cm)"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__weight
+msgid "Weight (kg)"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__blood_type
+msgid "Blood Type"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__chronic_diseases
+msgid "Chronic Diseases"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__medications
+msgid "Current Medications"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__allergies
+msgid "Allergies"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__emergency_contact
+msgid "Emergency Contact"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__emergency_phone
+msgid "Emergency Phone"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_workflow_engine__name
+msgid "Workflow Name"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_workflow_engine__model_name
+msgid "Model"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_workflow_engine__state_field
+msgid "State Field"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_workflow_engine__active
+msgid "Active"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__name
+msgid "Condition Name"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__condition_type
+msgid "Condition Type"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__required
+msgid "Required"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__description
+msgid "Description"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__name
+msgid "Application Number"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__applicant_name
+msgid "Full Name"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__email
+msgid "Email Address"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__phone
+msgid "Phone Number"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__submission_date
+msgid "Submission Date"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.ui.menu,name:acmst_admission.menu_acmst_admission
+msgid "ACMST Admission"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.ui.menu,name:acmst_admission.menu_acmst_admission_files
+msgid "Admission Files"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.ui.menu,name:acmst_admission.menu_acmst_health_checks
+msgid "Health Checks"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.ui.menu,name:acmst_admission.menu_acmst_workflow
+msgid "Workflow Engine"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.ui.menu,name:acmst_admission.menu_acmst_coordinator_conditions
+msgid "Coordinator Conditions"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.ui.menu,name:acmst_admission.menu_acmst_portal_applications
+msgid "Portal Applications"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.actions.act_window,name:acmst_admission.action_acmst_admission_files
+msgid "Admission Files"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.actions.act_window,name:acmst_admission.action_acmst_health_checks
+msgid "Health Checks"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.actions.act_window,name:acmst_admission.action_acmst_workflow_engines
+msgid "Workflow Engines"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.actions.act_window,name:acmst_admission.action_acmst_coordinator_conditions
+msgid "Coordinator Conditions"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.actions.act_window,name:acmst_admission.action_acmst_portal_applications
+msgid "Portal Applications"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_admission_file
+msgid "acmst.admission.file"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_health_check
+msgid "acmst.health.check"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_workflow_engine
+msgid "acmst.workflow.engine"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_coordinator_condition
+msgid "acmst.coordinator.condition"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_portal_application
+msgid "acmst.portal.application"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_admission_wizard
+msgid "acmst.admission.wizard"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_coordinator_condition_wizard
+msgid "acmst.coordinator.condition.wizard"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model,name:acmst_admission.model_acmst_ministry_approval_wizard
+msgid "acmst.ministry.approval.wizard"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__health_check_id
+msgid "Health Check"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__workflow_engine_id
+msgid "Workflow Engine"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__coordinator_condition_ids
+msgid "Coordinator Conditions"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__documents_count
+msgid "Documents Count"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__notes
+msgid "Internal Notes"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__admission_file_id
+msgid "Admission File"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__check_date
+msgid "Check Date"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__health_officer_id
+msgid "Health Officer"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_health_check__status
+msgid "Health Status"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_workflow_engine__description
+msgid "Description"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_workflow_engine__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__admission_file_id
+msgid "Admission File"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__coordinator_id
+msgid "Coordinator"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__review_date
+msgid "Review Date"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition__status
+msgid "Status"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__program_id
+msgid "Desired Program"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__batch_id
+msgid "Desired Batch"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_portal_application__status
+msgid "Application Status"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_wizard__admission_file_id
+msgid "Admission File"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_wizard__action_type
+msgid "Action Type"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_wizard__notes
+msgid "Notes"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition_wizard__condition_id
+msgid "Condition"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_coordinator_condition_wizard__action
+msgid "Action"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_ministry_approval_wizard__admission_file_id
+msgid "Admission File"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_ministry_approval_wizard__approval_type
+msgid "Approval Type"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_ministry_approval_wizard__ministry_reference
+msgid "Ministry Reference"
+msgstr ""
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_ministry_approval_wizard__approval_date
+msgid "Approval Date"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_admission_file_tree
+msgid "Admission Files"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_admission_file_form
+msgid "Admission File"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_health_check_tree
+msgid "Health Checks"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_health_check_form
+msgid "Health Check"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_workflow_engine_tree
+msgid "Workflow Engines"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_workflow_engine_form
+msgid "Workflow Engine"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_coordinator_condition_tree
+msgid "Coordinator Conditions"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_coordinator_condition_form
+msgid "Coordinator Condition"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_portal_application_tree
+msgid "Portal Applications"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_portal_application_form
+msgid "Portal Application"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_admission_wizard_form
+msgid "Admission Wizard"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_coordinator_condition_wizard_form
+msgid "Coordinator Condition Wizard"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.view_acmst_ministry_approval_wizard_form
+msgid "Ministry Approval Wizard"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Admission Portal - ACMST College"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Welcome to ACMST College Admission Portal"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Start your journey towards academic excellence"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Apply for Admission"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Join ACMST College and pursue your academic dreams. Our comprehensive programs are designed to prepare you for success in your chosen field."
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Available Programs"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Available Batches"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Apply Now"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Application Status"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Track your application progress"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Requirements"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "View admission requirements and documents needed"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Contact Us"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Get in touch with our admission team"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Recent News"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Latest updates and announcements"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "View All News"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Important Dates"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Application Deadlines"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Registration Periods"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Academic Calendar"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "View Calendar"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Quick Links"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Student Portal"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Academic Programs"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Campus Life"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Alumni Network"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Career Services"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "About ACMST"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Learn more about our institution"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "ACMST College"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Leading medical education institution"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Excellence in Medical Education"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "State-of-the-art Facilities"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Expert Faculty"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Research Opportunities"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Global Recognition"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Apply Today"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Start Your Application"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Check Requirements"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Contact Admission Office"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Phone"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Email"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Address"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "All rights reserved"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Privacy Policy"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Terms of Service"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Site Map"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Follow Us"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Facebook"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Twitter"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Instagram"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "LinkedIn"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "YouTube"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Submit Application"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Save Draft"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Next"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Previous"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Cancel"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Upload Document"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Remove"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Download"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Print"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Edit"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Delete"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Search"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Filter"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Sort By"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Name"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Date"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Status"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acm_admission.portal_admission_home
+msgid "Action"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Loading"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "No data available"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Please select"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Required field"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Invalid input"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Success"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Error"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Warning"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Information"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Confirmation"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Are you sure"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Yes"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "No"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "OK"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Save"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Submit"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Continue"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Back"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Close"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Help"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Support"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Documentation"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Logout"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Login"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Register"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Forgot Password"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Reset Password"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Change Password"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Profile"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Settings"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Dashboard"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Home"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "About"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Services"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Contact"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "More"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Show"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Hide"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Expand"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Collapse"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "First"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Last"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Page"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "of"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Total"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Results"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Found"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "No results found"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Try adjusting your search criteria"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Clear filters"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Refresh"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Export"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Import"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Create"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Update"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "View"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Copy"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Archive"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Unarchive"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Duplicate"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Send"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Receive"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Approve"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Reject"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Confirm"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Cancel"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Draft"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "In Progress"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Completed"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Pending"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Approved"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Rejected"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Cancelled"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Male"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Female"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Other"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Single"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Married"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Divorced"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Widowed"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "January"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "February"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "March"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "April"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "May"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "June"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "July"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "August"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "September"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "October"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "November"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "December"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Sunday"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Monday"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Tuesday"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Wednesday"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Thursday"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Friday"
+msgstr ""
+
+#. module: acmst_admission
+#: model_terms:ir.ui.view,arch_db:acmst_admission.portal_admission_home
+msgid "Saturday"
+msgstr ""

@@ -54,11 +54,18 @@
                   sequence="10"/>
 
         <!-- Admission Files -->
-        <menuitem id="menu_acmst_admission_files" 
-                  name="📁 Admission Files" 
-                  parent="menu_acmst_applications" 
-                  action="action_acmst_admission_file" 
+        <menuitem id="menu_acmst_admission_files"
+                  name="📁 Admission Files"
+                  parent="menu_acmst_applications"
+                  action="action_acmst_admission_file"
                   sequence="20"/>
+
+        <!-- Guardians -->
+        <menuitem id="menu_acmst_guardians"
+                  name="👥 Guardians"
+                  parent="menu_acmst_applications"
+                  action="action_acmst_guardian"
+                  sequence="30"/>
 
         <!-- Processing Students -->
         <menuitem id="menu_acmst_processing_students" 
@@ -175,10 +182,10 @@
         <!-- ======================================== -->
         <!-- OFFICER MANAGEMENT -->
         <!-- ======================================== -->
-        <menuitem id="menu_acmst_officer_management" 
+        <!-- <menuitem id="menu_acmst_officer_management" 
                   name="👨‍💼 Officer" 
                   parent="menu_acmst_admission_root" 
-                  sequence="40"/>
+                  sequence="40"/> -->
 
         <!-- Officer Dashboard -->
         <!-- <menuitem id="menu_acmst_officer_dashboard"
@@ -188,7 +195,7 @@
                   sequence="10"/> -->
 
         <!-- Officer Applications by Status -->
-        <menuitem id="menu_acmst_officer_new_applications" 
+       <!-- <menuitem id="menu_acmst_officer_new_applications" 
                   name="🆕 New Applications" 
                   parent="menu_acmst_officer_management" 
                   action="action_acmst_officer_new_applications" 
@@ -210,7 +217,7 @@
                   name="❌ Ministry Rejected" 
                   parent="menu_acmst_officer_management" 
                   action="action_acmst_officer_ministry_rejected" 
-                  sequence="50"/>
+                  sequence="50"/> -->
 
         <!-- ======================================== -->
         <!-- MANAGER MANAGEMENT -->

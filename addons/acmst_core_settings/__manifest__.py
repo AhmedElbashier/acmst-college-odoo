@@ -22,7 +22,7 @@
         This module serves as the foundation for all other ACMST College modules.
     """,
     'author': 'ACMST College Development Team',
-    'website': 'https://www.acmst.edu',
+    'website': 'https://www.acmst-edu.com',
     #'license': 'LGPL-3',
     'depends': [
         'base',
@@ -34,11 +34,12 @@
         # Security - Groups first, then access rights
         'security/acmst_core_settings_security.xml',
         'security/ir.model.access.csv',
-        
+
         # Data
         'data/ir_sequence_data.xml',
         'data/acmst_core_settings_data.xml',
-        
+
+
         # Views
         'views/acmst_university_views.xml',
         'views/acmst_college_views.xml',
@@ -47,10 +48,10 @@
         'views/acmst_batch_views.xml',
         'views/acmst_academic_year_views.xml',
         'views/acmst_academic_rules_views.xml',
-        
+
         # Wizards
         'views/acmst_batch_creation_wizard_views.xml',
-        
+
         # Menus (loaded after all views and wizards)
         'views/acmst_core_settings_menus.xml',
     ],

@@ -136,22 +136,22 @@ class AcmstHealthCheck(models.Model):
         help='Date for follow-up examination'
     )
 
-    # Attachments
-    medical_reports = fields.Binary(
+    # Attachments - Multiple files support
+    medical_reports = fields.Many2many(
+        'ir.attachment',
+        'acmst_health_check_medical_reports_rel',
+        'health_check_id',
+        'attachment_id',
         string='Medical Reports',
-        help='Medical examination reports'
+        help='Medical examination reports (multiple files allowed)'
     )
-    medical_reports_filename = fields.Char(
-        string='Medical Reports Filename',
-        help='Name of the medical reports file'
-    )
-    lab_results = fields.Binary(
+    lab_results = fields.Many2many(
+        'ir.attachment',
+        'acmst_health_check_lab_results_rel',
+        'health_check_id',
+        'attachment_id',
         string='Lab Results',
-        help='Laboratory test results'
-    )
-    lab_results_filename = fields.Char(
-        string='Lab Results Filename',
-        help='Name of the lab results file'
+        help='Laboratory test results (multiple files allowed)'
     )
 
     # Dashboard fields
@@ -195,19 +195,19 @@ class AcmstHealthCheck(models.Model):
         compute='_compute_dashboard_counts',
         help='Number of health checks performed this week'
     )
-    other_documents = fields.Binary(
+    other_documents = fields.Many2many(
+        'ir.attachment',
+        'acmst_health_check_other_documents_rel',
+        'health_check_id',
+        'attachment_id',
         string='Other Documents',
-        help='Other medical documents'
-    )
-    other_documents_filename = fields.Char(
-        string='Other Documents Filename',
-        help='Name of the other documents file'
+        help='Other medical documents (multiple files allowed)'
     )
 
     # Computed fields
     applicant_name = fields.Char(
         string='Applicant Name',
-        related='admission_file_id.applicant_name',
+        related='admission_file_id.applicant_name_english',
         store=True,
         help='Name of the applicant'
     )
@@ -217,6 +217,165 @@ class AcmstHealthCheck(models.Model):
         store=True,
         help='Program name'
     )
+
+    # Student Information for Examiners
+    applicant_name_arabic = fields.Char(
+        string='Applicant Name (Arabic)',
+        related='admission_file_id.applicant_name_arabic',
+        store=True,
+        help='Name of the applicant in Arabic'
+    )
+
+    # Student Profile Picture
+    profile_picture = fields.Binary(
+        string='Profile Picture',
+        related='admission_file_id.profile_picture',
+        store=True,
+        help='Student profile picture'
+    )
+    profile_picture_filename = fields.Char(
+        string='Profile Picture Filename',
+        related='admission_file_id.profile_picture_filename',
+        store=True,
+        help='Name of the profile picture file'
+    )
+    national_id = fields.Char(
+        string='National ID / Passport',
+        related='admission_file_id.national_id',
+        store=True,
+        help='National ID or passport number'
+    )
+    id_type = fields.Selection([
+        ('national_id', 'National ID'),
+        ('passport', 'Passport')
+    ], string='ID Type', related='admission_file_id.id_type', store=True, help='Type of identification document')
+    university_id = fields.Char(
+        string='University ID',
+        related='admission_file_id.university_id',
+        store=True,
+        help='University ID provided by ministry'
+    )
+    is_processing_student = fields.Boolean(
+        string='Processing Student',
+        related='admission_file_id.is_processing_student',
+        store=True,
+        help='Marked as processing student without university ID'
+    )
+    phone = fields.Char(
+        string='Phone',
+        related='admission_file_id.phone',
+        store=True,
+        help='Contact phone number'
+    )
+    email = fields.Char(
+        string='Email',
+        related='admission_file_id.email',
+        store=True,
+        help='Email address'
+    )
+    birth_date = fields.Date(
+        string='Birth Date',
+        related='admission_file_id.birth_date',
+        store=True,
+        help='Date of birth'
+    )
+    age = fields.Integer(
+        string='Age',
+        related='admission_file_id.age',
+        store=True,
+        help='Age in years'
+    )
+    gender = fields.Selection([
+        ('male', 'Male'),
+        ('female', 'Female')
+    ], string='Gender', related='admission_file_id.gender', store=True, help='Gender')
+    nationality = fields.Selection([
+        ('sudanese', 'Sudanese'),
+        ('foreign', 'Foreign')
+    ], string='Nationality', related='admission_file_id.nationality', store=True, help='Nationality')
+    address = fields.Text(
+        string='Address',
+        related='admission_file_id.address',
+        store=True,
+        help='Full address'
+    )
+    emergency_contact = fields.Char(
+        string='Emergency Contact',
+        related='admission_file_id.emergency_contact',
+        store=True,
+        help='Emergency contact person'
+    )
+    emergency_phone = fields.Char(
+        string='Emergency Phone',
+        related='admission_file_id.emergency_phone',
+        store=True,
+        help='Emergency contact phone number'
+    )
+    # Guardian information (from default guardian)
+    @api.depends('admission_file_id.guardian_ids', 'admission_file_id.guardian_ids.is_default')
+    def _compute_guardian_info(self):
+        for record in self:
+            default_guardian = record.admission_file_id.guardian_ids.filtered(lambda g: g.is_default) if record.admission_file_id.guardian_ids else False
+            if default_guardian:
+                record.guardian_name = default_guardian[0].name
+                record.guardian_relationship = default_guardian[0].relationship
+                record.guardian_phone = default_guardian[0].phone
+            else:
+                record.guardian_name = ''
+                record.guardian_relationship = ''
+                record.guardian_phone = ''
+
+    guardian_name = fields.Char(
+        string='Guardian Name',
+        compute='_compute_guardian_info',
+        store=True,
+        help='Guardian name'
+    )
+    guardian_relationship = fields.Selection([
+        ('father', 'Father'),
+        ('mother', 'Mother'),
+        ('brother', 'Brother'),
+        ('sister', 'Sister'),
+        ('uncle', 'Uncle'),
+        ('aunt', 'Aunt'),
+        ('grandfather', 'Grandfather'),
+        ('grandmother', 'Grandmother'),
+        ('legal_guardian', 'Legal Guardian'),
+        ('other', 'Other')
+    ], string='Guardian Relationship', compute='_compute_guardian_info', store=True, help='Relationship to guardian')
+    guardian_phone = fields.Char(
+        string='Guardian Phone',
+        compute='_compute_guardian_info',
+        store=True,
+        help='Guardian phone number'
+    )
+    religion = fields.Selection([
+        ('muslim', 'Muslim'),
+        ('christian', 'Christian'),
+        ('other', 'Other')
+    ], string='Religion', related='admission_file_id.religion', store=True, help='Religious affiliation')
+    batch_id = fields.Many2one(
+        'acmst.batch',
+        string='Batch',
+        related='admission_file_id.batch_id',
+        store=True,
+        help='Target batch'
+    )
+    batch_name = fields.Char(
+        string='Batch Name',
+        related='admission_file_id.batch_id.name',
+        store=True,
+        help='Batch name'
+    )
+    admission_type = fields.Selection([
+        ('direct', 'Direct Admission'),
+        ('regular', 'Regular Admission'),
+        ('private', 'Private Admission'),
+        ('transfer', 'Transfer'),
+        ('bridging', 'Bridging'),
+        ('degree_holder', 'Degree Holder'),
+        ('private_education_grant', 'Private Education Grant')
+    ], string='Admission Type', related='admission_file_id.admission_type', store=True, help='Type of admission')
 
     @api.depends('admission_file_id', 'check_date')
     def _compute_name(self):
@@ -529,3 +688,88 @@ class AcmstHealthCheck(models.Model):
             'view_mode': 'graph,pivot,tree',
             'context': {'group_by': ['check_date:month', 'state']},
         }
+
+    def write(self, vals):
+        """Override write to log all changes"""
+        _logger.info(f"Updating health check {self.name} with vals: {vals}")
+
+        # Get old values before update
+        old_values = {}
+        if 'state' in vals:
+            old_values['state'] = self.state
+        if 'medical_fitness' in vals:
+            old_values['medical_fitness'] = self.medical_fitness
+
+        result = super(AcmstHealthCheck, self).write(vals)
+
+        # Log state changes
+        if 'state' in vals and old_values.get('state') != self.state:
+            _logger.info(f"Health check {self.name} state changed from {old_values.get('state')} to {self.state}")
+
+            # Create audit log entry for state change
+            self.env['acmst.audit.log'].create({
+                'model_name': 'acmst.health.check',
+                'record_id': self.id,
+                'record_name': self.name,
+                'action': 'write',
+                'category': 'workflow',
+                'old_values': f"State: {old_values.get('state')}",
+                'new_values': f"State: {self.state}",
+                'user_id': self.env.user.id,
+                'action_description': f'State changed from {old_values.get("state")} to {self.state}'
+            })
+
+            # Post message to chatter
+            self.message_post(
+                body=f'Status changed from {old_values.get("state")} to {self.state}',
+                message_type='comment'
+            )
+
+        # Log medical fitness changes
+        if 'medical_fitness' in vals:
+            _logger.info(f"Health check {self.name} medical fitness changed")
+
+            self.env['acmst.audit.log'].create({
+                'model_name': 'acmst.health.check',
+                'record_id': self.id,
+                'record_name': self.name,
+                'action': 'write',
+                'category': 'data_modification',
+                'old_values': f"Medical Fitness: {old_values.get('medical_fitness', 'None')}",
+                'new_values': f"Medical Fitness: {self.medical_fitness}",
+                'user_id': self.env.user.id,
+                'action_description': 'Medical fitness updated'
+            })
+
+            self.message_post(
+                body=f'Medical fitness updated to {self.medical_fitness}',
+                message_type='comment'
+            )
+
+        return result
+
+    def unlink(self):
+        """Override unlink to log deletions"""
+        for record in self:
+            _logger.warning(f"Deleting health check {record.name} for admission file {record.admission_file_id.name}")
+
+            # Create audit log entry for deletion
+            self.env['acmst.audit.log'].create({
+                'model_name': 'acmst.health.check',
+                'record_id': record.id,
+                'record_name': record.name,
+                'action': 'unlink',
+                'category': 'data_deletion',
+                'old_values': f'Health check: {record.name} for {record.admission_file_id.name}',
+                'new_values': '',
+                'user_id': self.env.user.id,
+                'action_description': f'Health check deleted: {record.name}'
+            })
+
+            # Post message to chatter before deletion
+            record.message_post(
+                body=f'Health check {record.name} has been deleted',
+                message_type='comment'
+            )
+
+        return super(AcmstHealthCheck, self).unlink()

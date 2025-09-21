@@ -23,11 +23,17 @@ class AcmstUniversityIdUpdateWizard(models.TransientModel):
     )
     
     # Student Information (readonly)
-    applicant_name = fields.Char(
-        string='Applicant Name',
-        related='admission_file_id.applicant_name',
+    applicant_name_english = fields.Char(
+        string='Applicant Name (English)',
+        related='admission_file_id.applicant_name_english',
         readonly=True,
-        help='Student name'
+        help='Student name in English'
+    )
+    applicant_name_arabic = fields.Char(
+        string='Applicant Name (Arabic)',
+        related='admission_file_id.applicant_name_arabic',
+        readonly=True,
+        help='Student name in Arabic'
     )
     national_id = fields.Char(
         string='National ID',
@@ -54,6 +60,12 @@ class AcmstUniversityIdUpdateWizard(models.TransientModel):
         help='Comments about the university ID update'
     )
 
+    # Acknowledgment
+    acknowledge_warning = fields.Boolean(
+        string='I acknowledge that updating University ID is a sensitive operation',
+        help='I understand that this operation is logged and requires special permissions'
+    )
+
     @api.constrains('new_university_id')
     def _check_university_id(self):
         """Validate university ID format"""
@@ -70,15 +82,32 @@ class AcmstUniversityIdUpdateWizard(models.TransientModel):
                     )
 
     def action_update_university_id(self):
-        """Update university ID and clear processing status"""
+        """Update university ID with security checks and acknowledgment"""
         self.ensure_one()
-        
+
         if not self.new_university_id:
             raise UserError(_('Please enter a university ID.'))
-        
-        # Update university ID and clear processing status
+
+        if not self.acknowledge_warning:
+            raise UserError(_('Please acknowledge that you understand this is a sensitive operation.'))
+
+        # Check user permissions
+        if not self.env.user.has_group('acmst_admission.group_university_id_updater') and \
+           not self.env.user.has_group('acmst_admission.group_admin') and \
+           not self.env.user.has_group('acmst_admission.group_manager'):
+            raise UserError(_('You do not have permission to update University ID. This operation requires special permissions.'))
+
+        # Check if University ID is already assigned
+        if self.admission_file_id.university_id and self.admission_file_id.university_id == self.new_university_id:
+            raise UserError(_('The new University ID is the same as the current one.'))
+
+        # Log the sensitive operation
+        _logger.warning(f"Sensitive operation: University ID update by user {self.env.user.name} ({self.env.user.id}) "
+                       f"for admission file {self.admission_file_id.name} from '{self.admission_file_id.university_id}' to '{self.new_university_id}'")
+
+        # Update university ID
         self.admission_file_id.update_university_id(
-            self.new_university_id, 
+            self.new_university_id,
             self.env.user.id
         )
         

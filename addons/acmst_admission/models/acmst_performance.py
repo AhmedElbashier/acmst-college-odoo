@@ -501,7 +501,7 @@ class AcmstPerformanceOptimization(models.Model):
         
         optimizations.append(self.create_index_optimization(
             'acmst.admission.file',
-            ['applicant_name', 'national_id'],
+            ['applicant_name_english', 'national_id'],
             'acmst_admission_file_name_id_idx'
         ))
         

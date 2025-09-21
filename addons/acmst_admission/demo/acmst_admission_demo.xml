@@ -4,7 +4,8 @@
         
         <!-- Demo Portal Applications -->
         <record id="demo_portal_application_1" model="acmst.portal.application">
-            <field name="applicant_name">Ahmed Al-Rashid</field>
+            <field name="applicant_name_english">Ahmed Al-Rashid</field>
+            <field name="applicant_name_arabic">أحمد الراشد</field>
             <field name="national_id">1234567890</field>
             <field name="phone">+966501234567</field>
             <field name="email">ahmed.rashid@example.com</field>
@@ -12,17 +13,20 @@
             <field name="batch_id" ref="acmst_core_settings.batch_nursing_2024"/>
             <field name="birth_date">1995-03-15</field>
             <field name="gender">male</field>
-            <field name="nationality">Saudi</field>
+            <field name="nationality">sudanese</field>
             <field name="address">Riyadh, Saudi Arabia</field>
             <field name="emergency_contact">Sara Al-Rashid</field>
             <field name="emergency_phone">+966501234568</field>
             <field name="previous_education">Bachelor's in Computer Science from King Saud University</field>
+            <field name="id_type">national_id</field>
+            <field name="admission_type">regular</field>
             <field name="state">submitted</field>
             <field name="submission_date" eval="datetime.now()"/>
         </record>
 
         <record id="demo_portal_application_2" model="acmst.portal.application">
-            <field name="applicant_name">Fatima Al-Zahra</field>
+            <field name="applicant_name_english">Fatima Al-Zahra</field>
+            <field name="applicant_name_arabic">فاطمة الزهراء</field>
             <field name="national_id">0987654321</field>
             <field name="phone">+966501234569</field>
             <field name="email">fatima.zahra@example.com</field>
@@ -30,18 +34,21 @@
             <field name="batch_id" ref="acmst_core_settings.batch_pharmacy_2024"/>
             <field name="birth_date">1998-07-22</field>
             <field name="gender">female</field>
-            <field name="nationality">Saudi</field>
+            <field name="nationality">sudanese</field>
             <field name="address">Jeddah, Saudi Arabia</field>
             <field name="emergency_contact">Mohammed Al-Zahra</field>
             <field name="emergency_phone">+966501234570</field>
             <field name="previous_education">Bachelor's in Business Administration from King Abdulaziz University</field>
+            <field name="id_type">national_id</field>
+            <field name="admission_type">regular</field>
             <field name="state">approved</field>
             <field name="submission_date" eval="datetime.now()"/>
         </record>
 
         <!-- Demo Admission Files -->
         <record id="demo_admission_file_1" model="acmst.admission.file">
-            <field name="applicant_name">Ahmed Al-Rashid</field>
+            <field name="applicant_name_english">Ahmed Al-Rashid</field>
+            <field name="applicant_name_arabic">أحمد الراشد</field>
             <field name="national_id">1234567890</field>
             <field name="phone">+966501234567</field>
             <field name="email">ahmed.rashid@example.com</field>
@@ -49,11 +56,13 @@
             <field name="batch_id" ref="acmst_core_settings.batch_nursing_2024"/>
             <field name="birth_date">1995-03-15</field>
             <field name="gender">male</field>
-            <field name="nationality">Saudi</field>
+            <field name="nationality">sudanese</field>
             <field name="address">Riyadh, Saudi Arabia</field>
             <field name="emergency_contact">Sara Al-Rashid</field>
             <field name="emergency_phone">+966501234568</field>
             <field name="previous_education">Bachelor's in Computer Science from King Saud University</field>
+            <field name="id_type">national_id</field>
+            <field name="admission_type">regular</field>
             <field name="state">ministry_approved</field>
             <field name="submission_method">portal</field>
             <field name="application_date" eval="datetime.now()"/>
@@ -61,7 +70,8 @@
         </record>
 
         <record id="demo_admission_file_2" model="acmst.admission.file">
-            <field name="applicant_name">Fatima Al-Zahra</field>
+            <field name="applicant_name_english">Fatima Al-Zahra</field>
+            <field name="applicant_name_arabic">فاطمة الزهراء</field>
             <field name="national_id">0987654321</field>
             <field name="phone">+966501234569</field>
             <field name="email">fatima.zahra@example.com</field>
@@ -69,11 +79,13 @@
             <field name="batch_id" ref="acmst_core_settings.batch_pharmacy_2024"/>
             <field name="birth_date">1998-07-22</field>
             <field name="gender">female</field>
-            <field name="nationality">Saudi</field>
+            <field name="nationality">sudanese</field>
             <field name="address">Jeddah, Saudi Arabia</field>
             <field name="emergency_contact">Mohammed Al-Zahra</field>
             <field name="emergency_phone">+966501234570</field>
             <field name="previous_education">Bachelor's in Business Administration from King Abdulaziz University</field>
+            <field name="id_type">national_id</field>
+            <field name="admission_type">regular</field>
             <field name="state">coordinator_review</field>
             <field name="submission_method">portal</field>
             <field name="application_date" eval="datetime.now()"/>
@@ -82,7 +94,8 @@
         </record>
 
         <record id="demo_admission_file_3" model="acmst.admission.file">
-            <field name="applicant_name">Omar Al-Mansouri</field>
+            <field name="applicant_name_english">Omar Al-Mansouri</field>
+            <field name="applicant_name_arabic">عمر المنصوري</field>
             <field name="national_id">1122334455</field>
             <field name="phone">+966501234571</field>
             <field name="email">omar.mansouri@example.com</field>
@@ -90,11 +103,13 @@
             <field name="batch_id" ref="acmst_core_settings.batch_medical_lab_2024"/>
             <field name="birth_date">1997-11-08</field>
             <field name="gender">male</field>
-            <field name="nationality">Saudi</field>
+            <field name="nationality">sudanese</field>
             <field name="address">Dammam, Saudi Arabia</field>
             <field name="emergency_contact">Layla Al-Mansouri</field>
             <field name="emergency_phone">+966501234572</field>
             <field name="previous_education">Bachelor's in Biology from King Fahd University</field>
+            <field name="id_type">national_id</field>
+            <field name="admission_type">regular</field>
             <field name="state">health_required</field>
             <field name="submission_method">portal</field>
             <field name="application_date" eval="datetime.now()"/>
@@ -102,7 +117,8 @@
         </record>
 
         <record id="demo_admission_file_4" model="acmst.admission.file">
-            <field name="applicant_name">Noura Al-Shehri</field>
+            <field name="applicant_name_english">Noura Al-Shehri</field>
+            <field name="applicant_name_arabic">نورة الشهري</field>
             <field name="national_id">5566778899</field>
             <field name="phone">+966501234573</field>
             <field name="email">noura.shehri@example.com</field>
@@ -110,11 +126,13 @@
             <field name="batch_id" ref="acmst_core_settings.batch_nursing_2024"/>
             <field name="birth_date">1999-04-12</field>
             <field name="gender">female</field>
-            <field name="nationality">Saudi</field>
+            <field name="nationality">sudanese</field>
             <field name="address">Mecca, Saudi Arabia</field>
             <field name="emergency_contact">Khalid Al-Shehri</field>
             <field name="emergency_phone">+966501234574</field>
             <field name="previous_education">Bachelor's in Psychology from Umm Al-Qura University</field>
+            <field name="id_type">national_id</field>
+            <field name="admission_type">regular</field>
             <field name="state">manager_review</field>
             <field name="submission_method">portal</field>
             <field name="application_date" eval="datetime.now()"/>
@@ -124,7 +142,8 @@
         </record>
 
         <record id="demo_admission_file_5" model="acmst.admission.file">
-            <field name="applicant_name">Khalid Al-Otaibi</field>
+            <field name="applicant_name_english">Khalid Al-Otaibi</field>
+            <field name="applicant_name_arabic">خالد العطيبي</field>
             <field name="national_id">9988776655</field>
             <field name="phone">+966501234575</field>
             <field name="email">khalid.otaibi@example.com</field>
@@ -132,11 +151,13 @@
             <field name="batch_id" ref="acmst_core_settings.batch_pharmacy_2024"/>
             <field name="birth_date">1996-09-25</field>
             <field name="gender">male</field>
-            <field name="nationality">Saudi</field>
+            <field name="nationality">sudanese</field>
             <field name="address">Tabuk, Saudi Arabia</field>
             <field name="emergency_contact">Maha Al-Otaibi</field>
             <field name="emergency_phone">+966501234576</field>
             <field name="previous_education">Bachelor's in Chemistry from King Abdulaziz University</field>
+            <field name="id_type">national_id</field>
+            <field name="admission_type">regular</field>
             <field name="state">completed</field>
             <field name="submission_method">portal</field>
             <field name="application_date" eval="datetime.now()"/>

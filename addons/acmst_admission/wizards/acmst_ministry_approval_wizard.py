@@ -103,6 +103,86 @@ class AcmstMinistryApprovalWizard(models.TransientModel):
         help='Whether student data has been validated'
     )
 
+    # Sensitive Data Acknowledgment
+    acknowledge_sensitive_data = fields.Boolean(
+        string='I acknowledge that I have reviewed all sensitive data',
+        default=False,
+        help='I confirm that I have carefully reviewed all sensitive personal information including National ID, contact details, and academic records'
+    )
+
+    # Additional Sensitive Data Fields
+    birth_date = fields.Date(
+        string='Birth Date',
+        compute='_compute_applicant_data',
+        readonly=True,
+        help='Date of birth for verification'
+    )
+    gender = fields.Selection([
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other')
+    ], string='Gender',
+        compute='_compute_applicant_data',
+        readonly=True,
+        help='Gender for verification'
+    )
+    nationality = fields.Char(
+        string='Nationality',
+        compute='_compute_applicant_data',
+        readonly=True,
+        help='Nationality for verification'
+    )
+    address = fields.Text(
+        string='Address',
+        compute='_compute_applicant_data',
+        readonly=True,
+        help='Residential address for verification'
+    )
+    emergency_contact = fields.Char(
+        string='Emergency Contact',
+        compute='_compute_applicant_data',
+        readonly=True,
+        help='Emergency contact name for verification'
+    )
+    emergency_phone = fields.Char(
+        string='Emergency Phone',
+        compute='_compute_applicant_data',
+        readonly=True,
+        help='Emergency contact phone for verification'
+    )
+
+    # Educational Data
+    education_institution = fields.Char(
+        string='Previous Institution',
+        compute='_compute_applicant_data',
+        readonly=True,
+        help='Previous educational institution'
+    )
+    education_program = fields.Char(
+        string='Previous Program',
+        compute='_compute_applicant_data',
+        readonly=True,
+        help='Previous program studied'
+    )
+    education_completion_year = fields.Integer(
+        string='Completion Year',
+        compute='_compute_applicant_data',
+        readonly=True,
+        help='Year of completion of previous education'
+    )
+    certificate_type = fields.Selection([
+        ('high_school', 'High School'),
+        ('bachelor', 'Bachelor'),
+        ('master', 'Master'),
+        ('phd', 'PhD'),
+        ('diploma', 'Diploma'),
+        ('other', 'Other')
+    ], string='Certificate Type',
+        compute='_compute_applicant_data',
+        readonly=True,
+        help='Type of previous certificate'
+    )
+
     @api.onchange('has_university_id')
     def _onchange_has_university_id(self):
         """Clear university ID when unchecked"""
@@ -123,20 +203,40 @@ class AcmstMinistryApprovalWizard(models.TransientModel):
         for record in self:
             if record.portal_application_id:
                 # Get data from portal application
-                record.applicant_name = record.portal_application_id.applicant_name
+                record.applicant_name = record.portal_application_id.applicant_name_english
                 record.national_id = record.portal_application_id.national_id
                 record.phone = record.portal_application_id.phone
                 record.email = record.portal_application_id.email
                 record.program_id = record.portal_application_id.program_id
                 record.batch_id = record.portal_application_id.batch_id
+                record.birth_date = record.portal_application_id.birth_date
+                record.gender = record.portal_application_id.gender
+                record.nationality = record.portal_application_id.nationality
+                record.address = record.portal_application_id.address
+                record.emergency_contact = record.portal_application_id.emergency_contact
+                record.emergency_phone = record.portal_application_id.emergency_phone
+                record.education_institution = record.portal_application_id.education_institution
+                record.education_program = record.portal_application_id.education_program
+                record.education_completion_year = record.portal_application_id.education_completion_year
+                record.certificate_type = record.portal_application_id.certificate_type
             elif record.admission_file_id:
                 # Get data from admission file
-                record.applicant_name = record.admission_file_id.applicant_name
+                record.applicant_name = record.admission_file_id.applicant_name_english
                 record.national_id = record.admission_file_id.national_id
                 record.phone = record.admission_file_id.phone
                 record.email = record.admission_file_id.email
                 record.program_id = record.admission_file_id.program_id
                 record.batch_id = record.admission_file_id.batch_id
+                record.birth_date = record.admission_file_id.birth_date
+                record.gender = record.admission_file_id.gender
+                record.nationality = record.admission_file_id.nationality
+                record.address = record.admission_file_id.address
+                record.emergency_contact = record.admission_file_id.emergency_contact
+                record.emergency_phone = record.admission_file_id.emergency_phone
+                record.education_institution = record.admission_file_id.education_institution
+                record.education_program = record.admission_file_id.education_program
+                record.education_completion_year = record.admission_file_id.education_completion_year
+                record.certificate_type = record.admission_file_id.certificate_type
             else:
                 # Clear data if no source
                 record.applicant_name = False
@@ -145,6 +245,16 @@ class AcmstMinistryApprovalWizard(models.TransientModel):
                 record.email = False
                 record.program_id = False
                 record.batch_id = False
+                record.birth_date = False
+                record.gender = False
+                record.nationality = False
+                record.address = False
+                record.emergency_contact = False
+                record.emergency_phone = False
+                record.education_institution = False
+                record.education_program = False
+                record.education_completion_year = False
+                record.certificate_type = False
 
     def action_validate_data(self):
         """Validate student data"""
@@ -188,8 +298,30 @@ class AcmstMinistryApprovalWizard(models.TransientModel):
         if not self.data_validated:
             raise UserError(_('Please validate student data first before approving.'))
 
+        if not self.acknowledge_sensitive_data:
+            raise UserError(_('Please acknowledge that you have reviewed all sensitive data before approving.'))
+
         if self.decision != 'approve':
             raise UserError(_('This action is only for approval.'))
+
+        # Log the acknowledgment of sensitive data
+        _logger.info(f"User {self.approver_id.name} acknowledged sensitive data review for applicant {self.applicant_name}")
+
+        # Create audit log entry for data acknowledgment
+        audit_vals = {
+            'model_name': 'acmst.admission.file' if self.admission_file_id else 'acmst.portal.application',
+            'record_id': self.admission_file_id.id if self.admission_file_id else self.portal_application_id.id,
+            'record_name': self.admission_file_id.name if self.admission_file_id else self.portal_application_id.name,
+            'action': 'approval',
+            'category': 'data_access',
+            'old_values': '',
+            'new_values': 'Sensitive data reviewed and acknowledged',
+            'user_id': self.approver_id.id,
+            'action_description': f'Sensitive data acknowledgment by {self.approver_id.name} for ministry approval',
+            'is_sensitive': True,
+            'severity': 'high'
+        }
+        self.env['acmst.audit.log'].create(audit_vals)
 
         if self.portal_application_id:
             # Handle portal application approval
@@ -206,7 +338,8 @@ class AcmstMinistryApprovalWizard(models.TransientModel):
 
         # Create admission file from portal application
         admission_vals = {
-            'applicant_name': self.portal_application_id.applicant_name,
+            'applicant_name_english': self.portal_application_id.applicant_name_english,
+            'applicant_name_arabic': self.portal_application_id.applicant_name_arabic,
             'national_id': self.portal_application_id.national_id,
             'phone': self.portal_application_id.phone,
             'email': self.portal_application_id.email,
@@ -219,13 +352,39 @@ class AcmstMinistryApprovalWizard(models.TransientModel):
             'emergency_contact': self.portal_application_id.emergency_contact,
             'emergency_phone': self.portal_application_id.emergency_phone,
             'previous_education': self.portal_application_id.previous_education,
+            'education_institution': self.portal_application_id.education_institution,
+            'education_program': self.portal_application_id.education_program,
+            'education_college': self.portal_application_id.education_college,
+            'education_major': self.portal_application_id.education_major,
+            'education_start_year': self.portal_application_id.education_start_year,
+            'education_completion_year': self.portal_application_id.education_completion_year,
+            'certificate_type': self.portal_application_id.certificate_type,
+            'education_duration_years': self.portal_application_id.education_duration_years,
             'submission_method': 'portal',
             'state': 'health_required',  # Set to health_required for health check
+            'profile_picture': self.portal_application_id.profile_picture,
+            'profile_picture_filename': self.portal_application_id.profile_picture_filename,
+            'id_type': self.portal_application_id.id_type,
+            'admission_type': self.portal_application_id.admission_type,
+            'place_of_birth': self.portal_application_id.place_of_birth,
+            'religion': self.portal_application_id.religion,
             # Don't set name - let admission file generate its own ADM000xxx ID
         }
 
         _logger.info(f"Creating admission file from portal application {self.portal_application_id.name}")
         admission_file = self.env['acmst.admission.file'].create(admission_vals)
+
+        # Create guardian records for the admission file
+        for guardian in self.portal_application_id.guardian_ids:
+            self.env['acmst.guardian'].create({
+                'name': guardian.name,
+                'relationship': guardian.relationship,
+                'phone': guardian.phone,
+                'email': guardian.email,
+                'is_default': guardian.is_default,
+                'is_active': guardian.is_active,
+                'admission_file_id': admission_file.id
+            })
 
         # Handle university ID
         if self.has_university_id and self.university_id:

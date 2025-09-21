@@ -8,48 +8,100 @@
             <field name="description">Admission management system categories</field>
             <field name="sequence">100</field>
         </record>
+
+        <!-- Admission Management Subcategories -->
+        <record id="module_category_admission_operations" model="ir.module.category">
+            <field name="name">Admission Operations</field>
+            <field name="description">Operational roles in admission management</field>
+            <field name="parent_id" ref="module_category_admission"/>
+            <field name="sequence">101</field>
+        </record>
+
+        <record id="module_category_admission_approvals" model="ir.module.category">
+            <field name="name">Admission Approvals</field>
+            <field name="description">Approval and review roles in admission management</field>
+            <field name="parent_id" ref="module_category_admission"/>
+            <field name="sequence">102</field>
+        </record>
+
+        <record id="module_category_admission_administration" model="ir.module.category">
+            <field name="name">Admission Administration</field>
+            <field name="description">Administrative roles in admission management</field>
+            <field name="parent_id" ref="module_category_admission"/>
+            <field name="sequence">103</field>
+        </record>
         
         <!-- Security Groups -->
         <record id="acmst_admission.group_admin" model="res.groups">
-            <field name="name">Admission Admin</field>
-            <field name="category_id" ref="base.module_category_administration"/>
-            <field name="comment">Full access to all admission functions</field>
+            <field name="name">Admission Administrator</field>
+            <field name="category_id" ref="module_category_admission_administration"/>
+            <field name="comment">Full access to all admission functions, system configuration, and administration</field>
         </record>
 
         <record id="acmst_admission.group_manager" model="res.groups">
             <field name="name">Admission Manager</field>
-            <field name="category_id" ref="base.module_category_administration"/>
-            <field name="comment">Final approval authority for admission process</field>
+            <field name="category_id" ref="module_category_admission_approvals"/>
+            <field name="comment">Final approval authority for admission process and oversight of all applications</field>
         </record>
 
         <record id="acmst_admission.group_coordinator" model="res.groups">
             <field name="name">Program Coordinator</field>
-            <field name="category_id" ref="base.module_category_administration"/>
-            <field name="comment">Academic approval authority for admission process</field>
+            <field name="category_id" ref="module_category_admission_approvals"/>
+            <field name="comment">Academic approval authority for admission process and program-specific reviews</field>
         </record>
 
         <record id="acmst_admission.group_health" model="res.groups">
             <field name="name">Health Officer</field>
-            <field name="category_id" ref="base.module_category_administration"/>
-            <field name="comment">Medical assessment authority for admission process</field>
+            <field name="category_id" ref="module_category_admission_approvals"/>
+            <field name="comment">Medical assessment authority for admission process and health check approvals</field>
         </record>
 
         <record id="acmst_admission.group_officer" model="res.groups">
             <field name="name">Admission Officer</field>
-            <field name="category_id" ref="base.module_category_administration"/>
-            <field name="comment">File processing and management for admission process</field>
+            <field name="category_id" ref="module_category_admission_operations"/>
+            <field name="comment">File processing, document management, and daily operational tasks for admission process</field>
         </record>
 
         <record id="acmst_admission.group_portal" model="res.groups">
             <field name="name">Portal User</field>
             <field name="category_id" ref="module_category_admission"/>
-            <field name="comment">Limited access to own applications</field>
+            <field name="comment">Limited access to own applications and personal information</field>
         </record>
 
         <record id="acmst_admission.group_workflow_admin" model="res.groups">
             <field name="name">Workflow Administrator</field>
-            <field name="category_id" ref="base.module_category_administration"/>
-            <field name="comment">Can manage workflow engines and rules</field>
+            <field name="category_id" ref="module_category_admission_administration"/>
+            <field name="comment">Can manage workflow engines, rules, and system processes</field>
+        </record>
+
+        <record id="acmst_admission.group_university_id_updater" model="res.groups">
+            <field name="name">University ID Updater</field>
+            <field name="category_id" ref="module_category_admission_operations"/>
+            <field name="comment">Can update University ID for admission files (sensitive operation requiring special permissions)</field>
+        </record>
+
+        <record id="acmst_admission.group_document_manager" model="res.groups">
+            <field name="name">Document Manager</field>
+            <field name="category_id" ref="module_category_admission_operations"/>
+            <field name="comment">Specialized role for managing document attachments, approvals, and rejections</field>
+        </record>
+
+        <record id="acmst_admission.group_reports_viewer" model="res.groups">
+            <field name="name">Reports Viewer</field>
+            <field name="category_id" ref="module_category_admission"/>
+            <field name="comment">Read-only access to reports and analytics data</field>
+        </record>
+
+        <record id="acmst_admission.group_audit_viewer" model="res.groups">
+            <field name="name">Audit Viewer</field>
+            <field name="category_id" ref="module_category_admission_administration"/>
+            <field name="comment">Can view audit logs and system activity reports</field>
+        </record>
+
+        <record id="acmst_admission.group_readonly_user" model="res.groups">
+            <field name="name">Read-Only User</field>
+            <field name="category_id" ref="module_category_admission"/>
+            <field name="comment">Read-only access to admission files and basic information</field>
         </record>
 
         <!-- Record Rules -->
@@ -62,7 +114,7 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_admin'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
+            <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="True"/>
         </record>
 
@@ -73,7 +125,7 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_manager'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
+            <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
 
@@ -110,7 +162,18 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_officer'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="acmst_admission_file_rule_university_id_updater" model="ir.rule">
+            <field name="name">Admission File: University ID Updater Access</field>
+            <field name="model_id" ref="model_acmst_admission_file"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_university_id_updater'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
 
@@ -122,7 +185,7 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_admin'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
+            <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="True"/>
         </record>
 
@@ -133,7 +196,7 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_health'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
+            <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
 
@@ -145,7 +208,7 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_admin'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
+            <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="True"/>
         </record>
 
@@ -156,7 +219,7 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_coordinator'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
+            <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
 
@@ -213,7 +276,41 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_admin'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- University ID Update Wizard Rules -->
+        <record id="acmst_university_id_update_wizard_rule_admin" model="ir.rule">
+            <field name="name">University ID Update Wizard: Admin Access</field>
+            <field name="model_id" ref="model_acmst_university_id_update_wizard"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="acmst_university_id_update_wizard_rule_manager" model="ir.rule">
+            <field name="name">University ID Update Wizard: Manager Access</field>
+            <field name="model_id" ref="model_acmst_university_id_update_wizard"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="acmst_university_id_update_wizard_rule_university_id_updater" model="ir.rule">
+            <field name="name">University ID Update Wizard: University ID Updater Access</field>
+            <field name="model_id" ref="model_acmst_university_id_update_wizard"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_university_id_updater'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="True"/>
         </record>
 
@@ -224,7 +321,7 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_coordinator'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
+            <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
 
@@ -235,7 +332,7 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_manager'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
+            <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
 
@@ -247,7 +344,7 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_admin'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
+            <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="True"/>
         </record>
 
@@ -258,7 +355,7 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_coordinator'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
+            <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
 
@@ -269,8 +366,235 @@
             <field name="groups" eval="[(4, ref('acmst_admission.group_manager'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- AcmstDocument Rules -->
+        <record id="acmst_document_rule_admin" model="ir.rule">
+            <field name="name">Document: Admin Access</field>
+            <field name="model_id" ref="model_acmst_document"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="acmst_document_rule_manager" model="ir.rule">
+            <field name="name">Document: Manager Access</field>
+            <field name="model_id" ref="model_acmst_document"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="acmst_document_rule_document_manager" model="ir.rule">
+            <field name="name">Document: Document Manager Access</field>
+            <field name="model_id" ref="model_acmst_document"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_document_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="acmst_document_rule_officer" model="ir.rule">
+            <field name="name">Document: Officer Access</field>
+            <field name="model_id" ref="model_acmst_document"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_officer'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="acmst_document_rule_portal" model="ir.rule">
+            <field name="name">Document: Portal Access</field>
+            <field name="model_id" ref="model_acmst_document"/>
+            <field name="domain_force">[('portal_application_id.portal_user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_portal'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="acmst_document_rule_readonly" model="ir.rule">
+            <field name="name">Document: Read-Only Access</field>
+            <field name="model_id" ref="model_acmst_document"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_readonly_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- AcmstDocumentRejectionWizard Rules -->
+        <record id="acmst_document_rejection_wizard_rule_admin" model="ir.rule">
+            <field name="name">Document Rejection Wizard: Admin Access</field>
+            <field name="model_id" ref="model_acmst_document_rejection_wizard"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="acmst_document_rejection_wizard_rule_manager" model="ir.rule">
+            <field name="name">Document Rejection Wizard: Manager Access</field>
+            <field name="model_id" ref="model_acmst_document_rejection_wizard"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="acmst_document_rejection_wizard_rule_document_manager" model="ir.rule">
+            <field name="name">Document Rejection Wizard: Document Manager Access</field>
+            <field name="model_id" ref="model_acmst_document_rejection_wizard"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_document_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- AcmstPendingEmail Rules -->
+        <record id="acmst_pending_email_rule_admin" model="ir.rule">
+            <field name="name">Pending Email: Admin Access</field>
+            <field name="model_id" ref="model_acmst_pending_email"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="acmst_pending_email_rule_manager" model="ir.rule">
+            <field name="name">Pending Email: Manager Access</field>
+            <field name="model_id" ref="model_acmst_pending_email"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="acmst_pending_email_rule_officer" model="ir.rule">
+            <field name="name">Pending Email: Officer Access</field>
+            <field name="model_id" ref="model_acmst_pending_email"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_officer'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- AcmstPerformanceOptimization Rules -->
+        <record id="acmst_performance_rule_admin" model="ir.rule">
+            <field name="name">Performance Optimization: Admin Access</field>
+            <field name="model_id" ref="model_acmst_performance_optimization"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="acmst_performance_rule_workflow_admin" model="ir.rule">
+            <field name="name">Performance Optimization: Workflow Admin Access</field>
+            <field name="model_id" ref="model_acmst_performance_optimization"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_workflow_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- AcmstDashboard Rules -->
+        <record id="acmst_dashboard_rule_admin" model="ir.rule">
+            <field name="name">Dashboard: Admin Access</field>
+            <field name="model_id" ref="model_acmst_dashboard"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="acmst_dashboard_rule_manager" model="ir.rule">
+            <field name="name">Dashboard: Manager Access</field>
+            <field name="model_id" ref="model_acmst_dashboard"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="acmst_dashboard_rule_reports_viewer" model="ir.rule">
+            <field name="name">Dashboard: Reports Viewer Access</field>
+            <field name="model_id" ref="model_acmst_dashboard"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_reports_viewer'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- AcmstAuditLog Rules -->
+        <record id="acmst_audit_log_rule_audit_viewer" model="ir.rule">
+            <field name="name">Audit Log: Audit Viewer Access</field>
+            <field name="model_id" ref="model_acmst_audit_log"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_audit_viewer'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Workflow Engine Rules -->
+        <record id="acmst_workflow_engine_rule_workflow_admin" model="ir.rule">
+            <field name="name">Workflow Engine: Workflow Admin Access</field>
+            <field name="model_id" ref="model_acmst_workflow_engine"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_workflow_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="acmst_workflow_rule_rule_workflow_admin" model="ir.rule">
+            <field name="name">Workflow Rule: Workflow Admin Access</field>
+            <field name="model_id" ref="model_acmst_workflow_rule"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('acmst_admission.group_workflow_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
         </record>
 
     </data>

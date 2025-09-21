@@ -31,17 +31,40 @@ class AcmstAdmissionFile(models.Model):
         default=lambda self: _('New'),
         help='Unique file number for this admission application'
     )
+    applicant_name_english = fields.Char(
+        string='Applicant Name (English)',
+        required=True,
+        tracking=True,
+        help='Full name of the applicant in English'
+    )
+    applicant_name_arabic = fields.Char(
+        string='Applicant Name (Arabic)',
+        required=True,
+        tracking=True,
+        help='Full name of the applicant in Arabic'
+    )
+
     applicant_name = fields.Char(
         string='Applicant Name',
-        required=True,
-        tracking=True,
-        help='Full name of the applicant'
+        compute='_compute_applicant_name',
+        help='Full name of the applicant (uses English name as primary)'
     )
     national_id = fields.Char(
-        string='National ID',
+        string='National ID / Passport Number',
         required=True,
         tracking=True,
-        help='National identification number'
+        help='National ID or passport number'
+    )
+    # ID Document Upload
+    id_document = fields.Binary(
+        string='ID Document',
+        help='Upload National ID or Passport copy',
+        required=False,
+        tracking=True
+    )
+    id_document_filename = fields.Char(
+        string='ID Document Filename',
+        help='Filename of the uploaded ID document'
     )
     phone = fields.Char(
         string='Phone',
@@ -102,41 +125,49 @@ class AcmstAdmissionFile(models.Model):
     total_applications = fields.Integer(
         string='Total Applications',
         compute='_compute_dashboard_statistics',
+        store=True,
         help='Total number of applications'
     )
     pending_review = fields.Integer(
         string='Pending Review',
         compute='_compute_dashboard_statistics',
+        store=True,
         help='Number of applications pending review'
     )
     health_required = fields.Integer(
         string='Health Required',
         compute='_compute_dashboard_statistics',
+        store=True,
         help='Number of applications requiring health check'
     )
     coordinator_review = fields.Integer(
         string='Coordinator Review',
         compute='_compute_dashboard_statistics',
+        store=True,
         help='Number of applications in coordinator review'
     )
     manager_review = fields.Integer(
         string='Manager Review',
         compute='_compute_dashboard_statistics',
+        store=True,
         help='Number of applications in manager review'
     )
     ministry_pending_total = fields.Integer(
         string='Ministry Pending (Total)',
         compute='_compute_dashboard_statistics',
+        store=True,
         help='Number of applications pending ministry approval'
     )
     completed = fields.Integer(
         string='Completed',
         compute='_compute_dashboard_statistics',
+        store=True,
         help='Number of completed applications'
     )
     rejected = fields.Integer(
         string='Rejected',
         compute='_compute_admission_manager_statistics',
+        store=True,
         help='Number of rejected applications'
     )
 
@@ -144,21 +175,25 @@ class AcmstAdmissionFile(models.Model):
     new_applications_count = fields.Integer(
         string='New Applications',
         compute='_compute_officer_statistics',
+        store=True,
         help='Number of new applications'
     )
     ministry_pending_count = fields.Integer(
         string='Ministry Pending',
         compute='_compute_officer_statistics',
+        store=True,
         help='Number of applications pending ministry approval'
     )
     ministry_approved_count = fields.Integer(
         string='Ministry Approved',
         compute='_compute_officer_statistics',
+        store=True,
         help='Number of ministry approved applications'
     )
     ministry_rejected_count = fields.Integer(
         string='Ministry Rejected',
         compute='_compute_officer_statistics',
+        store=True,
         help='Number of ministry rejected applications'
     )
 
@@ -166,31 +201,37 @@ class AcmstAdmissionFile(models.Model):
     total_reviews = fields.Integer(
         string='Total Reviews',
         compute='_compute_coordinator_statistics',
+        store=True,
         help='Total number of coordinator reviews'
     )
     pending_review_count = fields.Integer(
         string='Pending Review',
         compute='_compute_coordinator_statistics',
+        store=True,
         help='Number of applications pending coordinator review'
     )
     approved_count = fields.Integer(
         string='Approved',
         compute='_compute_coordinator_statistics',
+        store=True,
         help='Number of applications approved by coordinator'
     )
     conditional_count = fields.Integer(
         string='Conditional',
         compute='_compute_coordinator_statistics',
+        store=True,
         help='Number of applications with conditional approval'
     )
     my_reviews_count = fields.Integer(
         string='My Reviews',
         compute='_compute_coordinator_statistics',
+        store=True,
         help='Number of reviews assigned to current user'
     )
     approved_total = fields.Integer(
         string='Approved (Total)',
         compute='_compute_dashboard_statistics',
+        store=True,
         help='Number of approved applications'
     )
 
@@ -215,11 +256,10 @@ class AcmstAdmissionFile(models.Model):
         ('male', 'Male'),
         ('female', 'Female')
     ], string='Gender', required=True, help='Gender')
-    nationality = fields.Char(
-        string='Nationality',
-        required=True,
-        help='Nationality'
-    )
+    nationality = fields.Selection([
+        ('sudanese', 'Sudanese'),
+        ('foreign', 'Foreign')
+    ], string='Nationality', required=True, help='Nationality')
     address = fields.Text(
         string='Address',
         required=True,
@@ -236,26 +276,140 @@ class AcmstAdmissionFile(models.Model):
         help='Emergency contact phone number'
     )
 
+    # Guardian Information
+    guardian_ids = fields.One2many(
+        'acmst.guardian',
+        'admission_file_id',
+        string='Guardians',
+        help='List of guardians for this admission file'
+    )
+
+    # Additional Personal Information
+    place_of_birth = fields.Char(
+        string='Place of Birth',
+        help='City/Country of birth'
+    )
+    religion = fields.Selection([
+        ('muslim', 'Muslim'),
+        ('christian', 'Christian'),
+        ('other', 'Other')
+    ], string='Religion', help='Religious affiliation')
+
+    # Identification Information
+    id_type = fields.Selection([
+        ('national_id', 'National ID'),
+        ('passport', 'Passport')
+    ], string='ID Type', required=True, help='Type of identification document')
+
+    # Admission Information
+    admission_type = fields.Selection([
+        ('direct', 'Direct Admission'),
+        ('regular', 'Regular Admission'),
+        ('private', 'Private Admission'),
+        ('transfer', 'Transfer'),
+        ('bridging', 'Bridging'),
+        ('degree_holder', 'Degree Holder'),
+        ('private_education_grant', 'Private Education Grant')
+    ], string='Type of Admission', required=True, help='Type of admission')
+
     # Academic Information
     previous_education = fields.Text(
         string='Previous Education',
         help='Previous educational background'
     )
+
+    # Detailed Education Information
+    education_institution = fields.Char(
+        string='Education Institution',
+        help='Name of previous educational institution'
+    )
+    education_program = fields.Char(
+        string='Education Program',
+        help='Program/degree obtained'
+    )
+    education_college = fields.Char(
+        string='Education College',
+        help='College/School attended'
+    )
+    education_major = fields.Char(
+        string='Education Major',
+        help='Major field of study'
+    )
+    education_start_year = fields.Integer(
+        string='Education Start Year',
+        help='Year when education started'
+    )
+    education_completion_year = fields.Integer(
+        string='Education Completion Year',
+        help='Year when education was completed'
+    )
+    certificate_type = fields.Selection([
+        ('diploma', 'Diploma'),
+        ('bachelor', 'Bachelor'),
+        ('master', 'Master'),
+        ('phd', 'PhD'),
+        ('certificate', 'Certificate'),
+        ('other', 'Other')
+    ], string='Certificate Type', help='Type of certificate obtained')
+    education_duration_years = fields.Integer(
+        string='Education Duration (Years)',
+        help='Duration of education in years'
+    )
+
+    # Document Attachments - One2many relations for multiple documents
+    document_ids = fields.One2many(
+        'acmst.document',
+        'admission_file_id',
+        string='Documents',
+        help='All documents attached to this admission file'
+    )
+
+    # Specific document categories
+    id_document_ids = fields.One2many(
+        'acmst.document',
+        'admission_file_id',
+        domain=[('document_type', '=', 'id_document')],
+        string='ID Documents',
+        help='Identification documents (National ID/Passport)'
+    )
+    academic_document_ids = fields.One2many(
+        'acmst.document',
+        'admission_file_id',
+        domain=[('document_type', 'in', ['academic_certificate', 'transcript'])],
+        string='Academic Documents',
+        help='Academic certificates and transcripts'
+    )
+    support_document_ids = fields.One2many(
+        'acmst.document',
+        'admission_file_id',
+        domain=[('document_type', 'in', ['support_document', 'medical_report', 'other'])],
+        string='Support Documents',
+        help='Other supporting documents'
+    )
+    health_document_ids = fields.One2many(
+        'acmst.document',
+        'admission_file_id',
+        domain=[('document_type', 'in', ['health_document', 'medical_report'])],
+        string='Health Check Documents',
+        help='Health check related documents and medical reports'
+    )
+
+    # Legacy fields for backward compatibility (single file support)
     certificates = fields.Binary(
-        string='Certificates',
-        help='Attached certificate files'
+        string='Legacy Certificates',
+        help='Legacy field - use document_ids instead'
     )
     certificates_filename = fields.Char(
-        string='Certificates Filename',
-        help='Name of the certificate file'
+        string='Legacy Certificates Filename',
+        help='Legacy field - use document_ids instead'
     )
     transcripts = fields.Binary(
-        string='Transcripts',
-        help='Attached transcript files'
+        string='Legacy Transcripts',
+        help='Legacy field - use document_ids instead'
     )
     transcripts_filename = fields.Char(
-        string='Transcripts Filename',
-        help='Name of the transcript file'
+        string='Legacy Transcripts Filename',
+        help='Legacy field - use document_ids instead'
     )
 
     # Process Tracking
@@ -290,6 +444,17 @@ class AcmstAdmissionFile(models.Model):
         string='Updated By',
         help='User who last updated the university ID'
     )
+
+    # Student Profile Picture
+    profile_picture = fields.Binary(
+        string='Profile Picture',
+        attachment=True,
+        help='Student profile picture'
+    )
+    profile_picture_filename = fields.Char(
+        string='Profile Picture Filename',
+        help='Name of the profile picture file'
+    )
     health_check_date = fields.Date(
         string='Health Check Date',
         help='Date when health check was completed'
@@ -301,12 +466,14 @@ class AcmstAdmissionFile(models.Model):
     )
     coordinator_approval_date = fields.Date(
         string='Coordinator Approval Date',
-        help='Date when coordinator approval was received'
+        help='Date when coordinator approval was received',
+        readonly=True
     )
     coordinator_id = fields.Many2one(
         'res.users',
         string='Coordinator',
-        help='Program coordinator who reviewed the application'
+        help='Program coordinator who reviewed the application',
+        readonly=True
     )
     manager_approval_date = fields.Date(
         string='Manager Approval Date',
@@ -316,6 +483,21 @@ class AcmstAdmissionFile(models.Model):
         'res.users',
         string='Manager',
         help='Admission manager who gave final approval'
+    )
+
+    # Guardian Information
+    guardian_ids = fields.One2many(
+        'acmst.guardian',
+        'admission_file_id',
+        string='Guardians',
+        help='Guardian information for the student'
+    )
+    default_guardian_id = fields.Many2one(
+        'acmst.guardian',
+        string='Default Guardian',
+        help='The default guardian for this student',
+        compute='_compute_default_guardian',
+        store=True
     )
 
     # Related Records
@@ -394,6 +576,15 @@ class AcmstAdmissionFile(models.Model):
             else:
                 record.age = 0
 
+    @api.depends('guardian_ids.is_default')
+    def _compute_default_guardian(self):
+        """Compute the default guardian"""
+        for record in self:
+            default_guardian = record.guardian_ids.filtered(
+                lambda g: g.is_default == True
+            )
+            record.default_guardian_id = default_guardian[:1] if default_guardian else False
+
     @api.depends('health_check_ids.state')
     def _compute_health_status(self):
         """Compute health approval status"""
@@ -425,6 +616,12 @@ class AcmstAdmissionFile(models.Model):
                 record.health_fitness_status = 'No Health Check'
                 record.health_follow_up_required = False
 
+    @api.depends('applicant_name_english')
+    def _compute_applicant_name(self):
+        """Compute the applicant name (uses English name as primary)"""
+        for record in self:
+            record.applicant_name = record.applicant_name_english or ''
+
     @api.model
     def create(self, vals):
         """Override create to generate file number and validate required fields"""
@@ -444,9 +641,10 @@ class AcmstAdmissionFile(models.Model):
             _logger.info(f"Generated admission file number: {vals['name']}")
 
         # Validate required fields
-        required_fields = ['program_id', 'batch_id', 'applicant_name', 'national_id',
-                          'phone', 'email', 'birth_date', 'gender', 'nationality',
-                          'address', 'emergency_contact', 'emergency_phone']
+        required_fields = ['program_id', 'batch_id', 'applicant_name_english', 'applicant_name_arabic',
+                          'phone', 'email', 'birth_date', 'gender', 'nationality', 'id_type',
+                          'national_id', 'address', 'emergency_contact', 'emergency_phone',
+                          'admission_type']
 
         missing_fields = []
         for field in required_fields:
@@ -464,12 +662,141 @@ class AcmstAdmissionFile(models.Model):
         admission_file = super().create(vals)
         _logger.info(f"Admission file {admission_file.name} created successfully with state: {admission_file.state}")
 
+        # Create audit log entry
+        self.env['acmst.audit.log'].create({
+            'model_name': 'acmst.admission.file',
+            'record_id': admission_file.id,
+            'record_name': admission_file.name,
+            'action': 'create',
+            'category': 'data_modification',
+            'old_values': '',
+            'new_values': f'Created new admission file for {admission_file.applicant_name_english}',
+            'user_id': self.env.user.id,
+            'action_description': f'New admission file created: {admission_file.name}'
+        })
+
+        # Post message to chatter
+        admission_file.message_post(
+            body=f'New admission file created for {admission_file.applicant_name_english}',
+            message_type='comment'
+        )
+
         # If state is health_required, create health check record
         if vals.get('state') == 'health_required':
             _logger.info(f"Creating health check record for admission file {admission_file.name}")
             admission_file._create_health_check_record()
 
         return admission_file
+
+    def write(self, vals):
+        """Override write to log all changes"""
+        _logger.info(f"Updating admission file {self.name} with vals: {vals}")
+
+        # Get old values before update
+        old_values = {}
+        if 'state' in vals:
+            old_values['state'] = self.state
+        if 'university_id' in vals:
+            old_values['university_id'] = self.university_id
+        if 'is_processing_student' in vals:
+            old_values['is_processing_student'] = self.is_processing_student
+
+        result = super(AcmstAdmissionFile, self).write(vals)
+
+        # Log state changes
+        if 'state' in vals and old_values.get('state') != self.state:
+            _logger.info(f"Admission file {self.name} state changed from {old_values.get('state')} to {self.state}")
+
+            # Create audit log entry for state change
+            self.env['acmst.audit.log'].create({
+                'model_name': 'acmst.admission.file',
+                'record_id': self.id,
+                'record_name': self.name,
+                'action': 'write',
+                'category': 'workflow',
+                'old_values': f"State: {old_values.get('state')}",
+                'new_values': f"State: {self.state}",
+                'user_id': self.env.user.id,
+                'action_description': f'State changed from {old_values.get("state")} to {self.state}'
+            })
+
+            # Post message to chatter
+            self.message_post(
+                body=f'Status changed from {old_values.get("state")} to {self.state}',
+                message_type='comment'
+            )
+
+            # Create activity for state change
+            if self.state == 'health_required':
+                self.activity_schedule(
+                    'acmst_admission.mail_activity_health_check',
+                    summary='Health Check Required',
+                    note=f'Admission file {self.name} requires health check examination.',
+                    user_id=self.env.user.id
+                )
+            elif self.state == 'coordinator_review':
+                self.activity_schedule(
+                    'acmst_admission.mail_activity_coordinator_review',
+                    summary='Coordinator Review Required',
+                    note=f'Admission file {self.name} requires academic coordinator review.',
+                    user_id=self.env.user.id
+                )
+            elif self.state == 'manager_review':
+                self.activity_schedule(
+                    'acmst_admission.mail_activity_manager_review',
+                    summary='Manager Review Required',
+                    note=f'Admission file {self.name} requires final manager approval.',
+                    user_id=self.env.user.id
+                )
+
+        # Log University ID changes
+        if 'university_id' in vals:
+            _logger.info(f"Admission file {self.name} university ID changed")
+
+            self.env['acmst.audit.log'].create({
+                'model_name': 'acmst.admission.file',
+                'record_id': self.id,
+                'record_name': self.name,
+                'action': 'write',
+                'category': 'data_modification',
+                'old_values': f"University ID: {old_values.get('university_id', 'None')}",
+                'new_values': f"University ID: {self.university_id}",
+                'user_id': self.env.user.id,
+                'action_description': 'University ID updated'
+            })
+
+            self.message_post(
+                body=f'University ID updated to {self.university_id}',
+                message_type='comment'
+            )
+
+        return result
+
+    def unlink(self):
+        """Override unlink to log deletions"""
+        for record in self:
+            _logger.warning(f"Deleting admission file {record.name} for applicant {record.applicant_name_english}")
+
+            # Create audit log entry for deletion
+            self.env['acmst.audit.log'].create({
+                'model_name': 'acmst.admission.file',
+                'record_id': record.id,
+                'record_name': record.name,
+                'action': 'unlink',
+                'category': 'data_deletion',
+                'old_values': f'Admission file: {record.name} for {record.applicant_name_english}',
+                'new_values': '',
+                'user_id': self.env.user.id,
+                'action_description': f'Admission file deleted: {record.name}'
+            })
+
+            # Post message to chatter before deletion
+            record.message_post(
+                body=f'Admission file {record.name} has been deleted',
+                message_type='comment'
+            )
+
+        return super(AcmstAdmissionFile, self).unlink()
 
     @api.constrains('national_id')
     def _check_national_id(self):
@@ -521,28 +848,37 @@ class AcmstAdmissionFile(models.Model):
         errors = []
         
         # Validate required fields
-        if not self.applicant_name or len(self.applicant_name.strip()) < 2:
-            errors.append(_('Applicant name must be at least 2 characters long.'))
-        
-        if not self.national_id or len(self.national_id) != 10:
-            errors.append(_('National ID must be exactly 10 digits.'))
-        
+        if not self.applicant_name_english or len(self.applicant_name_english.strip()) < 2:
+            errors.append(_('English name must be at least 2 characters long.'))
+
+        if not self.applicant_name_arabic or len(self.applicant_name_arabic.strip()) < 2:
+            errors.append(_('Arabic name must be at least 2 characters long.'))
+
+        if not self.national_id or len(self.national_id.strip()) < 5:
+            errors.append(_('National ID / Passport number is required.'))
+
         if not self.phone or len(self.phone.strip()) < 10:
             errors.append(_('Phone number must be at least 10 characters long.'))
-        
+
         if not self.email or '@' not in self.email:
             errors.append(_('Please enter a valid email address.'))
-        
+
         if not self.birth_date:
             errors.append(_('Birth date is required.'))
         elif self.birth_date > date.today():
             errors.append(_('Birth date cannot be in the future.'))
-        
+
         if not self.gender:
             errors.append(_('Gender is required.'))
-        
-        if not self.nationality or len(self.nationality.strip()) < 2:
-            errors.append(_('Nationality must be at least 2 characters long.'))
+
+        if not self.nationality:
+            errors.append(_('Nationality selection is required.'))
+
+        if not self.id_type:
+            errors.append(_('ID type selection is required.'))
+
+        if not self.admission_type:
+            errors.append(_('Admission type selection is required.'))
         
         if not self.address or len(self.address.strip()) < 10:
             errors.append(_('Address must be at least 10 characters long.'))
@@ -552,6 +888,23 @@ class AcmstAdmissionFile(models.Model):
         
         if not self.emergency_phone or len(self.emergency_phone.strip()) < 10:
             errors.append(_('Emergency phone must be at least 10 characters long. Current value: "%s" (length: %d)') % (self.emergency_phone or '', len(self.emergency_phone.strip()) if self.emergency_phone else 0))
+
+        # Validate guardian information
+        if not self.guardian_ids:
+            errors.append(_('At least one guardian is required.'))
+        else:
+            default_guardian_found = False
+            for guardian in self.guardian_ids:
+                if not guardian.name or len(guardian.name.strip()) < 2:
+                    errors.append(_('Guardian name must be at least 2 characters long.'))
+                if not guardian.relationship:
+                    errors.append(_('Guardian relationship is required.'))
+                if not guardian.phone or len(guardian.phone.strip()) < 10:
+                    errors.append(_('Guardian phone must be at least 10 characters long.'))
+                if guardian.is_default:
+                    default_guardian_found = True
+            if not default_guardian_found:
+                errors.append(_('At least one guardian must be marked as default.'))
         
         if not self.program_id:
             errors.append(_('Program selection is required.'))
@@ -622,7 +975,28 @@ class AcmstAdmissionFile(models.Model):
         self.ensure_one()
         if self.state != 'new':
             raise UserError(_('Only new applications can be submitted for ministry approval.'))
-        
+
+        _logger.info(f'Admission file {self.name} submitted for ministry approval by {self.env.user.name}')
+
+        # Create audit log entry
+        self.env['acmst.audit.log'].create({
+            'model_name': 'acmst.admission.file',
+            'record_id': self.id,
+            'record_name': self.name,
+            'action': 'action_submit_ministry',
+            'category': 'workflow',
+            'old_values': f'State: {self.state}',
+            'new_values': 'State: ministry_pending',
+            'user_id': self.env.user.id,
+            'action_description': 'Application submitted for ministry approval'
+        })
+
+        # Post message to chatter
+        self.message_post(
+            body=f'Application submitted for ministry approval by {self.env.user.name}',
+            message_type='comment'
+        )
+
         self.write({
             'state': 'ministry_pending',
             'application_date': fields.Datetime.now()
@@ -644,7 +1018,22 @@ class AcmstAdmissionFile(models.Model):
         self.ensure_one()
         if self.state != 'ministry_pending':
             raise UserError(_('Only ministry pending applications can be approved.'))
-        
+
+        _logger.info(f'Ministry approval wizard opened for admission file {self.name} by {self.env.user.name}')
+
+        # Create audit log entry
+        self.env['acmst.audit.log'].create({
+            'model_name': 'acmst.admission.file',
+            'record_id': self.id,
+            'record_name': self.name,
+            'action': 'action_ministry_approve',
+            'category': 'workflow',
+            'old_values': f'State: {self.state}',
+            'new_values': f'State: {self.state} (wizard opened)',
+            'user_id': self.env.user.id,
+            'action_description': 'Ministry approval wizard opened'
+        })
+
         # Validate student data before opening wizard
         try:
             self.validate_student_data()
@@ -769,10 +1158,10 @@ class AcmstAdmissionFile(models.Model):
             'comments': 'Health check approved'
         })
 
-        # Automatically move to coordinator review
+        # Automatically move to coordinator review and assign coordinator from program
         _logger.info(f"Moving admission file {self.name} to coordinator review")
         self.action_coordinator_review()
-        
+
         return True
 
     def action_health_reject(self):
@@ -809,8 +1198,37 @@ class AcmstAdmissionFile(models.Model):
             raise UserError(_('Only health approved applications can be sent to coordinator.'))
 
         _logger.info(f"Sending admission file {self.name} to coordinator review by {self.env.user.name}")
-        self.write({'state': 'coordinator_review'})
-        _logger.info(f"Admission file {self.name} state changed to 'coordinator_review'")
+
+        # Automatically assign coordinator from program
+        coordinator_id = self.program_id.coordinator_id.id if self.program_id.coordinator_id else False
+
+        if not coordinator_id:
+            _logger.warning(f"No coordinator assigned to program {self.program_id.name} for admission file {self.name}")
+
+            # Create activity for system admin or manager to assign coordinator manually
+            self.activity_schedule(
+                'acmst_admission.mail_activity_coordinator_review',
+                summary='Coordinator Assignment Required',
+                note=f'Admission file {self.name} requires coordinator assignment. Program {self.program_id.name} has no coordinator assigned.',
+                user_id=self.env.user.id  # Assign to current user for manual assignment
+            )
+
+        self.write({
+            'state': 'coordinator_review',
+            'coordinator_id': coordinator_id
+        })
+
+        _logger.info(f"Admission file {self.name} state changed to 'coordinator_review' and assigned to coordinator {coordinator_id}")
+
+        # Create activity for the assigned coordinator
+        if coordinator_id:
+            self.activity_schedule(
+                'acmst_admission.mail_activity_coordinator_review',
+                summary='Coordinator Review Required',
+                note=f'Admission file {self.name} requires academic coordinator review. Program: {self.program_id.name}',
+                user_id=coordinator_id
+            )
+
         return True
 
     def action_coordinator_approve(self):
@@ -839,7 +1257,16 @@ class AcmstAdmissionFile(models.Model):
         workflow_engine = self.env['acmst.workflow.engine'].search([('active', '=', True)], limit=1)
         if workflow_engine:
             workflow_engine.execute_workflow(self)
-        
+
+        # Mark coordinator review activities as done
+        coordinator_activities = self.env['mail.activity'].search([
+            ('res_id', '=', self.id),
+            ('res_model', '=', self._name),
+            ('activity_type_id', '=', self.env.ref('acmst_admission.mail_activity_coordinator_review').id),
+            ('state', '!=', 'done')
+        ])
+        coordinator_activities.action_done()
+
         return True
 
     def action_coordinator_reject(self):
@@ -863,7 +1290,16 @@ class AcmstAdmissionFile(models.Model):
             'decision': 'rejected',
             'comments': 'Rejected by coordinator'
         })
-        
+
+        # Mark coordinator review activities as done
+        coordinator_activities = self.env['mail.activity'].search([
+            ('res_id', '=', self.id),
+            ('res_model', '=', self._name),
+            ('activity_type_id', '=', self.env.ref('acmst_admission.mail_activity_coordinator_review').id),
+            ('state', '!=', 'done')
+        ])
+        coordinator_activities.action_done()
+
         return True
 
     def action_coordinator_conditional(self):
@@ -882,6 +1318,15 @@ class AcmstAdmissionFile(models.Model):
             'comments': 'Approved with conditions by coordinator'
         })
         
+        # Mark coordinator review activities as done
+        coordinator_activities = self.env['mail.activity'].search([
+            ('res_id', '=', self.id),
+            ('res_model', '=', self._name),
+            ('activity_type_id', '=', self.env.ref('acmst_admission.mail_activity_coordinator_review').id),
+            ('state', '!=', 'done')
+        ])
+        coordinator_activities.action_done()
+
         # Open the condition wizard
         return {
             'type': 'ir.actions.act_window',
@@ -952,6 +1397,15 @@ class AcmstAdmissionFile(models.Model):
         # Automatically complete the process
         self.action_complete()
 
+        # Mark manager review activities as done
+        manager_activities = self.env['mail.activity'].search([
+            ('res_id', '=', self.id),
+            ('res_model', '=', self._name),
+            ('activity_type_id', '=', self.env.ref('acmst_admission.mail_activity_manager_review').id),
+            ('state', '!=', 'done')
+        ])
+        manager_activities.action_done()
+
         return True
 
     def action_manager_reject(self):
@@ -991,6 +1445,15 @@ class AcmstAdmissionFile(models.Model):
                 self.send_rejection_notification()
             except Exception as e:
                 _logger.warning(f"Could not send rejection notification: {e}")
+
+        # Mark manager review activities as done
+        manager_activities = self.env['mail.activity'].search([
+            ('res_id', '=', self.id),
+            ('res_model', '=', self._name),
+            ('activity_type_id', '=', self.env.ref('acmst_admission.mail_activity_manager_review').id),
+            ('state', '!=', 'done')
+        ])
+        manager_activities.action_done()
 
         return True
 
@@ -1033,13 +1496,13 @@ class AcmstAdmissionFile(models.Model):
     def _prepare_student_vals(self):
         """Prepare student record values"""
         return {
-            'name': self.applicant_name,
+            'name': self.applicant_name_english,
             'is_company': False,
             'email': self.email,
             'phone': self.phone,
             'mobile': self.phone,
             'street': self.address,
-            'comment': f'National ID: {self.national_id}\nEmergency Contact: {self.emergency_contact}\nEmergency Phone: {self.emergency_phone}\nAdmission File: {self.name}',
+            'comment': f'National ID: {self.national_id}\nEmergency Contact: {self.emergency_contact}\nEmergency Phone: {self.emergency_phone}\nAdmission File: {self.name}\nID Type: {self.id_type}\nAdmission Type: {self.admission_type}\nReligion: {self.religion or "Not Specified"}',
         }
 
     def _prepare_academic_vals(self, student):
@@ -1092,10 +1555,8 @@ class AcmstAdmissionFile(models.Model):
         self.ensure_one()
         if not self.student_id:
             raise UserError(_('No student record found.'))
-        
-        template = self.env.ref('acmst_admission.email_template_welcome_student', False)
-        if template:
-            template.send_mail(self.id, force_send=True)
+
+        return self._safe_send_mail('acmst_admission.email_template_welcome_student')
         
         return {
             'type': 'ir.actions.client',
@@ -1123,9 +1584,7 @@ class AcmstAdmissionFile(models.Model):
     def send_health_check_notification(self):
         """Send health check required notification"""
         self.ensure_one()
-        template = self.env.ref('acmst_admission.email_template_health_check_required', False)
-        if template:
-            template.send_mail(self.id, force_send=True)
+        return self._safe_send_mail('acmst_admission.email_template_health_check_required')
 
     def _create_health_check_record(self):
         """Create health check record for this admission file"""
@@ -1146,19 +1605,72 @@ class AcmstAdmissionFile(models.Model):
             }
             self.env['acmst.health.check'].create(health_check_vals)
 
+    def _safe_send_mail(self, template_ref, record_id=None, force_send=True):
+        """Safely send email with proper error handling - NEVER raises exceptions"""
+        try:
+            template = self.env.ref(template_ref, False)
+            if not template:
+                _logger.warning(f'Template {template_ref} not found.')
+                return False
+
+            # Check if there's an active mail server before sending
+            mail_server = self.env['ir.mail_server'].search([('active', '=', True)], order='sequence', limit=1)
+            if not mail_server:
+                # Create pending email instead of skipping
+                _logger.warning(f'No active mail server configured. Creating pending email for template {template_ref}.')
+                try:
+                    self._create_pending_email(template_ref, record_id or self.id)
+                except Exception as e:
+                    _logger.error(f'Failed to create pending email for template {template_ref}: {str(e)}')
+                return False
+
+            # Try to send the email
+            try:
+                template.send_mail(record_id or self.id, force_send=force_send)
+                _logger.info(f'Successfully sent email using template {template_ref}')
+                return True
+            except Exception as e:
+                _logger.warning(f'Failed to send email using template {template_ref}: {str(e)}')
+                # Create pending email as fallback
+                try:
+                    self._create_pending_email(template_ref, record_id or self.id)
+                except Exception as e2:
+                    _logger.error(f'Failed to create pending email for template {template_ref}: {str(e2)}')
+                return False
+
+        except Exception as e:
+            _logger.error(f'Unexpected error in _safe_send_mail for template {template_ref}: {str(e)}')
+            return False
+
+    def _create_pending_email(self, template_ref, record_id):
+        """Create a pending email record"""
+        try:
+            template = self.env.ref(template_ref, False)
+            if template:
+                # Create pending email record
+                self.env['acmst.pending.email'].create({
+                    'template_ref': template_ref,
+                    'record_id': record_id,
+                    'model_name': self._name,
+                    'record_name': self.name or str(self.id),
+                    'priority': 'medium',
+                    'retry_count': 0,
+                    'max_retries': 3,
+                    'created_by': self.env.user.id,
+                })
+                _logger.info(f'Created pending email for template {template_ref} on record {record_id}')
+        except Exception as e:
+            _logger.error(f'Failed to create pending email for template {template_ref}: {str(e)}')
+
     def send_conditions_notification(self):
         """Send conditions notification"""
         self.ensure_one()
-        template = self.env.ref('acmst_admission.email_template_coordinator_conditions', False)
-        if template:
-            template.send_mail(self.id, force_send=True)
+        return self._safe_send_mail('acmst_admission.email_template_coordinator_conditions')
 
     def send_final_approval_notification(self):
         """Send final approval notification"""
         self.ensure_one()
-        template = self.env.ref('acmst_admission.email_template_final_approval', False)
-        if template:
-            template.send_mail(self.id, force_send=True)
+        return self._safe_send_mail('acmst_admission.email_template_final_approval')
 
     def action_create_conditions(self):
         """Open wizard to create conditions"""
@@ -1441,20 +1953,21 @@ class AcmstAdmissionFile(models.Model):
         }
 
     def action_update_university_id(self):
-        """Open university ID update wizard for processing students"""
+        """Open university ID update wizard for admission files"""
         self.ensure_one()
-        if not self.is_processing_student:
-            raise UserError(_('This action is only available for processing students.'))
-        
+
         return {
             'type': 'ir.actions.act_window',
-            'name': _('Update University ID'),
+            'name': _('Update University ID - Sensitive Operation'),
             'res_model': 'acmst.university.id.update.wizard',
             'view_mode': 'form',
             'target': 'new',
             'context': {
                 'default_admission_file_id': self.id,
                 'default_current_university_id': self.university_id or '',
+                'default_new_university_id': '',
+                'default_comments': '',
+                'default_acknowledge_warning': False
             }
         }
 
@@ -1502,16 +2015,19 @@ class AcmstAdmissionFile(models.Model):
     coordinator_review_rate = fields.Float(
         string='Review Rate',
         compute='_compute_coordinator_performance_stats',
+        store=True,
         help='Coordinator review completion rate percentage'
     )
     active_conditions_count = fields.Integer(
         string='Active Conditions',
         compute='_compute_coordinator_performance_stats',
+        store=True,
         help='Number of active conditions assigned to coordinator'
     )
     overdue_conditions_count = fields.Integer(
         string='Overdue Conditions',
         compute='_compute_coordinator_performance_stats',
+        store=True,
         help='Number of overdue conditions assigned to coordinator'
     )
 
@@ -1548,16 +2064,19 @@ class AcmstAdmissionFile(models.Model):
     officer_processing_rate = fields.Float(
         string='Processing Rate',
         compute='_compute_officer_processing_stats',
+        store=True,
         help='Officer processing rate percentage'
     )
     today_applications_count = fields.Integer(
         string="Today's Applications",
         compute='_compute_officer_processing_stats',
+        store=True,
         help='Number of applications received today'
     )
     week_applications_count = fields.Integer(
         string='This Week Applications',
         compute='_compute_officer_processing_stats',
+        store=True,
         help='Number of applications received this week'
     )
 
@@ -1595,26 +2114,31 @@ class AcmstAdmissionFile(models.Model):
     manager_pending_count = fields.Integer(
         string='Manager Pending',
         compute='_compute_manager_statistics',
+        store=True,
         help='Number of applications pending manager review'
     )
     manager_approvals_count = fields.Integer(
         string='My Approvals',
         compute='_compute_manager_statistics',
+        store=True,
         help='Number of applications approved by current manager'
     )
     manager_approval_rate = fields.Float(
         string='Approval Rate',
         compute='_compute_manager_statistics',
+        store=True,
         help='Manager approval rate percentage'
     )
     processing_students_count = fields.Integer(
         string='Processing Students',
         compute='_compute_manager_statistics',
+        store=True,
         help='Number of processing students (من طلاب المعالجات)'
     )
     student_records_count = fields.Integer(
         string='Student Records',
         compute='_compute_manager_statistics',
+        store=True,
         help='Number of created student records'
     )
 
@@ -1650,61 +2174,73 @@ class AcmstAdmissionFile(models.Model):
     program_count = fields.Integer(
         string='Programs',
         compute='_compute_reports_statistics',
+        store=True,
         help='Number of active programs'
     )
     batch_count = fields.Integer(
         string='Batches',
         compute='_compute_reports_statistics',
+        store=True,
         help='Number of active batches'
     )
     health_checks_count = fields.Integer(
         string='Health Checks',
         compute='_compute_reports_statistics',
+        store=True,
         help='Total number of health checks'
     )
     health_approved_count = fields.Integer(
         string='Health Approved',
         compute='_compute_reports_statistics',
+        store=True,
         help='Number of approved health checks'
     )
     health_pending_count = fields.Integer(
         string='Health Pending',
         compute='_compute_reports_statistics',
+        store=True,
         help='Number of pending health checks'
     )
     health_rejected_count = fields.Integer(
         string='Health Rejected',
         compute='_compute_reports_statistics',
+        store=True,
         help='Number of rejected health checks'
     )
     conditions_count = fields.Integer(
         string='Conditions',
         compute='_compute_reports_statistics',
+        store=True,
         help='Total number of coordinator conditions'
     )
     conditions_completed_count = fields.Integer(
         string='Conditions Completed',
         compute='_compute_reports_statistics',
+        store=True,
         help='Number of completed conditions'
     )
     conditions_pending_count = fields.Integer(
         string='Conditions Pending',
         compute='_compute_reports_statistics',
+        store=True,
         help='Number of pending conditions'
     )
     conditions_overdue_count = fields.Integer(
         string='Conditions Overdue',
         compute='_compute_reports_statistics',
+        store=True,
         help='Number of overdue conditions'
     )
     level2_count = fields.Integer(
         string='Level 2 Applications',
         compute='_compute_reports_statistics',
+        store=True,
         help='Number of Level 2 applications'
     )
     level3_count = fields.Integer(
         string='Level 3 Applications',
         compute='_compute_reports_statistics',
+        store=True,
         help='Number of Level 3 applications'
     )
 

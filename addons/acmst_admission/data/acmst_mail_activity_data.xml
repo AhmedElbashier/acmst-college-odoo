@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Health Check Activity Type -->
+        <record id="mail_activity_health_check" model="mail.activity.type">
+            <field name="name">Health Check Required</field>
+            <field name="summary">Health Check Examination</field>
+            <field name="category">default</field>
+            <field name="sequence">10</field>
+            <field name="icon">fa-stethoscope</field>
+            <field name="res_model">acmst.admission.file</field>
+        </record>
+
+        <!-- Coordinator Review Activity Type -->
+        <record id="mail_activity_coordinator_review" model="mail.activity.type">
+            <field name="name">Coordinator Review Required</field>
+            <field name="summary">Academic Coordinator Review</field>
+            <field name="category">default</field>
+            <field name="sequence">20</field>
+            <field name="icon">fa-graduation-cap</field>
+            <field name="res_model">acmst.admission.file</field>
+        </record>
+
+        <!-- Manager Review Activity Type -->
+        <record id="mail_activity_manager_review" model="mail.activity.type">
+            <field name="name">Manager Review Required</field>
+            <field name="summary">Final Manager Approval</field>
+            <field name="category">default</field>
+            <field name="sequence">30</field>
+            <field name="icon">fa-user-md</field>
+            <field name="res_model">acmst.admission.file</field>
+        </record>
+
+        <!-- Health Check Model Activities -->
+        <record id="mail_activity_health_check_model" model="mail.activity.type">
+            <field name="name">Health Check Pending</field>
+            <field name="summary">Health Check Examination</field>
+            <field name="category">default</field>
+            <field name="sequence">10</field>
+            <field name="icon">fa-stethoscope</field>
+            <field name="res_model">acmst.health.check</field>
+        </record>
+
+        <!-- Portal Application Activities -->
+        <record id="mail_activity_portal_review" model="mail.activity.type">
+            <field name="name">Portal Application Review</field>
+            <field name="summary">Review Portal Application</field>
+            <field name="category">default</field>
+            <field name="sequence">10</field>
+            <field name="icon">fa-clipboard</field>
+            <field name="res_model">acmst.portal.application</field>
+        </record>
+
+        <record id="mail_activity_portal_approval" model="mail.activity.type">
+            <field name="name">Portal Application Approval</field>
+            <field name="summary">Approve Portal Application</field>
+            <field name="category">default</field>
+            <field name="sequence">20</field>
+            <field name="icon">fa-check-square-o</field>
+            <field name="res_model">acmst.portal.application</field>
+        </record>
+
+        <!-- ACMST College Mail Server (Gmail Configuration) -->
+        <record id="acmst_mail_server_gmail" model="ir.mail_server">
+            <field name="name">ACMST College - Gmail SMTP</field>
+            <field name="smtp_host">smtp.gmail.com</field>
+            <field name="smtp_port">587</field>
+            <field name="smtp_encryption">starttls</field>
+            <field name="smtp_user">notifications@acmst.edu</field>
+            <field name="smtp_pass">your_gmail_app_password_here</field>
+            <field name="from_filter">notifications@acmst.edu</field>
+            <field name="active">False</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- ACMST College Mail Server (Generic SMTP) -->
+        <record id="acmst_mail_server_generic" model="ir.mail_server">
+            <field name="name">ACMST College - Generic SMTP</field>
+            <field name="smtp_host">your-smtp-server.com</field>
+            <field name="smtp_port">587</field>
+            <field name="smtp_encryption">starttls</field>
+            <field name="smtp_user">notifications@acmst.edu</field>
+            <field name="smtp_pass">your_smtp_password_here</field>
+            <field name="from_filter">notifications@acmst.edu</field>
+            <field name="active">False</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <!-- ACMST College Mail Server (Local SMTP) -->
+        <record id="acmst_mail_server_local" model="ir.mail_server">
+            <field name="name">ACMST College - Local SMTP</field>
+            <field name="smtp_host">localhost</field>
+            <field name="smtp_port">25</field>
+            <field name="smtp_encryption">none</field>
+            <field name="smtp_user">False</field>
+            <field name="smtp_pass">False</field>
+            <field name="from_filter">notifications@acmst.edu</field>
+            <field name="active">True</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- Cron Job for Retrying Pending Emails -->
+        <record id="cron_retry_pending_emails" model="ir.cron">
+            <field name="name">Retry Pending Emails</field>
+            <field name="model_id" ref="model_acmst_pending_email"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_retry_pending_emails()</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall">False</field>
+            <field name="active">True</field>
+        </record>
+
+    </data>
+</odoo>

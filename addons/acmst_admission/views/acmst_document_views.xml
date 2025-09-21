@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Document Tree View -->
+    <record id="view_acmst_document_tree" model="ir.ui.view">
+        <field name="name">acmst.document.tree</field>
+        <field name="model">acmst.document</field>
+        <field name="arch" type="xml">
+            <tree string="Documents" decoration-success="state == 'approved'" decoration-danger="state == 'rejected'" decoration-warning="state == 'draft'">
+                <field name="name" string="Document Name"/>
+                <field name="document_type" string="Type"/>
+                <field name="file_size" string="Size (KB)"/>
+                <field name="mime_type" string="Type"/>
+                <field name="state" string="Status" widget="badge"/>
+                <field name="approval_date" string="Approval Date"/>
+                <field name="approved_by" string="Approved By"/>
+                <field name="portal_application_id" string="Application" optional="1"/>
+                <field name="admission_file_id" string="Admission File" optional="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Document Form View -->
+    <record id="view_acmst_document_form" model="ir.ui.view">
+        <field name="name">acmst.document.form</field>
+        <field name="model">acmst.document</field>
+        <field name="arch" type="xml">
+            <form string="Document">
+                <header>
+                    <button name="action_approve" string="Approve" type="object" class="btn-success" invisible="state == 'approved'"/>
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger" invisible="state == 'rejected'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Document Information">
+                            <field name="document_type"/>
+                            <field name="file" filename="filename" required="1"/>
+                            <field name="filename" readonly="1"/>
+                            <field name="file_size" readonly="1"/>
+                            <field name="mime_type" readonly="1"/>
+                        </group>
+                        <group string="Relations">
+                            <field name="portal_application_id" readonly="1"/>
+                            <field name="admission_file_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Approval Information" invisible="state == 'draft'">
+                        <group col="6">
+                            <field name="approval_date" readonly="1"/>
+                            <field name="approved_by" readonly="1"/>
+                        </group>
+                        <group col="6">
+                            <field name="rejection_reason" widget="text" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Document Search View -->
+    <record id="view_acmst_document_search" model="ir.ui.view">
+        <field name="name">acmst.document.search</field>
+        <field name="model">acmst.document</field>
+        <field name="arch" type="xml">
+            <search string="Search Documents">
+                <field name="name" string="Document Name"/>
+                <field name="document_type" string="Type"/>
+                <field name="state" string="Status"/>
+                <field name="portal_application_id" string="Application"/>
+                <field name="admission_file_id" string="Admission File"/>
+                <separator/>
+                <filter string="🆕 Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="📤 Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="✅ Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="❌ Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <separator/>
+                <filter string="📄 ID Documents" name="id_documents" domain="[('document_type', '=', 'id_document')]"/>
+                <filter string="🎓 Academic Documents" name="academic_documents" domain="[('document_type', 'in', ['academic_certificate', 'transcript'])]"/>
+                <filter string="📋 Support Documents" name="support_documents" domain="[('document_type', 'in', ['support_document', 'medical_report', 'other'])]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" name="group_type" context="{'group_by': 'document_type'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Application" name="group_application" context="{'group_by': 'portal_application_id'}"/>
+                    <filter string="Admission File" name="group_admission_file" context="{'group_by': 'admission_file_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Document Action -->
+    <record id="action_acmst_document" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">acmst.document</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_acmst_document_search"/>
+        <field name="context">{'create': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage document attachments
+            </p>
+            <p>
+                Upload, approve, and manage all document attachments for admission applications.
+            </p>
+        </field>
+    </record>
+
+    <!-- Document Kanban View -->
+    <record id="view_acmst_document_kanban" model="ir.ui.view">
+        <field name="name">acmst.document.kanban</field>
+        <field name="model">acmst.document</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" string="Documents">
+                <field name="name"/>
+                <field name="document_type"/>
+                <field name="state"/>
+                <field name="file_size"/>
+                <field name="filename"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <field name="name"/>
+                                    </div>
+                                    <div class="o_secondary">
+                                        <field name="document_type" widget="badge"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_header_links">
+                                    <field name="state" widget="badge"/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_content">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong>File:</strong>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <field name="filename"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong>Size:</strong>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <field name="file_size"/> KB
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong>Type:</strong>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <field name="mime_type"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+</odoo>

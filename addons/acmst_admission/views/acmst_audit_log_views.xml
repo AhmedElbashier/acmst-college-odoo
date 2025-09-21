@@ -7,7 +7,7 @@
             <field name="name">acmst.audit.log.tree</field>
             <field name="model">acmst.audit.log</field>
             <field name="arch" type="xml">
-                <tree string="Audit Logs" decoration-success="severity == 'low'" decoration-warning="severity == 'medium'" decoration-danger="severity == 'high'" decoration-muted="severity == 'critical'">
+                <tree string="Audit Logs" decoration-success="severity == 'low'" decoration-warning="severity == 'medium'" decoration-danger="severity == 'high'" decoration-muted="severity == 'critical'" duplicate="False">
                     <field name="create_date"/>
                     <field name="user_id"/>
                     <field name="model_name"/>
@@ -29,7 +29,7 @@
             <field name="name">acmst.audit.log.form</field>
             <field name="model">acmst.audit.log</field>
             <field name="arch" type="xml">
-                <form string="Audit Log">
+                <form string="Audit Log" duplicate="False">
                     <header>
                         <field name="severity" widget="statusbar" statusbar_visible="low,medium,high,critical"/>
                     </header>
@@ -182,7 +182,7 @@
             <field name="name">Audit Logs</field>
             <field name="res_model">acmst.audit.log</field>
             <field name="view_mode">tree,form,graph,pivot</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No audit logs found
@@ -199,7 +199,7 @@
             <field name="res_model">acmst.audit.log</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('action', 'in', ['security_violation', 'data_breach', 'unauthorized_access'])]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No security violations found
@@ -216,7 +216,7 @@
             <field name="res_model">acmst.audit.log</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('is_anomaly', '=', True)]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No anomalies found

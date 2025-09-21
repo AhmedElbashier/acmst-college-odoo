@@ -7,15 +7,19 @@
             <field name="name">acmst.admission.file.tree</field>
             <field name="model">acmst.admission.file</field>
             <field name="arch" type="xml">
-                <tree string="Admission Files" decoration-info="state == 'new'" decoration-success="state == 'completed'" decoration-warning="state in ['ministry_pending', 'health_required', 'coordinator_review', 'manager_review']" decoration-danger="state in ['ministry_rejected', 'health_rejected', 'coordinator_rejected', 'manager_rejected', 'cancelled']" decoration-muted="is_processing_student == True">
+                <tree string="Admission Files" decoration-info="state == 'new'" decoration-success="state == 'completed'" decoration-warning="state in ['ministry_pending', 'health_required', 'coordinator_review', 'manager_review']" decoration-danger="state in ['ministry_rejected', 'health_rejected', 'coordinator_rejected', 'manager_rejected', 'cancelled']" decoration-muted="is_processing_student == True" duplicate="False">
+                    <field name="profile_picture" widget="image" options="{'size': [40, 40]}" string="Photo"/>
                     <field name="name" string="File Number"/>
-                    <field name="applicant_name" string="Applicant"/>
-                    <field name="national_id" string="National ID"/>
+                    <field name="applicant_name_english" string="Applicant (English)"/>
+                    <field name="applicant_name_arabic" string="Applicant (Arabic)"/>
+                    <field name="id_type" string="ID Type"/>
+                    <field name="national_id" string="ID Number"/>
                     <field name="phone" string="Phone"/>
                     <field name="email" string="Email"/>
                     <field name="program_id" string="Program"/>
                     <field name="batch_id" string="Batch"/>
-                    <field name="university_id" string="University ID"/>
+                    <field name="admission_type" string="Admission Type"/>
+                    <field name="university_id" string="University ID" readonly="1"/>
                     <field name="is_processing_student" string="Processing" widget="boolean_toggle"/>
                     <field name="state" string="State"/>
                     <field name="application_date" string="Application Date"/>
@@ -24,12 +28,94 @@
             </field>
         </record>
 
+        <!-- Admission File Kanban View -->
+        <record id="view_acmst_admission_file_kanban" model="ir.ui.view">
+            <field name="name">acmst.admission.file.kanban</field>
+            <field name="model">acmst.admission.file</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" string="Admission Files" duplicate="False">
+                    <field name="name"/>
+                    <field name="applicant_name_english"/>
+                    <field name="program_id"/>
+                    <field name="batch_id"/>
+                    <field name="state"/>
+                    <field name="application_date"/>
+                    <field name="profile_picture"/>
+                    <field name="university_id"/>
+                    <field name="is_processing_student"/>
+                    <field name="health_check_date"/>
+                    <field name="coordinator_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                    <field name="profile_picture" widget="image" class="oe_avatar" alt="Photo"/>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <strong>
+                                                <field name="name"/>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <field name="applicant_name_english"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Program:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="program_id"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Batch:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="batch_id"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>Status:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="state" widget="badge" decoration-success="state == 'completed'" decoration-warning="state in ['ministry_pending', 'health_required', 'coordinator_review', 'manager_review']" decoration-danger="state in ['ministry_rejected', 'health_rejected', 'coordinator_rejected', 'manager_rejected']" decoration-muted="is_processing_student == True"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong>University ID:</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <field name="university_id"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <strong>Applied:</strong>
+                                            <field name="application_date"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
         <!-- Admission File Form View -->
         <record id="view_acmst_admission_file_form" model="ir.ui.view">
             <field name="name">acmst.admission.file.form</field>
             <field name="model">acmst.admission.file</field>
             <field name="arch" type="xml">
-                <form string="Admission File">
+                <form string="Admission File" duplicate="False">
                     <header>
                         <button name="action_submit_ministry" string="Submit to Ministry" type="object" class="btn-primary" invisible="state != 'new'"/>
                         <button name="action_ministry_approve" string="Ministry Approve" type="object" class="btn-success" invisible="state != 'ministry_pending'"/>
@@ -39,20 +125,24 @@
                         <button name="action_health_reject" string="Health Reject" type="object" class="btn-danger" invisible="state != 'health_required'"/>
                         <button name="action_coordinator_approve" string="Coordinator Approve" type="object" class="btn-success" invisible="state != 'coordinator_review'"/>
                         <button name="action_coordinator_reject" string="Coordinator Reject" type="object" class="btn-danger" invisible="state != 'coordinator_review'"/>
-                        <button name="action_coordinator_conditional" string="Conditional Approval" type="object" class="btn-warning" invisible="state != 'coordinator_review'"/>
-                        <button name="action_create_conditions" string="Create Conditions" type="object" class="btn-info" invisible="state not in ['coordinator_review', 'coordinator_conditional']"/>
+                        <button name="action_coordinator_conditional" string="Conditional Approval" type="object" class="btn-warning" invisible="state != 'coordinator_review' or admission_type not in ['transfer', 'bridging']"/>
+                        <button name="action_create_conditions" string="Create Conditions" type="object" class="btn-info" invisible="state not in ['coordinator_review', 'coordinator_conditional'] or admission_type not in ['transfer', 'bridging']"/>
                         <button name="action_manager_approve" string="Manager Approve" type="object" class="btn-success" invisible="state != 'manager_review'"/>
                         <button name="action_manager_reject" string="Manager Reject" type="object" class="btn-danger" invisible="state != 'manager_review'"/>
-                        <button name="action_update_university_id" string="Update University ID" type="object" class="btn-info" invisible="not is_processing_student"/>
+                        <button name="action_update_university_id" string="⚠️ Update University ID" type="object" class="btn-warning" invisible="state == 'cancelled'"/>
                         <button name="action_generate_student_id" string="Generate Student ID" type="object" class="btn-info" invisible="state != 'completed'"/>
                         <button name="action_send_welcome_email" string="Send Welcome Email" type="object" class="btn-primary" invisible="state != 'completed'"/>
                         <button name="action_cancel" string="Cancel" type="object" class="btn-danger" invisible="state in ['completed', 'cancelled']"/>
                         <field name="state" widget="statusbar" statusbar_visible="ministry_pending,ministry_approved,health_required,health_approved,coordinator_review,coordinator_approved,manager_review,manager_approved,completed"/>
                     </header>
                     <sheet>
+                        <!-- Action Buttons Box -->
                         <div class="oe_button_box" name="button_box">
                             <button name="action_view_health_checks" type="object" class="oe_stat_button" icon="fa-heartbeat" invisible="not health_check_ids">
                                 <field name="health_check_ids" widget="statinfo" string="Health Checks"/>
+                            </button>
+                            <button name="action_update_university_id" type="object" class="oe_stat_button" icon="fa-id-card" invisible="state == 'cancelled'">
+                                <span>Update University ID</span>
                             </button>
                             <button name="action_view_conditions" type="object" class="oe_stat_button" icon="fa-list" invisible="not coordinator_conditions_ids">
                                 <field name="coordinator_conditions_ids" widget="statinfo" string="Conditions"/>
@@ -60,111 +150,473 @@
                             <button name="action_view_approvals" type="object" class="oe_stat_button" icon="fa-check" invisible="not approval_ids">
                                 <field name="approval_ids" widget="statinfo" string="Approvals"/>
                             </button>
+                            <button name="action_view_graph" type="object" class="oe_stat_button" icon="fa-bar-chart" string="Reports"/>
                         </div>
+
+                        <!-- Header Information -->
                         <div class="oe_title">
-                            <h1>
-                                <field name="name" readonly="1"/>
-                            </h1>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h1>
+                                        <field name="name" readonly="1"/>
+                                    </h1>
+                                    <div>
+                                        <strong>Admission Type:</strong> <field name="admission_type" class="font-weight-bold"/>
+                                    </div>
+                                    <div>
+                                        <strong>University ID:</strong> <field name="university_id" class="font-weight-bold" readonly="1"/>
+                                    </div>
+                                    <small class="text-muted">
+                                        Application for <field name="applicant_name_english" class="font-weight-bold"/>
+                                    </small>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="oe_avatar">
+                                                <field name="profile_picture" widget="image" class="oe_avatar_image" options="{'size': [80, 80]}"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>Status:</strong><br/>
+                                            <field name="state" widget="badge" class="oe_inline"/>
+                                            <br/><br/>
+                                            <strong>Submission:</strong><br/>
+                                            <field name="submission_method" class="oe_inline"/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>Date:</strong><br/>
+                                            <field name="application_date" widget="date" class="oe_inline"/>
+                                            <br/><br/>
+                                            <strong>Program:</strong><br/>
+                                            <field name="program_id" class="oe_inline"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <group>
-                            <group string="Basic Information">
-                                <field name="applicant_name"/>
-                                <field name="national_id"/>
-                                <field name="phone"/>
-                                <field name="email"/>
-                                <field name="application_date"/>
-                                <field name="submission_method"/>
-                            </group>
-                            <group string="Program Information">
-                                <field name="program_id"/>
-                                <field name="batch_id"/>
-                            </group>
-                        </group>
+
+                        <!-- Main Information Tabs -->
                         <notebook>
-                            <page string="Personal Information">
+                            <!-- Student Information Tab -->
+                            <page string="Student Information" icon="fa-user">
+                                <!-- Basic Personal Information -->
                                 <group>
-                                    <group>
+                                    <group string="Basic Information" col="2">
+                                        <field name="applicant_name_english" placeholder="Enter full name in English"/>
+                                        <field name="applicant_name_arabic" placeholder="أدخل الاسم الكامل بالعربية"/>
+                                    </group>
+                                    <group string="Birth Information" col="2">
                                         <field name="birth_date"/>
-                                        <field name="age"/>
+                                        <field name="place_of_birth" placeholder="Enter city/country of birth"/>
+                                        <field name="age" readonly="1" class="text-info"/>
+                                    </group>
+                                </group>
+
+                                <!-- Identity and Personal Details -->
+                                <group>
+                                    <group string="Personal Details" col="2">
                                         <field name="gender"/>
                                         <field name="nationality"/>
+                                        <field name="religion"/>
                                     </group>
-                                    <group>
-                                        <field name="address"/>
-                                        <field name="emergency_contact"/>
-                                        <field name="emergency_phone"/>
+                                    <group string="Identification" col="2">
+                                        <field name="id_type"/>
+                                        <field name="national_id" placeholder="Enter ID number"/>
+                                        <field name="admission_type"/>
+                                    </group>
+                                </group>
+
+                                <!-- ID Document Upload -->
+                                <group>
+                                    <group string="ID Document Upload" col="4">
+                                        <field name="id_document" filename="id_document_filename" required="1"/>
+                                        <field name="id_document_filename" invisible="1"/>
+                                    </group>
+                                </group>
+
+                                <!-- Contact Information -->
+                                <group>
+                                    <group string="Contact Information" col="2">
+                                        <field name="phone" placeholder="Enter phone number"/>
+                                        <field name="email" placeholder="Enter email address"/>
+                                    </group>
+                                    <group string="Address" col="2">
+                                        <field name="address" widget="text" placeholder="Enter full address"/>
+                                    </group>
+                                </group>
+
+                                <!-- Emergency Contact -->
+                                <group>
+                                    <group string="Emergency Contact" col="2">
+                                        <field name="emergency_contact" placeholder="Enter emergency contact name"/>
+                                        <field name="emergency_phone" placeholder="Enter emergency contact phone"/>
+                                    </group>
+                                    <group></group>
+                                </group>
+
+                                <!-- Additional Information -->
+                                <group>
+                                    <group string="Additional Information" col="4">
+                                        <field name="is_health_approved" widget="boolean" readonly="1"/>
+                                        <field name="has_pending_conditions" widget="boolean" readonly="1"/>
+                                        <field name="health_fitness_status" readonly="1"/>
+                                        <field name="health_follow_up_required" widget="boolean" readonly="1"/>
                                     </group>
                                 </group>
                             </page>
-                            <page string="Academic Information">
+
+                            <!-- Guardian Information Tab -->
+                            <page string="Guardian Information" icon="fa-users">
                                 <group>
-                                    <field name="previous_education"/>
-                                    <field name="certificates" filename="certificates_filename"/>
-                                    <field name="transcripts" filename="transcripts_filename"/>
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fa fa-info-circle" title="Information"></i>
+                                        <strong>Guardian Management:</strong> Add multiple guardians and mark one as default contact.
+                                        The first guardian added will be automatically set as default.
+                                    </div>
+                                </group>
+                                <group>
+                                    <field name="guardian_ids" nolabel="1" context="{'default_admission_file_id': active_id}">
+                                        <tree editable="bottom">
+                                            <field name="name" required="1"/>
+                                            <field name="relationship" required="1"/>
+                                            <field name="phone" required="1"/>
+                                            <field name="email"/>
+                                            <field name="is_default" widget="boolean_toggle"/>
+                                            <field name="is_active" invisible="1"/>
+                                        </tree>
+                                        <form>
+                                            <group>
+                                                <group>
+                                                    <field name="name" required="1"/>
+                                                    <field name="relationship" required="1"/>
+                                                    <field name="phone" required="1"/>
+                                                </group>
+                                                <group>
+                                                    <field name="email"/>
+                                                    <field name="is_default" widget="boolean_toggle"/>
+                                                    <field name="is_active"/>
+                                                </group>
+                                            </group>
+                                        </form>
+                                    </field>
+                                </group>
+                                <group>
+                                    <div class="alert alert-success">
+                                        <i class="fa fa-info-circle" title="Information"></i>
+                                        <strong>Default Guardian:</strong>
+                                        <field name="default_guardian_id" readonly="1" nolabel="1"/>
+                                        <br/>
+                                        <small>The first guardian added will be automatically set as the default contact.</small>
+                                    </div>
                                 </group>
                             </page>
-                            <page string="Process Tracking">
+
+                            <!-- Academic Information Tab -->
+                            <page string="Academic Information" icon="fa-graduation-cap">
+
+                                <!-- Educational Background -->
                                 <group>
-                                    <group string="Ministry Approval">
-                                        <field name="ministry_approval_date"/>
-                                        <field name="ministry_approver"/>
-                                    </group>
-                                    <group string="Health Check">
-                                        <field name="health_check_date"/>
-                                        <field name="health_approver"/>
-                                        <field name="is_health_approved"/>
+                                    <group string="Previous Education" col="6">
+                                        <field name="previous_education" widget="text" placeholder="Describe your previous educational background, degrees, and qualifications"/>
                                     </group>
                                 </group>
+
+                                <!-- Institution Information -->
                                 <group>
-                                    <group string="University ID">
-                                        <field name="university_id"/>
-                                        <field name="is_processing_student"/>
-                                        <field name="university_id_updated_date"/>
-                                        <field name="university_id_updated_by"/>
+                                    <group string="Institution Details" col="2">
+                                        <field name="education_institution" placeholder="Enter institution name"/>
+                                        <field name="education_program" placeholder="Enter program/degree"/>
                                     </group>
-                                    <group string="Coordinator Approval">
-                                        <field name="coordinator_approval_date"/>
-                                        <field name="coordinator_id"/>
-                                        <field name="has_pending_conditions"/>
+                                    <group string="Education Details" col="2">
+                                        <field name="education_college" placeholder="Enter college/school"/>
+                                        <field name="education_major" placeholder="Enter major field of study"/>
                                     </group>
                                 </group>
+
+                                <!-- Education Timeline -->
                                 <group>
-                                    <group string="Manager Approval">
-                                        <field name="manager_approval_date"/>
-                                        <field name="manager_id"/>
+                                    <group string="Timeline" col="2">
+                                        <field name="education_start_year" placeholder="e.g., 2020"/>
+                                        <field name="education_completion_year" placeholder="e.g., 2024"/>
+                                        <field name="certificate_type"/>
+                                        <field name="education_duration_years" placeholder="Duration in years"/>
                                     </group>
+                                </group>
+
+                                <!-- Academic Documents -->
+                               <group string="Academic Documents" col="4">
+                                        <field name="academic_document_ids" widget="many2many_binary" nolabel="1">
+                                            <tree>
+                                                <field name="name"/>
+                                                <field name="document_type"/>
+                                                <field name="file_size"/>
+                                            </tree>
+                                            <form>
+                                                <group>
+                                                    <group>
+                                                        <field name="name"/>
+                                                        <field name="document_type"/>
+                                                        <field name="file" filename="filename"/>
+                                                    </group>
+                                                </group>
+                                            </form>
+                                        </field>
                                 </group>
                             </page>
-                            <page string="Health Checks" invisible="not health_check_ids">
+
+                            <!-- Supporting Documents Tab -->
+                            <page string="Supporting Documents" icon="fa-file-o">
+                                <group>
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fa fa-info-circle" title="Information"></i>
+                                        <strong>Supporting Documents:</strong> Upload additional supporting documents like photos, birth certificates, etc.
+                                    </div>
+                                </group>
+
+                                <!-- Supporting Documents -->
+                                <group>
+                                    <group string="Supporting Documents" col="4">
+                                        <field name="support_document_ids" widget="many2many_binary" nolabel="1">
+                                            <tree>
+                                                <field name="name"/>
+                                                <field name="document_type"/>
+                                                <field name="file_size"/>
+                                            </tree>
+                                            <form>
+                                                <group>
+                                                    <group>
+                                                        <field name="name"/>
+                                                        <field name="document_type"/>
+                                                        <field name="file" filename="filename"/>
+                                                    </group>
+                                                </group>
+                                            </form>
+                                        </field>
+                                    </group>
+                                    <group string="Document Requirements" col="4">
+                                        <div class="alert alert-info">
+                                            <i class="fa fa-info-circle" title="Information"></i>
+                                            <strong>Supporting Documents:</strong> Upload photos, birth certificates, and other supporting documents.
+                                            <br/>
+                                            <small>Multiple files allowed. PDF, DOC, DOCX, JPG, PNG formats accepted. Maximum 10MB per file.</small>
+                                        </div>
+                                    </group>
+                                </group>
+
+                                <!-- File Requirements -->
+                                <group>
+                                    <div class="alert alert-warning">
+                                        <i class="fa fa-upload" title="Upload"></i>
+                                        <strong>File Requirements:</strong> PDF, DOC, DOCX, JPG, PNG formats accepted. Maximum "10MB" per file.
+                                    </div>
+                                </group>
+                            </page>
+
+                            <!-- Health Check Documents Tab -->
+                            <page string="Health Check Documents" icon="fa-heartbeat" invisible="not health_check_ids">
+                                <group>
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fa fa-info-circle" title="Information"></i>
+                                        <strong>Health Check Documents:</strong> Medical reports and health check related documents.
+                                    </div>
+                                </group>
+
+                                <!-- Health Check Documents -->
+                                <group>
+                                    <group string="Health Check Documents" col="4">
+                                        <field name="health_document_ids" widget="many2many_binary" nolabel="1">
+                                            <tree>
+                                                <field name="name"/>
+                                                <field name="document_type"/>
+                                                <field name="file_size"/>
+                                            </tree>
+                                            <form>
+                                                <group>
+                                                    <group>
+                                                        <field name="name"/>
+                                                        <field name="document_type"/>
+                                                        <field name="file" filename="filename"/>
+                                                    </group>
+                                                </group>
+                                            </form>
+                                        </field>
+                                    </group>
+                                    <group string="Document Requirements" col="4">
+                                        <div class="alert alert-info">
+                                            <i class="fa fa-info-circle" title="Information"></i>
+                                            <strong>Health Check Documents:</strong> Upload medical reports, lab results, and other health-related documents.
+                                            <br/>
+                                            <small>Multiple files allowed. PDF, DOC, DOCX, JPG, PNG formats accepted. Maximum 10MB per file.</small>
+                                        </div>
+                                    </group>
+                                </group>
+
+                                <!-- File Requirements -->
+                                <group>
+                                    <div class="alert alert-warning">
+                                        <i class="fa fa-upload" title="Upload"></i>
+                                        <strong>File Requirements:</strong> PDF, DOC, DOCX, JPG, PNG formats accepted. Maximum "10MB" per file.
+                                    </div>
+                                </group>
+                            </page>
+
+                            <!-- Approval Process Tab -->
+                            <page string="Approval Process" icon="fa-cogs">
+                                <group>
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fa fa-info-circle" title="Information"></i>
+                                        <strong>Process Tracking:</strong> Monitor the approval status through different stages of the admission process.
+                                    </div>
+                                </group>
+                                <!-- Ministry Approval Section -->
+                                <group string="Ministry Approval" col="2">
+                                    <div class="alert alert-primary">
+                                        <i class="fa fa-building" title="Ministry"></i>
+                                        <strong>Ministry Stage:</strong> Initial review by ministry authorities.
+                                    </div>
+                                    <field name="ministry_approval_date"/>
+                                    <field name="ministry_approver"/>
+                                </group>
+                                <!-- Health Check Section -->
+                                <group string="Health Check" col="2">
+                                    <div class="alert alert-success">
+                                        <i class="fa fa-heartbeat" title="Health Check"></i>
+                                        <strong>Health Stage:</strong> Medical examination and fitness assessment.
+                                    </div>
+                                    <field name="health_check_date"/>
+                                    <field name="health_approver"/>
+                                    <field name="is_health_approved" widget="boolean" readonly="1"/>
+                                    <field name="health_fitness_status" readonly="1"/>
+                                    <field name="health_follow_up_required" widget="boolean" readonly="1"/>
+                                </group>
+                                <!-- University ID Section -->
+                                <group string="University ID Management" col="2">
+                                    <div class="alert alert-warning">
+                                        <i class="fa fa-id-card" title="University ID"></i>
+                                        <strong>University ID:</strong> Processing and university ID assignment.
+                                    </div>
+                                    <field name="university_id" readonly="1"/>
+                                    <field name="is_processing_student" widget="toggle"/>
+                                    <field name="university_id_updated_date" readonly="1"/>
+                                    <field name="university_id_updated_by" readonly="1"/>
+                                </group>
+                                <!-- Coordinator Section -->
+                                <group string="Academic Coordinator" col="2">
+                                    <div class="alert alert-info">
+                                        <i class="fa fa-user-md" title="Coordinator Review"></i>
+                                        <strong>Coordinator Review:</strong> Academic program evaluation and conditions.
+                                    </div>
+                                    <field name="coordinator_approval_date"/>
+                                    <field name="coordinator_id"/>
+                                    <field name="has_pending_conditions" widget="boolean" readonly="1"/>
+                                </group>
+                                <!-- Manager Section -->
+                                <group string="Final Approval" col="2">
+                                    <div class="alert alert-success">
+                                        <i class="fa fa-check-circle" title="Manager Approval"></i>
+                                        <strong>Manager Approval:</strong> Final review and completion of admission process.
+                                    </div>
+                                    <field name="manager_approval_date"/>
+                                    <field name="manager_id"/>
+                                </group>
+                            </page>
+                            <!-- Health Checks Tab -->
+                            <page string="Health Checks" icon="fa-heartbeat" invisible="not health_check_ids">
+                                <group>
+                                    <div class="alert alert-success" role="alert">
+                                        <i class="fa fa-info-circle" title="Information"></i>
+                                        <strong>Medical Records:</strong> Detailed health check information and medical fitness assessments.
+                                    </div>
+                                </group>
                                 <field name="health_check_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="check_date"/>
-                                        <field name="examiner_id"/>
-                                        <field name="medical_fitness"/>
-                                        <field name="state"/>
+                                    <tree string="Health Check Records" editable="bottom">
+                                        <field name="check_date" string="Check Date"/>
+                                        <field name="examiner_id" string="Medical Examiner"/>
+                                        <field name="medical_fitness" string="Fitness Status"/>
+                                        <field name="state" string="Status"/>
                                     </tree>
+                                    <form string="Health Check Details">
+                                        <group>
+                                            <group>
+                                                <field name="check_date"/>
+                                                <field name="examiner_id"/>
+                                                <field name="medical_fitness"/>
+                                                <field name="state"/>
+                                            </group>
+                                            <group>
+                                                <field name="follow_up_required"/>
+                                                <field name="follow_up_date" invisible="not follow_up_required"/>
+                                                <field name="medical_notes" widget="text"/>
+                                            </group>
+                                        </group>
+                                    </form>
                                 </field>
                             </page>
-                            <page string="Conditions" invisible="not coordinator_conditions_ids">
+
+                            <!-- Conditions Tab -->
+                            <page string="Academic Conditions" icon="fa-list" invisible="not coordinator_conditions_ids">
+                                <group>
+                                    <div class="alert alert-warning" role="alert">
+                                        <i class="fa fa-info-circle" title="Information"></i>
+                                        <strong>Academic Requirements:</strong> Conditions set by academic coordinator that must be fulfilled for admission.
+                                    </div>
+                                </group>
                                 <field name="coordinator_conditions_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="subject_name"/>
-                                        <field name="level"/>
-                                        <field name="deadline"/>
-                                        <field name="status"/>
-                                        <field name="state"/>
+                                    <tree string="Academic Conditions" editable="bottom">
+                                        <field name="subject_name" string="Subject"/>
+                                        <field name="level" string="Level"/>
+                                        <field name="deadline" string="Deadline"/>
+                                        <field name="status" string="Status"/>
+                                        <field name="state" string="Condition Status"/>
                                     </tree>
+                                    <form string="Condition Details">
+                                        <group>
+                                            <group>
+                                                <field name="subject_name"/>
+                                                <field name="subject_code"/>
+                                                <field name="level"/>
+                                                <field name="deadline"/>
+                                                <field name="state"/>
+                                            </group>
+                                            <group>
+                                                <field name="description" widget="text"/>
+                                                <field name="status"/>
+                                            </group>
+                                        </group>
+                                    </form>
                                 </field>
                             </page>
-                            <page string="Approval History" invisible="not approval_ids">
+
+                            <!-- Approval History Tab -->
+                            <page string="Approval History" icon="fa-history" invisible="not approval_ids">
+                                <group>
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fa fa-info-circle" title="Information"></i>
+                                        <strong>Process Timeline:</strong> Complete history of all approval decisions and comments.
+                                    </div>
+                                </group>
                                 <field name="approval_ids" nolabel="1">
-                                    <tree>
-                                        <field name="approval_date"/>
-                                        <field name="approval_type"/>
-                                        <field name="approver_name"/>
-                                        <field name="decision"/>
-                                        <field name="comments"/>
+                                    <tree string="Approval History" decoration-info="decision == 'pending'" decoration-success="decision == 'approved'" decoration-danger="decision == 'rejected'">
+                                        <field name="approval_date" string="Date"/>
+                                        <field name="approval_type" string="Type"/>
+                                        <field name="approver_name" string="Approver"/>
+                                        <field name="decision" string="Decision"/>
+                                        <field name="comments" string="Comments"/>
                                     </tree>
+                                    <form string="Approval Details">
+                                        <group>
+                                            <group>
+                                                <field name="approval_date" readonly="1"/>
+                                                <field name="approval_type" readonly="1"/>
+                                                <field name="approver_name" readonly="1"/>
+                                                <field name="decision" readonly="1"/>
+                                            </group>
+                                            <group>
+                                                <field name="comments" widget="text" readonly="1"/>
+                                            </group>
+                                        </group>
+                                    </form>
                                 </field>
                             </page>
                         </notebook>
@@ -185,13 +637,18 @@
             <field name="arch" type="xml">
                 <search string="Search Admission Files">
                     <field name="name" string="File Number"/>
-                    <field name="applicant_name" string="Applicant"/>
-                    <field name="national_id" string="National ID"/>
+                    <field name="applicant_name_english" string="Applicant (English)"/>
+                    <field name="applicant_name_arabic" string="Applicant (Arabic)"/>
+                    <field name="id_type" string="ID Type"/>
+                    <field name="national_id" string="ID Number"/>
                     <field name="email" string="Email"/>
                     <field name="program_id" string="Program"/>
                     <field name="batch_id" string="Batch"/>
+                    <field name="admission_type" string="Admission Type"/>
                     <field name="state" string="State"/>
-                    <field name="university_id" string="University ID"/>
+                    <field name="university_id" string="University ID" readonly="1"/>
+                    <field name="religion" string="Religion"/>
+                    <field name="nationality" string="Nationality"/>
                     <separator/>
                     <!-- Status Filters -->
                     <filter string="🆕 New" name="new" domain="[('state', '=', 'new')]"/>
@@ -237,7 +694,7 @@
         <record id="action_acmst_admission_file" model="ir.actions.act_window">
             <field name="name">Admission Files</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="search_view_id" ref="view_acmst_admission_file_search"/>
             <field name="context">{'create': False}</field>
             <field name="help" type="html">
@@ -254,7 +711,7 @@
         <record id="action_acmst_processing_students" model="ir.actions.act_window">
             <field name="name">Processing Students (من طلاب المعالجات)</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="view_id" ref="view_acmst_admission_file_tree"/>
             <field name="domain">[('is_processing_student', '=', True)]</field>
             <field name="context">{'create': False, 'search_default_processing_students': 1}</field>
@@ -264,7 +721,7 @@
                 </p>
                 <p>
                     Students marked as "من طلاب المعالجات" (processing students)
-                    are those who were approved by ministry but don't have a university ID yet.
+                    are those who were approved by ministry but do not have a university ID yet.
                 </p>
             </field>
         </record>
@@ -274,9 +731,9 @@
         <record id="action_acmst_admission_file_pending" model="ir.actions.act_window">
             <field name="name">Pending Review</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('state', 'in', ['ministry_pending', 'health_required', 'coordinator_review', 'manager_review'])]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No applications pending review
@@ -291,9 +748,9 @@
         <record id="action_acmst_recent_applications" model="ir.actions.act_window">
             <field name="name">Recent Applications</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('create_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No recent applications
@@ -308,9 +765,9 @@
         <record id="action_acmst_overdue_applications" model="ir.actions.act_window">
             <field name="name">Overdue Applications</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('state', 'in', ['ministry_pending', 'health_required', 'coordinator_review', 'manager_review']), ('write_date', '&lt;', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No overdue applications
@@ -327,9 +784,9 @@
         <record id="action_acmst_health_pending" model="ir.actions.act_window">
             <field name="name">Pending Health Checks</field>
             <field name="res_model">acmst.health.check</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('admission_file_id.state', '=', 'health_required')]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No pending health checks
@@ -343,9 +800,9 @@
         <record id="action_acmst_health_approved" model="ir.actions.act_window">
             <field name="name">Health Approved</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('health_approver', '=', uid), ('state', 'in', ['health_approved', 'coordinator_review', 'coordinator_approved', 'coordinator_rejected', 'coordinator_conditional', 'manager_review', 'manager_approved', 'manager_rejected', 'completed'])]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No approved health checks
@@ -359,9 +816,9 @@
         <record id="action_acmst_health_rejected" model="ir.actions.act_window">
             <field name="name">Health Rejected</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('health_approver', '=', uid), ('state', 'in', ['health_rejected'])]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No rejected health checks
@@ -375,9 +832,9 @@
         <record id="action_acmst_health_my_reviews" model="ir.actions.act_window">
             <field name="name">My Health Reviews</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('health_approver', '=', uid)]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No health reviews assigned
@@ -394,9 +851,9 @@
         <record id="action_acmst_coordinator_my_conditions" model="ir.actions.act_window">
             <field name="name">My Conditions</field>
             <field name="res_model">acmst.coordinator.condition</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('coordinator_id', '=', uid)]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No conditions assigned
@@ -410,9 +867,9 @@
         <record id="action_acmst_coordinator_overdue_conditions" model="ir.actions.act_window">
             <field name="name">Overdue Conditions</field>
             <field name="res_model">acmst.coordinator.condition</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('state', '!=', 'completed'), ('deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No overdue conditions
@@ -427,9 +884,9 @@
         <record id="action_acmst_officer_new_applications" model="ir.actions.act_window">
             <field name="name">New Applications</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('state', 'in', ['new', 'ministry_pending'])]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No new applications
@@ -443,9 +900,9 @@
         <record id="action_acmst_officer_ministry_pending" model="ir.actions.act_window">
             <field name="name">Ministry Pending</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('state', '=', 'ministry_pending')]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No applications pending ministry approval
@@ -459,9 +916,9 @@
         <record id="action_acmst_officer_ministry_approved" model="ir.actions.act_window">
             <field name="name">Ministry Approved</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('state', 'in', ['ministry_approved', 'health_required', 'coordinator_review', 'coordinator_approved', 'coordinator_rejected', 'coordinator_conditional', 'manager_review', 'manager_approved', 'manager_rejected', 'completed'])]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No ministry approved applications
@@ -475,9 +932,9 @@
         <record id="action_acmst_officer_ministry_rejected" model="ir.actions.act_window">
             <field name="name">Ministry Rejected</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('state', '=', 'ministry_rejected')]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No ministry rejected applications
@@ -492,9 +949,9 @@
         <record id="action_acmst_health_officer_dashboard" model="ir.actions.act_window">
             <field name="name">Health Officer Dashboard</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('state', '=', 'health_required')]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No health checks pending
@@ -509,9 +966,9 @@
         <record id="action_acmst_coordinator_rejected" model="ir.actions.act_window">
             <field name="name">Coordinator Rejected</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('coordinator_id', '=', uid), ('state', 'in', ['coordinator_rejected'])]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No coordinator rejected applications
@@ -526,9 +983,9 @@
         <record id="action_acmst_student_records" model="ir.actions.act_window">
             <field name="name">Student Records</field>
             <field name="res_model">acmst.admission.file</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="domain">[('state', '=', 'completed')]</field>
-            <field name="context">{}</field>
+            <field name="context">{'create': False}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No student records found

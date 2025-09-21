@@ -148,12 +148,22 @@ class AcmstCoordinatorConditionWizard(models.TransientModel):
                 condition = self.env['acmst.coordinator.condition'].create(condition_vals)
                 created_conditions.append(condition)
             
-            # Send notification if requested
+            # Send notification if requested - but don't let it stop the approval process
             if self.send_notification and created_conditions:
                 try:
-                    self.admission_file_id.send_conditions_notification()
+                    # Check if mail server is properly configured
+                    mail_server = self.env['ir.mail_server'].search([('active', '=', True)], order='sequence', limit=1)
+                    if mail_server:
+                        success = self.admission_file_id.send_conditions_notification()
+                        if success:
+                            _logger.info(f'Successfully sent conditions notification for {self.admission_file_id.name}')
+                        else:
+                            _logger.warning(f'Conditions notification queued as pending email for {self.admission_file_id.name}')
+                    else:
+                        _logger.warning(f'No active mail server configured for {self.admission_file_id.name}. Notification will be queued.')
                 except Exception as e:
-                    _logger.warning(f'Failed to send notification: {str(e)}')
+                    _logger.warning(f'Failed to send notification for {self.admission_file_id.name}: {str(e)}')
+                    # Don't let email failure prevent the conditions from being created
             
             # Update admission file state to coordinator_conditional and then to manager_review
             self.admission_file_id.write({
@@ -168,8 +178,8 @@ class AcmstCoordinatorConditionWizard(models.TransientModel):
             
             # Show success message and close wizard
             message = _('Successfully created %d condition(s) for %s. Application moved to Manager Review.') % (
-                len(created_conditions), 
-                self.admission_file_id.applicant_name or self.admission_file_id.name
+                len(created_conditions),
+                self.admission_file_id.applicant_name_english or self.admission_file_id.name
             )
             
             return {
@@ -186,6 +196,14 @@ class AcmstCoordinatorConditionWizard(models.TransientModel):
             
         except Exception as e:
             _logger.error(f'Error creating conditions: {str(e)}')
+            # Rollback any changes if there was an error
+            try:
+                if self.admission_file_id:
+                    # Reset state if it was changed
+                    if self.admission_file_id.state == 'coordinator_conditional':
+                        self.admission_file_id.write({'state': 'coordinator_review'})
+            except Exception as rollback_e:
+                _logger.error(f'Error during rollback: {str(rollback_e)}')
             raise UserError(_('An error occurred while creating conditions: %s') % str(e))
 
 
