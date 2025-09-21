@@ -1941,6 +1941,311 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
             $('.detail-item .detail-value').eq(0).text(stats.total || 0);
             $('.detail-item .detail-value.completed').text(stats.completed || 0);
             $('.detail-item .detail-value.pending').text((stats.total || 0) - (stats.completed || 0));
+        },
+
+        _setupConditionsEventHandlers: function () {
+            var self = this;
+            
+            // Refresh conditions
+            $('#refresh-conditions').on('click', function(e) {
+                e.preventDefault();
+                self._loadConditionsData();
+            });
+            
+            // Upload documents
+            $(document).on('click', '[data-action="upload-documents"]', function(e) {
+                e.preventDefault();
+                var conditionId = $(this).data('condition-id');
+                self._showUploadModal(conditionId);
+            });
+            
+            // View details
+            $(document).on('click', '[data-action="view-details"]', function(e) {
+                e.preventDefault();
+                var conditionId = $(this).data('condition-id');
+                self._showConditionDetails(conditionId);
+            });
+            
+            // Quick actions
+            $('#upload-documents').on('click', function(e) {
+                e.preventDefault();
+                self._showUploadModal();
+            });
+            
+            $('#view-guidance').on('click', function(e) {
+                e.preventDefault();
+                self._showGuidanceModal();
+            });
+            
+            $('#contact-support').on('click', function(e) {
+                e.preventDefault();
+                self._showSupportModal();
+            });
+        },
+
+        _setupConditionsFiltering: function () {
+            var self = this;
+            
+            $('#condition-filter').on('change', function() {
+                var filter = $(this).val();
+                self._filterConditions(filter);
+            });
+        },
+
+        _filterConditions: function (filter) {
+            var $conditions = $('.condition-item');
+            
+            if (filter === 'all') {
+                $conditions.show();
+            } else {
+                $conditions.hide();
+                $conditions.filter('[data-status="' + filter + '"]').show();
+            }
+        },
+
+        _setupDeadlineTracking: function () {
+            var self = this;
+            
+            // Check for overdue conditions
+            this._checkOverdueConditions();
+            
+            // Set up periodic deadline checks
+            setInterval(function() {
+                self._checkOverdueConditions();
+            }, 60000); // Check every minute
+        },
+
+        _checkOverdueConditions: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/conditions/check-deadlines', 'call')
+                .then(function(result) {
+                    if (result.success && result.overdue_conditions.length > 0) {
+                        result.overdue_conditions.forEach(function(condition) {
+                            self._getNotificationSystem().showNotification(
+                                'warning',
+                                'Deadline Approaching',
+                                condition.title + ' is due in ' + condition.days_remaining + ' days',
+                                'exclamation-triangle'
+                            );
+                        });
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error checking deadlines:', error);
+                });
+        },
+
+        _showUploadModal: function (conditionId) {
+            var self = this;
+            var modal = $('<div class="comment-modal">' +
+                '<div class="comment-modal-content">' +
+                    '<div class="comment-modal-header">' +
+                        '<h5>Upload Documents</h5>' +
+                        '<button class="btn-close-modal">&times;</button>' +
+                    '</div>' +
+                    '<div class="comment-modal-body">' +
+                        '<form id="document-upload-form" enctype="multipart/form-data">' +
+                            '<div class="mb-3">' +
+                                '<label for="document-files" class="form-label">Select Documents</label>' +
+                                '<input type="file" class="form-control" id="document-files" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">' +
+                            '</div>' +
+                            '<div class="mb-3">' +
+                                '<label for="document-notes" class="form-label">Notes (Optional)</label>' +
+                                '<textarea class="form-control" id="document-notes" rows="3" placeholder="Add any additional notes about these documents..."></textarea>' +
+                            '</div>' +
+                        '</form>' +
+                    '</div>' +
+                    '<div class="comment-modal-footer">' +
+                        '<button type="button" class="acmst-btn acmst-btn-secondary" id="cancel-upload">Cancel</button>' +
+                        '<button type="button" class="acmst-btn acmst-btn-primary" id="submit-upload">Upload Documents</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>');
+            
+            $('body').append(modal);
+            
+            // Handle modal events
+            modal.find('.btn-close-modal, #cancel-upload').on('click', function() {
+                modal.remove();
+            });
+            
+            modal.find('#submit-upload').on('click', function() {
+                self._submitDocuments(modal, conditionId);
+            });
+            
+            modal.on('click', function(e) {
+                if (e.target === modal[0]) {
+                    modal.remove();
+                }
+            });
+        },
+
+        _submitDocuments: function (modal, conditionId) {
+            var self = this;
+            var formData = new FormData();
+            var files = modal.find('#document-files')[0].files;
+            var notes = modal.find('#document-notes').val();
+            
+            if (files.length === 0) {
+                self._getNotificationSystem().showNotification('error', 'No Files Selected', 'Please select at least one document to upload.', 'exclamation-triangle');
+                return;
+            }
+            
+            for (var i = 0; i < files.length; i++) {
+                formData.append('documents', files[i]);
+            }
+            formData.append('notes', notes);
+            formData.append('condition_id', conditionId);
+            
+            // Show loading state
+            modal.find('#submit-upload').prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Uploading...');
+            
+            ajax.jsonRpc('/admission/conditions/upload-documents', 'call', formData)
+                .then(function(result) {
+                    if (result.success) {
+                        self._getNotificationSystem().showNotification('success', 'Documents Uploaded', 'Your documents have been uploaded successfully.', 'check-circle');
+                        modal.remove();
+                        self._loadConditionsData();
+                    } else {
+                        self._getNotificationSystem().showNotification('error', 'Upload Failed', 'There was an error uploading your documents. Please try again.', 'exclamation-triangle');
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error uploading documents:', error);
+                    self._getNotificationSystem().showNotification('error', 'Upload Failed', 'There was an error uploading your documents. Please try again.', 'exclamation-triangle');
+                })
+                .finally(function() {
+                    modal.find('#submit-upload').prop('disabled', false).html('Upload Documents');
+                });
+        },
+
+        _showGuidanceModal: function () {
+            var self = this;
+            var modal = $('<div class="comment-modal">' +
+                '<div class="comment-modal-content" style="max-width: 800px;">' +
+                    '<div class="comment-modal-header">' +
+                        '<h5>Step-by-Step Guidance</h5>' +
+                        '<button class="btn-close-modal">&times;</button>' +
+                    '</div>' +
+                    '<div class="comment-modal-body">' +
+                        '<div class="guidance-content">' +
+                            '<h6>How to Complete Your Conditions:</h6>' +
+                            '<ol>' +
+                                '<li><strong>Review Requirements:</strong> Carefully read each condition and understand what documents or actions are required.</li>' +
+                                '<li><strong>Gather Documents:</strong> Collect all necessary documents as specified in each condition.</li>' +
+                                '<li><strong>Upload Documents:</strong> Use the upload button to submit your documents for each condition.</li>' +
+                                '<li><strong>Track Progress:</strong> Monitor your progress and upcoming deadlines in the dashboard.</li>' +
+                                '<li><strong>Follow Up:</strong> Check for any feedback or additional requirements from the admissions office.</li>' +
+                            '</ol>' +
+                            '<h6>Tips for Success:</h6>' +
+                            '<ul>' +
+                                '<li>Submit documents well before deadlines</li>' +
+                                '<li>Ensure all documents are clear and legible</li>' +
+                                '<li>Keep copies of all submitted documents</li>' +
+                                '<li>Contact support if you have any questions</li>' +
+                            '</ul>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="comment-modal-footer">' +
+                        '<button type="button" class="acmst-btn acmst-btn-primary" id="close-guidance">Got It</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>');
+            
+            $('body').append(modal);
+            
+            // Handle modal events
+            modal.find('.btn-close-modal, #close-guidance').on('click', function() {
+                modal.remove();
+            });
+            
+            modal.on('click', function(e) {
+                if (e.target === modal[0]) {
+                    modal.remove();
+                }
+            });
+        },
+
+        _showSupportModal: function () {
+            var self = this;
+            var modal = $('<div class="comment-modal">' +
+                '<div class="comment-modal-content">' +
+                    '<div class="comment-modal-header">' +
+                        '<h5>Contact Support</h5>' +
+                        '<button class="btn-close-modal">&times;</button>' +
+                    '</div>' +
+                    '<div class="comment-modal-body">' +
+                        '<form id="support-form">' +
+                            '<div class="mb-3">' +
+                                '<label for="support-subject" class="form-label">Subject</label>' +
+                                '<input type="text" class="form-control" id="support-subject" required placeholder="Brief description of your question">' +
+                            '</div>' +
+                            '<div class="mb-3">' +
+                                '<label for="support-message" class="form-label">Message</label>' +
+                                '<textarea class="form-control" id="support-message" rows="4" required placeholder="Please describe your question or issue in detail..."></textarea>' +
+                            '</div>' +
+                            '<div class="mb-3">' +
+                                '<label for="support-priority" class="form-label">Priority</label>' +
+                                '<select class="form-select" id="support-priority">' +
+                                    '<option value="low">Low</option>' +
+                                    '<option value="medium" selected>Medium</option>' +
+                                    '<option value="high">High</option>' +
+                                '</select>' +
+                            '</div>' +
+                        '</form>' +
+                    '</div>' +
+                    '<div class="comment-modal-footer">' +
+                        '<button type="button" class="acmst-btn acmst-btn-secondary" id="cancel-support">Cancel</button>' +
+                        '<button type="button" class="acmst-btn acmst-btn-primary" id="submit-support">Send Message</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>');
+            
+            $('body').append(modal);
+            
+            // Handle modal events
+            modal.find('.btn-close-modal, #cancel-support').on('click', function() {
+                modal.remove();
+            });
+            
+            modal.find('#submit-support').on('click', function() {
+                self._submitSupportRequest(modal);
+            });
+            
+            modal.on('click', function(e) {
+                if (e.target === modal[0]) {
+                    modal.remove();
+                }
+            });
+        },
+
+        _submitSupportRequest: function (modal) {
+            var self = this;
+            var subject = modal.find('#support-subject').val();
+            var message = modal.find('#support-message').val();
+            var priority = modal.find('#support-priority').val();
+            
+            if (!subject || !message) {
+                self._getNotificationSystem().showNotification('error', 'Validation Error', 'Please fill in all required fields.', 'exclamation-triangle');
+                return;
+            }
+            
+            ajax.jsonRpc('/admission/support/submit', 'call', {
+                subject: subject,
+                message: message,
+                priority: priority
+            }).then(function(result) {
+                if (result.success) {
+                    self._getNotificationSystem().showNotification('success', 'Message Sent', 'Your support request has been submitted successfully.', 'check-circle');
+                    modal.remove();
+                } else {
+                    self._getNotificationSystem().showNotification('error', 'Submission Failed', 'There was an error submitting your request. Please try again.', 'exclamation-triangle');
+                }
+            }).catch(function(error) {
+                console.error('Error submitting support request:', error);
+                self._getNotificationSystem().showNotification('error', 'Submission Failed', 'There was an error submitting your request. Please try again.', 'exclamation-triangle');
+            });
         }
     });
 
