@@ -1309,6 +1309,43 @@
                                     <button class="acmst-btn acmst-btn-outline" id="download-all">
                                         <i class="fa fa-download"></i> Download All
                                     </button>
+                                    <button class="acmst-btn acmst-btn-outline" id="share-documents">
+                                        <i class="fa fa-share-alt"></i> Share Documents
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Folder Structure -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-folder-tree"></i> Folder Structure</h3>
+                                </div>
+                                <div class="acmst-folder-tree" id="folder-tree">
+                                    <div class="folder-item" data-folder-id="root">
+                                        <i class="fa fa-folder"></i>
+                                        <span>All Documents</span>
+                                        <span class="folder-count">0</span>
+                                    </div>
+                                    <div class="folder-item" data-folder-id="academic">
+                                        <i class="fa fa-graduation-cap"></i>
+                                        <span>Academic</span>
+                                        <span class="folder-count">0</span>
+                                    </div>
+                                    <div class="folder-item" data-folder-id="financial">
+                                        <i class="fa fa-dollar-sign"></i>
+                                        <span>Financial</span>
+                                        <span class="folder-count">0</span>
+                                    </div>
+                                    <div class="folder-item" data-folder-id="health">
+                                        <i class="fa fa-heartbeat"></i>
+                                        <span>Health</span>
+                                        <span class="folder-count">0</span>
+                                    </div>
+                                    <div class="folder-item" data-folder-id="identity">
+                                        <i class="fa fa-id-card"></i>
+                                        <span>Identity</span>
+                                        <span class="folder-count">0</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1326,6 +1363,11 @@
                                                 <div class="search-box">
                                                     <input type="text" class="form-control" id="document-search" placeholder="Search documents...">
                                                     <i class="fa fa-search"></i>
+                                                </div>
+                                                <div class="filter-controls">
+                                                    <button class="btn btn-sm btn-outline-secondary" id="advanced-filter" title="Advanced Filter">
+                                                        <i class="fa fa-filter"></i> Filter
+                                                    </button>
                                                 </div>
                                                 <div class="view-controls">
                                                     <button class="btn btn-sm btn-outline-primary" id="grid-view" title="Grid View">
