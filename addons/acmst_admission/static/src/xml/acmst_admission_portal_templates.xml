@@ -7,9 +7,24 @@
             <t t-call="web.frontend_layout">
                 <t t-set="title">Admission Portal - ACMST College</t>
                 <div class="acmst-portal-container">
+                    <!-- Enhanced Header with Progress Tracking -->
                     <div class="acmst-portal-header">
-                        <h1>Welcome to ACMST College Admission Portal</h1>
-                        <p>Start your journey towards academic excellence</p>
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-graduation-cap"></i> Welcome to ACMST College Admission Portal</h1>
+                                    <p class="mb-0">Start your journey towards academic excellence with our comprehensive admission system</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="acmst-quick-stats">
+                                        <div class="stat-item">
+                                            <span class="stat-number" t-esc="application_count"/>
+                                            <span class="stat-label">Applications</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="row">
@@ -86,15 +101,45 @@
                     </div>
                     
                     <div class="acmst-card acmst-portal-application-form">
-                        <!-- Progress Bar -->
-                        <div class="acmst-progress">
-                            <div class="acmst-progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <!-- Enhanced Progress Bar with Steps -->
+                        <div class="acmst-progress-container">
+                            <div class="acmst-progress">
+                                <div class="acmst-progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="acmst-progress-steps">
+                                <div class="step active" data-step="1">
+                                    <div class="step-circle">1</div>
+                                    <div class="step-label">Personal Info</div>
+                                </div>
+                                <div class="step" data-step="2">
+                                    <div class="step-circle">2</div>
+                                    <div class="step-label">Admission Details</div>
+                                </div>
+                                <div class="step" data-step="3">
+                                    <div class="step-circle">3</div>
+                                    <div class="step-label">Documents</div>
+                                </div>
+                                <div class="step" data-step="4">
+                                    <div class="step-circle">4</div>
+                                    <div class="step-label">Review & Submit</div>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Application Header -->
+                        <!-- Enhanced Application Header -->
                         <div class="acmst-application-header">
-                            <h2><i class="fa fa-edit"></i> Admission Application</h2>
-                            <p class="text-muted">Please complete all sections carefully. Fields marked with * are required.</p>
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h2><i class="fa fa-edit"></i> Admission Application</h2>
+                                    <p class="text-muted">Please complete all sections carefully. Fields marked with * are required.</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="acmst-save-indicator">
+                                        <i class="fa fa-save"></i>
+                                        <span>Auto-save enabled</span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="alert alert-info">
                                 <i class="fa fa-info-circle"></i>
                                 <strong>Important:</strong> Ensure all information is accurate. You can save your progress and continue later.
@@ -105,10 +150,13 @@
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
                             <!-- Personal Information Section -->
-                            <div class="acmst-section">
+                            <div class="acmst-section wizard-step active" data-step="1">
                                 <div class="acmst-section-header">
                                     <h3><i class="fa fa-user"></i> Personal Information</h3>
                                     <p>Basic personal details and identification</p>
+                                    <div class="acmst-section-progress">
+                                        <span class="progress-text">Step 1 of 4</span>
+                                    </div>
                                 </div>
                                 <div class="acmst-section-content">
                             
@@ -165,10 +213,13 @@
                             </div>
 
                             <!-- Admission Details Section -->
-                            <div class="acmst-section">
+                            <div class="acmst-section wizard-step" data-step="2">
                                 <div class="acmst-section-header">
                                     <h3><i class="fa fa-graduation-cap"></i> Admission Details</h3>
                                     <p>Program selection and admission type</p>
+                                    <div class="acmst-section-progress">
+                                        <span class="progress-text">Step 2 of 4</span>
+                                    </div>
                                 </div>
                                 <div class="acmst-section-content">
                                     <div class="row">
@@ -328,10 +379,13 @@
                             </div>
 
                             <!-- Academic Information Section -->
-                            <div class="acmst-section">
+                            <div class="acmst-section wizard-step" data-step="3">
                                 <div class="acmst-section-header">
-                                    <h3><i class="fa fa-book"></i> Academic Information</h3>
+                                    <h3><i class="fa fa-book"></i> Academic Information & Documents</h3>
                                     <p>Previous education and supporting documents</p>
+                                    <div class="acmst-section-progress">
+                                        <span class="progress-text">Step 3 of 4</span>
+                                    </div>
                                 </div>
                                 <div class="acmst-section-content">
                                     <div class="row">
@@ -357,23 +411,38 @@
                                                 <strong>Tip:</strong> Upload certificates, transcripts, and other supporting documents
                                             </div>
                                         </div>
+                                        <div class="acmst-file-list" id="file-list">
+                                            <!-- Files will be listed here -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Terms and Agreement Section -->
-                            <div class="acmst-section">
+                            <!-- Review and Submit Section -->
+                            <div class="acmst-section wizard-step" data-step="4">
                                 <div class="acmst-section-header">
-                                    <h3><i class="fa fa-file-text"></i> Terms and Conditions</h3>
-                                    <p>Please review and accept the terms</p>
+                                    <h3><i class="fa fa-check-circle"></i> Review & Submit Application</h3>
+                                    <p>Review your information and submit your application</p>
+                                    <div class="acmst-section-progress">
+                                        <span class="progress-text">Step 4 of 4</span>
+                                    </div>
                                 </div>
                                 <div class="acmst-section-content">
-                                    <div class="alert alert-warning">
-                                        <i class="fa fa-exclamation-triangle"></i>
-                                        <strong>Important:</strong> Please read and agree to the terms and conditions before submitting your application.
+                                    <!-- Application Summary -->
+                                    <div class="acmst-application-summary">
+                                        <h4><i class="fa fa-list-alt"></i> Application Summary</h4>
+                                        <div class="summary-content" id="application-summary">
+                                            <!-- Summary will be populated by JavaScript -->
+                                        </div>
                                     </div>
 
+                                    <!-- Terms and Agreement -->
                                     <div class="acmst-terms-container">
+                                        <div class="alert alert-warning">
+                                            <i class="fa fa-exclamation-triangle"></i>
+                                            <strong>Important:</strong> Please read and agree to the terms and conditions before submitting your application.
+                                        </div>
+
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="terms_agreement" required="required"/>
                                             <label class="form-check-label" for="terms_agreement">
@@ -381,22 +450,14 @@
                                             </label>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <!-- Submit Actions Section -->
-                            <div class="acmst-section">
-                                <div class="acmst-section-header">
-                                    <h3><i class="fa fa-check-circle"></i> Submit Application</h3>
-                                    <p>Review and submit your application</p>
-                                </div>
-                                <div class="acmst-section-content">
-                                    <div class="alert alert-success">
-                                        <i class="fa fa-check"></i>
-                                        <strong>Ready to submit?</strong> Make sure all information is correct and all required fields are completed.
-                                    </div>
-
+                                    <!-- Submit Actions -->
                                     <div class="acmst-submit-actions">
+                                        <div class="alert alert-success">
+                                            <i class="fa fa-check"></i>
+                                            <strong>Ready to submit?</strong> Make sure all information is correct and all required fields are completed.
+                                        </div>
+
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <button type="button" class="acmst-btn acmst-btn-secondary btn-lg" data-action="save-draft">
@@ -413,6 +474,22 @@
                                 </div>
                             </div>
                         </form>
+                        
+                        <!-- Wizard Navigation -->
+                        <div class="acmst-wizard-navigation">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="button" class="acmst-btn acmst-btn-secondary" id="prev-step" disabled>
+                                        <i class="fa fa-arrow-left"></i> Previous
+                                    </button>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <button type="button" class="acmst-btn acmst-btn-primary" id="next-step">
+                                        Next <i class="fa fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </t>

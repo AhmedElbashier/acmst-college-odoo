@@ -2,32 +2,159 @@
 <odoo>
     <data>
         
-        <!-- Portal Dashboard Widget -->
+        <!-- Enhanced Portal Dashboard Widget -->
         <template id="portal_dashboard_admission" name="Admission Dashboard Widget">
-            <div class="col-md-6">
-                <div class="acmst-card">
-                    <div class="acmst-card-header">
-                        <h3>Admission Applications</h3>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="text-center">
-                                <h4 t-esc="application_count" class="text-primary"/>
-                                <p>Total Applications</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="text-center">
+            <div class="col-md-12">
+                <div class="acmst-dashboard-widget">
+                    <div class="acmst-card">
+                        <div class="acmst-card-header">
+                            <h3><i class="fa fa-graduation-cap"></i> Admission Dashboard</h3>
+                            <div class="acmst-card-actions">
                                 <a href="/admission/apply" class="acmst-btn acmst-btn-primary btn-sm">
                                     <i class="fa fa-plus"></i> New Application
                                 </a>
                             </div>
                         </div>
-                    </div>
-                    <div class="mt-3">
-                        <a href="/admission/status" class="acmst-btn acmst-btn-secondary btn-sm">
-                            <i class="fa fa-eye"></i> View All Applications
-                        </a>
+                        
+                        <!-- Quick Stats -->
+                        <div class="acmst-dashboard-stats">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="fa fa-file-alt"></i>
+                                        </div>
+                                        <div class="stat-content">
+                                            <h4 t-esc="application_count"/>
+                                            <p>Total Applications</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-card">
+                                        <div class="stat-icon pending">
+                                            <i class="fa fa-clock"></i>
+                                        </div>
+                                        <div class="stat-content">
+                                            <h4 t-esc="pending_count"/>
+                                            <p>Pending Review</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-card">
+                                        <div class="stat-icon approved">
+                                            <i class="fa fa-check-circle"></i>
+                                        </div>
+                                        <div class="stat-content">
+                                            <h4 t-esc="approved_count"/>
+                                            <p>Approved</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-card">
+                                        <div class="stat-icon rejected">
+                                            <i class="fa fa-times-circle"></i>
+                                        </div>
+                                        <div class="stat-content">
+                                            <h4 t-esc="rejected_count"/>
+                                            <p>Rejected</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Applications -->
+                        <div class="acmst-dashboard-content">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="acmst-recent-applications">
+                                        <h5><i class="fa fa-history"></i> Recent Applications</h5>
+                                        <div class="acmst-application-list">
+                                            <t t-foreach="recent_applications" t-as="app">
+                                                <div class="acmst-application-item">
+                                                    <div class="app-info">
+                                                        <h6 t-esc="app.name"/>
+                                                        <p t-esc="app.program_id.name"/>
+                                                        <small class="text-muted" t-esc="app.submission_date"/>
+                                                    </div>
+                                                    <div class="app-status">
+                                                        <span class="acmst-status acmst-status-app.state" t-esc="app.state"/>
+                                                    </div>
+                                                    <div class="app-actions">
+                                                        <a t-attf-href="/admission/status/#{app.id}" class="acmst-btn acmst-btn-sm acmst-btn-outline">
+                                                            <i class="fa fa-eye"></i> View
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="acmst-quick-actions">
+                                        <h5><i class="fa fa-bolt"></i> Quick Actions</h5>
+                                        <div class="d-grid gap-2">
+                                            <a href="/admission/apply" class="acmst-btn acmst-btn-primary">
+                                                <i class="fa fa-plus"></i> New Application
+                                            </a>
+                                            <a href="/admission/status" class="acmst-btn acmst-btn-secondary">
+                                                <i class="fa fa-list"></i> View All Applications
+                                            </a>
+                                            <a href="/admission/health-check" class="acmst-btn acmst-btn-info">
+                                                <i class="fa fa-heartbeat"></i> Health Check
+                                            </a>
+                                            <a href="/admission/conditions" class="acmst-btn acmst-btn-warning">
+                                                <i class="fa fa-tasks"></i> Conditions
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="acmst-progress-overview mt-3">
+                                        <h5><i class="fa fa-chart-line"></i> Progress Overview</h5>
+                                        <div class="progress-item">
+                                            <div class="progress-label">
+                                                <span>Application Submitted</span>
+                                                <span>100%</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 100%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="progress-item">
+                                            <div class="progress-label">
+                                                <span>Ministry Approval</span>
+                                                <span>75%</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 75%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="progress-item">
+                                            <div class="progress-label">
+                                                <span>Health Check</span>
+                                                <span>50%</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 50%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="progress-item">
+                                            <div class="progress-label">
+                                                <span>Final Approval</span>
+                                                <span>25%</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 25%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

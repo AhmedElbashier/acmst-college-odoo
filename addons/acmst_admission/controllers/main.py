@@ -19,12 +19,22 @@ class AdmissionPortal(CustomerPortal):
     def _prepare_home_portal_values(self, counters):
         values = super()._prepare_home_portal_values(counters)
         
-        # Get user's applications count
+        # Get user's applications data
         if request.env.user.has_group('acmst_admission.group_portal'):
             domain = [('portal_user_id', '=', request.env.user.id)]
-            values['application_count'] = request.env['acmst.portal.application'].search_count(domain)
+            applications = request.env['acmst.portal.application'].search(domain)
+            
+            values['application_count'] = len(applications)
+            values['pending_count'] = len(applications.filtered(lambda x: x.state in ['submitted', 'under_review']))
+            values['approved_count'] = len(applications.filtered(lambda x: x.state == 'approved'))
+            values['rejected_count'] = len(applications.filtered(lambda x: x.state == 'rejected'))
+            values['recent_applications'] = applications.sorted('submission_date', reverse=True)[:5]
         else:
             values['application_count'] = 0
+            values['pending_count'] = 0
+            values['approved_count'] = 0
+            values['rejected_count'] = 0
+            values['recent_applications'] = []
             
         return values
 

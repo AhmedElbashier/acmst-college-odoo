@@ -24,6 +24,8 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
             this._setupValidation();
             this._setupFileUpload();
             this._setupProgressBar();
+            this._setupWizard();
+            this._setupAutoSave();
         },
 
         _initializeForm: function () {
@@ -117,12 +119,199 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
             }
         },
 
+        _setupWizard: function () {
+            var self = this;
+            this.currentStep = 1;
+            this.totalSteps = 4;
+            
+            // Setup step navigation
+            this.$('#next-step').on('click', function() {
+                self._nextStep();
+            });
+            
+            this.$('#prev-step').on('click', function() {
+                self._prevStep();
+            });
+            
+            // Setup step click navigation
+            this.$('.acmst-progress-steps .step').on('click', function() {
+                var step = parseInt($(this).data('step'));
+                if (step <= self.currentStep || self._isStepCompleted(step)) {
+                    self._goToStep(step);
+                }
+            });
+            
+            this._updateWizardUI();
+        },
+
+        _setupAutoSave: function () {
+            var self = this;
+            var autoSaveInterval = 30000; // 30 seconds
+            
+            // Auto-save on field changes
+            this.$('input, select, textarea').on('change', function() {
+                clearTimeout(self.autoSaveTimeout);
+                self.autoSaveTimeout = setTimeout(function() {
+                    self._autoSave();
+                }, 2000); // Save 2 seconds after last change
+            });
+        },
+
+        _nextStep: function () {
+            if (this._validateCurrentStep()) {
+                if (this.currentStep < this.totalSteps) {
+                    this.currentStep++;
+                    this._goToStep(this.currentStep);
+                }
+            }
+        },
+
+        _prevStep: function () {
+            if (this.currentStep > 1) {
+                this.currentStep--;
+                this._goToStep(this.currentStep);
+            }
+        },
+
+        _goToStep: function (step) {
+            var self = this;
+            
+            // Hide all steps
+            this.$('.wizard-step').removeClass('active');
+            
+            // Show current step
+            this.$('.wizard-step[data-step="' + step + '"]').addClass('active');
+            
+            // Update progress steps
+            this.$('.acmst-progress-steps .step').each(function() {
+                var stepNum = parseInt($(this).data('step'));
+                $(this).removeClass('active completed');
+                
+                if (stepNum < step) {
+                    $(this).addClass('completed');
+                } else if (stepNum === step) {
+                    $(this).addClass('active');
+                }
+            });
+            
+            // Update progress bar
+            var progress = ((step - 1) / (this.totalSteps - 1)) * 100;
+            this.$('.acmst-progress-bar').css('width', progress + '%');
+            
+            // Update navigation buttons
+            this.$('#prev-step').prop('disabled', step === 1);
+            this.$('#next-step').text(step === this.totalSteps ? 'Submit' : 'Next');
+            
+            // Update step progress text
+            this.$('.acmst-section-progress .progress-text').text('Step ' + step + ' of ' + this.totalSteps);
+            
+            // Generate summary if on last step
+            if (step === this.totalSteps) {
+                this._generateApplicationSummary();
+            }
+        },
+
+        _validateCurrentStep: function () {
+            var self = this;
+            var isValid = true;
+            var $currentStep = this.$('.wizard-step.active');
+            
+            // Validate required fields in current step
+            $currentStep.find('input[required], select[required], textarea[required]').each(function() {
+                if (!self._validateField($(this))) {
+                    isValid = false;
+                }
+            });
+            
+            return isValid;
+        },
+
+        _isStepCompleted: function (step) {
+            var self = this;
+            var $step = this.$('.wizard-step[data-step="' + step + '"]');
+            var isCompleted = true;
+            
+            // Check if all required fields in step are filled
+            $step.find('input[required], select[required], textarea[required]').each(function() {
+                if (!$(this).val() || $(this).val().trim() === '') {
+                    isCompleted = false;
+                    return false;
+                }
+            });
+            
+            return isCompleted;
+        },
+
+        _updateWizardUI: function () {
+            this._goToStep(this.currentStep);
+        },
+
+        _autoSave: function () {
+            var self = this;
+            var formData = this._getFormData();
+            
+            // Show save indicator
+            this.$('.acmst-save-indicator').addClass('saving');
+            
+            ajax.jsonRpc('/admission/save_draft', 'call', formData)
+                .then(function(result) {
+                    if (result.success) {
+                        self.$('.acmst-save-indicator').removeClass('saving').addClass('saved');
+                        setTimeout(function() {
+                            self.$('.acmst-save-indicator').removeClass('saved');
+                        }, 2000);
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Auto-save failed:', error);
+                });
+        },
+
+        _generateApplicationSummary: function () {
+            var self = this;
+            var summary = '<div class="summary-content">';
+            
+            // Personal Information
+            summary += '<div class="summary-section">';
+            summary += '<h5>Personal Information</h5>';
+            summary += '<div class="summary-item"><strong>Name:</strong> ' + this.$('input[name="applicant_name_english"]').val() + '</div>';
+            summary += '<div class="summary-item"><strong>Phone:</strong> ' + this.$('input[name="phone"]').val() + '</div>';
+            summary += '<div class="summary-item"><strong>Email:</strong> ' + this.$('input[name="email"]').val() + '</div>';
+            summary += '<div class="summary-item"><strong>National ID:</strong> ' + this.$('input[name="national_id"]').val() + '</div>';
+            summary += '</div>';
+            
+            // Admission Details
+            summary += '<div class="summary-section">';
+            summary += '<h5>Admission Details</h5>';
+            summary += '<div class="summary-item"><strong>Program:</strong> ' + this.$('select[name="program_id"] option:selected').text() + '</div>';
+            summary += '<div class="summary-item"><strong>Batch:</strong> ' + this.$('select[name="batch_id"] option:selected').text() + '</div>';
+            summary += '<div class="summary-item"><strong>Admission Type:</strong> ' + this.$('select[name="admission_type"] option:selected').text() + '</div>';
+            summary += '</div>';
+            
+            // Documents
+            summary += '<div class="summary-section">';
+            summary += '<h5>Documents</h5>';
+            var fileCount = this.$('input[type="file"]')[0].files.length;
+            summary += '<div class="summary-item"><strong>Files:</strong> ' + fileCount + ' file(s) uploaded</div>';
+            summary += '</div>';
+            
+            summary += '</div>';
+            
+            this.$('#application-summary').html(summary);
+        },
+
         _onFormSubmit: function (event) {
             event.preventDefault();
             var self = this;
             
-            if (this._validateForm()) {
-                this._submitForm();
+            // If we're on the last step, submit the form
+            if (this.currentStep === this.totalSteps) {
+                if (this._validateForm()) {
+                    this._submitForm();
+                }
+            } else {
+                // Otherwise, go to next step
+                this._nextStep();
             }
         },
 
