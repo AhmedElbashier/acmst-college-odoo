@@ -133,8 +133,10 @@ class AcmstWorkflowEngine(models.Model):
                     
                     if self.notification_enabled and rule.send_notification:
                         rule.send_notification_email(admission_file)
+                except (ValidationError, UserError) as e:
+                    _logger.error(f'Validation error processing timeout transition for file {admission_file.name}: {str(e)}')
                 except Exception as e:
-                    _logger.error(f'Error processing timeout transition for file {admission_file.name}: {str(e)}')
+                    _logger.error(f'Unexpected error processing timeout transition for file {admission_file.name}: {str(e)}')
 
     @api.model
     def process_all_workflows(self):
@@ -144,8 +146,10 @@ class AcmstWorkflowEngine(models.Model):
         for workflow in active_workflows:
             try:
                 workflow.process_timeout_transitions()
+            except (ValidationError, UserError) as e:
+                _logger.error(f'Validation error processing workflow {workflow.name}: {str(e)}')
             except Exception as e:
-                _logger.error(f'Error processing workflow {workflow.name}: {str(e)}')
+                _logger.error(f'Unexpected error processing workflow {workflow.name}: {str(e)}')
 
     def test_workflow(self):
         """Test the workflow engine"""

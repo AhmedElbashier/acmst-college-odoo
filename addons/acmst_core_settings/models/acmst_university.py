@@ -194,12 +194,19 @@ class AcmstUniversity(models.Model):
             ])
             record.program_count = len(programs)
     
-    @api.depends('college_ids.program_ids.batch_ids')  # Will be updated when student module is available
+    @api.depends('college_ids.program_ids.batch_ids.admission_file_ids', 'college_ids.program_ids.batch_ids.admission_file_ids.state')
     def _compute_student_count(self):
         """Compute the number of students under this university"""
         for record in self:
-            # Placeholder - will be implemented when student module is available
-            record.student_count = 0
+            # Count all admission files across all batches as students
+            total_students = 0
+            for college in record.college_ids:
+                for program in college.program_ids:
+                    for batch in program.batch_ids:
+                        total_students += len(batch.admission_file_ids.filtered(
+                            lambda f: f.state in ['draft', 'submitted', 'under_review', 'approved']
+                        ))
+            record.student_count = total_students
     
     @api.depends('address', 'city', 'state_id', 'country_id', 'zip')
     def _compute_full_address(self):

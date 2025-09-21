@@ -1391,8 +1391,10 @@ class AcmstAdmissionFile(models.Model):
         if send_notification:
             try:
                 self.send_approval_notification()
+            except (ValidationError, UserError) as e:
+                _logger.warning(f"Validation error sending approval notification: {e}")
             except Exception as e:
-                _logger.warning(f"Could not send approval notification: {e}")
+                _logger.warning(f"Unexpected error sending approval notification: {e}")
 
         # Automatically complete the process
         self.action_complete()
@@ -1443,8 +1445,10 @@ class AcmstAdmissionFile(models.Model):
         if send_notification:
             try:
                 self.send_rejection_notification()
+            except (ValidationError, UserError) as e:
+                _logger.warning(f"Validation error sending rejection notification: {e}")
             except Exception as e:
-                _logger.warning(f"Could not send rejection notification: {e}")
+                _logger.warning(f"Unexpected error sending rejection notification: {e}")
 
         # Mark manager review activities as done
         manager_activities = self.env['mail.activity'].search([
@@ -1620,8 +1624,10 @@ class AcmstAdmissionFile(models.Model):
                 _logger.warning(f'No active mail server configured. Creating pending email for template {template_ref}.')
                 try:
                     self._create_pending_email(template_ref, record_id or self.id)
+                except (ValidationError, UserError) as e:
+                    _logger.error(f'Validation error creating pending email for template {template_ref}: {str(e)}')
                 except Exception as e:
-                    _logger.error(f'Failed to create pending email for template {template_ref}: {str(e)}')
+                    _logger.error(f'Unexpected error creating pending email for template {template_ref}: {str(e)}')
                 return False
 
             # Try to send the email
@@ -1629,15 +1635,30 @@ class AcmstAdmissionFile(models.Model):
                 template.send_mail(record_id or self.id, force_send=force_send)
                 _logger.info(f'Successfully sent email using template {template_ref}')
                 return True
-            except Exception as e:
-                _logger.warning(f'Failed to send email using template {template_ref}: {str(e)}')
+            except (ValidationError, UserError) as e:
+                _logger.warning(f'Validation error sending email using template {template_ref}: {str(e)}')
                 # Create pending email as fallback
                 try:
                     self._create_pending_email(template_ref, record_id or self.id)
+                except (ValidationError, UserError) as e2:
+                    _logger.error(f'Validation error creating pending email for template {template_ref}: {str(e2)}')
                 except Exception as e2:
-                    _logger.error(f'Failed to create pending email for template {template_ref}: {str(e2)}')
+                    _logger.error(f'Unexpected error creating pending email for template {template_ref}: {str(e2)}')
+                return False
+            except Exception as e:
+                _logger.warning(f'Unexpected error sending email using template {template_ref}: {str(e)}')
+                # Create pending email as fallback
+                try:
+                    self._create_pending_email(template_ref, record_id or self.id)
+                except (ValidationError, UserError) as e2:
+                    _logger.error(f'Validation error creating pending email for template {template_ref}: {str(e2)}')
+                except Exception as e2:
+                    _logger.error(f'Unexpected error creating pending email for template {template_ref}: {str(e2)}')
                 return False
 
+        except (ValidationError, UserError) as e:
+            _logger.error(f'Validation error in _safe_send_mail for template {template_ref}: {str(e)}')
+            return False
         except Exception as e:
             _logger.error(f'Unexpected error in _safe_send_mail for template {template_ref}: {str(e)}')
             return False
@@ -1659,8 +1680,10 @@ class AcmstAdmissionFile(models.Model):
                     'created_by': self.env.user.id,
                 })
                 _logger.info(f'Created pending email for template {template_ref} on record {record_id}')
+        except (ValidationError, UserError) as e:
+            _logger.error(f'Validation error creating pending email for template {template_ref}: {str(e)}')
         except Exception as e:
-            _logger.error(f'Failed to create pending email for template {template_ref}: {str(e)}')
+            _logger.error(f'Unexpected error creating pending email for template {template_ref}: {str(e)}')
 
     def send_conditions_notification(self):
         """Send conditions notification"""

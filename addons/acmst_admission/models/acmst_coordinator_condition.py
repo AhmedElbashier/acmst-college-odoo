@@ -223,7 +223,7 @@ class AcmstCoordinatorCondition(models.Model):
         })
         return True
 
-    @api.depends()
+    @api.depends_context('uid')
     def _compute_dashboard_statistics(self):
         """Compute dashboard statistics"""
         for record in self:

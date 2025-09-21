@@ -8,6 +8,13 @@ import logging
 import time
 from datetime import datetime, date, timedelta
 
+try:
+    import psycopg2
+    from psycopg2 import ProgrammingError
+except ImportError:
+    psycopg2 = None
+    ProgrammingError = Exception
+
 _logger = logging.getLogger(__name__)
 
 
@@ -82,12 +89,19 @@ class AcmstPerformanceOptimization(models.Model):
             _logger.info(f"Created index {index_name} for {model_name}")
             return optimization
             
+        except (psycopg2.Error, ProgrammingError) as e:
+            optimization.write({
+                'status': 'failed',
+                'notes': f'Database error creating index: {str(e)}'
+            })
+            _logger.error(f"Database error creating index {index_name}: {str(e)}")
+            return optimization
         except Exception as e:
             optimization.write({
                 'status': 'failed',
-                'notes': f'Error creating index: {str(e)}'
+                'notes': f'Unexpected error creating index: {str(e)}'
             })
-            _logger.error(f"Failed to create index {index_name}: {str(e)}")
+            _logger.error(f"Unexpected error creating index {index_name}: {str(e)}")
             return optimization
 
     @api.model
@@ -115,12 +129,19 @@ class AcmstPerformanceOptimization(models.Model):
             _logger.info(f"Implemented cache {cache_key} for {model_name}")
             return optimization
             
+        except (ValidationError, UserError) as e:
+            optimization.write({
+                'status': 'failed',
+                'notes': f'Validation error implementing cache: {str(e)}'
+            })
+            _logger.error(f"Validation error implementing cache {cache_key}: {str(e)}")
+            return optimization
         except Exception as e:
             optimization.write({
                 'status': 'failed',
-                'notes': f'Error implementing cache: {str(e)}'
+                'notes': f'Unexpected error implementing cache: {str(e)}'
             })
-            _logger.error(f"Failed to implement cache {cache_key}: {str(e)}")
+            _logger.error(f"Unexpected error implementing cache {cache_key}: {str(e)}")
             return optimization
 
     @api.model
@@ -147,12 +168,19 @@ class AcmstPerformanceOptimization(models.Model):
             _logger.info(f"Optimized query for {model_name}")
             return optimization
             
+        except (ValidationError, UserError) as e:
+            optimization.write({
+                'status': 'failed',
+                'notes': f'Validation error optimizing query: {str(e)}'
+            })
+            _logger.error(f"Validation error optimizing query for {model_name}: {str(e)}")
+            return optimization
         except Exception as e:
             optimization.write({
                 'status': 'failed',
-                'notes': f'Error optimizing query: {str(e)}'
+                'notes': f'Unexpected error optimizing query: {str(e)}'
             })
-            _logger.error(f"Failed to optimize query for {model_name}: {str(e)}")
+            _logger.error(f"Unexpected error optimizing query for {model_name}: {str(e)}")
             return optimization
 
     @api.model
@@ -179,12 +207,19 @@ class AcmstPerformanceOptimization(models.Model):
             _logger.info(f"Optimized view {view_name} for {model_name}")
             return optimization
             
+        except (ValidationError, UserError) as e:
+            optimization.write({
+                'status': 'failed',
+                'notes': f'Validation error optimizing view: {str(e)}'
+            })
+            _logger.error(f"Validation error optimizing view {view_name}: {str(e)}")
+            return optimization
         except Exception as e:
             optimization.write({
                 'status': 'failed',
-                'notes': f'Error optimizing view: {str(e)}'
+                'notes': f'Unexpected error optimizing view: {str(e)}'
             })
-            _logger.error(f"Failed to optimize view {view_name}: {str(e)}")
+            _logger.error(f"Unexpected error optimizing view {view_name}: {str(e)}")
             return optimization
 
     @api.model
@@ -211,12 +246,19 @@ class AcmstPerformanceOptimization(models.Model):
             _logger.info(f"Optimized report {report_name} for {model_name}")
             return optimization
             
+        except (ValidationError, UserError) as e:
+            optimization.write({
+                'status': 'failed',
+                'notes': f'Validation error optimizing report: {str(e)}'
+            })
+            _logger.error(f"Validation error optimizing report {report_name}: {str(e)}")
+            return optimization
         except Exception as e:
             optimization.write({
                 'status': 'failed',
-                'notes': f'Error optimizing report: {str(e)}'
+                'notes': f'Unexpected error optimizing report: {str(e)}'
             })
-            _logger.error(f"Failed to optimize report {report_name}: {str(e)}")
+            _logger.error(f"Unexpected error optimizing report {report_name}: {str(e)}")
             return optimization
 
     @api.model
@@ -243,12 +285,19 @@ class AcmstPerformanceOptimization(models.Model):
             _logger.info(f"Optimized workflow {workflow_name} for {model_name}")
             return optimization
             
+        except (ValidationError, UserError) as e:
+            optimization.write({
+                'status': 'failed',
+                'notes': f'Validation error optimizing workflow: {str(e)}'
+            })
+            _logger.error(f"Validation error optimizing workflow {workflow_name}: {str(e)}")
+            return optimization
         except Exception as e:
             optimization.write({
                 'status': 'failed',
-                'notes': f'Error optimizing workflow: {str(e)}'
+                'notes': f'Unexpected error optimizing workflow: {str(e)}'
             })
-            _logger.error(f"Failed to optimize workflow {workflow_name}: {str(e)}")
+            _logger.error(f"Unexpected error optimizing workflow {workflow_name}: {str(e)}")
             return optimization
 
     @api.model
@@ -275,12 +324,19 @@ class AcmstPerformanceOptimization(models.Model):
             _logger.info(f"Optimized security {security_feature} for {model_name}")
             return optimization
             
+        except (ValidationError, UserError) as e:
+            optimization.write({
+                'status': 'failed',
+                'notes': f'Validation error optimizing security: {str(e)}'
+            })
+            _logger.error(f"Validation error optimizing security {security_feature}: {str(e)}")
+            return optimization
         except Exception as e:
             optimization.write({
                 'status': 'failed',
-                'notes': f'Error optimizing security: {str(e)}'
+                'notes': f'Unexpected error optimizing security: {str(e)}'
             })
-            _logger.error(f"Failed to optimize security {security_feature}: {str(e)}")
+            _logger.error(f"Unexpected error optimizing security {security_feature}: {str(e)}")
             return optimization
 
     @api.model
@@ -307,12 +363,19 @@ class AcmstPerformanceOptimization(models.Model):
             _logger.info(f"Optimized UI {ui_component} for {model_name}")
             return optimization
             
+        except (ValidationError, UserError) as e:
+            optimization.write({
+                'status': 'failed',
+                'notes': f'Validation error optimizing UI: {str(e)}'
+            })
+            _logger.error(f"Validation error optimizing UI {ui_component}: {str(e)}")
+            return optimization
         except Exception as e:
             optimization.write({
                 'status': 'failed',
-                'notes': f'Error optimizing UI: {str(e)}'
+                'notes': f'Unexpected error optimizing UI: {str(e)}'
             })
-            _logger.error(f"Failed to optimize UI {ui_component}: {str(e)}")
+            _logger.error(f"Unexpected error optimizing UI {ui_component}: {str(e)}")
             return optimization
 
     @api.model
@@ -339,12 +402,19 @@ class AcmstPerformanceOptimization(models.Model):
             _logger.info(f"Optimized API {api_endpoint} for {model_name}")
             return optimization
             
+        except (ValidationError, UserError) as e:
+            optimization.write({
+                'status': 'failed',
+                'notes': f'Validation error optimizing API: {str(e)}'
+            })
+            _logger.error(f"Validation error optimizing API {api_endpoint}: {str(e)}")
+            return optimization
         except Exception as e:
             optimization.write({
                 'status': 'failed',
-                'notes': f'Error optimizing API: {str(e)}'
+                'notes': f'Unexpected error optimizing API: {str(e)}'
             })
-            _logger.error(f"Failed to optimize API {api_endpoint}: {str(e)}")
+            _logger.error(f"Unexpected error optimizing API {api_endpoint}: {str(e)}")
             return optimization
 
     @api.model
@@ -371,12 +441,19 @@ class AcmstPerformanceOptimization(models.Model):
             _logger.info(f"Optimized integration {integration_point} for {model_name}")
             return optimization
             
+        except (ValidationError, UserError) as e:
+            optimization.write({
+                'status': 'failed',
+                'notes': f'Validation error optimizing integration: {str(e)}'
+            })
+            _logger.error(f"Validation error optimizing integration {integration_point}: {str(e)}")
+            return optimization
         except Exception as e:
             optimization.write({
                 'status': 'failed',
-                'notes': f'Error optimizing integration: {str(e)}'
+                'notes': f'Unexpected error optimizing integration: {str(e)}'
             })
-            _logger.error(f"Failed to optimize integration {integration_point}: {str(e)}")
+            _logger.error(f"Unexpected error optimizing integration {integration_point}: {str(e)}")
             return optimization
 
     @api.model
@@ -455,9 +532,14 @@ class AcmstPerformanceOptimization(models.Model):
                     'performance_score': self._calculate_performance_score(search_time, read_time, count_time, count)
                 }
                 
+            except (ValidationError, UserError) as e:
+                audit_results[model_name] = {
+                    'error': f'Validation error: {str(e)}',
+                    'performance_score': 0
+                }
             except Exception as e:
                 audit_results[model_name] = {
-                    'error': str(e),
+                    'error': f'Unexpected error: {str(e)}',
                     'performance_score': 0
                 }
         
@@ -676,12 +758,18 @@ class AcmstPerformanceOptimization(models.Model):
                 'implementation_date': fields.Datetime.now()
             })
             
+        except (ValidationError, UserError) as e:
+            self.write({
+                'status': 'failed',
+                'notes': f'Validation error running optimization: {str(e)}'
+            })
+            raise UserError(_('Validation error running optimization: %s') % str(e))
         except Exception as e:
             self.write({
                 'status': 'failed',
-                'notes': f'Error running optimization: {str(e)}'
+                'notes': f'Unexpected error running optimization: {str(e)}'
             })
-            raise UserError(_('Failed to run optimization: %s') % str(e))
+            raise UserError(_('Unexpected error running optimization: %s') % str(e))
 
     def action_cancel_optimization(self):
         """Action to cancel optimization"""
