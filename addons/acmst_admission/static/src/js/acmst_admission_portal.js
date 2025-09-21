@@ -54,31 +54,77 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
                 self._validateField($(this));
             });
             
-            // National ID validation
+            // Enhanced National ID validation
             this.$('input[name="national_id"]').on('input', function() {
-                var value = $(this).val();
-                if (value.length === 10 && !/^\d{10}$/.test(value)) {
+                var value = $(this).val().replace(/\D/g, ''); // Remove non-digits
+                $(this).val(value); // Update field with cleaned value
+                
+                if (value.length > 0 && value.length < 10) {
                     self._showFieldError($(this), 'National ID must be exactly 10 digits');
+                } else if (value.length === 10) {
+                    if (!self._validateSaudiNationalID(value)) {
+                        self._showFieldError($(this), 'Invalid National ID format');
+                    } else {
+                        self._clearFieldError($(this));
+                    }
                 } else {
                     self._clearFieldError($(this));
                 }
             });
             
-            // Email validation
+            // Enhanced Email validation
             this.$('input[name="email"]').on('blur', function() {
-                var value = $(this).val();
-                if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                var value = $(this).val().trim();
+                if (value && !self._validateEmail(value)) {
                     self._showFieldError($(this), 'Please enter a valid email address');
                 } else {
                     self._clearFieldError($(this));
                 }
             });
             
-            // Phone validation
-            this.$('input[name="phone"]').on('blur', function() {
+            // Enhanced Phone validation
+            this.$('input[name="phone"]').on('input', function() {
                 var value = $(this).val();
-                if (value && !/^[\+]?[0-9\s\-\(\)]{10,}$/.test(value)) {
+                var cleaned = value.replace(/\D/g, '');
+                
+                if (cleaned.length > 0) {
+                    // Format phone number
+                    var formatted = self._formatPhoneNumber(cleaned);
+                    $(this).val(formatted);
+                }
+                
+                if (value && !self._validatePhone(value)) {
                     self._showFieldError($(this), 'Please enter a valid phone number');
+                } else {
+                    self._clearFieldError($(this));
+                }
+            });
+            
+            // Name validation
+            this.$('input[name="applicant_name_english"], input[name="applicant_name_arabic"]').on('blur', function() {
+                var value = $(this).val().trim();
+                if (value && !self._validateName(value)) {
+                    self._showFieldError($(this), 'Name must contain only letters and spaces');
+                } else {
+                    self._clearFieldError($(this));
+                }
+            });
+            
+            // Birth date validation
+            this.$('input[name="birth_date"]').on('change', function() {
+                var value = $(this).val();
+                if (value && !self._validateBirthDate(value)) {
+                    self._showFieldError($(this), 'You must be at least 16 years old to apply');
+                } else {
+                    self._clearFieldError($(this));
+                }
+            });
+            
+            // Address validation
+            this.$('textarea[name="address"]').on('blur', function() {
+                var value = $(this).val().trim();
+                if (value && value.length < 10) {
+                    self._showFieldError($(this), 'Please provide a more detailed address');
                 } else {
                     self._clearFieldError($(this));
                 }
@@ -91,14 +137,40 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
             var $fileInput = this.$('input[type="file"]');
             
             if ($fileUpload.length && $fileInput.length) {
+                // Click to upload
                 $fileUpload.on('click', function() {
                     $fileInput.click();
                 });
                 
+                // File selection
                 $fileInput.on('change', function() {
                     var files = this.files;
                     if (files.length > 0) {
-                        self._updateFileUploadDisplay(files[0]);
+                        self._handleFileSelection(files);
+                    }
+                });
+                
+                // Drag and drop functionality
+                $fileUpload.on('dragover', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).addClass('dragover');
+                });
+                
+                $fileUpload.on('dragleave', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).removeClass('dragover');
+                });
+                
+                $fileUpload.on('drop', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).removeClass('dragover');
+                    
+                    var files = e.originalEvent.dataTransfer.files;
+                    if (files.length > 0) {
+                        self._handleFileSelection(files);
                     }
                 });
             }
@@ -401,6 +473,87 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
             $field.siblings('.invalid-feedback').remove();
         },
 
+        // Enhanced validation methods
+        _validateSaudiNationalID: function (id) {
+            if (id.length !== 10) return false;
+            
+            // Check if first digit is 1 or 2
+            if (id[0] !== '1' && id[0] !== '2') return false;
+            
+            // Validate using Saudi National ID algorithm
+            var sum = 0;
+            for (var i = 0; i < 9; i++) {
+                var digit = parseInt(id[i]);
+                if (i % 2 === 0) {
+                    digit *= 2;
+                    if (digit > 9) digit = Math.floor(digit / 10) + (digit % 10);
+                }
+                sum += digit;
+            }
+            
+            var checkDigit = (10 - (sum % 10)) % 10;
+            return checkDigit === parseInt(id[9]);
+        },
+
+        _validateEmail: function (email) {
+            var emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+            return emailRegex.test(email);
+        },
+
+        _validatePhone: function (phone) {
+            // Remove all non-digit characters
+            var cleaned = phone.replace(/\D/g, '');
+            
+            // Check if it's a valid Saudi phone number (9 digits starting with 5)
+            if (cleaned.length === 9 && cleaned[0] === '5') {
+                return true;
+            }
+            
+            // Check if it's a valid international format
+            if (cleaned.length >= 10 && cleaned.length <= 15) {
+                return true;
+            }
+            
+            return false;
+        },
+
+        _formatPhoneNumber: function (phone) {
+            var cleaned = phone.replace(/\D/g, '');
+            
+            if (cleaned.length === 9 && cleaned[0] === '5') {
+                // Saudi format: 5XX XXX XXX
+                return cleaned.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
+            } else if (cleaned.length > 9) {
+                // International format: +XXX XXX XXX XXXX
+                if (cleaned.startsWith('966')) {
+                    return '+966 ' + cleaned.substring(3).replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
+                } else {
+                    return '+' + cleaned;
+                }
+            }
+            
+            return phone;
+        },
+
+        _validateName: function (name) {
+            // Allow letters, spaces, hyphens, and apostrophes
+            var nameRegex = /^[a-zA-Z\u0600-\u06FF\s\-']+$/;
+            return nameRegex.test(name) && name.length >= 2;
+        },
+
+        _validateBirthDate: function (dateString) {
+            var birthDate = new Date(dateString);
+            var today = new Date();
+            var age = today.getFullYear() - birthDate.getFullYear();
+            var monthDiff = today.getMonth() - birthDate.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            
+            return age >= 16 && age <= 100;
+        },
+
         _updateProgress: function () {
             var $progressBar = this.$('.acmst-progress-bar');
             if (!$progressBar.length) return;
@@ -427,22 +580,243 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
             $hint.text('Click to change file');
         },
 
-        _handleFileUpload: function (file) {
-            // Validate file type and size
-            var allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        _handleFileSelection: function (files) {
+            var self = this;
+            var validFiles = [];
+            var errors = [];
+            
+            // Process each file
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var validation = self._validateFile(file);
+                
+                if (validation.valid) {
+                    validFiles.push(file);
+                } else {
+                    errors.push(file.name + ': ' + validation.error);
+                }
+            }
+            
+            // Show errors if any
+            if (errors.length > 0) {
+                this._showAlert('File validation errors:<br>' + errors.join('<br>'), 'danger');
+            }
+            
+            // Add valid files to the list
+            if (validFiles.length > 0) {
+                this._addFilesToList(validFiles);
+                this._updateFileUploadDisplay();
+            }
+        },
+
+        _validateFile: function (file) {
+            var allowedTypes = [
+                'application/pdf',
+                'image/jpeg',
+                'image/jpg', 
+                'image/png',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            ];
             var maxSize = 10 * 1024 * 1024; // 10MB
             
+            // Check file type
             if (!allowedTypes.includes(file.type)) {
-                this._showAlert('Please upload a valid file type (PDF, DOC, DOCX, JPG, PNG)', 'danger');
-                return;
+                return {
+                    valid: false,
+                    error: 'Invalid file type. Allowed: PDF, DOC, DOCX, JPG, PNG'
+                };
             }
             
+            // Check file size
             if (file.size > maxSize) {
-                this._showAlert('File size must be less than 10MB', 'danger');
-                return;
+                return {
+                    valid: false,
+                    error: 'File size exceeds 10MB limit'
+                };
             }
             
-            this._updateFileUploadDisplay(file);
+            // Check file name length
+            if (file.name.length > 255) {
+                return {
+                    valid: false,
+                    error: 'File name too long (max 255 characters)'
+                };
+            }
+            
+            return { valid: true };
+        },
+
+        _addFilesToList: function (files) {
+            var self = this;
+            var $fileList = this.$('#file-list');
+            
+            if (!$fileList.length) {
+                $fileList = $('<div class="acmst-file-list" id="file-list"></div>');
+                this.$('.acmst-file-upload').after($fileList);
+            }
+            
+            files.forEach(function(file) {
+                var fileId = 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                var fileItem = self._createFileItem(file, fileId);
+                $fileList.append(fileItem);
+            });
+        },
+
+        _createFileItem: function (file, fileId) {
+            var self = this;
+            var fileSize = self._formatFileSize(file.size);
+            var fileIcon = self._getFileIcon(file.type);
+            
+            var $fileItem = $('<div class="file-item" data-file-id="' + fileId + '">' +
+                '<div class="file-info">' +
+                    '<div class="file-icon">' +
+                        '<i class="fa fa-' + fileIcon + '"></i>' +
+                    '</div>' +
+                    '<div class="file-details">' +
+                        '<div class="file-name">' + file.name + '</div>' +
+                        '<div class="file-size">' + fileSize + '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="file-actions">' +
+                    '<button class="btn-preview" data-file-id="' + fileId + '">' +
+                        '<i class="fa fa-eye"></i>' +
+                    '</button>' +
+                    '<button class="btn-remove" data-file-id="' + fileId + '">' +
+                        '<i class="fa fa-times"></i>' +
+                    '</button>' +
+                '</div>' +
+            '</div>');
+            
+            // Add event handlers
+            $fileItem.find('.btn-remove').on('click', function() {
+                self._removeFile(fileId);
+            });
+            
+            $fileItem.find('.btn-preview').on('click', function() {
+                self._previewFile(file);
+            });
+            
+            return $fileItem;
+        },
+
+        _formatFileSize: function (bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            var k = 1024;
+            var sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            var i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        },
+
+        _getFileIcon: function (fileType) {
+            if (fileType.includes('pdf')) return 'file-pdf';
+            if (fileType.includes('word') || fileType.includes('document')) return 'file-word';
+            if (fileType.includes('image')) return 'file-image';
+            return 'file';
+        },
+
+        _removeFile: function (fileId) {
+            $('.file-item[data-file-id="' + fileId + '"]').remove();
+            this._updateFileUploadDisplay();
+        },
+
+        _previewFile: function (file) {
+            if (file.type.includes('image')) {
+                this._previewImage(file);
+            } else if (file.type.includes('pdf')) {
+                this._previewPDF(file);
+            } else {
+                this._showAlert('Preview not available for this file type', 'info');
+            }
+        },
+
+        _previewImage: function (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var modal = $('<div class="file-preview-modal">' +
+                    '<div class="modal-content">' +
+                        '<div class="modal-header">' +
+                            '<h5>Image Preview</h5>' +
+                            '<button class="btn-close-modal">&times;</button>' +
+                        '</div>' +
+                        '<div class="modal-body">' +
+                            '<img src="' + e.target.result + '" style="max-width: 100%; max-height: 500px;">' +
+                        '</div>' +
+                    '</div>' +
+                '</div>');
+                
+                $('body').append(modal);
+                
+                modal.find('.btn-close-modal').on('click', function() {
+                    modal.remove();
+                });
+                
+                modal.on('click', function(e) {
+                    if (e.target === modal[0]) {
+                        modal.remove();
+                    }
+                });
+            };
+            reader.readAsDataURL(file);
+        },
+
+        _previewPDF: function (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var modal = $('<div class="file-preview-modal">' +
+                    '<div class="modal-content">' +
+                        '<div class="modal-header">' +
+                            '<h5>PDF Preview</h5>' +
+                            '<button class="btn-close-modal">&times;</button>' +
+                        '</div>' +
+                        '<div class="modal-body">' +
+                            '<iframe src="' + e.target.result + '" width="100%" height="500px"></iframe>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>');
+                
+                $('body').append(modal);
+                
+                modal.find('.btn-close-modal').on('click', function() {
+                    modal.remove();
+                });
+                
+                modal.on('click', function(e) {
+                    if (e.target === modal[0]) {
+                        modal.remove();
+                    }
+                });
+            };
+            reader.readAsDataURL(file);
+        },
+
+        _updateFileUploadDisplay: function () {
+            var $fileUpload = this.$('.acmst-file-upload');
+            var $icon = $fileUpload.find('.acmst-file-upload-icon');
+            var $text = $fileUpload.find('.acmst-file-upload-text');
+            var $hint = $fileUpload.find('.acmst-file-upload-hint');
+            var fileCount = this.$('.file-item').length;
+            
+            if (fileCount > 0) {
+                $icon.removeClass('fa-cloud-upload-alt').addClass('fa-check-circle');
+                $icon.css('color', '#28a745');
+                $text.text(fileCount + ' file(s) uploaded');
+                $hint.text('Click to add more files or drag and drop');
+            } else {
+                $icon.removeClass('fa-check-circle').addClass('fa-cloud-upload-alt');
+                $icon.css('color', '#6c757d');
+                $text.text('Click to upload documents');
+                $hint.html('<strong>Supported formats:</strong> PDF, DOC, DOCX, JPG, PNG<br/>' +
+                          '<strong>Maximum size:</strong> 10MB per file<br/>' +
+                          '<strong>Tip:</strong> Upload certificates, transcripts, and other supporting documents');
+            }
+        },
+
+        _handleFileUpload: function (file) {
+            // This method is kept for backward compatibility
+            this._handleFileSelection([file]);
         },
 
         _saveDraft: function () {
