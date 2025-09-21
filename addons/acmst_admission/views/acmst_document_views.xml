@@ -10,7 +10,7 @@
                 <field name="name" string="Document Name"/>
                 <field name="document_type" string="Type"/>
                 <field name="file_size" string="Size (KB)"/>
-                <field name="mime_type" string="Type"/>
+                <field name="mimetype" string="Type"/>
                 <field name="state" string="Status" widget="badge"/>
                 <field name="approval_date" string="Approval Date"/>
                 <field name="approved_by" string="Approved By"/>
@@ -43,7 +43,7 @@
                             <field name="file" filename="filename" required="1"/>
                             <field name="filename" readonly="1"/>
                             <field name="file_size" readonly="1"/>
-                            <field name="mime_type" readonly="1"/>
+                            <field name="mimetype" readonly="1"/>
                         </group>
                         <group string="Relations">
                             <field name="portal_application_id" readonly="1"/>
@@ -161,7 +161,7 @@
                                         <strong>Type:</strong>
                                     </div>
                                     <div class="col-md-6">
-                                        <field name="mime_type"/>
+                                        <field name="mimetype"/>
                                     </div>
                                 </div>
                             </div>

@@ -58,7 +58,7 @@ class AcmstDocument(models.Model):
         store=True,
         help='Size of the document file in kilobytes'
     )
-    mime_type = fields.Char(
+    mimetype = fields.Char(
         string='MIME Type',
         compute='_compute_mime_type',
         store=True,
@@ -121,9 +121,9 @@ class AcmstDocument(models.Model):
         for record in self:
             if record.filename:
                 import mimetypes
-                record.mime_type = mimetypes.guess_type(record.filename)[0] or 'application/octet-stream'
+                record.mimetype = mimetypes.guess_type(record.filename)[0] or 'application/octet-stream'
             else:
-                record.mime_type = 'application/octet-stream'
+                record.mimetype = 'application/octet-stream'
 
     @api.depends('document_type')
     def _compute_document_category(self):
