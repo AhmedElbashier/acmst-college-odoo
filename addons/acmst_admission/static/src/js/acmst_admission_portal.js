@@ -2246,12 +2246,779 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
                 console.error('Error submitting support request:', error);
                 self._getNotificationSystem().showNotification('error', 'Submission Failed', 'There was an error submitting your request. Please try again.', 'exclamation-triangle');
             });
+        },
+
+        // Document Management Portal functionality
+        setupDocumentManagement: function () {
+            var self = this;
+            
+            // Load documents data
+            this._loadDocumentsData();
+            
+            // Setup event handlers
+            this._setupDocumentEventHandlers();
+            
+            // Setup filtering and search
+            this._setupDocumentFiltering();
+            
+            // Setup view controls
+            this._setupViewControls();
+        },
+
+        _loadDocumentsData: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/documents/list', 'call')
+                .then(function(result) {
+                    if (result.success) {
+                        self._displayDocuments(result.documents);
+                        self._updateDocumentStats(result.stats);
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error loading documents:', error);
+                });
+        },
+
+        _displayDocuments: function (documents) {
+            var $container = $('#document-list');
+            $container.empty();
+            
+            if (documents.length === 0) {
+                $container.html('<div class="text-center text-muted py-4">No documents found.</div>');
+                return;
+            }
+            
+            documents.forEach(function(doc) {
+                var $document = self._createDocumentItem(doc);
+                $container.append($document);
+            });
+        },
+
+        _createDocumentItem: function (doc) {
+            var self = this;
+            var statusClass = 'status-' + doc.status;
+            var fileIcon = self._getFileIcon(doc.file_type);
+            
+            var $document = $('<div class="document-item" data-document-id="' + doc.id + '" data-category="' + doc.category + '">' +
+                '<div class="document-icon">' +
+                    '<i class="fa ' + fileIcon + '"></i>' +
+                '</div>' +
+                '<div class="document-info">' +
+                    '<div class="document-name">' + doc.name + '</div>' +
+                    '<div class="document-meta">' +
+                        '<span class="document-size">' + doc.size + '</span>' +
+                        '<span class="document-date">' + doc.upload_date + '</span>' +
+                        '<span class="document-status ' + statusClass + '">' + doc.status + '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="document-actions">' +
+                    '<button class="btn btn-sm btn-outline-primary" data-action="preview" data-document-id="' + doc.id + '">' +
+                        '<i class="fa fa-eye"></i>' +
+                    '</button>' +
+                    '<button class="btn btn-sm btn-outline-secondary" data-action="download" data-document-id="' + doc.id + '">' +
+                        '<i class="fa fa-download"></i>' +
+                    '</button>' +
+                    '<button class="btn btn-sm btn-outline-danger" data-action="delete" data-document-id="' + doc.id + '">' +
+                        '<i class="fa fa-trash"></i>' +
+                    '</button>' +
+                '</div>' +
+            '</div>');
+            
+            return $document;
+        },
+
+        _getFileIcon: function (fileType) {
+            var type = fileType.toLowerCase();
+            if (type.includes('pdf')) return 'fa-file-pdf';
+            if (type.includes('word') || type.includes('doc')) return 'fa-file-word';
+            if (type.includes('image') || type.includes('jpg') || type.includes('jpeg') || type.includes('png')) return 'fa-file-image';
+            if (type.includes('excel') || type.includes('xls')) return 'fa-file-excel';
+            if (type.includes('powerpoint') || type.includes('ppt')) return 'fa-file-powerpoint';
+            return 'fa-file';
+        },
+
+        _updateDocumentStats: function (stats) {
+            $('.stat-item.total .stat-number').text(stats.total || 0);
+            $('.stat-item.approved .stat-number').text(stats.approved || 0);
+            $('.stat-item.pending .stat-number').text(stats.pending || 0);
+            
+            // Update category counts
+            $('.category-item[data-category="all"] .count').text(stats.total || 0);
+            $('.category-item[data-category="academic"] .count').text(stats.academic || 0);
+            $('.category-item[data-category="financial"] .count').text(stats.financial || 0);
+            $('.category-item[data-category="health"] .count').text(stats.health || 0);
+            $('.category-item[data-category="identity"] .count').text(stats.identity || 0);
+        },
+
+        _setupDocumentEventHandlers: function () {
+            var self = this;
+            
+            // Category filtering
+            $('.category-item').on('click', function() {
+                var category = $(this).data('category');
+                self._filterDocumentsByCategory(category);
+                $('.category-item').removeClass('active');
+                $(this).addClass('active');
+            });
+            
+            // Document actions
+            $(document).on('click', '[data-action="preview"]', function(e) {
+                e.preventDefault();
+                var documentId = $(this).data('document-id');
+                self._previewDocument(documentId);
+            });
+            
+            $(document).on('click', '[data-action="download"]', function(e) {
+                e.preventDefault();
+                var documentId = $(this).data('document-id');
+                self._downloadDocument(documentId);
+            });
+            
+            $(document).on('click', '[data-action="delete"]', function(e) {
+                e.preventDefault();
+                var documentId = $(this).data('document-id');
+                self._deleteDocument(documentId);
+            });
+            
+            // Quick actions
+            $('#bulk-upload').on('click', function(e) {
+                e.preventDefault();
+                self._showBulkUploadModal();
+            });
+            
+            $('#create-folder').on('click', function(e) {
+                e.preventDefault();
+                self._createFolder();
+            });
+            
+            $('#download-all').on('click', function(e) {
+                e.preventDefault();
+                self._downloadAllDocuments();
+            });
+        },
+
+        _setupDocumentFiltering: function () {
+            var self = this;
+            
+            // Search functionality
+            $('#document-search').on('input', function() {
+                var searchTerm = $(this).val().toLowerCase();
+                self._searchDocuments(searchTerm);
+            });
+            
+            // Sort functionality
+            $('#sort-documents').on('change', function() {
+                var sortBy = $(this).val();
+                self._sortDocuments(sortBy);
+            });
+        },
+
+        _setupViewControls: function () {
+            var self = this;
+            
+            $('#grid-view').on('click', function() {
+                $('#document-list').addClass('grid-view');
+                $('#list-view').removeClass('active');
+                $(this).addClass('active');
+            });
+            
+            $('#list-view').on('click', function() {
+                $('#document-list').removeClass('grid-view');
+                $('#grid-view').removeClass('active');
+                $(this).addClass('active');
+            });
+        },
+
+        _filterDocumentsByCategory: function (category) {
+            var $documents = $('.document-item');
+            
+            if (category === 'all') {
+                $documents.show();
+            } else {
+                $documents.hide();
+                $documents.filter('[data-category="' + category + '"]').show();
+            }
+        },
+
+        _searchDocuments: function (searchTerm) {
+            var $documents = $('.document-item');
+            
+            $documents.each(function() {
+                var $doc = $(this);
+                var docName = $doc.find('.document-name').text().toLowerCase();
+                
+                if (docName.includes(searchTerm)) {
+                    $doc.show();
+                } else {
+                    $doc.hide();
+                }
+            });
+        },
+
+        _sortDocuments: function (sortBy) {
+            var $container = $('#document-list');
+            var $documents = $container.find('.document-item').toArray();
+            
+            $documents.sort(function(a, b) {
+                var $a = $(a);
+                var $b = $(b);
+                
+                switch (sortBy) {
+                    case 'name':
+                        return $a.find('.document-name').text().localeCompare($b.find('.document-name').text());
+                    case 'date':
+                        return new Date($b.data('date')) - new Date($a.data('date'));
+                    case 'size':
+                        return $b.data('size') - $a.data('size');
+                    case 'status':
+                        return $a.find('.document-status').text().localeCompare($b.find('.document-status').text());
+                    default:
+                        return 0;
+                }
+            });
+            
+            $container.empty().append($documents);
+        },
+
+        _previewDocument: function (documentId) {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/documents/preview', 'call', {
+                document_id: documentId
+            }).then(function(result) {
+                if (result.success) {
+                    self._showDocumentPreviewModal(result.document);
+                } else {
+                    self._getNotificationSystem().showNotification('error', 'Preview Error', 'Could not load document preview.', 'exclamation-triangle');
+                }
+            }).catch(function(error) {
+                console.error('Error loading document preview:', error);
+                self._getNotificationSystem().showNotification('error', 'Preview Error', 'Could not load document preview.', 'exclamation-triangle');
+            });
+        },
+
+        _showDocumentPreviewModal: function (document) {
+            var self = this;
+            var modal = $('<div class="document-preview-modal">' +
+                '<div class="document-preview-content">' +
+                    '<div class="document-preview-header">' +
+                        '<h5>' + document.name + '</h5>' +
+                        '<button class="btn-close-modal">&times;</button>' +
+                    '</div>' +
+                    '<div class="document-preview-body">' +
+                        '<iframe src="' + document.preview_url + '"></iframe>' +
+                    '</div>' +
+                '</div>' +
+            '</div>');
+            
+            $('body').append(modal);
+            
+            // Handle modal events
+            modal.find('.btn-close-modal').on('click', function() {
+                modal.remove();
+            });
+            
+            modal.on('click', function(e) {
+                if (e.target === modal[0]) {
+                    modal.remove();
+                }
+            });
+        },
+
+        _downloadDocument: function (documentId) {
+            window.open('/admission/documents/download/' + documentId, '_blank');
+        },
+
+        _deleteDocument: function (documentId) {
+            var self = this;
+            
+            if (confirm('Are you sure you want to delete this document?')) {
+                ajax.jsonRpc('/admission/documents/delete', 'call', {
+                    document_id: documentId
+                }).then(function(result) {
+                    if (result.success) {
+                        self._getNotificationSystem().showNotification('success', 'Document Deleted', 'The document has been deleted successfully.', 'check-circle');
+                        self._loadDocumentsData();
+                    } else {
+                        self._getNotificationSystem().showNotification('error', 'Delete Failed', 'There was an error deleting the document.', 'exclamation-triangle');
+                    }
+                }).catch(function(error) {
+                    console.error('Error deleting document:', error);
+                    self._getNotificationSystem().showNotification('error', 'Delete Failed', 'There was an error deleting the document.', 'exclamation-triangle');
+                });
+            }
+        },
+
+        _showBulkUploadModal: function () {
+            var self = this;
+            var modal = $('<div class="bulk-upload-modal">' +
+                '<div class="bulk-upload-content">' +
+                    '<div class="bulk-upload-header">' +
+                        '<h5>Bulk Upload Documents</h5>' +
+                        '<button class="btn-close-modal">&times;</button>' +
+                    '</div>' +
+                    '<div class="bulk-upload-body">' +
+                        '<div class="upload-zone" id="upload-zone">' +
+                            '<i class="fa fa-cloud-upload-alt"></i>' +
+                            '<h6>Drag and drop files here or click to select</h6>' +
+                            '<p>Supported formats: PDF, DOC, DOCX, JPG, PNG (Max 10MB each)</p>' +
+                            '<input type="file" id="bulk-file-input" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display: none;">' +
+                        '</div>' +
+                        '<div class="upload-progress" id="upload-progress" style="display: none;">' +
+                            '<h6>Upload Progress</h6>' +
+                            '<div id="progress-list"></div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="comment-modal-footer">' +
+                        '<button type="button" class="acmst-btn acmst-btn-secondary" id="cancel-bulk-upload">Cancel</button>' +
+                        '<button type="button" class="acmst-btn acmst-btn-primary" id="start-upload" disabled>Start Upload</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>');
+            
+            $('body').append(modal);
+            
+            // Setup drag and drop
+            self._setupBulkUploadDragDrop(modal);
+            
+            // Handle modal events
+            modal.find('.btn-close-modal, #cancel-bulk-upload').on('click', function() {
+                modal.remove();
+            });
+            
+            modal.find('#start-upload').on('click', function() {
+                self._startBulkUpload(modal);
+            });
+            
+            modal.on('click', function(e) {
+                if (e.target === modal[0]) {
+                    modal.remove();
+                }
+            });
+        },
+
+        _createFolder: function () {
+            var self = this;
+            var folderName = prompt('Enter folder name:');
+            
+            if (folderName) {
+                ajax.jsonRpc('/admission/documents/create-folder', 'call', {
+                    name: folderName
+                }).then(function(result) {
+                    if (result.success) {
+                        self._getNotificationSystem().showNotification('success', 'Folder Created', 'The folder has been created successfully.', 'check-circle');
+                        self._loadDocumentsData();
+                    } else {
+                        self._getNotificationSystem().showNotification('error', 'Create Failed', 'There was an error creating the folder.', 'exclamation-triangle');
+                    }
+                }).catch(function(error) {
+                    console.error('Error creating folder:', error);
+                    self._getNotificationSystem().showNotification('error', 'Create Failed', 'There was an error creating the folder.', 'exclamation-triangle');
+                });
+            }
+        },
+
+        _downloadAllDocuments: function () {
+            window.open('/admission/documents/download-all', '_blank');
+        }
+    });
+
+    // Document Management Widget
+    publicWidget.registry.PortalDocumentManagement = publicWidget.Widget.extend({
+        selector: '.acmst-portal-container',
+        events: {
+            'click #document-management-tab': '_onDocumentManagementClick',
+        },
+
+        start: function () {
+            var self = this;
+            return this._super.apply(this, arguments).then(function () {
+                if (self.$el.find('#document-management-tab').length) {
+                    self.setupDocumentManagement();
+                }
+            });
+        },
+
+        setupDocumentManagement: function () {
+            var self = this;
+            
+            // Load documents data
+            this._loadDocumentsData();
+            
+            // Setup event handlers
+            this._setupDocumentEventHandlers();
+            
+            // Setup filtering and search
+            this._setupDocumentFiltering();
+            
+            // Setup view controls
+            this._setupViewControls();
+        },
+
+        _loadDocumentsData: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/documents/list', 'call')
+                .then(function(result) {
+                    if (result.success) {
+                        self._displayDocuments(result.documents);
+                        self._updateDocumentStats(result.stats);
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error loading documents:', error);
+                });
+        },
+
+        _displayDocuments: function (documents) {
+            var $container = $('#document-list');
+            $container.empty();
+            
+            if (documents.length === 0) {
+                $container.html('<div class="text-center text-muted py-4">No documents found.</div>');
+                return;
+            }
+            
+            documents.forEach(function(doc) {
+                var $document = self._createDocumentItem(doc);
+                $container.append($document);
+            });
+        },
+
+        _createDocumentItem: function (doc) {
+            var self = this;
+            var statusClass = 'status-' + doc.status;
+            var fileIcon = self._getFileIcon(doc.file_type);
+            
+            var $document = $('<div class="document-item" data-document-id="' + doc.id + '" data-category="' + doc.category + '">' +
+                '<div class="document-icon">' +
+                    '<i class="fa ' + fileIcon + '"></i>' +
+                '</div>' +
+                '<div class="document-info">' +
+                    '<div class="document-name">' + doc.name + '</div>' +
+                    '<div class="document-meta">' +
+                        '<span class="document-size">' + doc.size + '</span>' +
+                        '<span class="document-date">' + doc.upload_date + '</span>' +
+                        '<span class="document-status ' + statusClass + '">' + doc.status + '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="document-actions">' +
+                    '<button class="btn btn-sm btn-outline-primary" data-action="preview" data-document-id="' + doc.id + '">' +
+                        '<i class="fa fa-eye"></i>' +
+                    '</button>' +
+                    '<button class="btn btn-sm btn-outline-secondary" data-action="download" data-document-id="' + doc.id + '">' +
+                        '<i class="fa fa-download"></i>' +
+                    '</button>' +
+                    '<button class="btn btn-sm btn-outline-danger" data-action="delete" data-document-id="' + doc.id + '">' +
+                        '<i class="fa fa-trash"></i>' +
+                    '</button>' +
+                '</div>' +
+            '</div>');
+            
+            return $document;
+        },
+
+        _getFileIcon: function (fileType) {
+            var type = fileType.toLowerCase();
+            if (type.includes('pdf')) return 'fa-file-pdf';
+            if (type.includes('word') || type.includes('doc')) return 'fa-file-word';
+            if (type.includes('image') || type.includes('jpg') || type.includes('jpeg') || type.includes('png')) return 'fa-file-image';
+            if (type.includes('excel') || type.includes('xls')) return 'fa-file-excel';
+            if (type.includes('powerpoint') || type.includes('ppt')) return 'fa-file-powerpoint';
+            return 'fa-file';
+        },
+
+        _updateDocumentStats: function (stats) {
+            $('.stat-item.total .stat-number').text(stats.total || 0);
+            $('.stat-item.approved .stat-number').text(stats.approved || 0);
+            $('.stat-item.pending .stat-number').text(stats.pending || 0);
+            
+            // Update category counts
+            $('.category-item[data-category="all"] .count').text(stats.total || 0);
+            $('.category-item[data-category="academic"] .count').text(stats.academic || 0);
+            $('.category-item[data-category="financial"] .count').text(stats.financial || 0);
+            $('.category-item[data-category="health"] .count').text(stats.health || 0);
+            $('.category-item[data-category="identity"] .count').text(stats.identity || 0);
+        },
+
+        _setupDocumentEventHandlers: function () {
+            var self = this;
+            
+            // Category filtering
+            $('.category-item').on('click', function() {
+                var category = $(this).data('category');
+                self._filterDocumentsByCategory(category);
+                $('.category-item').removeClass('active');
+                $(this).addClass('active');
+            });
+            
+            // Document actions
+            $(document).on('click', '[data-action="preview"]', function(e) {
+                e.preventDefault();
+                var documentId = $(this).data('document-id');
+                self._previewDocument(documentId);
+            });
+            
+            $(document).on('click', '[data-action="download"]', function(e) {
+                e.preventDefault();
+                var documentId = $(this).data('document-id');
+                self._downloadDocument(documentId);
+            });
+            
+            $(document).on('click', '[data-action="delete"]', function(e) {
+                e.preventDefault();
+                var documentId = $(this).data('document-id');
+                self._deleteDocument(documentId);
+            });
+            
+            // Quick actions
+            $('#bulk-upload').on('click', function(e) {
+                e.preventDefault();
+                self._showBulkUploadModal();
+            });
+            
+            $('#create-folder').on('click', function(e) {
+                e.preventDefault();
+                self._createFolder();
+            });
+            
+            $('#download-all').on('click', function(e) {
+                e.preventDefault();
+                self._downloadAllDocuments();
+            });
+        },
+
+        _setupDocumentFiltering: function () {
+            var self = this;
+            
+            // Search functionality
+            $('#document-search').on('input', function() {
+                var searchTerm = $(this).val().toLowerCase();
+                self._searchDocuments(searchTerm);
+            });
+            
+            // Sort functionality
+            $('#sort-documents').on('change', function() {
+                var sortBy = $(this).val();
+                self._sortDocuments(sortBy);
+            });
+        },
+
+        _setupViewControls: function () {
+            var self = this;
+            
+            $('#grid-view').on('click', function() {
+                $('#document-list').addClass('grid-view');
+                $('#list-view').removeClass('active');
+                $(this).addClass('active');
+            });
+            
+            $('#list-view').on('click', function() {
+                $('#document-list').removeClass('grid-view');
+                $('#grid-view').removeClass('active');
+                $(this).addClass('active');
+            });
+        },
+
+        _filterDocumentsByCategory: function (category) {
+            var $documents = $('.document-item');
+            
+            if (category === 'all') {
+                $documents.show();
+            } else {
+                $documents.hide();
+                $documents.filter('[data-category="' + category + '"]').show();
+            }
+        },
+
+        _searchDocuments: function (searchTerm) {
+            var $documents = $('.document-item');
+            
+            $documents.each(function() {
+                var $doc = $(this);
+                var docName = $doc.find('.document-name').text().toLowerCase();
+                
+                if (docName.includes(searchTerm)) {
+                    $doc.show();
+                } else {
+                    $doc.hide();
+                }
+            });
+        },
+
+        _sortDocuments: function (sortBy) {
+            var $container = $('#document-list');
+            var $documents = $container.find('.document-item').toArray();
+            
+            $documents.sort(function(a, b) {
+                var $a = $(a);
+                var $b = $(b);
+                
+                switch (sortBy) {
+                    case 'name':
+                        return $a.find('.document-name').text().localeCompare($b.find('.document-name').text());
+                    case 'date':
+                        return new Date($b.data('date')) - new Date($a.data('date'));
+                    case 'size':
+                        return $b.data('size') - $a.data('size');
+                    case 'status':
+                        return $a.find('.document-status').text().localeCompare($b.find('.document-status').text());
+                    default:
+                        return 0;
+                }
+            });
+            
+            $container.empty().append($documents);
+        },
+
+        _previewDocument: function (documentId) {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/documents/preview', 'call', {
+                document_id: documentId
+            }).then(function(result) {
+                if (result.success) {
+                    self._showDocumentPreviewModal(result.document);
+                } else {
+                    self._getNotificationSystem().showNotification('error', 'Preview Error', 'Could not load document preview.', 'exclamation-triangle');
+                }
+            }).catch(function(error) {
+                console.error('Error loading document preview:', error);
+                self._getNotificationSystem().showNotification('error', 'Preview Error', 'Could not load document preview.', 'exclamation-triangle');
+            });
+        },
+
+        _showDocumentPreviewModal: function (document) {
+            var self = this;
+            var modal = $('<div class="document-preview-modal">' +
+                '<div class="document-preview-content">' +
+                    '<div class="document-preview-header">' +
+                        '<h5>' + document.name + '</h5>' +
+                        '<button class="btn-close-modal">&times;</button>' +
+                    '</div>' +
+                    '<div class="document-preview-body">' +
+                        '<iframe src="' + document.preview_url + '"></iframe>' +
+                    '</div>' +
+                '</div>' +
+            '</div>');
+            
+            $('body').append(modal);
+            
+            // Handle modal events
+            modal.find('.btn-close-modal').on('click', function() {
+                modal.remove();
+            });
+            
+            modal.on('click', function(e) {
+                if (e.target === modal[0]) {
+                    modal.remove();
+                }
+            });
+        },
+
+        _downloadDocument: function (documentId) {
+            window.open('/admission/documents/download/' + documentId, '_blank');
+        },
+
+        _deleteDocument: function (documentId) {
+            var self = this;
+            
+            if (confirm('Are you sure you want to delete this document?')) {
+                ajax.jsonRpc('/admission/documents/delete', 'call', {
+                    document_id: documentId
+                }).then(function(result) {
+                    if (result.success) {
+                        self._getNotificationSystem().showNotification('success', 'Document Deleted', 'The document has been deleted successfully.', 'check-circle');
+                        self._loadDocumentsData();
+                    } else {
+                        self._getNotificationSystem().showNotification('error', 'Delete Failed', 'There was an error deleting the document.', 'exclamation-triangle');
+                    }
+                }).catch(function(error) {
+                    console.error('Error deleting document:', error);
+                    self._getNotificationSystem().showNotification('error', 'Delete Failed', 'There was an error deleting the document.', 'exclamation-triangle');
+                });
+            }
+        },
+
+        _showBulkUploadModal: function () {
+            var self = this;
+            var modal = $('<div class="bulk-upload-modal">' +
+                '<div class="bulk-upload-content">' +
+                    '<div class="bulk-upload-header">' +
+                        '<h5>Bulk Upload Documents</h5>' +
+                        '<button class="btn-close-modal">&times;</button>' +
+                    '</div>' +
+                    '<div class="bulk-upload-body">' +
+                        '<div class="upload-zone" id="upload-zone">' +
+                            '<i class="fa fa-cloud-upload-alt"></i>' +
+                            '<h6>Drag and drop files here or click to select</h6>' +
+                            '<p>Supported formats: PDF, DOC, DOCX, JPG, PNG (Max 10MB each)</p>' +
+                            '<input type="file" id="bulk-file-input" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display: none;">' +
+                        '</div>' +
+                        '<div class="upload-progress" id="upload-progress" style="display: none;">' +
+                            '<h6>Upload Progress</h6>' +
+                            '<div id="progress-list"></div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="comment-modal-footer">' +
+                        '<button type="button" class="acmst-btn acmst-btn-secondary" id="cancel-bulk-upload">Cancel</button>' +
+                        '<button type="button" class="acmst-btn acmst-btn-primary" id="start-upload" disabled>Start Upload</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>');
+            
+            $('body').append(modal);
+            
+            // Setup drag and drop
+            self._setupBulkUploadDragDrop(modal);
+            
+            // Handle modal events
+            modal.find('.btn-close-modal, #cancel-bulk-upload').on('click', function() {
+                modal.remove();
+            });
+            
+            modal.find('#start-upload').on('click', function() {
+                self._startBulkUpload(modal);
+            });
+            
+            modal.on('click', function(e) {
+                if (e.target === modal[0]) {
+                    modal.remove();
+                }
+            });
+        },
+
+        _createFolder: function () {
+            var self = this;
+            var folderName = prompt('Enter folder name:');
+            
+            if (folderName) {
+                ajax.jsonRpc('/admission/documents/create-folder', 'call', {
+                    name: folderName
+                }).then(function(result) {
+                    if (result.success) {
+                        self._getNotificationSystem().showNotification('success', 'Folder Created', 'The folder has been created successfully.', 'check-circle');
+                        self._loadDocumentsData();
+                    } else {
+                        self._getNotificationSystem().showNotification('error', 'Create Failed', 'There was an error creating the folder.', 'exclamation-triangle');
+                    }
+                }).catch(function(error) {
+                    console.error('Error creating folder:', error);
+                    self._getNotificationSystem().showNotification('error', 'Create Failed', 'There was an error creating the folder.', 'exclamation-triangle');
+                });
+            }
+        },
+
+        _downloadAllDocuments: function () {
+            window.open('/admission/documents/download-all', '_blank');
         }
     });
 
     // Initialize widgets
     publicWidget.registry.acmstPortalApplicationForm = PortalApplicationForm;
     publicWidget.registry.acmstPortalApplicationStatus = PortalApplicationStatus;
+    publicWidget.registry.acmstPortalDocumentManagement = PortalDocumentManagement;
     publicWidget.registry.acmstPortalHealthCheck = PortalHealthCheck;
     publicWidget.registry.acmstNotificationSystem = NotificationSystem;
 

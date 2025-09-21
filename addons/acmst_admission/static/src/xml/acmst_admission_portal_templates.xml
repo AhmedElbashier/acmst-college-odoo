@@ -1221,6 +1221,168 @@
             </button>
         </template>
 
+        <!-- Document Management Portal Template -->
+        <template id="portal_admission_documents" name="Admission Document Management Portal">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Document Management - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-folder-open"></i> Document Management</h1>
+                                    <p class="mb-0">Manage and organize your admission documents</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="acmst-document-summary">
+                                        <div class="document-stats">
+                                            <span class="stat-item total">
+                                                <i class="fa fa-file"></i>
+                                                <span class="stat-number" t-esc="total_documents or 0"/>
+                                                <span class="stat-label">Total</span>
+                                            </span>
+                                            <span class="stat-item approved">
+                                                <i class="fa fa-check-circle"></i>
+                                                <span class="stat-number" t-esc="approved_documents or 0"/>
+                                                <span class="stat-label">Approved</span>
+                                            </span>
+                                            <span class="stat-item pending">
+                                                <i class="fa fa-clock"></i>
+                                                <span class="stat-number" t-esc="pending_documents or 0"/>
+                                                <span class="stat-label">Pending</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            <!-- Document Categories -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-list"></i> Categories</h3>
+                                </div>
+                                <div class="acmst-document-categories">
+                                    <div class="category-item active" data-category="all">
+                                        <i class="fa fa-folder"></i>
+                                        <span>All Documents</span>
+                                        <span class="count" t-esc="total_documents or 0"/>
+                                    </div>
+                                    <div class="category-item" data-category="academic">
+                                        <i class="fa fa-graduation-cap"></i>
+                                        <span>Academic</span>
+                                        <span class="count" t-esc="academic_documents or 0"/>
+                                    </div>
+                                    <div class="category-item" data-category="financial">
+                                        <i class="fa fa-dollar-sign"></i>
+                                        <span>Financial</span>
+                                        <span class="count" t-esc="financial_documents or 0"/>
+                                    </div>
+                                    <div class="category-item" data-category="health">
+                                        <i class="fa fa-heartbeat"></i>
+                                        <span>Health</span>
+                                        <span class="count" t-esc="health_documents or 0"/>
+                                    </div>
+                                    <div class="category-item" data-category="identity">
+                                        <i class="fa fa-id-card"></i>
+                                        <span>Identity</span>
+                                        <span class="count" t-esc="identity_documents or 0"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Quick Actions -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-bolt"></i> Quick Actions</h3>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="acmst-btn acmst-btn-primary" id="bulk-upload">
+                                        <i class="fa fa-upload"></i> Bulk Upload
+                                    </button>
+                                    <button class="acmst-btn acmst-btn-secondary" id="create-folder">
+                                        <i class="fa fa-folder-plus"></i> Create Folder
+                                    </button>
+                                    <button class="acmst-btn acmst-btn-outline" id="download-all">
+                                        <i class="fa fa-download"></i> Download All
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-9">
+                            <!-- Document Toolbar -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6">
+                                            <h3><i class="fa fa-files"></i> Documents</h3>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="document-toolbar">
+                                                <div class="search-box">
+                                                    <input type="text" class="form-control" id="document-search" placeholder="Search documents...">
+                                                    <i class="fa fa-search"></i>
+                                                </div>
+                                                <div class="view-controls">
+                                                    <button class="btn btn-sm btn-outline-primary" id="grid-view" title="Grid View">
+                                                        <i class="fa fa-th"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-primary active" id="list-view" title="List View">
+                                                        <i class="fa fa-list"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="sort-controls">
+                                                    <select class="form-select" id="sort-documents">
+                                                        <option value="name">Sort by Name</option>
+                                                        <option value="date">Sort by Date</option>
+                                                        <option value="size">Sort by Size</option>
+                                                        <option value="status">Sort by Status</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Document List -->
+                                <div class="acmst-document-list" id="document-list">
+                                    <!-- Documents will be populated by JavaScript -->
+                                    <div class="document-item">
+                                        <div class="document-icon">
+                                            <i class="fa fa-file-pdf"></i>
+                                        </div>
+                                        <div class="document-info">
+                                            <div class="document-name">Official Transcript.pdf</div>
+                                            <div class="document-meta">
+                                                <span class="document-size">2.3 MB</span>
+                                                <span class="document-date">Uploaded 2 days ago</span>
+                                                <span class="document-status status-approved">Approved</span>
+                                            </div>
+                                        </div>
+                                        <div class="document-actions">
+                                            <button class="btn btn-sm btn-outline-primary" data-action="preview">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" data-action="download">
+                                                <i class="fa fa-download"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" data-action="delete">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
         <!-- Conditions Portal Template -->
         <template id="portal_admission_conditions" name="Admission Conditions Portal">
             <t t-call="web.frontend_layout">
