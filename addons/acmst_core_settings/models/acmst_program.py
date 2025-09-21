@@ -25,183 +25,183 @@ class AcmstProgram(models.Model):
 
     # Basic Information
     name = fields.Char(
-        string='Program Name',
+        string=_('Program Name'),
         required=True,
         tracking=True,
-        help="Official name of the academic program"
+        help=_("Official name of the academic program")
     )
     code = fields.Char(
-        string='Program Code',
+        string=_('Program Code'),
         required=True,
         size=15,
         tracking=True,
-        help="Unique code for the program (max 15 characters)"
+        help=_("Unique code for the program (max 15 characters)")
     )
     short_name = fields.Char(
-        string='Short Name',
+        string=_('Short Name'),
         size=50,
-        help="Abbreviated name for display purposes"
+        help=_("Abbreviated name for display purposes")
     )
     
     # Associations
     college_id = fields.Many2one(
         'acmst.college',
-        string='College',
+        string=_('College'),
         required=True,
         tracking=True,
-        help="College this program belongs to"
+        help=_("College this program belongs to")
     )
     university_id = fields.Many2one(
         related='college_id.university_id',
-        string='University',
+        string=_('University'),
         store=True,
         readonly=True
     )
     program_type_id = fields.Many2one(
         'acmst.program.type',
-        string='Program Type',
+        string=_('Program Type'),
         required=True,
         tracking=True,
-        help="Type of academic program"
+        help=_("Type of academic program")
     )
     
     # Personnel Management
     manager_id = fields.Many2one(
         'res.users',
-        string='Program Manager',
+        string=_('Program Manager'),
         tracking=True,
-        help="Program manager responsible for this program"
+        help=_("Program manager responsible for this program")
     )
     coordinator_id = fields.Many2one(
         'res.users',
-        string='Program Coordinator',
+        string=_('Program Coordinator'),
         tracking=True,
-        help="Program coordinator for this program"
+        help=_("Program coordinator for this program")
     )
     
     # Academic Information
     description = fields.Text(
-        string='Description',
-        help="Detailed description of the program"
+        string=_('Description'),
+        help=_("Detailed description of the program")
     )
     objectives = fields.Text(
-        string='Program Objectives',
-        help="Learning objectives of the program"
+        string=_('Program Objectives'),
+        help=_("Learning objectives of the program")
     )
     learning_outcomes = fields.Text(
-        string='Learning Outcomes',
-        help="Expected learning outcomes"
+        string=_('Learning Outcomes'),
+        help=_("Expected learning outcomes")
     )
     admission_requirements = fields.Text(
-        string='Admission Requirements',
-        help="Requirements for admission to this program"
+        string=_('Admission Requirements'),
+        help=_("Requirements for admission to this program")
     )
     
     # Academic Structure
     credits_required = fields.Integer(
-        string='Credits Required',
+        string=_('Credits Required'),
         tracking=True,
-        help="Total credits required to complete the program"
+        help=_("Total credits required to complete the program")
     )
     duration_years = fields.Float(
-        string='Duration (Years)',
+        string=_('Duration (Years)'),
         digits=(3, 1),
         tracking=True,
-        help="Program duration in years"
+        help=_("Program duration in years")
     )
     max_duration_years = fields.Float(
-        string='Maximum Duration (Years)',
+        string=_('Maximum Duration (Years)'),
         digits=(3, 1),
         tracking=True,
-        help="Maximum time allowed to complete the program"
+        help=_("Maximum time allowed to complete the program")
     )
     
     # Program Settings
     is_thesis_required = fields.Boolean(
-        string='Thesis Required',
+        string=_('Thesis Required'),
         default=False,
         tracking=True,
-        help="Whether a thesis is required for this program"
+        help=_("Whether a thesis is required for this program")
     )
     is_internship_required = fields.Boolean(
-        string='Internship Required',
+        string=_('Internship Required'),
         default=False,
         tracking=True,
-        help="Whether an internship is required for this program"
+        help=_("Whether an internship is required for this program")
     )
     internship_credits = fields.Integer(
-        string='Internship Credits',
-        help="Credits awarded for internship"
+        string=_('Internship Credits'),
+        help=_("Credits awarded for internship")
     )
     thesis_credits = fields.Integer(
-        string='Thesis Credits',
-        help="Credits awarded for thesis"
+        string=_('Thesis Credits'),
+        help=_("Credits awarded for thesis")
     )
     
     # Status and Settings
     active = fields.Boolean(
-        string='Active',
+        string=_('Active'),
         default=True,
         tracking=True,
-        help="Uncheck to archive this program"
+        help=_("Uncheck to archive this program")
     )
     is_online = fields.Boolean(
-        string='Online Program',
+        string=_('Online Program'),
         default=False,
         tracking=True,
-        help="Whether this is an online program"
+        help=_("Whether this is an online program")
     )
     is_part_time = fields.Boolean(
-        string='Part-time Program',
+        string=_('Part-time Program'),
         default=False,
         tracking=True,
-        help="Whether this is a part-time program"
+        help=_("Whether this is a part-time program")
     )
     
     # Related Records
     batch_ids = fields.One2many(
         'acmst.batch',
         'program_id',
-        string='Batches',
-        help="Batches under this program"
+        string=_('Batches'),
+        help=_("Batches under this program")
     )
     batch_count = fields.Integer(
-        string='Number of Batches',
+        string=_('Number of Batches'),
         compute='_compute_batch_count',
         store=True
     )
     student_count = fields.Integer(
-        string='Number of Students',
+        string=_('Number of Students'),
         compute='_compute_student_count',
         store=True
     )
     course_count = fields.Integer(
-        string='Number of Courses',
+        string=_('Number of Courses'),
         compute='_compute_course_count',
         store=True
     )
     
     # System Fields
     sequence = fields.Integer(
-        string='Sequence',
+        string=_('Sequence'),
         default=10,
-        help="Order of display"
+        help=_("Order of display")
     )
     color = fields.Integer(
-        string='Color',
+        string=_('Color'),
         default=0,
-        help="Color for kanban view"
+        help=_("Color for kanban view")
     )
     
     # Computed Fields
     full_name = fields.Char(
-        string='Full Name',
+        string=_('Full Name'),
         compute='_compute_full_name',
         store=True
     )
     program_level = fields.Selection(
         related='program_type_id.level',
-        string='Program Level',
+        string=_('Program Level'),
         store=True,
         readonly=True
     )

@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <strong>Program:</strong>
+                                            <strong t-esc="_('Program:')"/>
                                         </div>
                                         <div class="col-md-6">
                                             <field name="program_id"/>
@@ -74,7 +74,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <strong>Batch:</strong>
+                                            <strong t-esc="_('Batch:')"/>
                                         </div>
                                         <div class="col-md-6">
                                             <field name="batch_id"/>
@@ -82,7 +82,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <strong>Status:</strong>
+                                            <strong t-esc="_('Status:')"/>
                                         </div>
                                         <div class="col-md-6">
                                             <field name="state" widget="badge" decoration-success="state == 'completed'" decoration-warning="state in ['ministry_pending', 'health_required', 'coordinator_review', 'manager_review']" decoration-danger="state in ['ministry_rejected', 'health_rejected', 'coordinator_rejected', 'manager_rejected']" decoration-muted="is_processing_student == True"/>
@@ -90,7 +90,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <strong>University ID:</strong>
+                                            <strong t-esc="_('University ID:')"/>
                                         </div>
                                         <div class="col-md-6">
                                             <field name="university_id"/>
@@ -98,7 +98,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <strong>Applied:</strong>
+                                            <strong t-esc="_('Applied:')"/>
                                             <field name="application_date"/>
                                         </div>
                                     </div>
@@ -161,10 +161,10 @@
                                         <field name="name" readonly="1"/>
                                     </h1>
                                     <div>
-                                        <strong>Admission Type:</strong> <field name="admission_type" class="font-weight-bold"/>
+                                        <strong t-esc="_('Admission Type:')"/> <field name="admission_type" class="font-weight-bold"/>
                                     </div>
                                     <div>
-                                        <strong>University ID:</strong> <field name="university_id" class="font-weight-bold" readonly="1"/>
+                                        <strong t-esc="_('University ID:')"/> <field name="university_id" class="font-weight-bold" readonly="1"/>
                                     </div>
                                     <small class="text-muted">
                                         Application for <field name="applicant_name_english" class="font-weight-bold"/>
@@ -178,17 +178,17 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <strong>Status:</strong><br/>
+                                            <strong t-esc="_('Status:')"/><br/>
                                             <field name="state" widget="badge" class="oe_inline"/>
                                             <br/><br/>
-                                            <strong>Submission:</strong><br/>
+                                            <strong t-esc="_('Submission:')"/><br/>
                                             <field name="submission_method" class="oe_inline"/>
                                         </div>
                                         <div class="col-md-4">
-                                            <strong>Date:</strong><br/>
+                                            <strong t-esc="_('Date:')"/><br/>
                                             <field name="application_date" widget="date" class="oe_inline"/>
                                             <br/><br/>
-                                            <strong>Program:</strong><br/>
+                                            <strong t-esc="_('Program:')"/><br/>
                                             <field name="program_id" class="oe_inline"/>
                                         </div>
                                     </div>
@@ -271,7 +271,7 @@
                                 <group>
                                     <div class="alert alert-info" role="alert">
                                         <i class="fa fa-info-circle" title="Information"></i>
-                                        <strong>Guardian Management:</strong> Add multiple guardians and mark one as default contact.
+                                        <strong t-esc="_('Guardian Management:')"/> Add multiple guardians and mark one as default contact.
                                         The first guardian added will be automatically set as default.
                                     </div>
                                 </group>
@@ -304,7 +304,7 @@
                                 <group>
                                     <div class="alert alert-success">
                                         <i class="fa fa-info-circle" title="Information"></i>
-                                        <strong>Default Guardian:</strong>
+                                        <strong t-esc="_('Default Guardian:')"/>
                                         <field name="default_guardian_id" readonly="1" nolabel="1"/>
                                         <br/>
                                         <small>The first guardian added will be automatically set as the default contact.</small>
@@ -370,7 +370,7 @@
                                 <group>
                                     <div class="alert alert-info" role="alert">
                                         <i class="fa fa-info-circle" title="Information"></i>
-                                        <strong>Supporting Documents:</strong> Upload additional supporting documents like photos, birth certificates, etc.
+                                        <strong t-esc="_('Supporting Documents:')"/> Upload additional supporting documents like photos, birth certificates, etc.
                                     </div>
                                 </group>
 
@@ -397,7 +397,7 @@
                                     <group string="Document Requirements" col="4">
                                         <div class="alert alert-info">
                                             <i class="fa fa-info-circle" title="Information"></i>
-                                            <strong>Supporting Documents:</strong> Upload photos, birth certificates, and other supporting documents.
+                                            <strong t-esc="_('Supporting Documents:')"/> Upload photos, birth certificates, and other supporting documents.
                                             <br/>
                                             <small>Multiple files allowed. PDF, DOC, DOCX, JPG, PNG formats accepted. Maximum 10MB per file.</small>
                                         </div>
@@ -408,7 +408,7 @@
                                 <group>
                                     <div class="alert alert-warning">
                                         <i class="fa fa-upload" title="Upload"></i>
-                                        <strong>File Requirements:</strong> PDF, DOC, DOCX, JPG, PNG formats accepted. Maximum "10MB" per file.
+                                        <strong t-esc="_('File Requirements:')"/> PDF, DOC, DOCX, JPG, PNG formats accepted. Maximum "10MB" per file.
                                     </div>
                                 </group>
                             </page>
@@ -418,7 +418,7 @@
                                 <group>
                                     <div class="alert alert-info" role="alert">
                                         <i class="fa fa-info-circle" title="Information"></i>
-                                        <strong>Health Check Documents:</strong> Medical reports and health check related documents.
+                                        <strong t-esc="_('Health Check Documents:')"/> Medical reports and health check related documents.
                                     </div>
                                 </group>
 
@@ -445,7 +445,7 @@
                                     <group string="Document Requirements" col="4">
                                         <div class="alert alert-info">
                                             <i class="fa fa-info-circle" title="Information"></i>
-                                            <strong>Health Check Documents:</strong> Upload medical reports, lab results, and other health-related documents.
+                                            <strong t-esc="_('Health Check Documents:')"/> Upload medical reports, lab results, and other health-related documents.
                                             <br/>
                                             <small>Multiple files allowed. PDF, DOC, DOCX, JPG, PNG formats accepted. Maximum 10MB per file.</small>
                                         </div>
@@ -456,7 +456,7 @@
                                 <group>
                                     <div class="alert alert-warning">
                                         <i class="fa fa-upload" title="Upload"></i>
-                                        <strong>File Requirements:</strong> PDF, DOC, DOCX, JPG, PNG formats accepted. Maximum "10MB" per file.
+                                        <strong t-esc="_('File Requirements:')"/> PDF, DOC, DOCX, JPG, PNG formats accepted. Maximum "10MB" per file.
                                     </div>
                                 </group>
                             </page>
@@ -466,14 +466,14 @@
                                 <group>
                                     <div class="alert alert-info" role="alert">
                                         <i class="fa fa-info-circle" title="Information"></i>
-                                        <strong>Process Tracking:</strong> Monitor the approval status through different stages of the admission process.
+                                        <strong t-esc="_('Process Tracking:')"/> Monitor the approval status through different stages of the admission process.
                                     </div>
                                 </group>
                                 <!-- Ministry Approval Section -->
                                 <group string="Ministry Approval" col="2">
                                     <div class="alert alert-primary">
                                         <i class="fa fa-building" title="Ministry"></i>
-                                        <strong>Ministry Stage:</strong> Initial review by ministry authorities.
+                                        <strong t-esc="_('Ministry Stage:')"/> Initial review by ministry authorities.
                                     </div>
                                     <field name="ministry_approval_date"/>
                                     <field name="ministry_approver"/>
@@ -482,7 +482,7 @@
                                 <group string="Health Check" col="2">
                                     <div class="alert alert-success">
                                         <i class="fa fa-heartbeat" title="Health Check"></i>
-                                        <strong>Health Stage:</strong> Medical examination and fitness assessment.
+                                        <strong t-esc="_('Health Stage:')"/> Medical examination and fitness assessment.
                                     </div>
                                     <field name="health_check_date"/>
                                     <field name="health_approver"/>
@@ -494,7 +494,7 @@
                                 <group string="University ID Management" col="2">
                                     <div class="alert alert-warning">
                                         <i class="fa fa-id-card" title="University ID"></i>
-                                        <strong>University ID:</strong> Processing and university ID assignment.
+                                        <strong t-esc="_('University ID:')"/> Processing and university ID assignment.
                                     </div>
                                     <field name="university_id" readonly="1"/>
                                     <field name="is_processing_student" widget="toggle"/>
@@ -505,7 +505,7 @@
                                 <group string="Academic Coordinator" col="2">
                                     <div class="alert alert-info">
                                         <i class="fa fa-user-md" title="Coordinator Review"></i>
-                                        <strong>Coordinator Review:</strong> Academic program evaluation and conditions.
+                                        <strong t-esc="_('Coordinator Review:')"/> Academic program evaluation and conditions.
                                     </div>
                                     <field name="coordinator_approval_date"/>
                                     <field name="coordinator_id"/>
@@ -515,7 +515,7 @@
                                 <group string="Final Approval" col="2">
                                     <div class="alert alert-success">
                                         <i class="fa fa-check-circle" title="Manager Approval"></i>
-                                        <strong>Manager Approval:</strong> Final review and completion of admission process.
+                                        <strong t-esc="_('Manager Approval:')"/> Final review and completion of admission process.
                                     </div>
                                     <field name="manager_approval_date"/>
                                     <field name="manager_id"/>

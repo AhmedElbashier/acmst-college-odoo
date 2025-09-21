@@ -22,208 +22,208 @@ class AcmstPortalApplication(models.Model):
 
     # Application Data
     name = fields.Char(
-        string='Application Number',
+        string=_('Application Number'),
         required=True,
         copy=False,
         readonly=True,
         default=lambda self: _('New'),
-        help='Unique application number'
+        help=_('Unique application number')
     )
     national_id = fields.Char(
-        string='National ID / Passport Number',
+        string=_('National ID / Passport Number'),
         required=True,
         tracking=True,
-        help='National identification number'
+        help=_('National identification number')
     )
     phone = fields.Char(
-        string='Phone',
+        string=_('Phone'),
         required=True,
         tracking=True,
-        help='Contact phone number'
+        help=_('Contact phone number')
     )
     email = fields.Char(
-        string='Email',
+        string=_('Email'),
         required=True,
         tracking=True,
-        help='Email address'
+        help=_('Email address')
     )
     program_id = fields.Many2one(
         'acmst.program',
-        string='Program',
+        string=_('Program'),
         required=True,
         tracking=True,
-        help='Target program for admission'
+        help=_('Target program for admission')
     )
     batch_id = fields.Many2one(
         'acmst.batch',
-        string='Batch',
+        string=_('Batch'),
         required=True,
         tracking=True,
-        help='Target batch for admission'
+        help=_('Target batch for admission')
     )
     state = fields.Selection([
-        ('draft', 'Draft'),
-        ('submitted', 'Submitted'),
-        ('under_review', 'Under Review'),
-        ('approved', 'Approved'),
-        ('rejected', 'Rejected'),
-        ('cancelled', 'Cancelled')
-    ], string='State', default='draft', tracking=True, help='Current state of the application')
+        ('draft', _('Draft')),
+        ('submitted', _('Submitted')),
+        ('under_review', _('Under Review')),
+        ('approved', _('Approved')),
+        ('rejected', _('Rejected')),
+        ('cancelled', _('Cancelled'))
+    ], string=_('State'), default='draft', tracking=True, help=_('Current state of the application'))
     submitted_to_ministry = fields.Boolean(
-        string='Submitted to Ministry',
+        string=_('Submitted to Ministry'),
         default=False,
-        help='Whether this application has been submitted to ministry'
+        help=_('Whether this application has been submitted to ministry')
     )
     submission_date = fields.Datetime(
-        string='Submission Date',
-        help='Date when the application was submitted'
+        string=_('Submission Date'),
+        help=_('Date when the application was submitted')
     )
     admission_file_id = fields.Many2one(
         'acmst.admission.file',
-        string='Admission File',
-        help='Created admission file after approval'
+        string=_('Admission File'),
+        help=_('Created admission file after approval')
     )
 
     # Personal Information
     birth_date = fields.Date(
-        string='Birth Date',
+        string=_('Birth Date'),
         required=True,
-        help='Date of birth'
+        help=_('Date of birth')
     )
     gender = fields.Selection([
-        ('male', 'Male'),
-        ('female', 'Female')
-    ], string='Gender', required=True, help='Gender')
+        ('male', _('Male')),
+        ('female', _('Female'))
+    ], string=_('Gender'), required=True, help=_('Gender'))
     nationality = fields.Selection([
-        ('sudanese', 'Sudanese'),
-        ('foreign', 'Foreign')
-    ], string='Nationality', required=True, help='Nationality')
+        ('sudanese', _('Sudanese')),
+        ('foreign', _('Foreign'))
+    ], string=_('Nationality'), required=True, help=_('Nationality'))
     applicant_name_english = fields.Char(
-        string='Full Name (English)',
+        string=_('Full Name (English)'),
         required=True,
         tracking=True,
-        help='Full name in English'
+        help=_('Full name in English')
     )
     applicant_name_arabic = fields.Char(
-        string='Full Name (Arabic)',
+        string=_('Full Name (Arabic)'),
         required=True,
         tracking=True,
-        help='Full name in Arabic'
+        help=_('Full name in Arabic')
     )
 
     applicant_name = fields.Char(
-        string='Full Name',
+        string=_('Full Name'),
         compute='_compute_applicant_name',
-        help='Full name (uses English name as primary)'
+        help=_('Full name (uses English name as primary)')
     )
     religion = fields.Selection([
-        ('muslim', 'Muslim'),
-        ('christian', 'Christian'),
-        ('other', 'Other')
-    ], string='Religion', help='Religious affiliation')
+        ('muslim', _('Muslim')),
+        ('christian', _('Christian')),
+        ('other', _('Other'))
+    ], string=_('Religion'), help=_('Religious affiliation'))
     address = fields.Text(
-        string='Address',
+        string=_('Address'),
         required=True,
-        help='Full address'
+        help=_('Full address')
     )
     emergency_contact = fields.Char(
-        string='Emergency Contact',
+        string=_('Emergency Contact'),
         required=True,
-        help='Emergency contact person name'
+        help=_('Emergency contact person name')
     )
     emergency_phone = fields.Char(
-        string='Emergency Phone',
+        string=_('Emergency Phone'),
         required=True,
-        help='Emergency contact phone number'
+        help=_('Emergency contact phone number')
     )
 
     # Guardian Information
     guardian_ids = fields.One2many(
         'acmst.guardian',
         'portal_application_id',
-        string='Guardians',
-        help='List of guardians for this application'
+        string=_('Guardians'),
+        help=_('List of guardians for this application')
     )
 
     # Identification Information
     id_type = fields.Selection([
-        ('national_id', 'National ID'),
-        ('passport', 'Passport')
-    ], string='ID Type', required=True, help='Type of identification document')
+        ('national_id', _('National ID')),
+        ('passport', _('Passport'))
+    ], string=_('ID Type'), required=True, help=_('Type of identification document'))
     national_id = fields.Char(
-        string='National ID / Passport Number',
+        string=_('National ID / Passport Number'),
         required=True,
         tracking=True,
-        help='National ID or passport number'
+        help=_('National ID or passport number')
     )
 
     # Admission Information
     admission_type = fields.Selection([
-        ('direct', 'Direct Admission'),
-        ('regular', 'Regular Admission'),
-        ('private', 'Private Admission'),
-        ('transfer', 'Transfer'),
-        ('bridging', 'Bridging'),
-        ('degree_holder', 'Degree Holder'),
-        ('private_education_grant', 'Private Education Grant')
-    ], string='Type of Admission', required=True, help='Type of admission');
+        ('direct', _('Direct Admission')),
+        ('regular', _('Regular Admission')),
+        ('private', _('Private Admission')),
+        ('transfer', _('Transfer')),
+        ('bridging', _('Bridging')),
+        ('degree_holder', _('Degree Holder')),
+        ('private_education_grant', _('Private Education Grant'))
+    ], string=_('Type of Admission'), required=True, help=_('Type of admission'));
 
     # Additional Personal Information
     place_of_birth = fields.Char(
-        string='Place of Birth',
-        help='City/Country of birth'
+        string=_('Place of Birth'),
+        help=_('City/Country of birth')
     )
 
     # Academic Information
     previous_education = fields.Text(
-        string='Previous Education',
-        help='Previous educational background'
+        string=_('Previous Education'),
+        help=_('Previous educational background')
     )
 
     # Detailed Education Information
     education_institution = fields.Char(
-        string='Education Institution',
-        help='Name of previous educational institution'
+        string=_('Education Institution'),
+        help=_('Name of previous educational institution')
     )
     education_program = fields.Char(
-        string='Education Program',
-        help='Program/degree obtained'
+        string=_('Education Program'),
+        help=_('Program/degree obtained')
     )
     education_college = fields.Char(
-        string='Education College',
-        help='College/School attended'
+        string=_('Education College'),
+        help=_('College/School attended')
     )
     education_major = fields.Char(
-        string='Education Major',
-        help='Major field of study'
+        string=_('Education Major'),
+        help=_('Major field of study')
     )
     education_start_year = fields.Integer(
-        string='Education Start Year',
-        help='Year when education started'
+        string=_('Education Start Year'),
+        help=_('Year when education started')
     )
     education_completion_year = fields.Integer(
-        string='Education Completion Year',
-        help='Year when education was completed'
+        string=_('Education Completion Year'),
+        help=_('Year when education was completed')
     )
     certificate_type = fields.Selection([
-        ('diploma', 'Diploma'),
-        ('bachelor', 'Bachelor'),
-        ('master', 'Master'),
-        ('phd', 'PhD'),
-        ('certificate', 'Certificate'),
-        ('other', 'Other')
-    ], string='Certificate Type', help='Type of certificate obtained')
+        ('diploma', _('Diploma')),
+        ('bachelor', _('Bachelor')),
+        ('master', _('Master')),
+        ('phd', _('PhD')),
+        ('certificate', _('Certificate')),
+        ('other', _('Other'))
+    ], string=_('Certificate Type'), help=_('Type of certificate obtained'))
     education_duration_years = fields.Integer(
-        string='Education Duration (Years)',
-        help='Duration of education in years'
+        string=_('Education Duration (Years)'),
+        help=_('Duration of education in years')
     )
 
     # Document Attachments - One2many relations for multiple documents
     document_ids = fields.One2many(
         'acmst.document',
         'portal_application_id',
-        string='Documents',
-        help='All documents attached to this application'
+        string=_('Documents'),
+        help=_('All documents attached to this application')
     )
 
     # Specific document categories
@@ -231,112 +231,112 @@ class AcmstPortalApplication(models.Model):
         'acmst.document',
         'portal_application_id',
         domain=[('document_type', '=', 'id_document')],
-        string='ID Documents',
-        help='Identification documents (National ID/Passport)'
+        string=_('ID Documents'),
+        help=_('Identification documents (National ID/Passport)')
     )
     academic_document_ids = fields.One2many(
         'acmst.document',
         'portal_application_id',
         domain=[('document_type', 'in', ['academic_certificate', 'transcript'])],
-        string='Academic Documents',
-        help='Academic certificates and transcripts'
+        string=_('Academic Documents'),
+        help=_('Academic certificates and transcripts')
     )
     support_document_ids = fields.One2many(
         'acmst.document',
         'portal_application_id',
         domain=[('document_type', 'in', ['support_document', 'medical_report', 'other'])],
-        string='Support Documents',
-        help='Other supporting documents'
+        string=_('Support Documents'),
+        help=_('Other supporting documents')
     )
 
     # Legacy fields for backward compatibility (single file support)
     documents = fields.Binary(
-        string='Legacy Documents',
-        help='Legacy field - use document_ids instead'
+        string=_('Legacy Documents'),
+        help=_('Legacy field - use document_ids instead')
     )
     documents_filename = fields.Char(
-        string='Legacy Documents Filename',
-        help='Legacy field - use document_ids instead'
+        string=_('Legacy Documents Filename'),
+        help=_('Legacy field - use document_ids instead')
     )
 
     # ID Document Upload
     id_document = fields.Binary(
-        string='ID Document',
-        help='Upload your National ID or Passport copy',
+        string=_('ID Document'),
+        help=_('Upload your National ID or Passport copy'),
         required=False,
         tracking=True
     )
     id_document_filename = fields.Char(
-        string='ID Document Filename',
-        help='Filename of the uploaded ID document'
+        string=_('ID Document Filename'),
+        help=_('Filename of the uploaded ID document')
     )
 
     # Portal specific fields
     portal_user_id = fields.Many2one(
         'res.users',
-        string='Portal User',
-        help='Portal user who submitted the application'
+        string=_('Portal User'),
+        help=_('Portal user who submitted the application')
     )
     ip_address = fields.Char(
-        string='IP Address',
-        help='IP address of the submitter'
+        string=_('IP Address'),
+        help=_('IP address of the submitter')
     )
     user_agent = fields.Char(
-        string='User Agent',
-        help='Browser user agent'
+        string=_('User Agent'),
+        help=_('Browser user agent')
     )
 
     # Computed fields
     age = fields.Integer(
-        string='Age',
+        string=_('Age'),
         compute='_compute_age',
         store=True,
-        help='Age in years'
+        help=_('Age in years')
     )
     program_name = fields.Char(
-        string='Program Name',
+        string=_('Program Name'),
         related='program_id.name',
         store=True,
-        help='Program name'
+        help=_('Program name')
     )
     batch_name = fields.Char(
-        string='Batch Name',
+        string=_('Batch Name'),
         related='batch_id.name',
         store=True,
-        help='Batch name'
+        help=_('Batch name')
     )
 
     # University ID Information
     university_id = fields.Char(
-        string='University ID',
+        string=_('University ID'),
         tracking=True,
-        help='University ID provided by ministry (FRMNO)'
+        help=_('University ID provided by ministry (FRMNO)')
     )
     is_processing_student = fields.Boolean(
-        string='Processing Student',
+        string=_('Processing Student'),
         default=False,
         tracking=True,
-        help='Marked as من طلاب المعالجات - student without university ID'
+        help=_('Marked as من طلاب المعالجات - student without university ID')
     )
     university_id_updated_date = fields.Datetime(
-        string='University ID Updated Date',
-        help='Date when university ID was last updated'
+        string=_('University ID Updated Date'),
+        help=_('Date when university ID was last updated')
     )
     university_id_updated_by = fields.Many2one(
         'res.users',
-        string='Updated By',
-        help='User who last updated the university ID'
+        string=_('Updated By'),
+        help=_('User who last updated the university ID')
     )
 
     # Student Profile Picture
     profile_picture = fields.Binary(
-        string='Profile Picture',
+        string=_('Profile Picture'),
         attachment=True,
-        help='Student profile picture'
+        help=_('Student profile picture')
     )
     profile_picture_filename = fields.Char(
-        string='Profile Picture Filename',
-        help='Name of the profile picture file'
+        string=_('Profile Picture Filename'),
+        help=_('Name of the profile picture file')
     )
 
     @api.depends('birth_date')

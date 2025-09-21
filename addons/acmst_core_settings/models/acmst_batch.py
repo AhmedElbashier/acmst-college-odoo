@@ -25,27 +25,27 @@ class AcmstBatch(models.Model):
 
     # Basic Information
     name = fields.Char(
-        string='Batch Name',
+        string=_('Batch Name'),
         required=True,
         tracking=True,
-        help="Name of the batch (e.g., 2024-2025, Fall 2024)"
+        help=_("Name of the batch (e.g., 2024-2025, Fall 2024)")
     )
     code = fields.Char(
-        string='Batch Code',
+        string=_('Batch Code'),
         required=True,
         size=20,
         tracking=True,
-        help="Unique code for the batch (max 20 characters)"
+        help=_("Unique code for the batch (max 20 characters)")
     )
     description = fields.Text(
-        string='Description',
-        help="Description of the batch"
+        string=_('Description'),
+        help=_("Description of the batch")
     )
     
     # Associations
     program_id = fields.Many2one(
         'acmst.program',
-        string='Program',
+        string=_('Program'),
         required=True,
         tracking=True,
         help="Program this batch belongs to"

@@ -20,30 +20,30 @@ class AcmstCoordinatorCondition(models.Model):
     # Basic Information
     admission_file_id = fields.Many2one(
         'acmst.admission.file',
-        string='Admission File',
+        string=_('Admission File'),
         required=True,
         ondelete='cascade',
-        help='Related admission file'
+        help=_('Related admission file')
     )
     coordinator_id = fields.Many2one(
         'res.users',
-        string='Coordinator',
+        string=_('Coordinator'),
         required=True,
         default=lambda self: self.env.user,
-        help='Program coordinator who set the condition'
+        help=_('Program coordinator who set the condition')
     )
     condition_date = fields.Date(
-        string='Condition Date',
+        string=_('Condition Date'),
         default=fields.Date.today,
         required=True,
-        help='Date when the condition was set'
+        help=_('Date when the condition was set')
     )
     state = fields.Selection([
-        ('pending', 'Pending'),
-        ('completed', 'Completed'),
-        ('rejected', 'Rejected'),
-        ('overdue', 'Overdue')
-    ], string='State', default='pending', tracking=True, help='Current state of the condition')
+        ('pending', _('Pending')),
+        ('completed', _('Completed')),
+        ('rejected', _('Rejected')),
+        ('overdue', _('Overdue'))
+    ], string=_('State'), default='pending', tracking=True, help=_('Current state of the condition'))
 
     # Dashboard Statistics (computed fields)
     total_conditions = fields.Integer(

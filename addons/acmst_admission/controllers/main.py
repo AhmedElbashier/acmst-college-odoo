@@ -132,7 +132,7 @@ class AdmissionPortal(CustomerPortal):
             if errors:
                 return json.dumps({
                     'success': False,
-                    'error': 'Validation errors: ' + ', '.join(errors)
+                    'error': _('Validation errors: ') + ', '.join(errors)
                 })
             
             # Create application
@@ -144,14 +144,14 @@ class AdmissionPortal(CustomerPortal):
             return json.dumps({
                 'success': True,
                 'application_id': application.id,
-                'message': 'Application submitted successfully!'
+                'message': _('Application submitted successfully!')
             })
             
         except Exception as e:
             _logger.error('Error submitting application: %s', str(e))
             return json.dumps({
                 'success': False,
-                'error': 'An error occurred while submitting your application. Please try again.'
+                'error': _('An error occurred while submitting your application. Please try again.')
             })
 
     @http.route('/admission/save-draft', type='http', methods=['POST'], auth="public", website=True, csrf=False)
@@ -167,21 +167,21 @@ class AdmissionPortal(CustomerPortal):
                 if application.exists() and application.portal_user_id == request.env.user:
                     application.write(form_data)
                 else:
-                    return json.dumps({'success': False, 'error': 'Invalid application'})
+                    return json.dumps({'success': False, 'error': _('Invalid application')})
             else:
                 application = request.env['acmst.portal.application'].create(form_data)
             
             return json.dumps({
                 'success': True,
                 'application_id': application.id,
-                'message': 'Draft saved successfully!'
+                'message': _('Draft saved successfully!')
             })
             
         except Exception as e:
             _logger.error('Error saving draft: %s', str(e))
             return json.dumps({
                 'success': False,
-                'error': 'An error occurred while saving your draft. Please try again.'
+                'error': _('An error occurred while saving your draft. Please try again.')
             })
 
     @http.route('/admission/health-check/submit', type='http', methods=['POST'], auth="user", website=True, csrf=False)
@@ -192,14 +192,14 @@ class AdmissionPortal(CustomerPortal):
             application = request.env['acmst.portal.application'].browse(application_id)
             
             if not application.exists() or application.portal_user_id != request.env.user:
-                return json.dumps({'success': False, 'error': 'Invalid application'})
+                return json.dumps({'success': False, 'error': _('Invalid application')})
             
             if not application.admission_file_id:
-                return json.dumps({'success': False, 'error': 'No admission file found'})
+                return json.dumps({'success': False, 'error': _('No admission file found')})
             
             admission_file = application.admission_file_id
             if admission_file.state != 'health_required':
-                return json.dumps({'success': False, 'error': 'Health check not required'})
+                return json.dumps({'success': False, 'error': _('Health check not required')})
             
             # Prepare health check data
             health_data = self._prepare_health_check_data(kw)
@@ -212,14 +212,14 @@ class AdmissionPortal(CustomerPortal):
             
             return json.dumps({
                 'success': True,
-                'message': 'Health check submitted successfully!'
+                'message': _('Health check submitted successfully!')
             })
             
         except Exception as e:
             _logger.error('Error submitting health check: %s', str(e))
             return json.dumps({
                 'success': False,
-                'error': 'An error occurred while submitting your health check. Please try again.'
+                'error': _('An error occurred while submitting your health check. Please try again.')
             })
 
     @http.route('/admission/condition/complete', type='http', methods=['POST'], auth="user", website=True, csrf=False)
@@ -230,11 +230,11 @@ class AdmissionPortal(CustomerPortal):
             condition = request.env['acmst.coordinator.condition'].browse(condition_id)
             
             if not condition.exists():
-                return json.dumps({'success': False, 'error': 'Invalid condition'})
+                return json.dumps({'success': False, 'error': _('Invalid condition')})
             
             # Check if user has access to this condition
             if condition.admission_file_id.portal_user_id != request.env.user:
-                return json.dumps({'success': False, 'error': 'Access denied'})
+                return json.dumps({'success': False, 'error': _('Access denied')})
             
             # Mark as complete
             condition.action_complete()

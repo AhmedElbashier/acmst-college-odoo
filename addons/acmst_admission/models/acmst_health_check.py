@@ -19,70 +19,70 @@ class AcmstHealthCheck(models.Model):
 
     # Basic Information
     name = fields.Char(
-        string='Health Check Name',
+        string=_('Health Check Name'),
         compute='_compute_name',
         store=True,
-        help='Unique name for this health check'
+        help=_('Unique name for this health check')
     )
     admission_file_id = fields.Many2one(
         'acmst.admission.file',
-        string='Admission File',
+        string=_('Admission File'),
         required=True,
         ondelete='cascade',
-        help='Related admission file'
+        help=_('Related admission file')
     )
     check_date = fields.Datetime(
-        string='Check Date',
+        string=_('Check Date'),
         default=fields.Datetime.now,
         required=True,
-        help='Date and time of the health check'
+        help=_('Date and time of the health check')
     )
     examiner_id = fields.Many2one(
         'res.users',
-        string='Examiner',
+        string=_('Examiner'),
         required=True,
         default=lambda self: self.env.user,
-        help='Medical examiner who performed the check'
+        help=_('Medical examiner who performed the check')
     )
     state = fields.Selection([
-        ('draft', 'Draft'),
-        ('submitted', 'Submitted'),
-        ('approved', 'Approved'),
-        ('rejected', 'Rejected')
-    ], string='State', default='draft', tracking=True, help='Current state of the health check')
+        ('draft', _('Draft')),
+        ('submitted', _('Submitted')),
+        ('approved', _('Approved')),
+        ('rejected', _('Rejected'))
+    ], string=_('State'), default='draft', tracking=True, help=_('Current state of the health check'))
 
     # Health Questionnaire
     has_chronic_diseases = fields.Boolean(
-        string='Has Chronic Diseases',
-        help='Does the applicant have any chronic diseases?'
+        string=_('Has Chronic Diseases'),
+        help=_('Does the applicant have any chronic diseases?')
     )
     chronic_diseases_details = fields.Text(
-        string='Chronic Diseases Details',
-        help='Details about chronic diseases'
+        string=_('Chronic Diseases Details'),
+        help=_('Details about chronic diseases')
     )
     takes_medications = fields.Boolean(
-        string='Takes Medications',
-        help='Does the applicant take any medications?'
+        string=_('Takes Medications'),
+        help=_('Does the applicant take any medications?')
     )
     medications_details = fields.Text(
-        string='Medications Details',
-        help='Details about medications being taken'
+        string=_('Medications Details'),
+        help=_('Details about medications being taken')
     )
     has_allergies = fields.Boolean(
-        string='Has Allergies',
-        help='Does the applicant have any allergies?'
+        string=_('Has Allergies'),
+        help=_('Does the applicant have any allergies?')
     )
     allergies_details = fields.Text(
-        string='Allergies Details',
-        help='Details about allergies'
+        string=_('Allergies Details'),
+        help=_('Details about allergies')
     )
     has_disabilities = fields.Boolean(
-        string='Has Disabilities',
-        help='Does the applicant have any disabilities?'
+        string=_('Has Disabilities'),
+        help=_('Does the applicant have any disabilities?')
     )
     disabilities_details = fields.Text(
-        string='Disabilities Details',
-        help='Details about disabilities'
+        string=_('Disabilities Details'),
+        help=_('Details about disabilities')
     )
     blood_type = fields.Selection([
         ('A+', 'A+'),
@@ -93,17 +93,17 @@ class AcmstHealthCheck(models.Model):
         ('AB-', 'AB-'),
         ('O+', 'O+'),
         ('O-', 'O-'),
-        ('unknown', 'Unknown')
-    ], string='Blood Type', help='Blood type')
+        ('unknown', _('Unknown'))
+    ], string=_('Blood Type'), help=_('Blood type'))
     height = fields.Float(
-        string='Height (cm)',
+        string=_('Height (cm)'),
         digits=(5, 2),
-        help='Height in centimeters'
+        help=_('Height in centimeters')
     )
     weight = fields.Float(
-        string='Weight (kg)',
+        string=_('Weight (kg)'),
         digits=(5, 2),
-        help='Weight in kilograms'
+        help=_('Weight in kilograms')
     )
     bmi = fields.Float(
         string='BMI',

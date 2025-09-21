@@ -24,344 +24,344 @@ class AcmstAdmissionFile(models.Model):
 
     # Core fields
     name = fields.Char(
-        string='File Number',
+        string=_('File Number'),
         required=True,
         copy=False,
         readonly=True,
         default=lambda self: _('New'),
-        help='Unique file number for this admission application'
+        help=_('Unique file number for this admission application')
     )
     applicant_name_english = fields.Char(
-        string='Applicant Name (English)',
+        string=_('Applicant Name (English)'),
         required=True,
         tracking=True,
-        help='Full name of the applicant in English'
+        help=_('Full name of the applicant in English')
     )
     applicant_name_arabic = fields.Char(
-        string='Applicant Name (Arabic)',
+        string=_('Applicant Name (Arabic)'),
         required=True,
         tracking=True,
-        help='Full name of the applicant in Arabic'
+        help=_('Full name of the applicant in Arabic')
     )
 
     applicant_name = fields.Char(
-        string='Applicant Name',
+        string=_('Applicant Name'),
         compute='_compute_applicant_name',
-        help='Full name of the applicant (uses English name as primary)'
+        help=_('Full name of the applicant (uses English name as primary)')
     )
     national_id = fields.Char(
-        string='National ID / Passport Number',
+        string=_('National ID / Passport Number'),
         required=True,
         tracking=True,
-        help='National ID or passport number'
+        help=_('National ID or passport number')
     )
     # ID Document Upload
     id_document = fields.Binary(
-        string='ID Document',
-        help='Upload National ID or Passport copy',
+        string=_('ID Document'),
+        help=_('Upload National ID or Passport copy'),
         required=False,
         tracking=True
     )
     id_document_filename = fields.Char(
-        string='ID Document Filename',
-        help='Filename of the uploaded ID document'
+        string=_('ID Document Filename'),
+        help=_('Filename of the uploaded ID document')
     )
     phone = fields.Char(
-        string='Phone',
+        string=_('Phone'),
         required=True,
         tracking=True,
-        help='Contact phone number'
+        help=_('Contact phone number')
     )
     email = fields.Char(
-        string='Email',
+        string=_('Email'),
         required=True,
         tracking=True,
-        help='Email address'
+        help=_('Email address')
     )
     program_id = fields.Many2one(
         'acmst.program',
-        string='Program',
+        string=_('Program'),
         required=True,
         tracking=True,
-        help='Target program for admission'
+        help=_('Target program for admission')
     )
     batch_id = fields.Many2one(
         'acmst.batch',
-        string='Batch',
+        string=_('Batch'),
         required=True,
         tracking=True,
-        help='Target batch for admission'
+        help=_('Target batch for admission')
     )
     academic_level = fields.Selection([
-        ('level2', 'Level 2'),
-        ('level3', 'Level 3')
-    ], string='Academic Level', tracking=True, 
-       help='Academic level assigned during conditional approval')
+        ('level2', _('Level 2')),
+        ('level3', _('Level 3'))
+    ], string=_('Academic Level'), tracking=True, 
+       help=_('Academic level assigned during conditional approval'))
     coordinator_recommended_level = fields.Selection([
-        ('level2', 'Level 2'),
-        ('level3', 'Level 3')
-    ], string='Coordinator Recommended Level', tracking=True, 
-       help='Academic level recommended by coordinator during conditional approval')
+        ('level2', _('Level 2')),
+        ('level3', _('Level 3'))
+    ], string=_('Coordinator Recommended Level'), tracking=True, 
+       help=_('Academic level recommended by coordinator during conditional approval'))
     state = fields.Selection([
-        ('new', 'New Application'),
-        ('ministry_pending', 'Ministry Approval Pending'),
-        ('ministry_approved', 'Ministry Approved'),
-        ('ministry_rejected', 'Ministry Rejected'),
-        ('health_required', 'Health Check Required'),
-        ('health_approved', 'Health Approved'),
-        ('health_rejected', 'Health Rejected'),
-        ('coordinator_review', 'Coordinator Review'),
-        ('coordinator_approved', 'Coordinator Approved'),
-        ('coordinator_rejected', 'Coordinator Rejected'),
-        ('coordinator_conditional', 'Coordinator Conditional'),
-        ('manager_review', 'Manager Review'),
-        ('manager_approved', 'Manager Approved'),
-        ('manager_rejected', 'Manager Rejected'),
-        ('completed', 'Completed'),
-        ('cancelled', 'Cancelled')
-    ], string='State', default='new', tracking=True, help='Current state of the admission file')
+        ('new', _('New Application')),
+        ('ministry_pending', _('Ministry Approval Pending')),
+        ('ministry_approved', _('Ministry Approved')),
+        ('ministry_rejected', _('Ministry Rejected')),
+        ('health_required', _('Health Check Required')),
+        ('health_approved', _('Health Approved')),
+        ('health_rejected', _('Health Rejected')),
+        ('coordinator_review', _('Coordinator Review')),
+        ('coordinator_approved', _('Coordinator Approved')),
+        ('coordinator_rejected', _('Coordinator Rejected')),
+        ('coordinator_conditional', _('Coordinator Conditional')),
+        ('manager_review', _('Manager Review')),
+        ('manager_approved', _('Manager Approved')),
+        ('manager_rejected', _('Manager Rejected')),
+        ('completed', _('Completed')),
+        ('cancelled', _('Cancelled'))
+    ], string=_('State'), default='new', tracking=True, help=_('Current state of the admission file'))
 
     # Dashboard Statistics (computed fields)
     total_applications = fields.Integer(
-        string='Total Applications',
+        string=_('Total Applications'),
         compute='_compute_dashboard_statistics',
         store=True,
-        help='Total number of applications'
+        help=_('Total number of applications')
     )
     pending_review = fields.Integer(
-        string='Pending Review',
+        string=_('Pending Review'),
         compute='_compute_dashboard_statistics',
         store=True,
-        help='Number of applications pending review'
+        help=_('Number of applications pending review')
     )
     health_required = fields.Integer(
-        string='Health Required',
+        string=_('Health Required'),
         compute='_compute_dashboard_statistics',
         store=True,
-        help='Number of applications requiring health check'
+        help=_('Number of applications requiring health check')
     )
     coordinator_review = fields.Integer(
-        string='Coordinator Review',
+        string=_('Coordinator Review'),
         compute='_compute_dashboard_statistics',
         store=True,
-        help='Number of applications in coordinator review'
+        help=_('Number of applications in coordinator review')
     )
     manager_review = fields.Integer(
-        string='Manager Review',
+        string=_('Manager Review'),
         compute='_compute_dashboard_statistics',
         store=True,
-        help='Number of applications in manager review'
+        help=_('Number of applications in manager review')
     )
     ministry_pending_total = fields.Integer(
-        string='Ministry Pending (Total)',
+        string=_('Ministry Pending (Total)'),
         compute='_compute_dashboard_statistics',
         store=True,
-        help='Number of applications pending ministry approval'
+        help=_('Number of applications pending ministry approval')
     )
     completed = fields.Integer(
-        string='Completed',
+        string=_('Completed'),
         compute='_compute_dashboard_statistics',
         store=True,
-        help='Number of completed applications'
+        help=_('Number of completed applications')
     )
     rejected = fields.Integer(
-        string='Rejected',
+        string=_('Rejected'),
         compute='_compute_admission_manager_statistics',
         store=True,
-        help='Number of rejected applications'
+        help=_('Number of rejected applications')
     )
 
     # Officer Dashboard Statistics (computed fields)
     new_applications_count = fields.Integer(
-        string='New Applications',
+        string=_('New Applications'),
         compute='_compute_officer_statistics',
         store=True,
-        help='Number of new applications'
+        help=_('Number of new applications')
     )
     ministry_pending_count = fields.Integer(
-        string='Ministry Pending',
+        string=_('Ministry Pending'),
         compute='_compute_officer_statistics',
         store=True,
-        help='Number of applications pending ministry approval'
+        help=_('Number of applications pending ministry approval')
     )
     ministry_approved_count = fields.Integer(
-        string='Ministry Approved',
+        string=_('Ministry Approved'),
         compute='_compute_officer_statistics',
         store=True,
-        help='Number of ministry approved applications'
+        help=_('Number of ministry approved applications')
     )
     ministry_rejected_count = fields.Integer(
-        string='Ministry Rejected',
+        string=_('Ministry Rejected'),
         compute='_compute_officer_statistics',
         store=True,
-        help='Number of ministry rejected applications'
+        help=_('Number of ministry rejected applications')
     )
 
     # Coordinator Dashboard Statistics (computed fields)
     total_reviews = fields.Integer(
-        string='Total Reviews',
+        string=_('Total Reviews'),
         compute='_compute_coordinator_statistics',
         store=True,
-        help='Total number of coordinator reviews'
+        help=_('Total number of coordinator reviews')
     )
     pending_review_count = fields.Integer(
-        string='Pending Review',
+        string=_('Pending Review'),
         compute='_compute_coordinator_statistics',
         store=True,
-        help='Number of applications pending coordinator review'
+        help=_('Number of applications pending coordinator review')
     )
     approved_count = fields.Integer(
-        string='Approved',
+        string=_('Approved'),
         compute='_compute_coordinator_statistics',
         store=True,
-        help='Number of applications approved by coordinator'
+        help=_('Number of applications approved by coordinator')
     )
     conditional_count = fields.Integer(
-        string='Conditional',
+        string=_('Conditional'),
         compute='_compute_coordinator_statistics',
         store=True,
-        help='Number of applications with conditional approval'
+        help=_('Number of applications with conditional approval')
     )
     my_reviews_count = fields.Integer(
-        string='My Reviews',
+        string=_('My Reviews'),
         compute='_compute_coordinator_statistics',
         store=True,
-        help='Number of reviews assigned to current user'
+        help=_('Number of reviews assigned to current user')
     )
     approved_total = fields.Integer(
-        string='Approved (Total)',
+        string=_('Approved (Total)'),
         compute='_compute_dashboard_statistics',
         store=True,
-        help='Number of approved applications'
+        help=_('Number of approved applications')
     )
 
     application_date = fields.Datetime(
-        string='Application Date',
+        string=_('Application Date'),
         default=fields.Datetime.now,
         required=True,
-        help='Date when the application was submitted'
+        help=_('Date when the application was submitted')
     )
     submission_method = fields.Selection([
-        ('portal', 'Portal'),
-        ('office', 'Office')
-    ], string='Submission Method', default='portal', help='How the application was submitted')
+        ('portal', _('Portal')),
+        ('office', _('Office'))
+    ], string=_('Submission Method'), default='portal', help=_('How the application was submitted'))
 
     # Personal Information
     birth_date = fields.Date(
-        string='Birth Date',
+        string=_('Birth Date'),
         required=True,
-        help='Date of birth'
+        help=_('Date of birth')
     )
     gender = fields.Selection([
-        ('male', 'Male'),
-        ('female', 'Female')
-    ], string='Gender', required=True, help='Gender')
+        ('male', _('Male')),
+        ('female', _('Female'))
+    ], string=_('Gender'), required=True, help=_('Gender'))
     nationality = fields.Selection([
-        ('sudanese', 'Sudanese'),
-        ('foreign', 'Foreign')
-    ], string='Nationality', required=True, help='Nationality')
+        ('sudanese', _('Sudanese')),
+        ('foreign', _('Foreign'))
+    ], string=_('Nationality'), required=True, help=_('Nationality'))
     address = fields.Text(
-        string='Address',
+        string=_('Address'),
         required=True,
-        help='Full address'
+        help=_('Full address')
     )
     emergency_contact = fields.Char(
-        string='Emergency Contact',
+        string=_('Emergency Contact'),
         required=True,
-        help='Emergency contact person name'
+        help=_('Emergency contact person name')
     )
     emergency_phone = fields.Char(
-        string='Emergency Phone',
+        string=_('Emergency Phone'),
         required=True,
-        help='Emergency contact phone number'
+        help=_('Emergency contact phone number')
     )
 
     # Guardian Information
     guardian_ids = fields.One2many(
         'acmst.guardian',
         'admission_file_id',
-        string='Guardians',
-        help='List of guardians for this admission file'
+        string=_('Guardians'),
+        help=_('List of guardians for this admission file')
     )
 
     # Additional Personal Information
     place_of_birth = fields.Char(
-        string='Place of Birth',
-        help='City/Country of birth'
+        string=_('Place of Birth'),
+        help=_('City/Country of birth')
     )
     religion = fields.Selection([
-        ('muslim', 'Muslim'),
-        ('christian', 'Christian'),
-        ('other', 'Other')
-    ], string='Religion', help='Religious affiliation')
+        ('muslim', _('Muslim')),
+        ('christian', _('Christian')),
+        ('other', _('Other'))
+    ], string=_('Religion'), help=_('Religious affiliation'))
 
     # Identification Information
     id_type = fields.Selection([
-        ('national_id', 'National ID'),
-        ('passport', 'Passport')
-    ], string='ID Type', required=True, help='Type of identification document')
+        ('national_id', _('National ID')),
+        ('passport', _('Passport'))
+    ], string=_('ID Type'), required=True, help=_('Type of identification document'))
 
     # Admission Information
     admission_type = fields.Selection([
-        ('direct', 'Direct Admission'),
-        ('regular', 'Regular Admission'),
-        ('private', 'Private Admission'),
-        ('transfer', 'Transfer'),
-        ('bridging', 'Bridging'),
-        ('degree_holder', 'Degree Holder'),
-        ('private_education_grant', 'Private Education Grant')
-    ], string='Type of Admission', required=True, help='Type of admission')
+        ('direct', _('Direct Admission')),
+        ('regular', _('Regular Admission')),
+        ('private', _('Private Admission')),
+        ('transfer', _('Transfer')),
+        ('bridging', _('Bridging')),
+        ('degree_holder', _('Degree Holder')),
+        ('private_education_grant', _('Private Education Grant'))
+    ], string=_('Type of Admission'), required=True, help=_('Type of admission'))
 
     # Academic Information
     previous_education = fields.Text(
-        string='Previous Education',
-        help='Previous educational background'
+        string=_('Previous Education'),
+        help=_('Previous educational background')
     )
 
     # Detailed Education Information
     education_institution = fields.Char(
-        string='Education Institution',
-        help='Name of previous educational institution'
+        string=_('Education Institution'),
+        help=_('Name of previous educational institution')
     )
     education_program = fields.Char(
-        string='Education Program',
-        help='Program/degree obtained'
+        string=_('Education Program'),
+        help=_('Program/degree obtained')
     )
     education_college = fields.Char(
-        string='Education College',
-        help='College/School attended'
+        string=_('Education College'),
+        help=_('College/School attended')
     )
     education_major = fields.Char(
-        string='Education Major',
-        help='Major field of study'
+        string=_('Education Major'),
+        help=_('Major field of study')
     )
     education_start_year = fields.Integer(
-        string='Education Start Year',
-        help='Year when education started'
+        string=_('Education Start Year'),
+        help=_('Year when education started')
     )
     education_completion_year = fields.Integer(
-        string='Education Completion Year',
-        help='Year when education was completed'
+        string=_('Education Completion Year'),
+        help=_('Year when education was completed')
     )
     certificate_type = fields.Selection([
-        ('diploma', 'Diploma'),
-        ('bachelor', 'Bachelor'),
-        ('master', 'Master'),
-        ('phd', 'PhD'),
-        ('certificate', 'Certificate'),
-        ('other', 'Other')
-    ], string='Certificate Type', help='Type of certificate obtained')
+        ('diploma', _('Diploma')),
+        ('bachelor', _('Bachelor')),
+        ('master', _('Master')),
+        ('phd', _('PhD')),
+        ('certificate', _('Certificate')),
+        ('other', _('Other'))
+    ], string=_('Certificate Type'), help=_('Type of certificate obtained'))
     education_duration_years = fields.Integer(
-        string='Education Duration (Years)',
-        help='Duration of education in years'
+        string=_('Education Duration (Years)'),
+        help=_('Duration of education in years')
     )
 
     # Document Attachments - One2many relations for multiple documents
     document_ids = fields.One2many(
         'acmst.document',
         'admission_file_id',
-        string='Documents',
-        help='All documents attached to this admission file'
+        string=_('Documents'),
+        help=_('All documents attached to this admission file')
     )
 
     # Specific document categories
@@ -369,133 +369,133 @@ class AcmstAdmissionFile(models.Model):
         'acmst.document',
         'admission_file_id',
         domain=[('document_type', '=', 'id_document')],
-        string='ID Documents',
-        help='Identification documents (National ID/Passport)'
+        string=_('ID Documents'),
+        help=_('Identification documents (National ID/Passport)')
     )
     academic_document_ids = fields.One2many(
         'acmst.document',
         'admission_file_id',
         domain=[('document_type', 'in', ['academic_certificate', 'transcript'])],
-        string='Academic Documents',
-        help='Academic certificates and transcripts'
+        string=_('Academic Documents'),
+        help=_('Academic certificates and transcripts')
     )
     support_document_ids = fields.One2many(
         'acmst.document',
         'admission_file_id',
         domain=[('document_type', 'in', ['support_document', 'medical_report', 'other'])],
-        string='Support Documents',
-        help='Other supporting documents'
+        string=_('Support Documents'),
+        help=_('Other supporting documents')
     )
     health_document_ids = fields.One2many(
         'acmst.document',
         'admission_file_id',
         domain=[('document_type', 'in', ['health_document', 'medical_report'])],
-        string='Health Check Documents',
-        help='Health check related documents and medical reports'
+        string=_('Health Check Documents'),
+        help=_('Health check related documents and medical reports')
     )
 
     # Legacy fields for backward compatibility (single file support)
     certificates = fields.Binary(
-        string='Legacy Certificates',
-        help='Legacy field - use document_ids instead'
+        string=_('Legacy Certificates'),
+        help=_('Legacy field - use document_ids instead')
     )
     certificates_filename = fields.Char(
-        string='Legacy Certificates Filename',
-        help='Legacy field - use document_ids instead'
+        string=_('Legacy Certificates Filename'),
+        help=_('Legacy field - use document_ids instead')
     )
     transcripts = fields.Binary(
-        string='Legacy Transcripts',
-        help='Legacy field - use document_ids instead'
+        string=_('Legacy Transcripts'),
+        help=_('Legacy field - use document_ids instead')
     )
     transcripts_filename = fields.Char(
-        string='Legacy Transcripts Filename',
-        help='Legacy field - use document_ids instead'
+        string=_('Legacy Transcripts Filename'),
+        help=_('Legacy field - use document_ids instead')
     )
 
     # Process Tracking
     ministry_approval_date = fields.Date(
-        string='Ministry Approval Date',
-        help='Date when ministry approval was received'
+        string=_('Ministry Approval Date'),
+        help=_('Date when ministry approval was received')
     )
     ministry_approver = fields.Many2one(
         'res.users',
-        string='Ministry Approver',
-        help='User who approved from ministry'
+        string=_('Ministry Approver'),
+        help=_('User who approved from ministry')
     )
     
     # University ID and Processing Status
     university_id = fields.Char(
-        string='University ID',
+        string=_('University ID'),
         tracking=True,
-        help='University ID provided by ministry (FRMNO)'
+        help=_('University ID provided by ministry (FRMNO)')
     )
     is_processing_student = fields.Boolean(
-        string='Processing Student',
+        string=_('Processing Student'),
         default=False,
         tracking=True,
-        help='Marked as من طلاب المعالجات - student without university ID'
+        help=_('Marked as من طلاب المعالجات - student without university ID')
     )
     university_id_updated_date = fields.Datetime(
-        string='University ID Updated Date',
-        help='Date when university ID was last updated'
+        string=_('University ID Updated Date'),
+        help=_('Date when university ID was last updated')
     )
     university_id_updated_by = fields.Many2one(
         'res.users',
-        string='Updated By',
-        help='User who last updated the university ID'
+        string=_('Updated By'),
+        help=_('User who last updated the university ID')
     )
 
     # Student Profile Picture
     profile_picture = fields.Binary(
-        string='Profile Picture',
+        string=_('Profile Picture'),
         attachment=True,
-        help='Student profile picture'
+        help=_('Student profile picture')
     )
     profile_picture_filename = fields.Char(
-        string='Profile Picture Filename',
-        help='Name of the profile picture file'
+        string=_('Profile Picture Filename'),
+        help=_('Name of the profile picture file')
     )
     health_check_date = fields.Date(
-        string='Health Check Date',
-        help='Date when health check was completed'
+        string=_('Health Check Date'),
+        help=_('Date when health check was completed')
     )
     health_approver = fields.Many2one(
         'res.users',
-        string='Health Approver',
-        help='User who approved health check'
+        string=_('Health Approver'),
+        help=_('User who approved health check')
     )
     coordinator_approval_date = fields.Date(
-        string='Coordinator Approval Date',
-        help='Date when coordinator approval was received',
+        string=_('Coordinator Approval Date'),
+        help=_('Date when coordinator approval was received'),
         readonly=True
     )
     coordinator_id = fields.Many2one(
         'res.users',
-        string='Coordinator',
-        help='Program coordinator who reviewed the application',
+        string=_('Coordinator'),
+        help=_('Program coordinator who reviewed the application'),
         readonly=True
     )
     manager_approval_date = fields.Date(
-        string='Manager Approval Date',
-        help='Date when manager approval was received'
+        string=_('Manager Approval Date'),
+        help=_('Date when manager approval was received')
     )
     manager_id = fields.Many2one(
         'res.users',
-        string='Manager',
-        help='Admission manager who gave final approval'
+        string=_('Manager'),
+        help=_('Admission manager who gave final approval')
     )
 
     # Guardian Information
     guardian_ids = fields.One2many(
         'acmst.guardian',
         'admission_file_id',
-        string='Guardians',
-        help='Guardian information for the student'
+        string=_('Guardians'),
+        help=_('Guardian information for the student')
     )
     default_guardian_id = fields.Many2one(
         'acmst.guardian',
-        string='Default Guardian',
-        help='The default guardian for this student',
+        string=_('Default Guardian'),
+        help=_('The default guardian for this student'),
         compute='_compute_default_guardian',
         store=True
     )
@@ -504,63 +504,63 @@ class AcmstAdmissionFile(models.Model):
     health_check_ids = fields.One2many(
         'acmst.health.check',
         'admission_file_id',
-        string='Health Checks',
-        help='Health check records for this admission file'
+        string=_('Health Checks'),
+        help=_('Health check records for this admission file')
     )
     coordinator_conditions_ids = fields.One2many(
         'acmst.coordinator.condition',
         'admission_file_id',
-        string='Coordinator Conditions',
-        help='Conditions set by coordinator'
+        string=_('Coordinator Conditions'),
+        help=_('Conditions set by coordinator')
     )
     coordinator_notes = fields.Text(
-        string='Coordinator Notes',
-        help='Notes and comments from coordinator review'
+        string=_('Coordinator Notes'),
+        help=_('Notes and comments from coordinator review')
     )
     coordinator_conditions = fields.Text(
-        string='Coordinator Conditions Summary',
-        help='Summary of conditions set by coordinator'
+        string=_('Coordinator Conditions Summary'),
+        help=_('Summary of conditions set by coordinator')
     )
     approval_ids = fields.One2many(
         'acmst.admission.approval',
         'admission_file_id',
-        string='Approval History',
-        help='History of all approvals for this file'
+        string=_('Approval History'),
+        help=_('History of all approvals for this file')
     )
     student_id = fields.Many2one(
         'res.partner',
-        string='Student Record',
-        help='Created student record after completion'
+        string=_('Student Record'),
+        help=_('Created student record after completion')
     )
 
     # Computed fields
     age = fields.Integer(
-        string='Age',
+        string=_('Age'),
         compute='_compute_age',
         store=True,
-        help='Age in years'
+        help=_('Age in years')
     )
     is_health_approved = fields.Boolean(
-        string='Health Approved',
+        string=_('Health Approved'),
         compute='_compute_health_status',
-        help='Whether health check is approved'
+        help=_('Whether health check is approved')
     )
     has_pending_conditions = fields.Boolean(
-        string='Has Pending Conditions',
+        string=_('Has Pending Conditions'),
         compute='_compute_conditions_status',
-        help='Whether there are pending coordinator conditions'
+        help=_('Whether there are pending coordinator conditions')
     )
     
     # Health Check Computed Fields
     health_fitness_status = fields.Char(
-        string='Fitness Status',
+        string=_('Fitness Status'),
         compute='_compute_health_check_data',
-        help='Medical fitness status from health check'
+        help=_('Medical fitness status from health check')
     )
     health_follow_up_required = fields.Boolean(
-        string='Follow-up Required',
+        string=_('Follow-up Required'),
         compute='_compute_health_check_data',
-        help='Whether follow-up is required from health check'
+        help=_('Whether follow-up is required from health check')
     )
 
     @api.depends('birth_date')

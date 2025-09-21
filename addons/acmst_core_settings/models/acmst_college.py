@@ -25,22 +25,22 @@ class AcmstCollege(models.Model):
 
     # Basic Information
     name = fields.Char(
-        string='College Name',
+        string=_('College Name'),
         required=True,
         tracking=True,
-        help="Official name of the college/department"
+        help=_("Official name of the college/department")
     )
     code = fields.Char(
-        string='College Code',
+        string=_('College Code'),
         required=True,
         size=10,
         tracking=True,
-        help="Unique code for the college (max 10 characters)"
+        help=_("Unique code for the college (max 10 characters)")
     )
     short_name = fields.Char(
-        string='Short Name',
+        string=_('Short Name'),
         size=50,
-        help="Abbreviated name for display purposes"
+        help=_("Abbreviated name for display purposes")
     )
     
     # University Association
