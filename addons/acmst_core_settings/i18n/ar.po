@@ -36,6 +36,96 @@ msgid "Address"
 msgstr "العنوان"
 
 #. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__city
+msgid "City"
+msgstr "المدينة"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__country_id
+msgid "Country"
+msgstr "البلد"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__phone
+msgid "Phone"
+msgstr "الهاتف"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__email
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__website
+msgid "Website"
+msgstr "الموقع الإلكتروني"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__established_year
+msgid "Established Year"
+msgstr "سنة التأسيس"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__description
+msgid "Description"
+msgstr "الوصف"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__active
+msgid "Active"
+msgstr "نشط"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__name
+msgid "Program Name"
+msgstr "اسم البرنامج"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__code
+msgid "Program Code"
+msgstr "رمز البرنامج"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__college_id
+msgid "College"
+msgstr "الكلية"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__university_id
+msgid "University"
+msgstr "الجامعة"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__program_type_id
+msgid "Program Type"
+msgstr "نوع البرنامج"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__manager_id
+msgid "Program Manager"
+msgstr "مدير البرنامج"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__coordinator_id
+msgid "Program Coordinator"
+msgstr "منسق البرنامج"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__duration_years
+msgid "Duration (Years)"
+msgstr "المدة (بالسنوات)"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_program__credits_required
+msgid "Credits Required"
+msgstr "الساعات المطلوبة"
+
+#. module: acmst_core_settings
+#: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__address
+msgid "Address"
+msgstr "العنوان"
+
+#. module: acmst_core_settings
 #: model:ir.model.fields,field_description:acmst_core_settings.field_acmst_university__phone
 msgid "Phone"
 msgstr "الهاتف"

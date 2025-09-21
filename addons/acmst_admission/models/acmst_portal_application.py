@@ -300,43 +300,43 @@ class AcmstPortalApplication(models.Model):
         help=_('Program name')
     )
     batch_name = fields.Char(
-        string='Batch Name',
+        string=_('Batch Name'),
         related='batch_id.name',
         store=True,
-        help='Batch name'
+        help=_('Batch name')
     )
 
     # University ID Information
     university_id = fields.Char(
-        string='University ID',
+        string=_('University ID'),
         tracking=True,
-        help='University ID provided by ministry (FRMNO)'
+        help=_('University ID provided by ministry (FRMNO)')
     )
     is_processing_student = fields.Boolean(
-        string='Processing Student',
+        string=_('Processing Student'),
         default=False,
         tracking=True,
-        help='Marked as من طلاب المعالجات - student without university ID'
+        help=_('Marked as من طلاب المعالجات - student without university ID')
     )
     university_id_updated_date = fields.Datetime(
-        string='University ID Updated Date',
-        help='Date when university ID was last updated'
+        string=_('University ID Updated Date'),
+        help=_('Date when university ID was last updated')
     )
     university_id_updated_by = fields.Many2one(
         'res.users',
-        string='Updated By',
-        help='User who last updated the university ID'
+        string=_('Updated By'),
+        help=_('User who last updated the university ID')
     )
 
     # Student Profile Picture
     profile_picture = fields.Binary(
-        string='Profile Picture',
+        string=_('Profile Picture'),
         attachment=True,
-        help='Student profile picture'
+        help=_('Student profile picture')
     )
     profile_picture_filename = fields.Char(
-        string='Profile Picture Filename',
-        help='Name of the profile picture file'
+        string=_('Profile Picture Filename'),
+        help=_('Name of the profile picture file')
     )
 
     @api.depends('birth_date')

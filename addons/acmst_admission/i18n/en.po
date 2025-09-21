@@ -31,6 +31,66 @@ msgid "Email"
 msgstr "Email"
 
 #. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__age
+msgid "Age"
+msgstr "Age"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__birth_date
+msgid "Birth Date"
+msgstr "Birth Date"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__gender
+msgid "Gender"
+msgstr "Gender"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__gender
+msgid "Male"
+msgstr "Male"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__gender
+msgid "Female"
+msgstr "Female"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__nationality
+msgid "Nationality"
+msgstr "Nationality"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__nationality
+msgid "Sudanese"
+msgstr "Sudanese"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__nationality
+msgid "Foreign"
+msgstr "Foreign"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__address
+msgid "Address"
+msgstr "Address"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__academic_level
+msgid "Academic Level"
+msgstr "Academic Level"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__academic_level
+msgid "Level 2"
+msgstr "Level 2"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__academic_level
+msgid "Level 3"
+msgstr "Level 3"
+
+#. module: acmst_admission
 #: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__phone
 msgid "Phone"
 msgstr "Phone"

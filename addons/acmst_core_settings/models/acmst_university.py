@@ -25,155 +25,155 @@ class AcmstUniversity(models.Model):
 
     # Basic Information
     name = fields.Char(
-        string='University Name',
+        string=_('University Name'),
         required=True,
         tracking=True,
-        help="Official name of the university/institution"
+        help=_("Official name of the university/institution")
     )
     code = fields.Char(
-        string='University Code',
+        string=_('University Code'),
         required=True,
         size=10,
         tracking=True,
-        help="Unique code for the university (max 10 characters)"
+        help=_("Unique code for the university (max 10 characters)")
     )
     short_name = fields.Char(
-        string='Short Name',
+        string=_('Short Name'),
         size=50,
-        help="Abbreviated name for display purposes"
+        help=_("Abbreviated name for display purposes")
     )
     
     # Contact Information
     address = fields.Text(
-        string='Address',
+        string=_('Address'),
         tracking=True,
-        help="Complete address of the university"
+        help=_("Complete address of the university")
     )
     city = fields.Char(
-        string='City',
+        string=_('City'),
         size=100,
         tracking=True
     )
     state_id = fields.Many2one(
         'res.country.state',
-        string='State/Province',
+        string=_('State/Province'),
         tracking=True
     )
     country_id = fields.Many2one(
         'res.country',
-        string='Country',
+        string=_('Country'),
         default=lambda self: self.env.company.country_id,
         tracking=True
     )
     zip = fields.Char(
-        string='ZIP Code',
+        string=_('ZIP Code'),
         size=20,
         tracking=True
     )
     
     # Contact Details
     phone = fields.Char(
-        string='Phone',
+        string=_('Phone'),
         size=20,
         tracking=True,
-        help="Main contact phone number"
+        help=_("Main contact phone number")
     )
     mobile = fields.Char(
-        string='Mobile',
+        string=_('Mobile'),
         size=20,
         tracking=True
     )
     email = fields.Char(
-        string='Email',
+        string=_('Email'),
         size=100,
         tracking=True,
-        help="Main contact email address"
+        help=_("Main contact email address")
     )
     website = fields.Char(
-        string='Website',
+        string=_('Website'),
         size=200,
         tracking=True,
-        help="Official website URL"
+        help=_("Official website URL")
     )
     
     # Branding
     logo = fields.Binary(
-        string='Logo',
+        string=_('Logo'),
         attachment=True,
-        help="University logo image"
+        help=_("University logo image")
     )
     logo_web = fields.Binary(
-        string='Web Logo',
+        string=_('Web Logo'),
         attachment=True,
-        help="Logo optimized for web display"
+        help=_("Logo optimized for web display")
     )
     
     # Academic Information
     established_year = fields.Integer(
-        string='Established Year',
+        string=_('Established Year'),
         tracking=True,
-        help="Year the university was established"
+        help=_("Year the university was established")
     )
     accreditation = fields.Text(
-        string='Accreditation',
-        help="Accreditation details and certifications"
+        string=_('Accreditation'),
+        help=_("Accreditation details and certifications")
     )
     description = fields.Text(
-        string='Description',
-        help="Detailed description of the university"
+        string=_('Description'),
+        help=_("Detailed description of the university")
     )
     
     # Status and Settings
     active = fields.Boolean(
-        string='Active',
+        string=_('Active'),
         default=True,
         tracking=True,
-        help="Uncheck to archive this university"
+        help=_("Uncheck to archive this university")
     )
     is_main = fields.Boolean(
-        string='Main University',
+        string=_('Main University'),
         default=False,
-        help="Mark as the main university in the system"
+        help=_("Mark as the main university in the system")
     )
     
     # Related Records
     college_ids = fields.One2many(
         'acmst.college',
         'university_id',
-        string='Colleges',
-        help="Colleges under this university"
+        string=_('Colleges'),
+        help=_("Colleges under this university")
     )
     college_count = fields.Integer(
-        string='Number of Colleges',
+        string=_('Number of Colleges'),
         compute='_compute_college_count',
         store=True
     )
     program_count = fields.Integer(
-        string='Number of Programs',
+        string=_('Number of Programs'),
         compute='_compute_program_count',
         store=True
     )
     student_count = fields.Integer(
-        string='Number of Students',
+        string=_('Number of Students'),
         compute='_compute_student_count',
         store=True
     )
     
     # System Fields
     sequence = fields.Integer(
-        string='Sequence',
+        string=_('Sequence'),
         default=10,
-        help="Order of display"
+        help=_("Order of display")
     )
     color = fields.Integer(
-        string='Color',
+        string=_('Color'),
         default=0,
-        help="Color for kanban view"
+        help=_("Color for kanban view")
     )
     
     # Computed Fields
     full_address = fields.Text(
-        string='Full Address',
+        string=_('Full Address'),
         compute='_compute_full_address',
         store=True
     )

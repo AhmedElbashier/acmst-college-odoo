@@ -31,9 +31,149 @@ msgid "Email"
 msgstr "البريد الإلكتروني"
 
 #. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__age
+msgid "Age"
+msgstr "العمر"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__birth_date
+msgid "Birth Date"
+msgstr "تاريخ الميلاد"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__gender
+msgid "Gender"
+msgstr "الجنس"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__gender
+msgid "Male"
+msgstr "ذكر"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__gender
+msgid "Female"
+msgstr "أنثى"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__nationality
+msgid "Nationality"
+msgstr "الجنسية"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__nationality
+msgid "Sudanese"
+msgstr "سوداني"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__nationality
+msgid "Foreign"
+msgstr "أجنبي"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__address
+msgid "Address"
+msgstr "العنوان"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__academic_level
+msgid "Academic Level"
+msgstr "المستوى الأكاديمي"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__academic_level
+msgid "Level 2"
+msgstr "المستوى الثاني"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__academic_level
+msgid "Level 3"
+msgstr "المستوى الثالث"
+
+#. module: acmst_admission
 #: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__phone
 msgid "Phone"
 msgstr "الهاتف"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "New Application"
+msgstr "طلب جديد"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Ministry Approval Pending"
+msgstr "في انتظار موافقة الوزارة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Ministry Approved"
+msgstr "موافقة الوزارة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Ministry Rejected"
+msgstr "رفض الوزارة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Health Check Required"
+msgstr "مطلوب فحص طبي"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Health Approved"
+msgstr "موافقة طبية"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Health Rejected"
+msgstr "رفض طبي"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Coordinator Review"
+msgstr "مراجعة المنسق"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Coordinator Approved"
+msgstr "موافقة المنسق"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Coordinator Rejected"
+msgstr "رفض المنسق"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Coordinator Conditional"
+msgstr "موافقة مشروطة من المنسق"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Manager Review"
+msgstr "مراجعة المدير"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Manager Approved"
+msgstr "موافقة المدير"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Manager Rejected"
+msgstr "رفض المدير"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Completed"
+msgstr "مكتمل"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
+msgid "Cancelled"
+msgstr "ملغي"
 
 #. module: acmst_admission
 #: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__nationality
