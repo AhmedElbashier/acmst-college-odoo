@@ -24,6 +24,7 @@ The module automatically installs the following Odoo modules:
 - `portal` (Portal access)
 - `web` (Web interface)
 - `website` (Website functionality)
+- `acmst_core_settings` (Required for program and batch management)
 
 ## Installation Steps
 

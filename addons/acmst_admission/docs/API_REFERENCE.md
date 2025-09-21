@@ -92,6 +92,10 @@ headers = {
 | `state` | Selection | No | Workflow state |
 | `coordinator_id` | Many2one | No | Assigned coordinator |
 | `student_id` | Many2one | No | Generated student record |
+| `university_id` | Char | No | University ID provided by ministry |
+| `is_processing_student` | Boolean | No | Flag for processing students (من طلاب المعالجات) |
+| `university_id_updated_date` | Datetime | No | Date when university ID was last updated |
+| `university_id_updated_by` | Many2one | No | User who last updated the university ID |
 | `notes` | Text | No | Additional notes |
 
 #### Methods
@@ -185,6 +189,35 @@ Complete the admission process.
 **Example**:
 ```python
 admission_file.action_complete()
+```
+
+##### `mark_as_processing_student()`
+
+Mark student as processing (من طلاب المعالجات) when no university ID is provided.
+
+**Parameters**:
+- `user_id` (Integer): User ID who marked the student as processing
+
+**Returns**: Boolean
+
+**Example**:
+```python
+admission_file.mark_as_processing_student(user.id)
+```
+
+##### `update_university_id()`
+
+Update university ID and clear processing student status.
+
+**Parameters**:
+- `university_id` (String): New university ID
+- `user_id` (Integer): User ID who updated the ID
+
+**Returns**: Boolean
+
+**Example**:
+```python
+admission_file.update_university_id('UNIV12345', user.id)
 ```
 
 ##### `get_portal_url()`

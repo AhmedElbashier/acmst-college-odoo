@@ -13,6 +13,7 @@ The ACMST Admission Module is a comprehensive Odoo module designed to manage the
 - **Health Check System**: Medical assessment and fitness evaluation
 - **Coordinator Approval**: Conditional requirements and academic prerequisites
 - **Manager Approval**: Final approval and student record generation
+- **Processing Students Management**: Students approved without university ID (من طلاب المعالجات)
 - **Audit Logging**: Comprehensive tracking of all system activities
 - **Performance Optimization**: Built-in performance monitoring and optimization tools
 
@@ -159,6 +160,14 @@ The module includes several security groups:
 - **Coordinator Review** → **Coordinator Conditional**: Conditional requirements
 - **Coordinator Conditional** → **Manager Approved**: Manager approval
 - **Manager Approved** → **Completed**: Process completion
+
+### Processing Students Workflow
+
+Students approved without university ID are marked as "Processing Students" (من طلاب المعالجات) and:
+- Appear in the Processing Students menu with muted styling
+- Have `is_processing_student = True` field set
+- Can be filtered using the "⏳ Processing Students" filter
+- Are tracked with update date and user information
 
 ## API Reference
 
@@ -358,6 +367,13 @@ tail -f /var/log/odoo/odoo.log
 This module is licensed under the AGPL-3.0 License. See the LICENSE file for details.
 
 ## Changelog
+
+### Version 1.1.0 (Latest)
+- **Processing Students Management**: Students approved without university ID are marked as "من طلاب المعالجات"
+- **Manager Dashboard Views**: Enabled manager-specific dashboard and menu items
+- **Enhanced University ID Tracking**: Improved tracking of university ID updates and processing student status
+- **Fixed Workflow Logic**: Corrected ministry approval wizard to properly handle processing students
+- **Updated Documentation**: Comprehensive documentation for all features
 
 ### Version 1.0.0
 - Initial release

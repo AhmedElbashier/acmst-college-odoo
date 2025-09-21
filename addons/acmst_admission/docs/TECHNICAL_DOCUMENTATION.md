@@ -63,7 +63,9 @@ acmst_admission/
 │   ├── acmst_workflow_engine_views.xml
 │   ├── acmst_audit_log_views.xml
 │   ├── acmst_performance_views.xml
-│   └── acmst_admission_menus.xml
+│   ├── acmst_admission_menus.xml
+│   ├── acmst_admission_manager_dashboard_views.xml
+│   └── acmst_manager_dashboard_views.xml
 ├── controllers/
 │   └── main.py
 ├── wizards/
@@ -225,6 +227,10 @@ CREATE INDEX acmst_audit_log_model_id_date_idx ON acmst_audit_log(res_model_id, 
 - `state`: Current workflow state
 - `program_id`: Reference to academic program
 - `batch_id`: Reference to academic batch
+- `university_id`: University ID provided by ministry
+- `is_processing_student`: Boolean flag for processing students (من طلاب المعالجات)
+- `university_id_updated_date`: Date when university ID was last updated
+- `university_id_updated_by`: User who last updated the university ID
 
 **Key Methods**:
 - `action_submit()`: Submit application for review
@@ -234,6 +240,8 @@ CREATE INDEX acmst_audit_log_model_id_date_idx ON acmst_audit_log(res_model_id, 
 - `action_coordinator_review()`: Send for coordinator review
 - `action_manager_approve()`: Approve at manager level
 - `action_complete()`: Complete admission process
+- `mark_as_processing_student()`: Mark student as processing (without university ID)
+- `update_university_id()`: Update university ID and clear processing status
 
 **State Machine**:
 ```

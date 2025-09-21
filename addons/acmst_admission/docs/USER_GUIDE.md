@@ -8,8 +8,9 @@
 5. [Health Check System](#health-check-system)
 6. [Coordinator Conditions](#coordinator-conditions)
 7. [Manager Approval](#manager-approval)
-8. [Reports and Analytics](#reports-and-analytics)
-9. [Troubleshooting](#troubleshooting)
+8. [Processing Students](#processing-students)
+9. [Reports and Analytics](#reports-and-analytics)
+10. [Troubleshooting](#troubleshooting)
 
 ## Overview
 
@@ -19,6 +20,7 @@ The ACMST Admission Module is a comprehensive system for managing college admiss
 - **Health Check System**: Medical assessment and fitness evaluation
 - **Coordinator Conditions**: Program-specific requirements management
 - **Manager Approval**: Multi-level approval workflow
+- **Processing Students Management**: Students approved without university ID (من طلاب المعالجات)
 - **Progress Tracking**: Real-time status updates
 - **Document Management**: Secure file upload and storage
 - **Email Notifications**: Automated communication
@@ -75,6 +77,41 @@ The ACMST Admission Module is a comprehensive system for managing college admiss
 - Upload documents
 - Track application status
 - Receive notifications
+
+## Processing Students
+
+### Overview
+
+Processing Students (من طلاب المعالجات) are students who have been approved by the ministry but do not yet have a university ID. These students are marked with a special status and appear with muted styling in the admission system.
+
+### For Officers and Managers
+
+#### Viewing Processing Students
+1. Go to **Applications** → **Processing Students (من طلاب المعالجات)**
+2. Use the filter "⏳ Processing Students" in any admission file view
+3. Look for records with muted/gray styling
+
+#### Managing Processing Students
+1. **Update University ID**: Use the "Update University ID" button when available
+2. **Track Status**: Monitor students waiting for university ID assignment
+3. **Generate Reports**: Include processing students in admission reports
+
+### For Students
+
+Students approved without university ID:
+- Are marked as "Processing Students" in the system
+- Can continue with other admission requirements
+- Will be updated when university ID becomes available
+- Receive notifications when their status changes
+
+### Processing Student Workflow
+
+1. **Ministry Approval**: Student approved by ministry
+2. **No University ID**: Marked as processing student if no ID provided
+3. **Health Check**: Continue with medical assessment
+4. **Coordinator Review**: Academic evaluation continues
+5. **University ID Update**: ID added when available
+6. **Final Approval**: Complete admission process
 
 ## Portal Access
 
