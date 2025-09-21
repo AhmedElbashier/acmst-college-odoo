@@ -844,6 +844,33 @@
                                 </div>
                             </div>
                             
+                            <!-- Communication History -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-comments"></i> Communication History</h3>
+                                    <div class="acmst-card-actions">
+                                        <button class="acmst-btn acmst-btn-sm acmst-btn-outline" id="add-comment">
+                                            <i class="fa fa-plus"></i> Add Comment
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="acmst-communication-history" id="communication-history">
+                                    <div class="communication-item">
+                                        <div class="communication-icon">
+                                            <i class="fa fa-info-circle"></i>
+                                        </div>
+                                        <div class="communication-content">
+                                            <div class="communication-title">Application Status Update</div>
+                                            <div class="communication-message">Your application has been received and is being processed.</div>
+                                            <div class="communication-meta">
+                                                <span class="communication-author">System</span>
+                                                <span class="communication-time" t-esc="application.submission_date"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Status Summary -->
                             <div class="acmst-card">
                                 <div class="acmst-card-header">
@@ -907,14 +934,28 @@
             </t>
         </template>
 
-        <!-- Portal Health Check Template -->
+        <!-- Enhanced Portal Health Check Template -->
         <template id="portal_admission_health_check" name="Admission Health Check">
             <t t-call="web.frontend_layout">
                 <t t-set="title">Health Check - ACMST College</t>
                 <div class="acmst-portal-container">
                     <div class="acmst-portal-header">
-                        <h1>Health Check Form</h1>
-                        <p>Please complete the health questionnaire</p>
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-heartbeat"></i> Health Check Portal</h1>
+                                    <p class="mb-0">Complete your medical assessment for admission</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="acmst-health-status">
+                                        <span class="health-status-badge" t-att-class="'health-status-' + (health_check.state or 'pending')">
+                                            <i class="fa fa-heartbeat"></i>
+                                            <span t-esc="health_check.state or 'Pending'"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="acmst-card acmst-portal-health-check">

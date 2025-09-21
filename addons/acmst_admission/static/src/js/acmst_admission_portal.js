@@ -1541,6 +1541,298 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
                     console.error('Error sending test notifications:', error);
                     self.showNotification('error', 'Test Failed', 'There was an error sending test notifications. Please try again later.', 'exclamation-triangle');
                 });
+        },
+
+        // Communication system
+        setupCommunicationSystem: function () {
+            var self = this;
+            
+            // Handle add comment button
+            $('#add-comment').on('click', function(e) {
+                e.preventDefault();
+                self._showCommentModal();
+            });
+            
+            // Load communication history
+            this._loadCommunicationHistory();
+        },
+
+        _showCommentModal: function () {
+            var self = this;
+            var modal = $('<div class="comment-modal">' +
+                '<div class="comment-modal-content">' +
+                    '<div class="comment-modal-header">' +
+                        '<h5>Add Comment</h5>' +
+                        '<button class="btn-close-modal">&times;</button>' +
+                    '</div>' +
+                    '<div class="comment-modal-body">' +
+                        '<form id="comment-form">' +
+                            '<div class="mb-3">' +
+                                '<label for="comment-type" class="form-label">Comment Type</label>' +
+                                '<select class="form-select" id="comment-type" required>' +
+                                    '<option value="question">Question</option>' +
+                                    '<option value="concern">Concern</option>' +
+                                    '<option value="update">Status Update Request</option>' +
+                                    '<option value="other">Other</option>' +
+                                '</select>' +
+                            '</div>' +
+                            '<div class="mb-3">' +
+                                '<label for="comment-message" class="form-label">Message</label>' +
+                                '<textarea class="form-control" id="comment-message" rows="4" required placeholder="Please describe your comment or question..."></textarea>' +
+                            '</div>' +
+                        '</form>' +
+                    '</div>' +
+                    '<div class="comment-modal-footer">' +
+                        '<button type="button" class="acmst-btn acmst-btn-secondary" id="cancel-comment">Cancel</button>' +
+                        '<button type="button" class="acmst-btn acmst-btn-primary" id="submit-comment">Submit Comment</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>');
+            
+            $('body').append(modal);
+            
+            // Handle modal events
+            modal.find('.btn-close-modal, #cancel-comment').on('click', function() {
+                modal.remove();
+            });
+            
+            modal.find('#submit-comment').on('click', function() {
+                self._submitComment(modal);
+            });
+            
+            modal.on('click', function(e) {
+                if (e.target === modal[0]) {
+                    modal.remove();
+                }
+            });
+        },
+
+        _submitComment: function (modal) {
+            var self = this;
+            var type = modal.find('#comment-type').val();
+            var message = modal.find('#comment-message').val();
+            
+            if (!message.trim()) {
+                self.showNotification('error', 'Validation Error', 'Please enter a message.', 'exclamation-triangle');
+                return;
+            }
+            
+            ajax.jsonRpc('/admission/communication/add', 'call', {
+                type: type,
+                message: message
+            }).then(function(result) {
+                if (result.success) {
+                    self.showNotification('success', 'Comment Added', 'Your comment has been submitted successfully.', 'check-circle');
+                    modal.remove();
+                    self._loadCommunicationHistory();
+                } else {
+                    self.showNotification('error', 'Submission Failed', 'There was an error submitting your comment. Please try again.', 'exclamation-triangle');
+                }
+            }).catch(function(error) {
+                console.error('Error submitting comment:', error);
+                self.showNotification('error', 'Submission Failed', 'There was an error submitting your comment. Please try again.', 'exclamation-triangle');
+            });
+        },
+
+        _loadCommunicationHistory: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/communication/history', 'call')
+                .then(function(result) {
+                    if (result.success) {
+                        self._displayCommunicationHistory(result.communications);
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error loading communication history:', error);
+                });
+        },
+
+        _displayCommunicationHistory: function (communications) {
+            var $container = $('#communication-history');
+            $container.empty();
+            
+            if (communications.length === 0) {
+                $container.html('<div class="text-center text-muted py-4">No communications yet.</div>');
+                return;
+            }
+            
+            communications.forEach(function(comm) {
+                var $item = $('<div class="communication-item">' +
+                    '<div class="communication-icon">' +
+                        '<i class="fa fa-' + (comm.icon || 'comment') + '"></i>' +
+                    '</div>' +
+                    '<div class="communication-content">' +
+                        '<div class="communication-title">' + comm.title + '</div>' +
+                        '<div class="communication-message">' + comm.message + '</div>' +
+                        '<div class="communication-meta">' +
+                            '<span class="communication-author">' + comm.author + '</span>' +
+                            '<span class="communication-time">' + comm.timestamp + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>');
+                
+                $container.append($item);
+            });
+        },
+
+        // Health Check Portal functionality
+        setupHealthCheckPortal: function () {
+            var self = this;
+            
+            // BMI Calculator
+            this._setupBMICalculator();
+            
+            // Appointment booking
+            this._setupAppointmentBooking();
+            
+            // Form validation
+            this._setupHealthFormValidation();
+            
+            // Progress tracking
+            this._updateHealthProgress();
+        },
+
+        _setupBMICalculator: function () {
+            var self = this;
+            
+            $('#height, #weight').on('input', function() {
+                var height = parseFloat($('#height').val());
+                var weight = parseFloat($('#weight').val());
+                
+                if (height && weight && height > 0 && weight > 0) {
+                    var bmi = weight / Math.pow(height / 100, 2);
+                    var bmiRounded = Math.round(bmi * 10) / 10;
+                    
+                    $('#bmi').val(bmiRounded);
+                    
+                    // Add BMI calculator display if it doesn't exist
+                    if (!$('.bmi-calculator').length) {
+                        var bmiCategory = self._getBMICategory(bmi);
+                        var $bmiDisplay = $('<div class="bmi-calculator">' +
+                            '<div class="bmi-result">BMI: ' + bmiRounded + '</div>' +
+                            '<div class="bmi-category">Category: ' + bmiCategory + '</div>' +
+                        '</div>');
+                        
+                        $('#weight').closest('.acmst-form-group').after($bmiDisplay);
+                    } else {
+                        var bmiCategory = self._getBMICategory(bmi);
+                        $('.bmi-result').text('BMI: ' + bmiRounded);
+                        $('.bmi-category').text('Category: ' + bmiCategory);
+                    }
+                }
+            });
+        },
+
+        _getBMICategory: function (bmi) {
+            if (bmi < 18.5) return 'Underweight';
+            if (bmi < 25) return 'Normal weight';
+            if (bmi < 30) return 'Overweight';
+            return 'Obese';
+        },
+
+        _setupAppointmentBooking: function () {
+            var self = this;
+            
+            $('#book-appointment').on('click', function(e) {
+                e.preventDefault();
+                self._bookAppointment();
+            });
+        },
+
+        _bookAppointment: function () {
+            var self = this;
+            var selectedSlot = $('input[name="appointment_slot"]:checked').val();
+            
+            if (!selectedSlot) {
+                self._getNotificationSystem().showNotification('error', 'No Slot Selected', 'Please select an appointment time.', 'exclamation-triangle');
+                return;
+            }
+            
+            ajax.jsonRpc('/admission/health-check/book-appointment', 'call', {
+                slot: selectedSlot
+            }).then(function(result) {
+                if (result.success) {
+                    self._getNotificationSystem().showNotification('success', 'Appointment Booked', 'Your appointment has been scheduled successfully.', 'calendar-check');
+                    self._updateHealthProgress();
+                } else {
+                    self._getNotificationSystem().showNotification('error', 'Booking Failed', 'There was an error booking your appointment. Please try again.', 'exclamation-triangle');
+                }
+            }).catch(function(error) {
+                console.error('Error booking appointment:', error);
+                self._getNotificationSystem().showNotification('error', 'Booking Failed', 'There was an error booking your appointment. Please try again.', 'exclamation-triangle');
+            });
+        },
+
+        _setupHealthFormValidation: function () {
+            var self = this;
+            
+            // Height validation
+            $('#height').on('input', function() {
+                var height = parseFloat($(this).val());
+                if (height && (height < 100 || height > 250)) {
+                    self._showFieldError($(this), 'Height must be between 100-250 cm');
+                } else {
+                    self._clearFieldError($(this));
+                }
+            });
+            
+            // Weight validation
+            $('#weight').on('input', function() {
+                var weight = parseFloat($(this).val());
+                if (weight && (weight < 30 || weight > 200)) {
+                    self._showFieldError($(this), 'Weight must be between 30-200 kg');
+                } else {
+                    self._clearFieldError($(this));
+                }
+            });
+            
+            // Phone validation for emergency contact
+            $('input[name="emergency_contact_phone"]').on('input', function() {
+                var phone = $(this).val();
+                if (phone && !self._validatePhone(phone)) {
+                    self._showFieldError($(this), 'Please enter a valid phone number');
+                } else {
+                    self._clearFieldError($(this));
+                }
+            });
+        },
+
+        _updateHealthProgress: function () {
+            // Update progress steps based on current state
+            var currentState = $('.health-status-badge').attr('class').match(/health-status-(\w+)/);
+            if (currentState) {
+                var state = currentState[1];
+                
+                // Reset all steps
+                $('.progress-step').removeClass('completed active');
+                
+                // Mark completed steps
+                if (state !== 'pending') {
+                    $('.progress-step').first().addClass('completed');
+                }
+                
+                if (['appointment_scheduled', 'appointment_completed', 'approved', 'rejected'].includes(state)) {
+                    $('.progress-step').eq(1).addClass('completed');
+                }
+                
+                if (['appointment_completed', 'approved', 'rejected'].includes(state)) {
+                    $('.progress-step').eq(2).addClass('completed');
+                }
+                
+                if (['approved', 'rejected'].includes(state)) {
+                    $('.progress-step').eq(3).addClass('completed');
+                }
+                
+                // Mark active step
+                if (state === 'form_completed') {
+                    $('.progress-step').eq(1).addClass('active');
+                } else if (state === 'appointment_scheduled') {
+                    $('.progress-step').eq(2).addClass('active');
+                } else if (state === 'appointment_completed') {
+                    $('.progress-step').eq(3).addClass('active');
+                }
+            }
         }
     });
 

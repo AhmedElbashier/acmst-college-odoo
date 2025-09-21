@@ -1550,6 +1550,504 @@ textarea.form-control:focus {
     }
 }
 
+/* Communication History */
+.acmst-communication-history {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px 0;
+}
+
+.communication-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 15px 0;
+    border-bottom: 1px solid #f8f9fa;
+    position: relative;
+}
+
+.communication-item:last-child {
+    border-bottom: none;
+}
+
+.communication-item::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.communication-item:last-child::before {
+    display: none;
+}
+
+.communication-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e3f2fd;
+    color: #1976d2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.communication-content {
+    flex: 1;
+    background: #f8f9fa;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border-left: 3px solid #1976d2;
+}
+
+.communication-title {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.communication-message {
+    color: #6c757d;
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.communication-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #adb5bd;
+}
+
+.communication-author {
+    font-weight: 500;
+    color: #1976d2;
+}
+
+.communication-time {
+    font-style: italic;
+}
+
+/* Comment Form Modal */
+.comment-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.comment-modal-content {
+    background: white;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90%;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.comment-modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #e9ecef;
+    background: #f8f9fa;
+}
+
+.comment-modal-body {
+    padding: 20px;
+}
+
+.comment-modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #e9ecef;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Real-time Status Updates Enhancement */
+.acmst-live-indicator.offline {
+    color: #dc3545;
+}
+
+.acmst-live-indicator.offline .live-dot {
+    background: #dc3545;
+    animation: none;
+}
+
+.acmst-live-indicator.offline .live-text::after {
+    content: ' (Offline)';
+    font-size: 10px;
+}
+
+/* Status Change Notifications */
+.status-change-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    padding: 15px;
+    border-left: 4px solid #1976d2;
+    max-width: 350px;
+    z-index: 9999;
+    animation: slideInRight 0.3s ease-out;
+}
+
+.status-change-notification.success {
+    border-left-color: #28a745;
+}
+
+.status-change-notification.warning {
+    border-left-color: #ffc107;
+}
+
+.status-change-notification.error {
+    border-left-color: #dc3545;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Health Check Portal Styles */
+.acmst-health-status {
+    text-align: center;
+}
+
+.health-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.health-status-pending {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.health-status-form_completed {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.health-status-appointment_scheduled {
+    background: #e2e3e5;
+    color: #383d41;
+    border: 1px solid #d6d8db;
+}
+
+.health-status-appointment_completed {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.health-status-approved {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.health-status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Health Check Progress */
+.acmst-health-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.progress-step {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    opacity: 0.5;
+}
+
+.progress-step.completed {
+    opacity: 1;
+    background: #f8fff8;
+    border: 1px solid #d4edda;
+}
+
+.progress-step.active {
+    opacity: 1;
+    background: #e3f2fd;
+    border: 1px solid #1976d2;
+    transform: translateX(5px);
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e9ecef;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.progress-step.completed .step-icon {
+    background: #28a745;
+    color: white;
+}
+
+.progress-step.active .step-icon {
+    background: #1976d2;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.step-content h5 {
+    margin: 0 0 5px 0;
+    color: #495057;
+    font-weight: 600;
+}
+
+.step-content p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+/* Appointment Scheduler */
+.acmst-appointment-scheduler {
+    padding: 15px 0;
+}
+
+.available-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.slot-item {
+    position: relative;
+}
+
+.slot-item input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.slot-item label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.slot-item label:hover {
+    border-color: #1976d2;
+    background: #f8f9fa;
+}
+
+.slot-item input[type="radio"]:checked + label {
+    border-color: #1976d2;
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.slot-date {
+    font-weight: 600;
+    color: #495057;
+}
+
+.slot-time {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.slot-item input[type="radio"]:checked + label .slot-date,
+.slot-item input[type="radio"]:checked + label .slot-time {
+    color: #1976d2;
+}
+
+/* Status Info */
+.acmst-status-info {
+    padding: 15px 0;
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+
+.status-label {
+    font-weight: 500;
+    color: #495057;
+}
+
+/* Health Check Form Enhancements */
+.acmst-portal-health-check .acmst-form-group {
+    margin-bottom: 20px;
+}
+
+.acmst-portal-health-check .acmst-form-group label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.acmst-portal-health-check .acmst-form-group label.required::after {
+    content: ' *';
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.acmst-portal-health-check .form-control {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.acmst-portal-health-check .form-control:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+}
+
+/* BMI Calculator */
+.bmi-calculator {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+    border-left: 3px solid #1976d2;
+}
+
+.bmi-result {
+    font-weight: 600;
+    color: #1976d2;
+    font-size: 16px;
+}
+
+.bmi-category {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+/* Medical Form Validation */
+.medical-form-error {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
+}
+
+.medical-form-error.show {
+    display: block;
+}
+
+/* Health Check Progress Bar */
+.health-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.health-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+/* Mobile Responsive for Health Check */
+@media (max-width: 768px) {
+    .acmst-health-progress {
+        gap: 15px;
+    }
+    
+    .progress-step {
+        padding: 12px;
+    }
+    
+    .step-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+    
+    .available-slots {
+        gap: 8px;
+    }
+    
+    .slot-item label {
+        padding: 10px 12px;
+    }
+    
+    .health-status-badge {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
+
 /* Loading States */
 .wizard-loading {
     position: absolute;
