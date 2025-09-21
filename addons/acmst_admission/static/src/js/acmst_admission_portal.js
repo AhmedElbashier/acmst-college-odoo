@@ -1833,6 +1833,114 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
                     $('.progress-step').eq(3).addClass('active');
                 }
             }
+        },
+
+        // Conditions Portal functionality
+        setupConditionsPortal: function () {
+            var self = this;
+            
+            // Load conditions data
+            this._loadConditionsData();
+            
+            // Setup event handlers
+            this._setupConditionsEventHandlers();
+            
+            // Setup filtering
+            this._setupConditionsFiltering();
+            
+            // Setup deadline tracking
+            this._setupDeadlineTracking();
+        },
+
+        _loadConditionsData: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/conditions/list', 'call')
+                .then(function(result) {
+                    if (result.success) {
+                        self._displayConditions(result.conditions);
+                        self._updateConditionsStats(result.stats);
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error loading conditions:', error);
+                });
+        },
+
+        _displayConditions: function (conditions) {
+            var $container = $('#conditions-list');
+            $container.empty();
+            
+            if (conditions.length === 0) {
+                $container.html('<div class="text-center text-muted py-4">No conditions found.</div>');
+                return;
+            }
+            
+            conditions.forEach(function(condition) {
+                var $condition = self._createConditionItem(condition);
+                $container.append($condition);
+            });
+        },
+
+        _createConditionItem: function (condition) {
+            var self = this;
+            var statusClass = 'status-' + condition.status;
+            var priorityClass = condition.priority || 'medium';
+            
+            var $condition = $('<div class="condition-item" data-condition-id="' + condition.id + '">' +
+                '<div class="condition-header">' +
+                    '<div class="condition-title">' +
+                        '<h5>' + condition.title + '</h5>' +
+                        '<span class="condition-type">' + condition.type + '</span>' +
+                    '</div>' +
+                    '<div class="condition-status">' +
+                        '<span class="status-badge ' + statusClass + '">' + condition.status + '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="condition-content">' +
+                    '<p class="condition-description">' + condition.description + '</p>' +
+                    '<div class="condition-details">' +
+                        '<div class="detail-row">' +
+                            '<span class="detail-label">Deadline:</span>' +
+                            '<span class="detail-value deadline">' + condition.deadline + '</span>' +
+                        '</div>' +
+                        '<div class="detail-row">' +
+                            '<span class="detail-label">Priority:</span>' +
+                            '<span class="detail-value priority ' + priorityClass + '">' + condition.priority + '</span>' +
+                        '</div>' +
+                        '<div class="detail-row">' +
+                            '<span class="detail-label">Documents Required:</span>' +
+                            '<span class="detail-value">' + condition.documents_required + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="condition-actions">' +
+                        '<button class="acmst-btn acmst-btn-primary acmst-btn-sm" data-action="upload-documents" data-condition-id="' + condition.id + '">' +
+                            '<i class="fa fa-upload"></i> Upload Documents' +
+                        '</button>' +
+                        '<button class="acmst-btn acmst-btn-outline acmst-btn-sm" data-action="view-details" data-condition-id="' + condition.id + '">' +
+                            '<i class="fa fa-eye"></i> View Details' +
+                        '</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>');
+            
+            return $condition;
+        },
+
+        _updateConditionsStats: function (stats) {
+            $('.stat-item.completed .stat-number').text(stats.completed || 0);
+            $('.stat-item.pending .stat-number').text(stats.pending || 0);
+            $('.stat-item.overdue .stat-number').text(stats.overdue || 0);
+            
+            // Update progress bar
+            var progress = stats.progress || 0;
+            $('.progress-bar-large .progress-fill').css('width', progress + '%');
+            $('.progress-percentage').text(progress + '%');
+            
+            // Update progress details
+            $('.detail-item .detail-value').eq(0).text(stats.total || 0);
+            $('.detail-item .detail-value.completed').text(stats.completed || 0);
+            $('.detail-item .detail-value.pending').text((stats.total || 0) - (stats.completed || 0));
         }
     });
 

@@ -1221,6 +1221,230 @@
             </button>
         </template>
 
+        <!-- Conditions Portal Template -->
+        <template id="portal_admission_conditions" name="Admission Conditions Portal">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Conditions & Requirements - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-tasks"></i> Conditions & Requirements</h1>
+                                    <p class="mb-0">Complete all conditional requirements for your admission</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="acmst-conditions-summary">
+                                        <div class="conditions-stats">
+                                            <span class="stat-item completed">
+                                                <i class="fa fa-check-circle"></i>
+                                                <span class="stat-number" t-esc="conditions_completed or 0"/>
+                                                <span class="stat-label">Completed</span>
+                                            </span>
+                                            <span class="stat-item pending">
+                                                <i class="fa fa-clock"></i>
+                                                <span class="stat-number" t-esc="conditions_pending or 0"/>
+                                                <span class="stat-label">Pending</span>
+                                            </span>
+                                            <span class="stat-item overdue">
+                                                <i class="fa fa-exclamation-triangle"></i>
+                                                <span class="stat-number" t-esc="conditions_overdue or 0"/>
+                                                <span class="stat-label">Overdue</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            <!-- Conditions Progress Overview -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-chart-line"></i> Overall Progress</h3>
+                                    <div class="acmst-card-actions">
+                                        <button class="acmst-btn acmst-btn-sm acmst-btn-outline" id="refresh-conditions">
+                                            <i class="fa fa-refresh"></i> Refresh
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="acmst-conditions-progress">
+                                    <div class="progress-overview">
+                                        <div class="progress-bar-large">
+                                            <div class="progress-fill" t-att-style="'width: ' + (conditions_progress or 0) + '%'"></div>
+                                        </div>
+                                        <div class="progress-text">
+                                            <span class="progress-percentage" t-esc="(conditions_progress or 0) + '%'"/>
+                                            <span class="progress-label">Complete</span>
+                                        </div>
+                                    </div>
+                                    <div class="progress-details">
+                                        <div class="detail-item">
+                                            <span class="detail-label">Total Conditions:</span>
+                                            <span class="detail-value" t-esc="total_conditions or 0"/>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Completed:</span>
+                                            <span class="detail-value completed" t-esc="conditions_completed or 0"/>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Remaining:</span>
+                                            <span class="detail-value pending" t-esc="(total_conditions or 0) - (conditions_completed or 0)"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Conditions List -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-list-check"></i> Conditional Requirements</h3>
+                                    <div class="acmst-card-actions">
+                                        <div class="filter-dropdown">
+                                            <select class="form-select" id="condition-filter">
+                                                <option value="all">All Conditions</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="overdue">Overdue</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="acmst-conditions-list" id="conditions-list">
+                                    <!-- Conditions will be populated by JavaScript -->
+                                    <div class="condition-item">
+                                        <div class="condition-header">
+                                            <div class="condition-title">
+                                                <h5>Submit Official Transcripts</h5>
+                                                <span class="condition-type">Academic</span>
+                                            </div>
+                                            <div class="condition-status">
+                                                <span class="status-badge status-pending">Pending</span>
+                                            </div>
+                                        </div>
+                                        <div class="condition-content">
+                                            <p class="condition-description">
+                                                Submit official transcripts from all previously attended institutions. 
+                                                Transcripts must be sealed and sent directly from the institution.
+                                            </p>
+                                            <div class="condition-details">
+                                                <div class="detail-row">
+                                                    <span class="detail-label">Deadline:</span>
+                                                    <span class="detail-value deadline">March 15, 2024</span>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <span class="detail-label">Priority:</span>
+                                                    <span class="detail-value priority high">High</span>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <span class="detail-label">Documents Required:</span>
+                                                    <span class="detail-value">Official Transcripts (2)</span>
+                                                </div>
+                                            </div>
+                                            <div class="condition-actions">
+                                                <button class="acmst-btn acmst-btn-primary acmst-btn-sm" data-action="upload-documents">
+                                                    <i class="fa fa-upload"></i> Upload Documents
+                                                </button>
+                                                <button class="acmst-btn acmst-btn-outline acmst-btn-sm" data-action="view-details">
+                                                    <i class="fa fa-eye"></i> View Details
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <!-- Quick Actions -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-bolt"></i> Quick Actions</h3>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="acmst-btn acmst-btn-primary" id="upload-documents">
+                                        <i class="fa fa-upload"></i> Upload Documents
+                                    </button>
+                                    <button class="acmst-btn acmst-btn-secondary" id="view-guidance">
+                                        <i class="fa fa-question-circle"></i> View Guidance
+                                    </button>
+                                    <button class="acmst-btn acmst-btn-outline" id="contact-support">
+                                        <i class="fa fa-headset"></i> Contact Support
+                                    </button>
+                                    <a href="/admission/status" class="acmst-btn acmst-btn-outline">
+                                        <i class="fa fa-arrow-left"></i> Back to Status
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Upcoming Deadlines -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-calendar-alt"></i> Upcoming Deadlines</h3>
+                                </div>
+                                <div class="acmst-deadlines-list">
+                                    <div class="deadline-item urgent">
+                                        <div class="deadline-icon">
+                                            <i class="fa fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="deadline-content">
+                                            <div class="deadline-title">Official Transcripts</div>
+                                            <div class="deadline-date">Due in 3 days</div>
+                                        </div>
+                                    </div>
+                                    <div class="deadline-item warning">
+                                        <div class="deadline-icon">
+                                            <i class="fa fa-clock"></i>
+                                        </div>
+                                        <div class="deadline-content">
+                                            <div class="deadline-title">English Proficiency Test</div>
+                                            <div class="deadline-date">Due in 1 week</div>
+                                        </div>
+                                    </div>
+                                    <div class="deadline-item normal">
+                                        <div class="deadline-icon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <div class="deadline-content">
+                                            <div class="deadline-title">Financial Documents</div>
+                                            <div class="deadline-date">Due in 2 weeks</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Help & Support -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-life-ring"></i> Need Help?</h3>
+                                </div>
+                                <div class="acmst-help-resources">
+                                    <div class="help-item">
+                                        <i class="fa fa-book"></i>
+                                        <span>Step-by-step Guide</span>
+                                    </div>
+                                    <div class="help-item">
+                                        <i class="fa fa-question-circle"></i>
+                                        <span>FAQ</span>
+                                    </div>
+                                    <div class="help-item">
+                                        <i class="fa fa-video"></i>
+                                        <span>Video Tutorials</span>
+                                    </div>
+                                    <div class="help-item">
+                                        <i class="fa fa-comments"></i>
+                                        <span>Live Chat</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
         <!-- Notification Preferences Template -->
         <template id="notification_preferences" name="Notification Preferences">
             <div class="acmst-card">
