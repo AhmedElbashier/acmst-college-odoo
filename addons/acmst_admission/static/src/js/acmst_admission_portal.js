@@ -3015,6 +3015,903 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
         }
     });
 
+    // API Integrations Widget
+    publicWidget.registry.PortalAPIIntegrations = publicWidget.Widget.extend({
+        selector: '.acmst-portal-container',
+        events: {
+            'click #integrations-tab': '_onIntegrationsClick',
+        },
+
+        start: function () {
+            var self = this;
+            return this._super.apply(this, arguments).then(function () {
+                if (self.$el.find('#integrations-tab').length) {
+                    self.setupAPIIntegrations();
+                }
+            });
+        },
+
+        setupAPIIntegrations: function () {
+            var self = this;
+            
+            // Initialize integrations functionality
+            this._loadIntegrationData();
+            this._setupIntegrationEventHandlers();
+            this._setupIntegrationFilters();
+        },
+
+        _loadIntegrationData: function () {
+            var self = this;
+            
+            // Load integration status
+            this._loadIntegrationStatus();
+            
+            // Load available integrations
+            this._loadAvailableIntegrations();
+            
+            // Load integration logs
+            this._loadIntegrationLogs();
+            
+            // Load API usage stats
+            this._loadAPIUsageStats();
+        },
+
+        _loadIntegrationStatus: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/integrations/status', 'call')
+            .then(function(result) {
+                if (result.success) {
+                    self._updateIntegrationStatus(result.status);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error loading integration status:', error);
+            });
+        },
+
+        _updateIntegrationStatus: function (status) {
+            $('#active-integrations').text(status.active || 0);
+            $('#error-integrations').text(status.errors || 0);
+            $('#pending-integrations').text(status.pending || 0);
+            $('#api-calls-today').text(status.api_calls_today || 0);
+        },
+
+        _loadAvailableIntegrations: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/integrations/available', 'call')
+            .then(function(result) {
+                if (result.success) {
+                    self._displayAvailableIntegrations(result.integrations);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error loading available integrations:', error);
+            });
+        },
+
+        _displayAvailableIntegrations: function (integrations) {
+            var $container = $('#integrations-grid');
+            $container.empty();
+            
+            if (integrations.length === 0) {
+                $container.html('<div class="text-center py-5">' +
+                    '<i class="fa fa-plug fa-3x text-muted mb-3"></i>' +
+                    '<h4 class="text-muted">No integrations available</h4>' +
+                    '<p class="text-muted">Check back later for new integrations</p>' +
+                '</div>');
+                return;
+            }
+            
+            integrations.forEach(function(integration) {
+                var $card = self._createIntegrationCard(integration);
+                $container.append($card);
+            });
+        },
+
+        _createIntegrationCard: function (integration) {
+            var $card = $('<div class="integration-card" data-id="' + integration.id + '">' +
+                '<div class="integration-card-header">' +
+                    '<div class="integration-card-title">' + integration.name + '</div>' +
+                    '<div class="integration-card-category">' + integration.category + '</div>' +
+                '</div>' +
+                '<div class="integration-card-content">' +
+                    '<div class="integration-card-description">' + integration.description + '</div>' +
+                    '<div class="integration-card-features">' +
+                        integration.features.map(function(feature) {
+                            return '<span class="integration-feature">' + feature + '</span>';
+                        }).join('') +
+                    '</div>' +
+                '</div>' +
+                '<div class="integration-card-actions">' +
+                    '<button class="btn btn-sm btn-outline-primary" data-action="configure">Configure</button>' +
+                    '<button class="btn btn-sm btn-outline-secondary" data-action="test">Test</button>' +
+                '</div>' +
+            '</div>');
+            
+            return $card;
+        },
+
+        _loadIntegrationLogs: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/integrations/logs', 'call')
+            .then(function(result) {
+                if (result.success) {
+                    self._displayIntegrationLogs(result.logs);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error loading integration logs:', error);
+            });
+        },
+
+        _displayIntegrationLogs: function (logs) {
+            var $container = $('#integration-logs');
+            $container.empty();
+            
+            if (logs.length === 0) {
+                $container.html('<div class="text-center text-muted py-3">No recent activity</div>');
+                return;
+            }
+            
+            logs.forEach(function(log) {
+                var $entry = self._createLogEntry(log);
+                $container.append($entry);
+            });
+        },
+
+        _createLogEntry: function (log) {
+            var iconClass = 'fa-' + (log.type === 'success' ? 'check-circle' : 
+                                    log.type === 'error' ? 'exclamation-triangle' :
+                                    log.type === 'warning' ? 'exclamation-circle' : 'info-circle');
+            
+            var $entry = $('<div class="log-entry">' +
+                '<div class="log-icon ' + log.type + '">' +
+                    '<i class="fa ' + iconClass + '"></i>' +
+                '</div>' +
+                '<div class="log-content">' +
+                    '<div class="log-title">' + log.title + '</div>' +
+                    '<div class="log-description">' + log.description + '</div>' +
+                    '<div class="log-time">' + log.time + '</div>' +
+                '</div>' +
+            '</div>');
+            
+            return $entry;
+        },
+
+        _loadAPIUsageStats: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/integrations/usage-stats', 'call')
+            .then(function(result) {
+                if (result.success) {
+                    self._displayAPIUsageStats(result.stats);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error loading API usage stats:', error);
+            });
+        },
+
+        _displayAPIUsageStats: function (stats) {
+            var $container = $('#api-usage-stats');
+            $container.empty();
+            
+            stats.forEach(function(stat) {
+                var $item = self._createUsageStatItem(stat);
+                $container.append($item);
+            });
+        },
+
+        _createUsageStatItem: function (stat) {
+            var $item = $('<div class="usage-stat-item">' +
+                '<div class="usage-stat-label">' + stat.label + '</div>' +
+                '<div class="usage-stat-value">' + stat.value + '</div>' +
+                '<div class="usage-stat-bar">' +
+                    '<div class="usage-stat-fill" style="width: ' + stat.percentage + '%"></div>' +
+                '</div>' +
+            '</div>');
+            
+            return $item;
+        },
+
+        _setupIntegrationEventHandlers: function () {
+            var self = this;
+            
+            // Refresh button
+            $('#refresh-integrations').on('click', function() {
+                self._loadIntegrationData();
+            });
+            
+            // Add integration button
+            $('#add-integration').on('click', function() {
+                self._showAddIntegrationModal();
+            });
+            
+            // Integration actions
+            $(document).on('click', '[data-action="configure"]', function(e) {
+                e.preventDefault();
+                var integrationId = $(this).closest('[data-id]').data('id');
+                self._configureIntegration(integrationId);
+            });
+            
+            $(document).on('click', '[data-action="test"]', function(e) {
+                e.preventDefault();
+                var integrationId = $(this).closest('[data-id]').data('id');
+                self._testIntegration(integrationId);
+            });
+        },
+
+        _setupIntegrationFilters: function () {
+            var self = this;
+            
+            // Category filter
+            $('#integration-category').on('change', function() {
+                var category = $(this).val();
+                self._filterIntegrationsByCategory(category);
+            });
+        },
+
+        _filterIntegrationsByCategory: function (category) {
+            var $cards = $('.integration-card');
+            
+            if (category === '') {
+                $cards.show();
+            } else {
+                $cards.hide();
+                $cards.filter('[data-category="' + category + '"]').show();
+            }
+        },
+
+        _configureIntegration: function (integrationId) {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/integrations/configure', 'call', {
+                integration_id: integrationId
+            })
+            .then(function(result) {
+                if (result.success) {
+                    self._showIntegrationConfigModal(result.config);
+                } else {
+                    self._getNotificationSystem().showNotification('error', 'Configuration Failed', 'There was an error configuring the integration.', 'exclamation-triangle');
+                }
+            })
+            .catch(function(error) {
+                console.error('Error configuring integration:', error);
+                self._getNotificationSystem().showNotification('error', 'Configuration Failed', 'There was an error configuring the integration.', 'exclamation-triangle');
+            });
+        },
+
+        _testIntegration: function (integrationId) {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/integrations/test', 'call', {
+                integration_id: integrationId
+            })
+            .then(function(result) {
+                if (result.success) {
+                    self._getNotificationSystem().showNotification('success', 'Test Successful', 'The integration test was successful.', 'check-circle');
+                    self._loadIntegrationLogs();
+                } else {
+                    self._getNotificationSystem().showNotification('error', 'Test Failed', 'The integration test failed: ' + result.message, 'exclamation-triangle');
+                }
+            })
+            .catch(function(error) {
+                console.error('Error testing integration:', error);
+                self._getNotificationSystem().showNotification('error', 'Test Failed', 'There was an error testing the integration.', 'exclamation-triangle');
+            });
+        },
+
+        _showAddIntegrationModal: function () {
+            // This would show a modal to add new integrations
+            var $modal = $('<div class="integration-modal">' +
+                '<div class="integration-modal-content">' +
+                    '<div class="integration-modal-header">' +
+                        '<div class="integration-modal-title">Add New Integration</div>' +
+                        '<button class="integration-modal-close">&times;</button>' +
+                    '</div>' +
+                    '<div class="integration-modal-body">' +
+                        '<p>Select an integration to add to your system:</p>' +
+                        '<div class="integration-options">' +
+                            '<div class="integration-option" data-type="payment">' +
+                                '<i class="fa fa-credit-card"></i>' +
+                                '<span>Payment Gateway</span>' +
+                            '</div>' +
+                            '<div class="integration-option" data-type="communication">' +
+                                '<i class="fa fa-envelope"></i>' +
+                                '<span>Email Service</span>' +
+                            '</div>' +
+                            '<div class="integration-option" data-type="document">' +
+                                '<i class="fa fa-file"></i>' +
+                                '<span>Document Storage</span>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="integration-modal-footer">' +
+                        '<button class="btn btn-secondary" id="cancel-add-integration">Cancel</button>' +
+                        '<button class="btn btn-primary" id="confirm-add-integration">Add Integration</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>');
+            
+            $('body').append($modal);
+            
+            // Close modal handlers
+            $modal.find('.integration-modal-close, #cancel-add-integration').on('click', function() {
+                $modal.remove();
+            });
+            
+            // Integration option selection
+            $modal.find('.integration-option').on('click', function() {
+                $modal.find('.integration-option').removeClass('selected');
+                $(this).addClass('selected');
+            });
+            
+            // Confirm add integration
+            $modal.find('#confirm-add-integration').on('click', function() {
+                var selectedType = $modal.find('.integration-option.selected').data('type');
+                if (selectedType) {
+                    self._addIntegration(selectedType);
+                    $modal.remove();
+                }
+            });
+        },
+
+        _addIntegration: function (type) {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/integrations/add', 'call', {
+                type: type
+            })
+            .then(function(result) {
+                if (result.success) {
+                    self._getNotificationSystem().showNotification('success', 'Integration Added', 'The integration has been added successfully.', 'check-circle');
+                    self._loadAvailableIntegrations();
+                } else {
+                    self._getNotificationSystem().showNotification('error', 'Add Failed', 'There was an error adding the integration.', 'exclamation-triangle');
+                }
+            })
+            .catch(function(error) {
+                console.error('Error adding integration:', error);
+                self._getNotificationSystem().showNotification('error', 'Add Failed', 'There was an error adding the integration.', 'exclamation-triangle');
+            });
+        },
+
+        _showIntegrationConfigModal: function (config) {
+            // This would show a modal to configure the integration
+            console.log('Showing configuration modal for:', config);
+        }
+    });
+
+    // Advanced Search Widget
+    publicWidget.registry.PortalAdvancedSearch = publicWidget.Widget.extend({
+        selector: '.acmst-portal-container',
+        events: {
+            'click #search-tab': '_onSearchClick',
+        },
+
+        start: function () {
+            var self = this;
+            return this._super.apply(this, arguments).then(function () {
+                if (self.$el.find('#search-tab').length) {
+                    self.setupAdvancedSearch();
+                }
+            });
+        },
+
+        setupAdvancedSearch: function () {
+            var self = this;
+            
+            // Initialize search functionality
+            this._setupSearchInput();
+            this._setupSearchFilters();
+            this._setupSearchResults();
+            this._setupSavedSearches();
+            
+            // Load initial data
+            this._loadSavedSearches();
+        },
+
+        _setupSearchInput: function () {
+            var self = this;
+            var searchTimeout;
+            
+            // Quick search input
+            $('#quick-search').on('input', function() {
+                var query = $(this).val();
+                
+                clearTimeout(searchTimeout);
+                
+                if (query.length >= 2) {
+                    searchTimeout = setTimeout(function() {
+                        self._getSearchSuggestions(query);
+                    }, 300);
+                } else {
+                    $('#search-suggestions').hide();
+                }
+            });
+            
+            // Search button
+            $('#search-btn').on('click', function() {
+                self._performSearch();
+            });
+            
+            // Enter key search
+            $('#quick-search').on('keypress', function(e) {
+                if (e.which === 13) {
+                    self._performSearch();
+                }
+            });
+            
+            // Hide suggestions when clicking outside
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.search-input-group').length) {
+                    $('#search-suggestions').hide();
+                }
+            });
+        },
+
+        _getSearchSuggestions: function (query) {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/search/suggestions', 'call', {
+                query: query
+            })
+            .then(function(result) {
+                if (result.success) {
+                    self._displaySuggestions(result.suggestions);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error getting search suggestions:', error);
+            });
+        },
+
+        _displaySuggestions: function (suggestions) {
+            var $container = $('#search-suggestions');
+            $container.empty();
+            
+            if (suggestions.length === 0) {
+                $container.hide();
+                return;
+            }
+            
+            suggestions.forEach(function(suggestion) {
+                var $item = $('<div class="suggestion-item" data-query="' + suggestion.query + '">' +
+                    '<div class="suggestion-title">' + suggestion.title + '</div>' +
+                    '<div class="suggestion-description">' + suggestion.description + '</div>' +
+                '</div>');
+                
+                $item.on('click', function() {
+                    $('#quick-search').val(suggestion.query);
+                    $container.hide();
+                    self._performSearch();
+                });
+                
+                $container.append($item);
+            });
+            
+            $container.show();
+        },
+
+        _setupSearchFilters: function () {
+            var self = this;
+            
+            // Apply filters button
+            $('#apply-filters').on('click', function() {
+                self._performSearch();
+            });
+            
+            // Clear filters button
+            $('#clear-filters').on('click', function() {
+                self._clearAllFilters();
+            });
+            
+            // Filter change handlers
+            $('#status-filter, #program-filter, #document-type-filter, #date-from, #date-to').on('change', function() {
+                self._updateFilterCount();
+            });
+            
+            // Priority checkboxes
+            $('input[name="priority"]').on('change', function() {
+                self._updateFilterCount();
+            });
+        },
+
+        _updateFilterCount: function () {
+            var activeFilters = 0;
+            
+            // Count active filters
+            if ($('#status-filter').val() && $('#status-filter').val().length > 0) activeFilters++;
+            if ($('#program-filter').val()) activeFilters++;
+            if ($('#document-type-filter').val()) activeFilters++;
+            if ($('#date-from').val()) activeFilters++;
+            if ($('#date-to').val()) activeFilters++;
+            if ($('input[name="priority"]:checked').length > 0) activeFilters++;
+            
+            // Update apply button text
+            var $applyBtn = $('#apply-filters');
+            if (activeFilters > 0) {
+                $applyBtn.html('<i class="fa fa-search"></i> Apply Filters (' + activeFilters + ')');
+            } else {
+                $applyBtn.html('<i class="fa fa-search"></i> Apply Filters');
+            }
+        },
+
+        _clearAllFilters: function () {
+            $('#quick-search').val('');
+            $('#status-filter').val([]);
+            $('#program-filter').val('');
+            $('#document-type-filter').val('');
+            $('#date-from').val('');
+            $('#date-to').val('');
+            $('input[name="priority"]').prop('checked', false);
+            
+            this._updateFilterCount();
+            this._clearSearchResults();
+        },
+
+        _performSearch: function () {
+            var self = this;
+            var searchParams = this._getSearchParams();
+            
+            // Show loading state
+            this._showSearchLoading();
+            
+            ajax.jsonRpc('/admission/search/perform', 'call', searchParams)
+            .then(function(result) {
+                if (result.success) {
+                    self._displaySearchResults(result.results, result.pagination);
+                } else {
+                    self._showSearchError(result.message);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error performing search:', error);
+                self._showSearchError('Search failed. Please try again.');
+            });
+        },
+
+        _getSearchParams: function () {
+            return {
+                query: $('#quick-search').val(),
+                status: $('#status-filter').val() || [],
+                program: $('#program-filter').val(),
+                document_type: $('#document-type-filter').val(),
+                date_from: $('#date-from').val(),
+                date_to: $('#date-to').val(),
+                priority: $('input[name="priority"]:checked').map(function() {
+                    return $(this).val();
+                }).get(),
+                sort: $('#sort-results').val(),
+                page: 1
+            };
+        },
+
+        _showSearchLoading: function () {
+            var $results = $('#search-results');
+            $results.html('<div class="search-loading">' +
+                '<div class="spinner-border" role="status"></div>' +
+                '<div class="search-loading-text">Searching...</div>' +
+            '</div>');
+        },
+
+        _displaySearchResults: function (results, pagination) {
+            var $results = $('#search-results');
+            var $pagination = $('#search-pagination');
+            
+            if (results.length === 0) {
+                this._showEmptyResults();
+                $pagination.hide();
+                return;
+            }
+            
+            // Display results based on current view
+            var currentView = $('[data-view].active').data('view') || 'list';
+            
+            if (currentView === 'list') {
+                this._displayListResults(results);
+            } else {
+                this._displayGridResults(results);
+            }
+            
+            // Display pagination
+            if (pagination && pagination.total_pages > 1) {
+                this._displayPagination(pagination);
+                $pagination.show();
+            } else {
+                $pagination.hide();
+            }
+        },
+
+        _displayListResults: function (results) {
+            var $results = $('#search-results');
+            var $container = $('<div class="search-results-list"></div>');
+            
+            results.forEach(function(result) {
+                var $item = this._createListResultItem(result);
+                $container.append($item);
+            }.bind(this));
+            
+            $results.html($container);
+        },
+
+        _displayGridResults: function (results) {
+            var $results = $('#search-results');
+            var $container = $('<div class="search-results-grid"></div>');
+            
+            results.forEach(function(result) {
+                var $item = this._createGridResultItem(result);
+                $container.append($item);
+            }.bind(this));
+            
+            $results.html($container);
+        },
+
+        _createListResultItem: function (result) {
+            var $item = $('<div class="search-result-item" data-id="' + result.id + '">' +
+                '<div class="search-result-header">' +
+                    '<div class="search-result-title">' + result.title + '</div>' +
+                    '<div class="search-result-type">' + result.type + '</div>' +
+                '</div>' +
+                '<div class="search-result-meta">' +
+                    '<span><i class="fa fa-calendar"></i> ' + result.date + '</span>' +
+                    '<span><i class="fa fa-user"></i> ' + result.author + '</span>' +
+                    '<span><i class="fa fa-tag"></i> ' + result.category + '</span>' +
+                '</div>' +
+                '<div class="search-result-description">' + result.description + '</div>' +
+                '<div class="search-result-tags">' +
+                    result.tags.map(function(tag) {
+                        return '<span class="search-result-tag">' + tag + '</span>';
+                    }).join('') +
+                '</div>' +
+                '<div class="search-result-actions">' +
+                    '<button class="btn btn-sm btn-outline-primary" data-action="view">View</button>' +
+                    '<button class="btn btn-sm btn-outline-secondary" data-action="edit">Edit</button>' +
+                    '<button class="btn btn-sm btn-outline-info" data-action="download">Download</button>' +
+                '</div>' +
+            '</div>');
+            
+            return $item;
+        },
+
+        _createGridResultItem: function (result) {
+            var $item = $('<div class="search-result-card" data-id="' + result.id + '">' +
+                '<div class="search-result-card-header">' +
+                    '<div class="search-result-card-title">' + result.title + '</div>' +
+                    '<div class="search-result-card-type">' + result.type + '</div>' +
+                '</div>' +
+                '<div class="search-result-card-content">' +
+                    '<div class="search-result-card-description">' + result.description + '</div>' +
+                    '<div class="search-result-card-meta">' +
+                        '<div><i class="fa fa-calendar"></i> ' + result.date + '</div>' +
+                        '<div><i class="fa fa-user"></i> ' + result.author + '</div>' +
+                        '<div><i class="fa fa-tag"></i> ' + result.category + '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="search-result-card-actions">' +
+                    '<button class="btn btn-sm btn-outline-primary" data-action="view">View</button>' +
+                    '<button class="btn btn-sm btn-outline-secondary" data-action="edit">Edit</button>' +
+                '</div>' +
+            '</div>');
+            
+            return $item;
+        },
+
+        _displayPagination: function (pagination) {
+            var $pagination = $('#search-pagination .pagination');
+            $pagination.empty();
+            
+            // Previous button
+            if (pagination.current_page > 1) {
+                $pagination.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (pagination.current_page - 1) + '">Previous</a></li>');
+            }
+            
+            // Page numbers
+            for (var i = 1; i <= pagination.total_pages; i++) {
+                var activeClass = i === pagination.current_page ? 'active' : '';
+                $pagination.append('<li class="page-item ' + activeClass + '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>');
+            }
+            
+            // Next button
+            if (pagination.current_page < pagination.total_pages) {
+                $pagination.append('<li class="page-item"><a class="page-link" href="#" data-page="' + (pagination.current_page + 1) + '">Next</a></li>');
+            }
+        },
+
+        _showEmptyResults: function () {
+            var $results = $('#search-results');
+            $results.html('<div class="search-empty">' +
+                '<i class="fa fa-search"></i>' +
+                '<h4>No results found</h4>' +
+                '<p>Try adjusting your search criteria or filters</p>' +
+            '</div>');
+        },
+
+        _showSearchError: function (message) {
+            var $results = $('#search-results');
+            $results.html('<div class="search-empty">' +
+                '<i class="fa fa-exclamation-triangle"></i>' +
+                '<h4>Search Error</h4>' +
+                '<p>' + message + '</p>' +
+            '</div>');
+        },
+
+        _clearSearchResults: function () {
+            var $results = $('#search-results');
+            $results.html('<div class="text-center py-5">' +
+                '<i class="fa fa-search fa-3x text-muted mb-3"></i>' +
+                '<h4 class="text-muted">Start your search</h4>' +
+                '<p class="text-muted">Use the filters on the left to find what you\'re looking for</p>' +
+            '</div>');
+            $('#search-pagination').hide();
+        },
+
+        _setupSearchResults: function () {
+            var self = this;
+            
+            // View toggle
+            $('[data-view]').on('click', function() {
+                $('[data-view]').removeClass('active');
+                $(this).addClass('active');
+                
+                var view = $(this).data('view');
+                self._switchView(view);
+            });
+            
+            // Sort change
+            $('#sort-results').on('change', function() {
+                self._performSearch();
+            });
+            
+            // Result actions
+            $(document).on('click', '[data-action="view"]', function(e) {
+                e.preventDefault();
+                var resultId = $(this).closest('[data-id]').data('id');
+                self._viewResult(resultId);
+            });
+            
+            $(document).on('click', '[data-action="edit"]', function(e) {
+                e.preventDefault();
+                var resultId = $(this).closest('[data-id]').data('id');
+                self._editResult(resultId);
+            });
+            
+            $(document).on('click', '[data-action="download"]', function(e) {
+                e.preventDefault();
+                var resultId = $(this).closest('[data-id]').data('id');
+                self._downloadResult(resultId);
+            });
+            
+            // Pagination
+            $(document).on('click', '.page-link', function(e) {
+                e.preventDefault();
+                var page = $(this).data('page');
+                self._goToPage(page);
+            });
+        },
+
+        _switchView: function (view) {
+            // Re-render results with new view
+            var currentResults = this._getCurrentResults();
+            if (currentResults && currentResults.length > 0) {
+                if (view === 'list') {
+                    this._displayListResults(currentResults);
+                } else {
+                    this._displayGridResults(currentResults);
+                }
+            }
+        },
+
+        _getCurrentResults: function () {
+            // This would store current results for view switching
+            return this.currentResults || [];
+        },
+
+        _viewResult: function (resultId) {
+            window.open('/admission/search/result/' + resultId, '_blank');
+        },
+
+        _editResult: function (resultId) {
+            window.open('/admission/search/edit/' + resultId, '_blank');
+        },
+
+        _downloadResult: function (resultId) {
+            window.open('/admission/search/download/' + resultId, '_blank');
+        },
+
+        _goToPage: function (page) {
+            // Update search params and perform search
+            this.currentPage = page;
+            this._performSearch();
+        },
+
+        _setupSavedSearches: function () {
+            var self = this;
+            
+            // Save search button
+            $('#save-search').on('click', function() {
+                self._showSaveSearchModal();
+            });
+            
+            // New search button
+            $('#new-search').on('click', function() {
+                self._clearAllFilters();
+            });
+        },
+
+        _loadSavedSearches: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/search/saved', 'call')
+            .then(function(result) {
+                if (result.success) {
+                    self._displaySavedSearches(result.searches);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error loading saved searches:', error);
+            });
+        },
+
+        _displaySavedSearches: function (searches) {
+            var $container = $('#saved-searches');
+            $container.empty();
+            
+            if (searches.length === 0) {
+                $container.html('<div class="text-center text-muted py-3">No saved searches</div>');
+                return;
+            }
+            
+            searches.forEach(function(search) {
+                var $item = $('<div class="saved-search-item" data-id="' + search.id + '">' +
+                    '<div class="saved-search-info">' +
+                        '<div class="saved-search-name">' + search.name + '</div>' +
+                        '<div class="saved-search-query">' + search.query + '</div>' +
+                    '</div>' +
+                    '<div class="saved-search-actions">' +
+                        '<button class="btn btn-sm btn-outline-primary" data-action="load">Load</button>' +
+                        '<button class="btn btn-sm btn-outline-danger" data-action="delete">Delete</button>' +
+                    '</div>' +
+                '</div>');
+                
+                $container.append($item);
+            });
+        },
+
+        _showSaveSearchModal: function () {
+            // This would show a modal to save the current search
+            var searchName = prompt('Enter a name for this search:');
+            if (searchName) {
+                this._saveSearch(searchName);
+            }
+        },
+
+        _saveSearch: function (name) {
+            var self = this;
+            var searchParams = this._getSearchParams();
+            
+            ajax.jsonRpc('/admission/search/save', 'call', {
+                name: name,
+                params: searchParams
+            })
+            .then(function(result) {
+                if (result.success) {
+                    self._getNotificationSystem().showNotification('success', 'Search Saved', 'Your search has been saved successfully.', 'check-circle');
+                    self._loadSavedSearches();
+                } else {
+                    self._getNotificationSystem().showNotification('error', 'Save Failed', 'There was an error saving the search.', 'exclamation-triangle');
+                }
+            })
+            .catch(function(error) {
+                console.error('Error saving search:', error);
+                self._getNotificationSystem().showNotification('error', 'Save Failed', 'There was an error saving the search.', 'exclamation-triangle');
+            });
+        }
+    });
+
     // Analytics Dashboard Widget
     publicWidget.registry.PortalAnalytics = publicWidget.Widget.extend({
         selector: '.acmst-portal-container',
@@ -3405,6 +4302,8 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
     publicWidget.registry.acmstPortalHealthCheck = PortalHealthCheck;
     publicWidget.registry.acmstNotificationSystem = NotificationSystem;
     publicWidget.registry.acmstPortalAnalytics = PortalAnalytics;
+    publicWidget.registry.acmstPortalAdvancedSearch = PortalAdvancedSearch;
+    publicWidget.registry.acmstPortalAPIIntegrations = PortalAPIIntegrations;
 
     return {
         PortalApplicationForm: PortalApplicationForm,
