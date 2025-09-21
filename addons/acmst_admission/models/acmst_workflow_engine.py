@@ -177,13 +177,23 @@ class AcmstWorkflowEngine(models.Model):
                     'type': 'success',
                 }
             }
+        except (ValidationError, UserError) as e:
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('Workflow Test Failed'),
+                    'message': _('Validation error testing workflow "%s": %s' % (self.name, str(e))),
+                    'type': 'danger',
+                }
+            }
         except Exception as e:
             return {
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
                 'params': {
                     'title': _('Workflow Test Failed'),
-                    'message': _('Error testing workflow "%s": %s' % (self.name, str(e))),
+                    'message': _('Unexpected error testing workflow "%s": %s' % (self.name, str(e))),
                     'type': 'danger',
                 }
             }
@@ -209,9 +219,12 @@ class AcmstWorkflowEngine(models.Model):
             try:
                 self.process_workflow(file)
                 processed_count += 1
+            except (ValidationError, UserError) as e:
+                error_count += 1
+                _logger.error(f'Validation error processing file {file.name} with workflow {self.name}: {str(e)}')
             except Exception as e:
                 error_count += 1
-                _logger.error(f'Error processing file {file.name} with workflow {self.name}: {str(e)}')
+                _logger.error(f'Unexpected error processing file {file.name} with workflow {self.name}: {str(e)}')
         
         message = _('Workflow "%s" processed %d files successfully.' % (self.name, processed_count))
         if error_count > 0:
@@ -395,8 +408,11 @@ class AcmstWorkflowRule(models.Model):
             }
             
             return eval(self.condition_expression, context)
+        except (ValidationError, UserError) as e:
+            _logger.error(f'Validation error evaluating custom condition: {str(e)}')
+            return False
         except Exception as e:
-            _logger.error(f'Error evaluating custom condition: {str(e)}')
+            _logger.error(f'Unexpected error evaluating custom condition: {str(e)}')
             return False
 
     def validate_conditions(self, admission_file):
@@ -425,8 +441,12 @@ class AcmstWorkflowRule(models.Model):
                 # Create pending email instead of skipping
                 _logger.warning(f'No active mail server configured. Creating pending email for workflow notification.')
                 self._create_pending_email(admission_file)
+        except (ValidationError, UserError) as e:
+            _logger.error(f'Validation error sending notification for file {admission_file.name}: {str(e)}')
+            # Create pending email for failed attempts too
+            self._create_pending_email(admission_file)
         except Exception as e:
-            _logger.error(f'Error sending notification for file {admission_file.name}: {str(e)}')
+            _logger.error(f'Unexpected error sending notification for file {admission_file.name}: {str(e)}')
             # Create pending email for failed attempts too
             self._create_pending_email(admission_file)
 
@@ -446,8 +466,10 @@ class AcmstWorkflowRule(models.Model):
                     'created_by': self.env.user.id,
                 })
                 _logger.info(f'Created pending email for workflow notification on file {admission_file.name}')
+        except (ValidationError, UserError) as e:
+            _logger.error(f'Validation error creating pending email for workflow notification: {str(e)}')
         except Exception as e:
-            _logger.error(f'Failed to create pending email for workflow notification: {str(e)}')
+            _logger.error(f'Unexpected error creating pending email for workflow notification: {str(e)}')
 
     @api.constrains('from_state', 'to_state')
     def _check_state_transition(self):

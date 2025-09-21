@@ -436,8 +436,19 @@ class AcmstMinistryApprovalWizard(models.TransientModel):
 
     def _send_approval_notification(self):
         """Send approval notification"""
-        # TODO: Implement notification logic
-        _logger.info(f"Portal application {self.portal_application_id.name} approved by ministry")
+        try:
+            if self.portal_application_id:
+                # Send notification to portal application
+                self.portal_application_id._safe_send_mail('acmst_admission.email_template_ministry_approval')
+                _logger.info(f"Sent ministry approval notification to portal application {self.portal_application_id.name}")
+            elif self.admission_file_id:
+                # Send notification to admission file
+                self.admission_file_id._safe_send_mail('acmst_admission.email_template_ministry_approval')
+                _logger.info(f"Sent ministry approval notification to admission file {self.admission_file_id.name}")
+        except (ValidationError, UserError) as e:
+            _logger.error(f"Validation error sending ministry approval notification: {str(e)}")
+        except Exception as e:
+            _logger.error(f"Unexpected error sending ministry approval notification: {str(e)}")
 
     def _approve_admission_file(self):
         """Approve regular admission file"""
