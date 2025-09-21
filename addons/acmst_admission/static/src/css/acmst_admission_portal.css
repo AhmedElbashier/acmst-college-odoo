@@ -1163,6 +1163,443 @@
     transition: width 0.5s ease;
 }
 
+/* Timeline Styles */
+.acmst-timeline {
+    position: relative;
+    padding: 20px 0;
+}
+
+.acmst-timeline::before {
+    content: '';
+    position: absolute;
+    left: 30px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+    padding-left: 70px;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.timeline-item.active,
+.timeline-item.completed {
+    opacity: 1;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #e9ecef;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    border: 4px solid white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.timeline-item.active .timeline-marker {
+    background: #1976d2;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.timeline-item.completed .timeline-marker {
+    background: #28a745;
+    color: white;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(25, 118, 210, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(25, 118, 210, 0); }
+}
+
+.timeline-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border: 1px solid #e9ecef;
+}
+
+.timeline-content h5 {
+    margin: 0 0 10px 0;
+    color: #1976d2;
+    font-weight: 600;
+}
+
+.timeline-content p {
+    margin: 0 0 10px 0;
+    color: #6c757d;
+}
+
+.timeline-content small {
+    font-size: 12px;
+}
+
+/* Information Sections */
+.info-section {
+    margin-bottom: 20px;
+}
+
+.info-section h5 {
+    color: #1976d2;
+    margin-bottom: 15px;
+    font-weight: 600;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 8px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #495057;
+    min-width: 120px;
+}
+
+.info-value {
+    color: #6c757d;
+    text-align: right;
+}
+
+/* Status Badge */
+.acmst-status-badge {
+    text-align: center;
+}
+
+.acmst-status-badge .acmst-status {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 25px;
+}
+
+/* Status Summary */
+.status-summary {
+    padding: 10px 0;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #f8f9fa;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+
+.status-item.active,
+.status-item.completed {
+    opacity: 1;
+}
+
+.status-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e9ecef;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.status-item.active .status-icon {
+    background: #1976d2;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.status-item.completed .status-icon {
+    background: #28a745;
+    color: white;
+}
+
+.status-text {
+    flex: 1;
+}
+
+.status-title {
+    display: block;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
+}
+
+.status-date,
+.status-status {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.status-status {
+    font-weight: 500;
+}
+
+/* Enhanced Status Colors */
+.acmst-status-ministry_pending {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.acmst-status-ministry_approved {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.acmst-status-health_required {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.acmst-status-health_approved {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.acmst-status-coordinator_review {
+    background-color: #e2e3e5;
+    color: #383d41;
+    border: 1px solid #d6d8db;
+}
+
+.acmst-status-coordinator_approved {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.acmst-status-coordinator_conditional {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.acmst-status-manager_review {
+    background-color: #e2e3e5;
+    color: #383d41;
+    border: 1px solid #d6d8db;
+}
+
+.acmst-status-manager_approved {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.acmst-status-completed {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Notification System */
+.acmst-notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    max-width: 400px;
+}
+
+.acmst-notification {
+    display: flex;
+    align-items: flex-start;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    margin-bottom: 10px;
+    padding: 15px;
+    border-left: 4px solid;
+    animation: slideInRight 0.3s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.acmst-notification::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.acmst-notification-success {
+    border-left-color: #28a745;
+}
+
+.acmst-notification-success .notification-icon {
+    color: #28a745;
+}
+
+.acmst-notification-error {
+    border-left-color: #dc3545;
+}
+
+.acmst-notification-error .notification-icon {
+    color: #dc3545;
+}
+
+.acmst-notification-warning {
+    border-left-color: #ffc107;
+}
+
+.acmst-notification-warning .notification-icon {
+    color: #ffc107;
+}
+
+.acmst-notification-info {
+    border-left-color: #17a2b8;
+}
+
+.acmst-notification-info .notification-icon {
+    color: #17a2b8;
+}
+
+.notification-icon {
+    font-size: 20px;
+    margin-right: 15px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-content h6 {
+    margin: 0 0 5px 0;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.notification-content p {
+    margin: 0 0 5px 0;
+    color: #6c757d;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.notification-content small {
+    font-size: 11px;
+    color: #adb5bd;
+}
+
+.notification-actions {
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    color: #adb5bd;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-size: 12px;
+}
+
+.btn-close:hover {
+    background: #f8f9fa;
+    color: #6c757d;
+}
+
+/* Auto-hide animation */
+.acmst-notification.hide {
+    animation: slideOutRight 0.3s ease-in forwards;
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Mobile responsive notifications */
+@media (max-width: 768px) {
+    .acmst-notification-container {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    
+    .acmst-notification {
+        padding: 12px;
+    }
+    
+    .notification-icon {
+        font-size: 18px;
+        margin-right: 12px;
+    }
+    
+    .notification-content h6 {
+        font-size: 13px;
+    }
+    
+    .notification-content p {
+        font-size: 12px;
+    }
+}
+
 /* Print Styles */
 @media print {
     .acmst-portal-container {
@@ -1181,6 +1618,14 @@
     }
     
     .wizard-navigation {
+        display: none;
+    }
+    
+    .timeline-marker {
+        animation: none !important;
+    }
+    
+    .acmst-notification-container {
         display: none;
     }
 }

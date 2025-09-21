@@ -769,14 +769,134 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
         }
     });
 
+    // Notification System Widget
+    var NotificationSystem = publicWidget.Widget.extend({
+        selector: 'body',
+        events: {
+            'click .btn-close': '_onCloseNotification'
+        },
+
+        start: function () {
+            this._super.apply(this, arguments);
+            this._initializeNotificationSystem();
+        },
+
+        _initializeNotificationSystem: function () {
+            // Create notification container if it doesn't exist
+            if (!$('#notification-container').length) {
+                $('body').append('<div class="acmst-notification-container" id="notification-container"></div>');
+            }
+            
+            // Load existing notifications
+            this._loadNotifications();
+            
+            // Set up auto-refresh for notifications
+            setInterval(this._loadNotifications.bind(this), 30000); // Check every 30 seconds
+        },
+
+        _loadNotifications: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/notifications', 'call')
+                .then(function(result) {
+                    if (result.success) {
+                        self._displayNotifications(result.notifications);
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error loading notifications:', error);
+                });
+        },
+
+        _displayNotifications: function (notifications) {
+            var self = this;
+            var $container = $('#notification-container');
+            
+            // Clear existing notifications
+            $container.empty();
+            
+            // Display new notifications
+            notifications.forEach(function(notification) {
+                self._showNotification(notification);
+            });
+        },
+
+        _showNotification: function (notification) {
+            var self = this;
+            var $container = $('#notification-container');
+            
+            var $notification = $('<div class="acmst-notification acmst-notification-' + notification.type + '">' +
+                '<div class="notification-icon">' +
+                    '<i class="fa fa-' + notification.icon + '"></i>' +
+                '</div>' +
+                '<div class="notification-content">' +
+                    '<h6>' + notification.title + '</h6>' +
+                    '<p>' + notification.message + '</p>' +
+                    '<small class="text-muted">' + notification.timestamp + '</small>' +
+                '</div>' +
+                '<div class="notification-actions">' +
+                    '<button class="btn-close" data-notification-id="' + notification.id + '">' +
+                        '<i class="fa fa-times"></i>' +
+                    '</button>' +
+                '</div>' +
+            '</div>');
+            
+            $container.append($notification);
+            
+            // Auto-hide after 5 seconds
+            setTimeout(function() {
+                self._hideNotification($notification);
+            }, 5000);
+        },
+
+        _hideNotification: function ($notification) {
+            $notification.addClass('hide');
+            setTimeout(function() {
+                $notification.remove();
+            }, 300);
+        },
+
+        _onCloseNotification: function (event) {
+            var $button = $(event.currentTarget);
+            var notificationId = $button.data('notification-id');
+            var $notification = $button.closest('.acmst-notification');
+            
+            // Mark as read on server
+            ajax.jsonRpc('/admission/notifications/mark_read', 'call', {
+                notification_id: notificationId
+            }).catch(function(error) {
+                console.error('Error marking notification as read:', error);
+            });
+            
+            // Hide notification
+            this._hideNotification($notification);
+        },
+
+        // Public method to show notification
+        showNotification: function (type, title, message, icon) {
+            var notification = {
+                id: Date.now(),
+                type: type || 'info',
+                title: title || 'Notification',
+                message: message || '',
+                icon: icon || 'info-circle',
+                timestamp: new Date().toLocaleTimeString()
+            };
+            
+            this._showNotification(notification);
+        }
+    });
+
     // Initialize widgets
     publicWidget.registry.acmstPortalApplicationForm = PortalApplicationForm;
     publicWidget.registry.acmstPortalApplicationStatus = PortalApplicationStatus;
     publicWidget.registry.acmstPortalHealthCheck = PortalHealthCheck;
+    publicWidget.registry.acmstNotificationSystem = NotificationSystem;
 
     return {
         PortalApplicationForm: PortalApplicationForm,
         PortalApplicationStatus: PortalApplicationStatus,
-        PortalHealthCheck: PortalHealthCheck
+        PortalHealthCheck: PortalHealthCheck,
+        NotificationSystem: NotificationSystem
     };
 });

@@ -559,56 +559,187 @@
             </t>
         </template>
 
-        <!-- Portal Application Status Detail Template -->
+        <!-- Enhanced Portal Application Status Detail Template -->
         <template id="portal_admission_status_detail" name="Admission Application Status Detail">
             <t t-call="web.frontend_layout">
                 <t t-set="title">Application Details - ACMST College</t>
                 <div class="acmst-portal-container">
                     <div class="acmst-portal-header">
-                        <h1>Application Details</h1>
-                        <p>Application Number: <strong t-esc="application.name"/></p>
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-file-alt"></i> Application Details</h1>
+                                    <p class="mb-0">Application Number: <strong t-esc="application.name"/></p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="acmst-status-badge">
+                                        <span class="acmst-status acmst-status-application.state" t-esc="application.state"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="row">
                         <div class="col-md-8">
+                            <!-- Application Progress Timeline -->
                             <div class="acmst-card">
                                 <div class="acmst-card-header">
-                                    <h3>Application Information</h3>
+                                    <h3><i class="fa fa-timeline"></i> Application Progress</h3>
+                                </div>
+                                <div class="acmst-timeline">
+                                    <div class="timeline-item completed">
+                                        <div class="timeline-marker">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>Application Submitted</h5>
+                                            <p>Your application has been successfully submitted</p>
+                                            <small class="text-muted" t-esc="application.submission_date"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item" t-att-class="'active' if application.state in ['ministry_pending', 'ministry_approved', 'health_required', 'health_approved', 'coordinator_review', 'coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="timeline-marker">
+                                            <i class="fa fa-building"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>Ministry Approval</h5>
+                                            <p>Waiting for ministry approval</p>
+                                            <t t-if="application.state == 'ministry_approved'">
+                                                <small class="text-success">Approved by Ministry</small>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item" t-att-class="'active' if application.state in ['health_required', 'health_approved', 'coordinator_review', 'coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="timeline-marker">
+                                            <i class="fa fa-heartbeat"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>Health Check</h5>
+                                            <p>Medical assessment required</p>
+                                            <t t-if="application.state == 'health_approved'">
+                                                <small class="text-success">Health check completed</small>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item" t-att-class="'active' if application.state in ['coordinator_review', 'coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="timeline-marker">
+                                            <i class="fa fa-user-graduate"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>Academic Review</h5>
+                                            <p>Program coordinator review</p>
+                                            <t t-if="application.state == 'coordinator_approved'">
+                                                <small class="text-success">Approved by Coordinator</small>
+                                            </t>
+                                            <t t-if="application.state == 'coordinator_conditional'">
+                                                <small class="text-warning">Conditional approval</small>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item" t-att-class="'active' if application.state in ['manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="timeline-marker">
+                                            <i class="fa fa-user-tie"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>Final Approval</h5>
+                                            <p>Admission manager final review</p>
+                                            <t t-if="application.state == 'manager_approved'">
+                                                <small class="text-success">Final approval granted</small>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item" t-att-class="'completed' if application.state == 'completed' else ''">
+                                        <div class="timeline-marker">
+                                            <i class="fa fa-graduation-cap"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>Admission Complete</h5>
+                                            <p>Student record created successfully</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Application Information -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-info-circle"></i> Application Information</h3>
                                 </div>
                                 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <p><strong>Applicant:</strong> <span t-esc="application.applicant_name"/></p>
-                                        <p><strong>National ID:</strong> <span t-esc="application.national_id"/></p>
-                                        <p><strong>Phone:</strong> <span t-esc="application.phone"/></p>
-                                        <p><strong>Email:</strong> <span t-esc="application.email"/></p>
+                                        <div class="info-section">
+                                            <h5>Personal Details</h5>
+                                            <div class="info-item">
+                                                <span class="info-label">Applicant:</span>
+                                                <span class="info-value" t-esc="application.applicant_name"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">National ID:</span>
+                                                <span class="info-value" t-esc="application.national_id"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">Phone:</span>
+                                                <span class="info-value" t-esc="application.phone"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">Email:</span>
+                                                <span class="info-value" t-esc="application.email"/>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <p><strong>Program:</strong> <span t-esc="application.program_id.name"/></p>
-                                        <p><strong>Batch:</strong> <span t-esc="application.batch_id.name"/></p>
-                                        <p><strong>Submission Date:</strong> <span t-esc="application.submission_date"/></p>
-                                        <p><strong>Status:</strong> 
-                                            <span class="acmst-status acmst-status-application.state" t-esc="application.state"/>
-                                        </p>
+                                        <div class="info-section">
+                                            <h5>Admission Details</h5>
+                                            <div class="info-item">
+                                                <span class="info-label">Program:</span>
+                                                <span class="info-value" t-esc="application.program_id.name"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">Batch:</span>
+                                                <span class="info-value" t-esc="application.batch_id.name"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">Submission Date:</span>
+                                                <span class="info-value" t-esc="application.submission_date"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">Status:</span>
+                                                <span class="acmst-status acmst-status-application.state" t-esc="application.state"/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 
                                 <t t-if="application.admission_file_id">
                                     <div class="mt-4">
-                                        <h5>Admission File</h5>
-                                        <p><strong>File Number:</strong> <span t-esc="application.admission_file_id.name"/></p>
-                                        <p><strong>File Status:</strong> 
-                                            <span class="acmst-status acmst-status-application.admission_file_id.state" t-esc="application.admission_file_id.state"/>
-                                        </p>
+                                        <div class="info-section">
+                                            <h5>Admission File</h5>
+                                            <div class="info-item">
+                                                <span class="info-label">File Number:</span>
+                                                <span class="info-value" t-esc="application.admission_file_id.name"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">File Status:</span>
+                                                <span class="acmst-status acmst-status-application.admission_file_id.state" t-esc="application.admission_file_id.state"/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </t>
                             </div>
                         </div>
                         
                         <div class="col-md-4">
+                            <!-- Quick Actions -->
                             <div class="acmst-card">
                                 <div class="acmst-card-header">
-                                    <h3>Quick Actions</h3>
+                                    <h3><i class="fa fa-bolt"></i> Quick Actions</h3>
                                 </div>
                                 <div class="d-grid gap-2">
                                     <a href="/admission/apply" class="acmst-btn acmst-btn-primary">
@@ -617,6 +748,74 @@
                                     <a href="/admission/status" class="acmst-btn acmst-btn-secondary">
                                         <i class="fa fa-list"></i> All Applications
                                     </a>
+                                    <t t-if="application.state == 'health_required'">
+                                        <a t-attf-href="/admission/health-check/#{application.id}" class="acmst-btn acmst-btn-info">
+                                            <i class="fa fa-heartbeat"></i> Health Check
+                                        </a>
+                                    </t>
+                                    <t t-if="application.state == 'coordinator_conditional'">
+                                        <a t-attf-href="/admission/conditions/#{application.id}" class="acmst-btn acmst-btn-warning">
+                                            <i class="fa fa-tasks"></i> View Conditions
+                                        </a>
+                                    </t>
+                                </div>
+                            </div>
+                            
+                            <!-- Status Summary -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-chart-pie"></i> Status Summary</h3>
+                                </div>
+                                <div class="status-summary">
+                                    <div class="status-item">
+                                        <div class="status-icon completed">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                        <div class="status-text">
+                                            <span class="status-title">Application Submitted</span>
+                                            <span class="status-date" t-esc="application.submission_date"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="status-item" t-att-class="'active' if application.state in ['ministry_pending', 'ministry_approved', 'health_required', 'health_approved', 'coordinator_review', 'coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="status-icon">
+                                            <i class="fa fa-building"></i>
+                                        </div>
+                                        <div class="status-text">
+                                            <span class="status-title">Ministry Approval</span>
+                                            <span class="status-status" t-esc="'In Progress' if application.state == 'ministry_pending' else 'Completed' if application.state == 'ministry_approved' else 'Pending'"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="status-item" t-att-class="'active' if application.state in ['health_required', 'health_approved', 'coordinator_review', 'coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="status-icon">
+                                            <i class="fa fa-heartbeat"></i>
+                                        </div>
+                                        <div class="status-text">
+                                            <span class="status-title">Health Check</span>
+                                            <span class="status-status" t-esc="'Required' if application.state == 'health_required' else 'Completed' if application.state == 'health_approved' else 'Pending'"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="status-item" t-att-class="'active' if application.state in ['coordinator_review', 'coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="status-icon">
+                                            <i class="fa fa-user-graduate"></i>
+                                        </div>
+                                        <div class="status-text">
+                                            <span class="status-title">Academic Review</span>
+                                            <span class="status-status" t-esc="'In Progress' if application.state == 'coordinator_review' else 'Approved' if application.state == 'coordinator_approved' else 'Conditional' if application.state == 'coordinator_conditional' else 'Pending'"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="status-item" t-att-class="'active' if application.state in ['manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="status-icon">
+                                            <i class="fa fa-user-tie"></i>
+                                        </div>
+                                        <div class="status-text">
+                                            <span class="status-title">Final Approval</span>
+                                            <span class="status-status" t-esc="'In Progress' if application.state == 'manager_review' else 'Approved' if application.state == 'manager_approved' else 'Pending'"/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -852,6 +1051,32 @@
                     </div>
                 </div>
             </t>
+        </template>
+
+        <!-- Notification System -->
+        <template id="portal_notification_system" name="Portal Notification System">
+            <div class="acmst-notification-container" id="notification-container">
+                <!-- Notifications will be dynamically added here -->
+            </div>
+        </template>
+
+        <!-- Notification Item Template -->
+        <template id="notification_item" name="Notification Item">
+            <div class="acmst-notification" t-att-class="'acmst-notification-' + notification.type">
+                <div class="notification-icon">
+                    <i t-att-class="'fa fa-' + notification.icon"/>
+                </div>
+                <div class="notification-content">
+                    <h6 t-esc="notification.title"/>
+                    <p t-esc="notification.message"/>
+                    <small class="text-muted" t-esc="notification.timestamp"/>
+                </div>
+                <div class="notification-actions">
+                    <button class="btn-close" t-att-data-notification-id="notification.id">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
         </template>
 
     </data>
