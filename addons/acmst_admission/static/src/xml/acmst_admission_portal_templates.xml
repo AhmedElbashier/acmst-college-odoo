@@ -7,9 +7,24 @@
             <t t-call="web.frontend_layout">
                 <t t-set="title">Admission Portal - ACMST College</t>
                 <div class="acmst-portal-container">
+                    <!-- Enhanced Header with Progress Tracking -->
                     <div class="acmst-portal-header">
-                        <h1>Welcome to ACMST College Admission Portal</h1>
-                        <p>Start your journey towards academic excellence</p>
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-graduation-cap"></i> Welcome to ACMST College Admission Portal</h1>
+                                    <p class="mb-0">Start your journey towards academic excellence with our comprehensive admission system</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="acmst-quick-stats">
+                                        <div class="stat-item">
+                                            <span class="stat-number" t-esc="application_count"/>
+                                            <span class="stat-label">Applications</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="row">
@@ -86,15 +101,45 @@
                     </div>
                     
                     <div class="acmst-card acmst-portal-application-form">
-                        <!-- Progress Bar -->
-                        <div class="acmst-progress">
-                            <div class="acmst-progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <!-- Enhanced Progress Bar with Steps -->
+                        <div class="acmst-progress-container">
+                            <div class="acmst-progress">
+                                <div class="acmst-progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="acmst-progress-steps">
+                                <div class="step active" data-step="1">
+                                    <div class="step-circle">1</div>
+                                    <div class="step-label">Personal Info</div>
+                                </div>
+                                <div class="step" data-step="2">
+                                    <div class="step-circle">2</div>
+                                    <div class="step-label">Admission Details</div>
+                                </div>
+                                <div class="step" data-step="3">
+                                    <div class="step-circle">3</div>
+                                    <div class="step-label">Documents</div>
+                                </div>
+                                <div class="step" data-step="4">
+                                    <div class="step-circle">4</div>
+                                    <div class="step-label">Review & Submit</div>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Application Header -->
+                        <!-- Enhanced Application Header -->
                         <div class="acmst-application-header">
-                            <h2><i class="fa fa-edit"></i> Admission Application</h2>
-                            <p class="text-muted">Please complete all sections carefully. Fields marked with * are required.</p>
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h2><i class="fa fa-edit"></i> Admission Application</h2>
+                                    <p class="text-muted">Please complete all sections carefully. Fields marked with * are required.</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="acmst-save-indicator">
+                                        <i class="fa fa-save"></i>
+                                        <span>Auto-save enabled</span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="alert alert-info">
                                 <i class="fa fa-info-circle"></i>
                                 <strong>Important:</strong> Ensure all information is accurate. You can save your progress and continue later.
@@ -105,10 +150,13 @@
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
                             <!-- Personal Information Section -->
-                            <div class="acmst-section">
+                            <div class="acmst-section wizard-step active" data-step="1">
                                 <div class="acmst-section-header">
                                     <h3><i class="fa fa-user"></i> Personal Information</h3>
                                     <p>Basic personal details and identification</p>
+                                    <div class="acmst-section-progress">
+                                        <span class="progress-text">Step 1 of 4</span>
+                                    </div>
                                 </div>
                                 <div class="acmst-section-content">
                             
@@ -165,10 +213,13 @@
                             </div>
 
                             <!-- Admission Details Section -->
-                            <div class="acmst-section">
+                            <div class="acmst-section wizard-step" data-step="2">
                                 <div class="acmst-section-header">
                                     <h3><i class="fa fa-graduation-cap"></i> Admission Details</h3>
                                     <p>Program selection and admission type</p>
+                                    <div class="acmst-section-progress">
+                                        <span class="progress-text">Step 2 of 4</span>
+                                    </div>
                                 </div>
                                 <div class="acmst-section-content">
                                     <div class="row">
@@ -328,10 +379,13 @@
                             </div>
 
                             <!-- Academic Information Section -->
-                            <div class="acmst-section">
+                            <div class="acmst-section wizard-step" data-step="3">
                                 <div class="acmst-section-header">
-                                    <h3><i class="fa fa-book"></i> Academic Information</h3>
+                                    <h3><i class="fa fa-book"></i> Academic Information & Documents</h3>
                                     <p>Previous education and supporting documents</p>
+                                    <div class="acmst-section-progress">
+                                        <span class="progress-text">Step 3 of 4</span>
+                                    </div>
                                 </div>
                                 <div class="acmst-section-content">
                                     <div class="row">
@@ -357,23 +411,38 @@
                                                 <strong>Tip:</strong> Upload certificates, transcripts, and other supporting documents
                                             </div>
                                         </div>
+                                        <div class="acmst-file-list" id="file-list">
+                                            <!-- Files will be listed here -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Terms and Agreement Section -->
-                            <div class="acmst-section">
+                            <!-- Review and Submit Section -->
+                            <div class="acmst-section wizard-step" data-step="4">
                                 <div class="acmst-section-header">
-                                    <h3><i class="fa fa-file-text"></i> Terms and Conditions</h3>
-                                    <p>Please review and accept the terms</p>
+                                    <h3><i class="fa fa-check-circle"></i> Review & Submit Application</h3>
+                                    <p>Review your information and submit your application</p>
+                                    <div class="acmst-section-progress">
+                                        <span class="progress-text">Step 4 of 4</span>
+                                    </div>
                                 </div>
                                 <div class="acmst-section-content">
-                                    <div class="alert alert-warning">
-                                        <i class="fa fa-exclamation-triangle"></i>
-                                        <strong>Important:</strong> Please read and agree to the terms and conditions before submitting your application.
+                                    <!-- Application Summary -->
+                                    <div class="acmst-application-summary">
+                                        <h4><i class="fa fa-list-alt"></i> Application Summary</h4>
+                                        <div class="summary-content" id="application-summary">
+                                            <!-- Summary will be populated by JavaScript -->
+                                        </div>
                                     </div>
 
+                                    <!-- Terms and Agreement -->
                                     <div class="acmst-terms-container">
+                                        <div class="alert alert-warning">
+                                            <i class="fa fa-exclamation-triangle"></i>
+                                            <strong>Important:</strong> Please read and agree to the terms and conditions before submitting your application.
+                                        </div>
+
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="terms_agreement" required="required"/>
                                             <label class="form-check-label" for="terms_agreement">
@@ -381,22 +450,14 @@
                                             </label>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <!-- Submit Actions Section -->
-                            <div class="acmst-section">
-                                <div class="acmst-section-header">
-                                    <h3><i class="fa fa-check-circle"></i> Submit Application</h3>
-                                    <p>Review and submit your application</p>
-                                </div>
-                                <div class="acmst-section-content">
-                                    <div class="alert alert-success">
-                                        <i class="fa fa-check"></i>
-                                        <strong>Ready to submit?</strong> Make sure all information is correct and all required fields are completed.
-                                    </div>
-
+                                    <!-- Submit Actions -->
                                     <div class="acmst-submit-actions">
+                                        <div class="alert alert-success">
+                                            <i class="fa fa-check"></i>
+                                            <strong>Ready to submit?</strong> Make sure all information is correct and all required fields are completed.
+                                        </div>
+
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <button type="button" class="acmst-btn acmst-btn-secondary btn-lg" data-action="save-draft">
@@ -413,6 +474,22 @@
                                 </div>
                             </div>
                         </form>
+                        
+                        <!-- Wizard Navigation -->
+                        <div class="acmst-wizard-navigation">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="button" class="acmst-btn acmst-btn-secondary" id="prev-step" disabled>
+                                        <i class="fa fa-arrow-left"></i> Previous
+                                    </button>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <button type="button" class="acmst-btn acmst-btn-primary" id="next-step">
+                                        Next <i class="fa fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </t>
@@ -482,56 +559,270 @@
             </t>
         </template>
 
-        <!-- Portal Application Status Detail Template -->
+        <!-- Enhanced Portal Application Status Detail Template -->
         <template id="portal_admission_status_detail" name="Admission Application Status Detail">
             <t t-call="web.frontend_layout">
                 <t t-set="title">Application Details - ACMST College</t>
                 <div class="acmst-portal-container">
                     <div class="acmst-portal-header">
-                        <h1>Application Details</h1>
-                        <p>Application Number: <strong t-esc="application.name"/></p>
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-file-alt"></i> Application Details</h1>
+                                    <p class="mb-0">Application Number: <strong t-esc="application.name"/></p>
+                                    <div class="acmst-application-meta">
+                                        <span class="meta-item">
+                                            <i class="fa fa-calendar"></i>
+                                            Submitted: <strong t-esc="application.submission_date"/>
+                                        </span>
+                                        <span class="meta-item">
+                                            <i class="fa fa-clock"></i>
+                                            Last Updated: <strong t-esc="application.write_date"/>
+                                        </span>
+                                        <span class="meta-item">
+                                            <i class="fa fa-user"></i>
+                                            Program: <strong t-esc="application.program_id.name"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="acmst-status-badge">
+                                        <span class="acmst-status acmst-status-application.state" t-esc="application.state"/>
+                                    </div>
+                                    <div class="acmst-progress-summary">
+                                        <div class="progress-text">
+                                            <span class="progress-label">Overall Progress</span>
+                                            <span class="progress-percentage" t-esc="application.progress_percentage + '%'"/>
+                                        </div>
+                                        <div class="progress-bar-mini">
+                                            <div class="progress-fill" t-att-style="'width: ' + application.progress_percentage + '%'"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="row">
                         <div class="col-md-8">
+                            <!-- Real-time Status Updates -->
                             <div class="acmst-card">
                                 <div class="acmst-card-header">
-                                    <h3>Application Information</h3>
+                                    <h3><i class="fa fa-sync-alt"></i> Real-time Status Updates</h3>
+                                    <div class="acmst-live-indicator">
+                                        <span class="live-dot"></span>
+                                        <span class="live-text">Live Updates</span>
+                                    </div>
+                                </div>
+                                <div class="acmst-status-updates" id="status-updates">
+                                    <div class="status-update-item">
+                                        <div class="update-icon">
+                                            <i class="fa fa-info-circle"></i>
+                                        </div>
+                                        <div class="update-content">
+                                            <div class="update-title">Application Status Check</div>
+                                            <div class="update-message">Your application is being processed. We'll notify you of any changes.</div>
+                                            <div class="update-time">Just now</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Application Progress Timeline -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-timeline"></i> Application Progress</h3>
+                                    <div class="acmst-timeline-controls">
+                                        <button class="btn btn-sm btn-outline-primary" id="refresh-timeline">
+                                            <i class="fa fa-refresh"></i> Refresh
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="acmst-timeline">
+                                    <div class="timeline-item completed">
+                                        <div class="timeline-marker">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>Application Submitted</h5>
+                                            <p>Your application has been successfully submitted</p>
+                                            <div class="timeline-meta">
+                                                <small class="text-muted" t-esc="application.submission_date"/>
+                                                <span class="timeline-duration">Completed</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item" t-att-class="'active' if application.state in ['ministry_pending', 'ministry_approved', 'health_required', 'health_approved', 'coordinator_review', 'coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="timeline-marker">
+                                            <i class="fa fa-building"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>Ministry Approval</h5>
+                                            <p>Waiting for ministry approval</p>
+                                            <div class="timeline-meta">
+                                                <t t-if="application.state == 'ministry_approved'">
+                                                    <small class="text-success">Approved by Ministry</small>
+                                                    <span class="timeline-duration">Completed</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <small class="text-muted">Estimated: 3-5 business days</small>
+                                                    <span class="timeline-duration">In Progress</span>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item" t-att-class="'active' if application.state in ['health_required', 'health_approved', 'coordinator_review', 'coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="timeline-marker">
+                                            <i class="fa fa-heartbeat"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>Health Check</h5>
+                                            <p>Medical assessment required</p>
+                                            <div class="timeline-meta">
+                                                <t t-if="application.state == 'health_approved'">
+                                                    <small class="text-success">Health check completed</small>
+                                                    <span class="timeline-duration">Completed</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <small class="text-muted">Estimated: 1-2 business days</small>
+                                                    <span class="timeline-duration">Pending</span>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item" t-att-class="'active' if application.state in ['coordinator_review', 'coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="timeline-marker">
+                                            <i class="fa fa-user-graduate"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>Academic Review</h5>
+                                            <p>Program coordinator review</p>
+                                            <div class="timeline-meta">
+                                                <t t-if="application.state == 'coordinator_approved'">
+                                                    <small class="text-success">Approved by Coordinator</small>
+                                                    <span class="timeline-duration">Completed</span>
+                                                </t>
+                                                <t t-if="application.state == 'coordinator_conditional'">
+                                                    <small class="text-warning">Conditional approval</small>
+                                                    <span class="timeline-duration">Completed</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <small class="text-muted">Estimated: 2-3 business days</small>
+                                                    <span class="timeline-duration">In Progress</span>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item" t-att-class="'active' if application.state in ['manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="timeline-marker">
+                                            <i class="fa fa-user-tie"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>Final Approval</h5>
+                                            <p>Admission manager final review</p>
+                                            <div class="timeline-meta">
+                                                <t t-if="application.state == 'manager_approved'">
+                                                    <small class="text-success">Final approval granted</small>
+                                                    <span class="timeline-duration">Completed</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <small class="text-muted">Estimated: 1-2 business days</small>
+                                                    <span class="timeline-duration">Pending</span>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item" t-att-class="'completed' if application.state == 'completed' else ''">
+                                        <div class="timeline-marker">
+                                            <i class="fa fa-graduation-cap"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5>Admission Complete</h5>
+                                            <p>Student record created successfully</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Application Information -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-info-circle"></i> Application Information</h3>
                                 </div>
                                 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <p><strong>Applicant:</strong> <span t-esc="application.applicant_name"/></p>
-                                        <p><strong>National ID:</strong> <span t-esc="application.national_id"/></p>
-                                        <p><strong>Phone:</strong> <span t-esc="application.phone"/></p>
-                                        <p><strong>Email:</strong> <span t-esc="application.email"/></p>
+                                        <div class="info-section">
+                                            <h5>Personal Details</h5>
+                                            <div class="info-item">
+                                                <span class="info-label">Applicant:</span>
+                                                <span class="info-value" t-esc="application.applicant_name"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">National ID:</span>
+                                                <span class="info-value" t-esc="application.national_id"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">Phone:</span>
+                                                <span class="info-value" t-esc="application.phone"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">Email:</span>
+                                                <span class="info-value" t-esc="application.email"/>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <p><strong>Program:</strong> <span t-esc="application.program_id.name"/></p>
-                                        <p><strong>Batch:</strong> <span t-esc="application.batch_id.name"/></p>
-                                        <p><strong>Submission Date:</strong> <span t-esc="application.submission_date"/></p>
-                                        <p><strong>Status:</strong> 
-                                            <span class="acmst-status acmst-status-application.state" t-esc="application.state"/>
-                                        </p>
+                                        <div class="info-section">
+                                            <h5>Admission Details</h5>
+                                            <div class="info-item">
+                                                <span class="info-label">Program:</span>
+                                                <span class="info-value" t-esc="application.program_id.name"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">Batch:</span>
+                                                <span class="info-value" t-esc="application.batch_id.name"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">Submission Date:</span>
+                                                <span class="info-value" t-esc="application.submission_date"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">Status:</span>
+                                                <span class="acmst-status acmst-status-application.state" t-esc="application.state"/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 
                                 <t t-if="application.admission_file_id">
                                     <div class="mt-4">
-                                        <h5>Admission File</h5>
-                                        <p><strong>File Number:</strong> <span t-esc="application.admission_file_id.name"/></p>
-                                        <p><strong>File Status:</strong> 
-                                            <span class="acmst-status acmst-status-application.admission_file_id.state" t-esc="application.admission_file_id.state"/>
-                                        </p>
+                                        <div class="info-section">
+                                            <h5>Admission File</h5>
+                                            <div class="info-item">
+                                                <span class="info-label">File Number:</span>
+                                                <span class="info-value" t-esc="application.admission_file_id.name"/>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">File Status:</span>
+                                                <span class="acmst-status acmst-status-application.admission_file_id.state" t-esc="application.admission_file_id.state"/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </t>
                             </div>
                         </div>
                         
                         <div class="col-md-4">
+                            <!-- Quick Actions -->
                             <div class="acmst-card">
                                 <div class="acmst-card-header">
-                                    <h3>Quick Actions</h3>
+                                    <h3><i class="fa fa-bolt"></i> Quick Actions</h3>
                                 </div>
                                 <div class="d-grid gap-2">
                                     <a href="/admission/apply" class="acmst-btn acmst-btn-primary">
@@ -540,6 +831,101 @@
                                     <a href="/admission/status" class="acmst-btn acmst-btn-secondary">
                                         <i class="fa fa-list"></i> All Applications
                                     </a>
+                                    <t t-if="application.state == 'health_required'">
+                                        <a t-attf-href="/admission/health-check/#{application.id}" class="acmst-btn acmst-btn-info">
+                                            <i class="fa fa-heartbeat"></i> Health Check
+                                        </a>
+                                    </t>
+                                    <t t-if="application.state == 'coordinator_conditional'">
+                                        <a t-attf-href="/admission/conditions/#{application.id}" class="acmst-btn acmst-btn-warning">
+                                            <i class="fa fa-tasks"></i> View Conditions
+                                        </a>
+                                    </t>
+                                </div>
+                            </div>
+                            
+                            <!-- Communication History -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-comments"></i> Communication History</h3>
+                                    <div class="acmst-card-actions">
+                                        <button class="acmst-btn acmst-btn-sm acmst-btn-outline" id="add-comment">
+                                            <i class="fa fa-plus"></i> Add Comment
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="acmst-communication-history" id="communication-history">
+                                    <div class="communication-item">
+                                        <div class="communication-icon">
+                                            <i class="fa fa-info-circle"></i>
+                                        </div>
+                                        <div class="communication-content">
+                                            <div class="communication-title">Application Status Update</div>
+                                            <div class="communication-message">Your application has been received and is being processed.</div>
+                                            <div class="communication-meta">
+                                                <span class="communication-author">System</span>
+                                                <span class="communication-time" t-esc="application.submission_date"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Status Summary -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-chart-pie"></i> Status Summary</h3>
+                                </div>
+                                <div class="status-summary">
+                                    <div class="status-item">
+                                        <div class="status-icon completed">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                        <div class="status-text">
+                                            <span class="status-title">Application Submitted</span>
+                                            <span class="status-date" t-esc="application.submission_date"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="status-item" t-att-class="'active' if application.state in ['ministry_pending', 'ministry_approved', 'health_required', 'health_approved', 'coordinator_review', 'coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="status-icon">
+                                            <i class="fa fa-building"></i>
+                                        </div>
+                                        <div class="status-text">
+                                            <span class="status-title">Ministry Approval</span>
+                                            <span class="status-status" t-esc="'In Progress' if application.state == 'ministry_pending' else 'Completed' if application.state == 'ministry_approved' else 'Pending'"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="status-item" t-att-class="'active' if application.state in ['health_required', 'health_approved', 'coordinator_review', 'coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="status-icon">
+                                            <i class="fa fa-heartbeat"></i>
+                                        </div>
+                                        <div class="status-text">
+                                            <span class="status-title">Health Check</span>
+                                            <span class="status-status" t-esc="'Required' if application.state == 'health_required' else 'Completed' if application.state == 'health_approved' else 'Pending'"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="status-item" t-att-class="'active' if application.state in ['coordinator_review', 'coordinator_approved', 'coordinator_conditional', 'manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="status-icon">
+                                            <i class="fa fa-user-graduate"></i>
+                                        </div>
+                                        <div class="status-text">
+                                            <span class="status-title">Academic Review</span>
+                                            <span class="status-status" t-esc="'In Progress' if application.state == 'coordinator_review' else 'Approved' if application.state == 'coordinator_approved' else 'Conditional' if application.state == 'coordinator_conditional' else 'Pending'"/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="status-item" t-att-class="'active' if application.state in ['manager_review', 'manager_approved', 'completed'] else ''">
+                                        <div class="status-icon">
+                                            <i class="fa fa-user-tie"></i>
+                                        </div>
+                                        <div class="status-text">
+                                            <span class="status-title">Final Approval</span>
+                                            <span class="status-status" t-esc="'In Progress' if application.state == 'manager_review' else 'Approved' if application.state == 'manager_approved' else 'Pending'"/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -548,14 +934,28 @@
             </t>
         </template>
 
-        <!-- Portal Health Check Template -->
+        <!-- Enhanced Portal Health Check Template -->
         <template id="portal_admission_health_check" name="Admission Health Check">
             <t t-call="web.frontend_layout">
                 <t t-set="title">Health Check - ACMST College</t>
                 <div class="acmst-portal-container">
                     <div class="acmst-portal-header">
-                        <h1>Health Check Form</h1>
-                        <p>Please complete the health questionnaire</p>
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-heartbeat"></i> Health Check Portal</h1>
+                                    <p class="mb-0">Complete your medical assessment for admission</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="acmst-health-status">
+                                        <span class="health-status-badge" t-att-class="'health-status-' + (health_check.state or 'pending')">
+                                            <i class="fa fa-heartbeat"></i>
+                                            <span t-esc="health_check.state or 'Pending'"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="acmst-card acmst-portal-health-check">
@@ -775,6 +1175,1101 @@
                     </div>
                 </div>
             </t>
+        </template>
+
+        <!-- Notification System -->
+        <template id="portal_notification_system" name="Portal Notification System">
+            <div class="acmst-notification-container" id="notification-container">
+                <!-- Notifications will be dynamically added here -->
+            </div>
+        </template>
+
+        <!-- Notification Item Template -->
+        <template id="notification_item" name="Notification Item">
+            <div class="acmst-notification" t-att-class="'acmst-notification-' + notification.type">
+                <div class="notification-icon">
+                    <i t-att-class="'fa fa-' + notification.icon"/>
+                </div>
+                <div class="notification-content">
+                    <h6 t-esc="notification.title"/>
+                    <p t-esc="notification.message"/>
+                    <small class="text-muted" t-esc="notification.timestamp"/>
+                </div>
+                <div class="notification-actions">
+                    <button class="btn-close" t-att-data-notification-id="notification.id">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Tooltip System -->
+        <template id="tooltip_system" name="Tooltip System">
+            <div class="acmst-tooltip" id="acmst-tooltip">
+                <div class="tooltip-arrow"></div>
+                <div class="tooltip-content">
+                    <div class="tooltip-title"></div>
+                    <div class="tooltip-text"></div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Help Button Template -->
+        <template id="help_button" name="Help Button">
+            <button class="acmst-help-btn" t-att-data-help-text="helpText" t-att-data-help-title="helpTitle">
+                <i class="fa fa-question-circle"></i>
+            </button>
+        </template>
+
+        <!-- API Integrations Template -->
+        <template id="portal_admission_integrations" name="API Integrations Portal">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">API Integrations - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-plug"></i> API Integrations</h1>
+                                    <p class="mb-0">Connect with external services and manage integrations</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="integration-controls">
+                                        <button class="acmst-btn acmst-btn-outline" id="refresh-integrations">
+                                            <i class="fa fa-sync"></i> Refresh
+                                        </button>
+                                        <button class="acmst-btn acmst-btn-primary" id="add-integration">
+                                            <i class="fa fa-plus"></i> Add Integration
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Integration Status Overview -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="acmst-card integration-status-card">
+                                <div class="status-icon">
+                                    <i class="fa fa-check-circle"></i>
+                                </div>
+                                <div class="status-content">
+                                    <div class="status-value" id="active-integrations">0</div>
+                                    <div class="status-label">Active Integrations</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="acmst-card integration-status-card">
+                                <div class="status-icon">
+                                    <i class="fa fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="status-content">
+                                    <div class="status-value" id="error-integrations">0</div>
+                                    <div class="status-label">Errors</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="acmst-card integration-status-card">
+                                <div class="status-icon">
+                                    <i class="fa fa-clock"></i>
+                                </div>
+                                <div class="status-content">
+                                    <div class="status-value" id="pending-integrations">0</div>
+                                    <div class="status-label">Pending</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="acmst-card integration-status-card">
+                                <div class="status-icon">
+                                    <i class="fa fa-chart-line"></i>
+                                </div>
+                                <div class="status-content">
+                                    <div class="status-value" id="api-calls-today">0</div>
+                                    <div class="status-label">API Calls Today</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Available Integrations -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-list"></i> Available Integrations</h3>
+                                    <div class="integration-filters">
+                                        <select class="form-select" id="integration-category">
+                                            <option value="">All Categories</option>
+                                            <option value="payment">Payment</option>
+                                            <option value="communication">Communication</option>
+                                            <option value="document">Document</option>
+                                            <option value="analytics">Analytics</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <div class="integrations-grid" id="integrations-grid">
+                                        <!-- Integration cards will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <!-- Integration Logs -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-history"></i> Recent Activity</h3>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <div class="integration-logs" id="integration-logs">
+                                        <!-- Log entries will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- API Usage Stats -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-chart-bar"></i> API Usage</h3>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <div class="api-usage-stats" id="api-usage-stats">
+                                        <!-- Usage stats will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Advanced Search Template -->
+        <template id="portal_admission_search" name="Advanced Search Portal">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Advanced Search - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-search"></i> Advanced Search</h1>
+                                    <p class="mb-0">Find applications, documents, and information quickly</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="search-controls">
+                                        <button class="acmst-btn acmst-btn-outline" id="save-search">
+                                            <i class="fa fa-save"></i> Save Search
+                                        </button>
+                                        <button class="acmst-btn acmst-btn-primary" id="new-search">
+                                            <i class="fa fa-plus"></i> New Search
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Search Interface -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <!-- Search Filters -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-filter"></i> Search Filters</h3>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <!-- Quick Search -->
+                                    <div class="search-section">
+                                        <label class="form-label">Quick Search</label>
+                                        <div class="search-input-group">
+                                            <input type="text" class="form-control" id="quick-search" placeholder="Search anything...">
+                                            <button class="btn btn-outline-secondary" type="button" id="search-btn">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                        <div class="search-suggestions" id="search-suggestions">
+                                            <!-- Suggestions will be populated by JavaScript -->
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Advanced Filters -->
+                                    <div class="search-section">
+                                        <h5>Advanced Filters</h5>
+                                        
+                                        <!-- Application Status -->
+                                        <div class="filter-group">
+                                            <label class="form-label">Application Status</label>
+                                            <select class="form-select" id="status-filter" multiple>
+                                                <option value="draft">Draft</option>
+                                                <option value="submitted">Submitted</option>
+                                                <option value="under_review">Under Review</option>
+                                                <option value="approved">Approved</option>
+                                                <option value="rejected">Rejected</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Date Range -->
+                                        <div class="filter-group">
+                                            <label class="form-label">Date Range</label>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <input type="date" class="form-control" id="date-from" placeholder="From">
+                                                </div>
+                                                <div class="col-6">
+                                                    <input type="date" class="form-control" id="date-to" placeholder="To">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Program -->
+                                        <div class="filter-group">
+                                            <label class="form-label">Program</label>
+                                            <select class="form-select" id="program-filter">
+                                                <option value="">All Programs</option>
+                                                <option value="computer_science">Computer Science</option>
+                                                <option value="engineering">Engineering</option>
+                                                <option value="business">Business</option>
+                                                <option value="medicine">Medicine</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Document Type -->
+                                        <div class="filter-group">
+                                            <label class="form-label">Document Type</label>
+                                            <select class="form-select" id="document-type-filter">
+                                                <option value="">All Documents</option>
+                                                <option value="academic">Academic</option>
+                                                <option value="financial">Financial</option>
+                                                <option value="health">Health</option>
+                                                <option value="identity">Identity</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Priority -->
+                                        <div class="filter-group">
+                                            <label class="form-label">Priority</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="priority-high" value="high">
+                                                <label class="form-check-label" for="priority-high">High Priority</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="priority-medium" value="medium">
+                                                <label class="form-check-label" for="priority-medium">Medium Priority</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="priority-low" value="low">
+                                                <label class="form-check-label" for="priority-low">Low Priority</label>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Search Actions -->
+                                        <div class="search-actions">
+                                            <button class="acmst-btn acmst-btn-primary w-100" id="apply-filters">
+                                                <i class="fa fa-search"></i> Apply Filters
+                                            </button>
+                                            <button class="acmst-btn acmst-btn-outline w-100" id="clear-filters">
+                                                <i class="fa fa-times"></i> Clear All
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Saved Searches -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-bookmark"></i> Saved Searches</h3>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <div class="saved-searches" id="saved-searches">
+                                        <!-- Saved searches will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-8">
+                            <!-- Search Results -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h3><i class="fa fa-list"></i> Search Results</h3>
+                                        <div class="search-results-controls">
+                                            <select class="form-select" id="sort-results">
+                                                <option value="relevance">Sort by Relevance</option>
+                                                <option value="date">Sort by Date</option>
+                                                <option value="name">Sort by Name</option>
+                                                <option value="status">Sort by Status</option>
+                                            </select>
+                                            <div class="view-toggle">
+                                                <button class="btn btn-sm btn-outline-primary active" data-view="list">
+                                                    <i class="fa fa-list"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-primary" data-view="grid">
+                                                    <i class="fa fa-th"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <!-- Search Results Content -->
+                                    <div class="search-results" id="search-results">
+                                        <div class="text-center py-5">
+                                            <i class="fa fa-search fa-3x text-muted mb-3"></i>
+                                            <h4 class="text-muted">Start your search</h4>
+                                            <p class="text-muted">Use the filters on the left to find what you're looking for</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Pagination -->
+                                    <div class="search-pagination" id="search-pagination" style="display: none;">
+                                        <nav aria-label="Search results pagination">
+                                            <ul class="pagination justify-content-center">
+                                                <!-- Pagination will be populated by JavaScript -->
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Analytics Dashboard Template -->
+        <template id="portal_admission_analytics" name="Admission Analytics Dashboard">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Analytics Dashboard - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-chart-line"></i> Analytics Dashboard</h1>
+                                    <p class="mb-0">Track your admission progress and performance metrics</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="analytics-controls">
+                                        <select class="form-select" id="time-period">
+                                            <option value="7">Last 7 Days</option>
+                                            <option value="30" selected>Last 30 Days</option>
+                                            <option value="90">Last 90 Days</option>
+                                            <option value="365">Last Year</option>
+                                        </select>
+                                        <button class="acmst-btn acmst-btn-outline" id="refresh-analytics">
+                                            <i class="fa fa-sync"></i> Refresh
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Key Metrics Overview -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="acmst-card metric-card">
+                                <div class="metric-icon">
+                                    <i class="fa fa-file-alt"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <div class="metric-value" id="total-applications">0</div>
+                                    <div class="metric-label">Total Applications</div>
+                                    <div class="metric-change positive" id="app-change">
+                                        <i class="fa fa-arrow-up"></i> +12%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="acmst-card metric-card">
+                                <div class="metric-icon">
+                                    <i class="fa fa-check-circle"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <div class="metric-value" id="approved-applications">0</div>
+                                    <div class="metric-label">Approved</div>
+                                    <div class="metric-change positive" id="approved-change">
+                                        <i class="fa fa-arrow-up"></i> +8%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="acmst-card metric-card">
+                                <div class="metric-icon">
+                                    <i class="fa fa-clock"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <div class="metric-value" id="pending-applications">0</div>
+                                    <div class="metric-label">Pending</div>
+                                    <div class="metric-change neutral" id="pending-change">
+                                        <i class="fa fa-minus"></i> 0%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="acmst-card metric-card">
+                                <div class="metric-icon">
+                                    <i class="fa fa-percentage"></i>
+                                </div>
+                                <div class="metric-content">
+                                    <div class="metric-value" id="success-rate">0%</div>
+                                    <div class="metric-label">Success Rate</div>
+                                    <div class="metric-change positive" id="success-change">
+                                        <i class="fa fa-arrow-up"></i> +5%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts and Visualizations -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <!-- Application Trends Chart -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-chart-line"></i> Application Trends</h3>
+                                    <div class="chart-controls">
+                                        <button class="btn btn-sm btn-outline-primary active" data-chart="line">Line</button>
+                                        <button class="btn btn-sm btn-outline-primary" data-chart="bar">Bar</button>
+                                        <button class="btn btn-sm btn-outline-primary" data-chart="area">Area</button>
+                                    </div>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <canvas id="application-trends-chart" width="400" height="200"></canvas>
+                                </div>
+                            </div>
+                            
+                            <!-- Status Distribution Chart -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-chart-pie"></i> Status Distribution</h3>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <canvas id="status-distribution-chart" width="300" height="300"></canvas>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="status-legend" id="status-legend">
+                                                <!-- Legend items will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <!-- Recent Activity -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-history"></i> Recent Activity</h3>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <div class="activity-feed" id="activity-feed">
+                                        <!-- Activity items will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Performance Indicators -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-tachometer-alt"></i> Performance</h3>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <div class="performance-indicators">
+                                        <div class="indicator-item">
+                                            <div class="indicator-label">Application Completion</div>
+                                            <div class="indicator-bar">
+                                                <div class="indicator-fill" id="completion-bar" style="width: 85%"></div>
+                                            </div>
+                                            <div class="indicator-value">85%</div>
+                                        </div>
+                                        <div class="indicator-item">
+                                            <div class="indicator-label">Document Upload</div>
+                                            <div class="indicator-bar">
+                                                <div class="indicator-fill" id="upload-bar" style="width: 92%"></div>
+                                            </div>
+                                            <div class="indicator-value">92%</div>
+                                        </div>
+                                        <div class="indicator-item">
+                                            <div class="indicator-label">Health Check</div>
+                                            <div class="indicator-bar">
+                                                <div class="indicator-fill" id="health-bar" style="width: 78%"></div>
+                                            </div>
+                                            <div class="indicator-value">78%</div>
+                                        </div>
+                                        <div class="indicator-item">
+                                            <div class="indicator-label">Conditions Met</div>
+                                            <div class="indicator-bar">
+                                                <div class="indicator-fill" id="conditions-bar" style="width: 65%"></div>
+                                            </div>
+                                            <div class="indicator-value">65%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detailed Reports Section -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-chart-bar"></i> Detailed Reports</h3>
+                                    <div class="report-controls">
+                                        <button class="acmst-btn acmst-btn-primary" id="generate-report">
+                                            <i class="fa fa-download"></i> Generate Report
+                                        </button>
+                                        <button class="acmst-btn acmst-btn-outline" id="export-data">
+                                            <i class="fa fa-file-export"></i> Export Data
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="acmst-card-body">
+                                    <div class="reports-grid" id="reports-grid">
+                                        <!-- Report cards will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Document Management Portal Template -->
+        <template id="portal_admission_documents" name="Admission Document Management Portal">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Document Management - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-folder-open"></i> Document Management</h1>
+                                    <p class="mb-0">Manage and organize your admission documents</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="acmst-document-summary">
+                                        <div class="document-stats">
+                                            <span class="stat-item total">
+                                                <i class="fa fa-file"></i>
+                                                <span class="stat-number" t-esc="total_documents or 0"/>
+                                                <span class="stat-label">Total</span>
+                                            </span>
+                                            <span class="stat-item approved">
+                                                <i class="fa fa-check-circle"></i>
+                                                <span class="stat-number" t-esc="approved_documents or 0"/>
+                                                <span class="stat-label">Approved</span>
+                                            </span>
+                                            <span class="stat-item pending">
+                                                <i class="fa fa-clock"></i>
+                                                <span class="stat-number" t-esc="pending_documents or 0"/>
+                                                <span class="stat-label">Pending</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            <!-- Document Categories -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-list"></i> Categories</h3>
+                                </div>
+                                <div class="acmst-document-categories">
+                                    <div class="category-item active" data-category="all">
+                                        <i class="fa fa-folder"></i>
+                                        <span>All Documents</span>
+                                        <span class="count" t-esc="total_documents or 0"/>
+                                    </div>
+                                    <div class="category-item" data-category="academic">
+                                        <i class="fa fa-graduation-cap"></i>
+                                        <span>Academic</span>
+                                        <span class="count" t-esc="academic_documents or 0"/>
+                                    </div>
+                                    <div class="category-item" data-category="financial">
+                                        <i class="fa fa-dollar-sign"></i>
+                                        <span>Financial</span>
+                                        <span class="count" t-esc="financial_documents or 0"/>
+                                    </div>
+                                    <div class="category-item" data-category="health">
+                                        <i class="fa fa-heartbeat"></i>
+                                        <span>Health</span>
+                                        <span class="count" t-esc="health_documents or 0"/>
+                                    </div>
+                                    <div class="category-item" data-category="identity">
+                                        <i class="fa fa-id-card"></i>
+                                        <span>Identity</span>
+                                        <span class="count" t-esc="identity_documents or 0"/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Quick Actions -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-bolt"></i> Quick Actions</h3>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="acmst-btn acmst-btn-primary" id="bulk-upload">
+                                        <i class="fa fa-upload"></i> Bulk Upload
+                                    </button>
+                                    <button class="acmst-btn acmst-btn-secondary" id="create-folder">
+                                        <i class="fa fa-folder-plus"></i> Create Folder
+                                    </button>
+                                    <button class="acmst-btn acmst-btn-outline" id="download-all">
+                                        <i class="fa fa-download"></i> Download All
+                                    </button>
+                                    <button class="acmst-btn acmst-btn-outline" id="share-documents">
+                                        <i class="fa fa-share-alt"></i> Share Documents
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Folder Structure -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-folder-tree"></i> Folder Structure</h3>
+                                </div>
+                                <div class="acmst-folder-tree" id="folder-tree">
+                                    <div class="folder-item" data-folder-id="root">
+                                        <i class="fa fa-folder"></i>
+                                        <span>All Documents</span>
+                                        <span class="folder-count">0</span>
+                                    </div>
+                                    <div class="folder-item" data-folder-id="academic">
+                                        <i class="fa fa-graduation-cap"></i>
+                                        <span>Academic</span>
+                                        <span class="folder-count">0</span>
+                                    </div>
+                                    <div class="folder-item" data-folder-id="financial">
+                                        <i class="fa fa-dollar-sign"></i>
+                                        <span>Financial</span>
+                                        <span class="folder-count">0</span>
+                                    </div>
+                                    <div class="folder-item" data-folder-id="health">
+                                        <i class="fa fa-heartbeat"></i>
+                                        <span>Health</span>
+                                        <span class="folder-count">0</span>
+                                    </div>
+                                    <div class="folder-item" data-folder-id="identity">
+                                        <i class="fa fa-id-card"></i>
+                                        <span>Identity</span>
+                                        <span class="folder-count">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-9">
+                            <!-- Document Toolbar -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6">
+                                            <h3><i class="fa fa-files"></i> Documents</h3>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="document-toolbar">
+                                                <div class="search-box">
+                                                    <input type="text" class="form-control" id="document-search" placeholder="Search documents...">
+                                                    <i class="fa fa-search"></i>
+                                                </div>
+                                                <div class="filter-controls">
+                                                    <button class="btn btn-sm btn-outline-secondary" id="advanced-filter" title="Advanced Filter">
+                                                        <i class="fa fa-filter"></i> Filter
+                                                    </button>
+                                                </div>
+                                                <div class="view-controls">
+                                                    <button class="btn btn-sm btn-outline-primary" id="grid-view" title="Grid View">
+                                                        <i class="fa fa-th"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-primary active" id="list-view" title="List View">
+                                                        <i class="fa fa-list"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="sort-controls">
+                                                    <select class="form-select" id="sort-documents">
+                                                        <option value="name">Sort by Name</option>
+                                                        <option value="date">Sort by Date</option>
+                                                        <option value="size">Sort by Size</option>
+                                                        <option value="status">Sort by Status</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Document List -->
+                                <div class="acmst-document-list" id="document-list">
+                                    <!-- Documents will be populated by JavaScript -->
+                                    <div class="document-item">
+                                        <div class="document-icon">
+                                            <i class="fa fa-file-pdf"></i>
+                                        </div>
+                                        <div class="document-info">
+                                            <div class="document-name">Official Transcript.pdf</div>
+                                            <div class="document-meta">
+                                                <span class="document-size">2.3 MB</span>
+                                                <span class="document-date">Uploaded 2 days ago</span>
+                                                <span class="document-status status-approved">Approved</span>
+                                            </div>
+                                        </div>
+                                        <div class="document-actions">
+                                            <button class="btn btn-sm btn-outline-primary" data-action="preview">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" data-action="download">
+                                                <i class="fa fa-download"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" data-action="delete">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Conditions Portal Template -->
+        <template id="portal_admission_conditions" name="Admission Conditions Portal">
+            <t t-call="web.frontend_layout">
+                <t t-set="title">Conditions & Requirements - ACMST College</t>
+                <div class="acmst-portal-container">
+                    <div class="acmst-portal-header">
+                        <div class="container-fluid">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h1><i class="fa fa-tasks"></i> Conditions & Requirements</h1>
+                                    <p class="mb-0">Complete all conditional requirements for your admission</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="acmst-conditions-summary">
+                                        <div class="conditions-stats">
+                                            <span class="stat-item completed">
+                                                <i class="fa fa-check-circle"></i>
+                                                <span class="stat-number" t-esc="conditions_completed or 0"/>
+                                                <span class="stat-label">Completed</span>
+                                            </span>
+                                            <span class="stat-item pending">
+                                                <i class="fa fa-clock"></i>
+                                                <span class="stat-number" t-esc="conditions_pending or 0"/>
+                                                <span class="stat-label">Pending</span>
+                                            </span>
+                                            <span class="stat-item overdue">
+                                                <i class="fa fa-exclamation-triangle"></i>
+                                                <span class="stat-number" t-esc="conditions_overdue or 0"/>
+                                                <span class="stat-label">Overdue</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            <!-- Conditions Progress Overview -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-chart-line"></i> Overall Progress</h3>
+                                    <div class="acmst-card-actions">
+                                        <button class="acmst-btn acmst-btn-sm acmst-btn-outline" id="refresh-conditions">
+                                            <i class="fa fa-refresh"></i> Refresh
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="acmst-conditions-progress">
+                                    <div class="progress-overview">
+                                        <div class="progress-bar-large">
+                                            <div class="progress-fill" t-att-style="'width: ' + (conditions_progress or 0) + '%'"></div>
+                                        </div>
+                                        <div class="progress-text">
+                                            <span class="progress-percentage" t-esc="(conditions_progress or 0) + '%'"/>
+                                            <span class="progress-label">Complete</span>
+                                        </div>
+                                    </div>
+                                    <div class="progress-details">
+                                        <div class="detail-item">
+                                            <span class="detail-label">Total Conditions:</span>
+                                            <span class="detail-value" t-esc="total_conditions or 0"/>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Completed:</span>
+                                            <span class="detail-value completed" t-esc="conditions_completed or 0"/>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Remaining:</span>
+                                            <span class="detail-value pending" t-esc="(total_conditions or 0) - (conditions_completed or 0)"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Conditions List -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-list-check"></i> Conditional Requirements</h3>
+                                    <div class="acmst-card-actions">
+                                        <div class="filter-dropdown">
+                                            <select class="form-select" id="condition-filter">
+                                                <option value="all">All Conditions</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="overdue">Overdue</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="acmst-conditions-list" id="conditions-list">
+                                    <!-- Conditions will be populated by JavaScript -->
+                                    <div class="condition-item">
+                                        <div class="condition-header">
+                                            <div class="condition-title">
+                                                <h5>Submit Official Transcripts</h5>
+                                                <span class="condition-type">Academic</span>
+                                            </div>
+                                            <div class="condition-status">
+                                                <span class="status-badge status-pending">Pending</span>
+                                            </div>
+                                        </div>
+                                        <div class="condition-content">
+                                            <p class="condition-description">
+                                                Submit official transcripts from all previously attended institutions. 
+                                                Transcripts must be sealed and sent directly from the institution.
+                                            </p>
+                                            <div class="condition-details">
+                                                <div class="detail-row">
+                                                    <span class="detail-label">Deadline:</span>
+                                                    <span class="detail-value deadline">March 15, 2024</span>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <span class="detail-label">Priority:</span>
+                                                    <span class="detail-value priority high">High</span>
+                                                </div>
+                                                <div class="detail-row">
+                                                    <span class="detail-label">Documents Required:</span>
+                                                    <span class="detail-value">Official Transcripts (2)</span>
+                                                </div>
+                                            </div>
+                                            <div class="condition-actions">
+                                                <button class="acmst-btn acmst-btn-primary acmst-btn-sm" data-action="upload-documents">
+                                                    <i class="fa fa-upload"></i> Upload Documents
+                                                </button>
+                                                <button class="acmst-btn acmst-btn-outline acmst-btn-sm" data-action="view-details">
+                                                    <i class="fa fa-eye"></i> View Details
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <!-- Quick Actions -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-bolt"></i> Quick Actions</h3>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="acmst-btn acmst-btn-primary" id="upload-documents">
+                                        <i class="fa fa-upload"></i> Upload Documents
+                                    </button>
+                                    <button class="acmst-btn acmst-btn-secondary" id="view-guidance">
+                                        <i class="fa fa-question-circle"></i> View Guidance
+                                    </button>
+                                    <button class="acmst-btn acmst-btn-outline" id="contact-support">
+                                        <i class="fa fa-headset"></i> Contact Support
+                                    </button>
+                                    <a href="/admission/status" class="acmst-btn acmst-btn-outline">
+                                        <i class="fa fa-arrow-left"></i> Back to Status
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Upcoming Deadlines -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-calendar-alt"></i> Upcoming Deadlines</h3>
+                                </div>
+                                <div class="acmst-deadlines-list">
+                                    <div class="deadline-item urgent">
+                                        <div class="deadline-icon">
+                                            <i class="fa fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="deadline-content">
+                                            <div class="deadline-title">Official Transcripts</div>
+                                            <div class="deadline-date">Due in 3 days</div>
+                                        </div>
+                                    </div>
+                                    <div class="deadline-item warning">
+                                        <div class="deadline-icon">
+                                            <i class="fa fa-clock"></i>
+                                        </div>
+                                        <div class="deadline-content">
+                                            <div class="deadline-title">English Proficiency Test</div>
+                                            <div class="deadline-date">Due in 1 week</div>
+                                        </div>
+                                    </div>
+                                    <div class="deadline-item normal">
+                                        <div class="deadline-icon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <div class="deadline-content">
+                                            <div class="deadline-title">Financial Documents</div>
+                                            <div class="deadline-date">Due in 2 weeks</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Help & Support -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-life-ring"></i> Need Help?</h3>
+                                </div>
+                                <div class="acmst-help-resources">
+                                    <div class="help-item">
+                                        <i class="fa fa-book"></i>
+                                        <span>Step-by-step Guide</span>
+                                    </div>
+                                    <div class="help-item">
+                                        <i class="fa fa-question-circle"></i>
+                                        <span>FAQ</span>
+                                    </div>
+                                    <div class="help-item">
+                                        <i class="fa fa-video"></i>
+                                        <span>Video Tutorials</span>
+                                    </div>
+                                    <div class="help-item">
+                                        <i class="fa fa-comments"></i>
+                                        <span>Live Chat</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Notification Preferences Template -->
+        <template id="notification_preferences" name="Notification Preferences">
+            <div class="acmst-card">
+                <div class="acmst-card-header">
+                    <h3><i class="fa fa-bell"></i> Notification Preferences</h3>
+                    <p class="text-muted">Choose how you want to be notified about your application status</p>
+                </div>
+                <div class="acmst-card-body">
+                    <form id="notification-preferences-form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>In-App Notifications</h5>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notify-app-status" checked>
+                                    <label class="form-check-label" for="notify-app-status">
+                                        Application status changes
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notify-documents" checked>
+                                    <label class="form-check-label" for="notify-documents">
+                                        Document requirements
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notify-deadlines" checked>
+                                    <label class="form-check-label" for="notify-deadlines">
+                                        Important deadlines
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Email Notifications</h5>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="email-status" checked>
+                                    <label class="form-check-label" for="email-status">
+                                        Status change emails
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="email-reminders" checked>
+                                    <label class="form-check-label" for="email-reminders">
+                                        Reminder emails
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="email-weekly" checked>
+                                    <label class="form-check-label" for="email-weekly">
+                                        Weekly summary
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h5>SMS Notifications</h5>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="sms-urgent" checked>
+                                    <label class="form-check-label" for="sms-urgent">
+                                        Urgent updates only
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="sms-approval">
+                                    <label class="form-check-label" for="sms-approval">
+                                        Final approval notification
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Notification Frequency</h5>
+                                <select class="form-select" id="notification-frequency">
+                                    <option value="immediate">Immediate</option>
+                                    <option value="hourly">Hourly digest</option>
+                                    <option value="daily" selected>Daily digest</option>
+                                    <option value="weekly">Weekly digest</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <button type="submit" class="acmst-btn acmst-btn-primary">
+                                <i class="fa fa-save"></i> Save Preferences
+                            </button>
+                            <button type="button" class="acmst-btn acmst-btn-secondary ms-2" id="test-notifications">
+                                <i class="fa fa-paper-plane"></i> Test Notifications
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </template>
 
     </data>
