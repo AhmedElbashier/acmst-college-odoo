@@ -111,7 +111,7 @@ class AcmstDashboard(models.Model):
         help='Health checks assigned to current user'
     )
 
-    @api.depends()
+    @api.depends_context('uid')
     def _compute_dashboard_statistics(self):
         """Compute dashboard statistics"""
         for record in self:
@@ -123,7 +123,7 @@ class AcmstDashboard(models.Model):
             record.ministry_pending = self.env['acmst.admission.file'].search_count([('state', '=', 'ministry_pending')])
             record.completed = self.env['acmst.admission.file'].search_count([('state', '=', 'completed')])
 
-    @api.depends()
+    @api.depends_context('uid')
     def _compute_coordinator_statistics(self):
         """Compute coordinator dashboard statistics"""
         for record in self:
@@ -135,7 +135,7 @@ class AcmstDashboard(models.Model):
             record.my_reviews_count = self.env['acmst.admission.file'].search_count([('coordinator_id', '=', self.env.user.id)])
             record.approved = self.env['acmst.admission.file'].search_count([('state', '=', 'manager_approved')])
 
-    @api.depends()
+    @api.depends_context('uid')
     def _compute_health_statistics(self):
         """Compute health check statistics"""
         for record in self:

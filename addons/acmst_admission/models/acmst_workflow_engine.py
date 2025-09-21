@@ -133,8 +133,10 @@ class AcmstWorkflowEngine(models.Model):
                     
                     if self.notification_enabled and rule.send_notification:
                         rule.send_notification_email(admission_file)
+                except (ValidationError, UserError) as e:
+                    _logger.error(f'Validation error processing timeout transition for file {admission_file.name}: {str(e)}')
                 except Exception as e:
-                    _logger.error(f'Error processing timeout transition for file {admission_file.name}: {str(e)}')
+                    _logger.error(f'Unexpected error processing timeout transition for file {admission_file.name}: {str(e)}')
 
     @api.model
     def process_all_workflows(self):
@@ -144,8 +146,10 @@ class AcmstWorkflowEngine(models.Model):
         for workflow in active_workflows:
             try:
                 workflow.process_timeout_transitions()
+            except (ValidationError, UserError) as e:
+                _logger.error(f'Validation error processing workflow {workflow.name}: {str(e)}')
             except Exception as e:
-                _logger.error(f'Error processing workflow {workflow.name}: {str(e)}')
+                _logger.error(f'Unexpected error processing workflow {workflow.name}: {str(e)}')
 
     def test_workflow(self):
         """Test the workflow engine"""
@@ -173,13 +177,23 @@ class AcmstWorkflowEngine(models.Model):
                     'type': 'success',
                 }
             }
+        except (ValidationError, UserError) as e:
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('Workflow Test Failed'),
+                    'message': _('Validation error testing workflow "%s": %s' % (self.name, str(e))),
+                    'type': 'danger',
+                }
+            }
         except Exception as e:
             return {
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
                 'params': {
                     'title': _('Workflow Test Failed'),
-                    'message': _('Error testing workflow "%s": %s' % (self.name, str(e))),
+                    'message': _('Unexpected error testing workflow "%s": %s' % (self.name, str(e))),
                     'type': 'danger',
                 }
             }
@@ -205,9 +219,12 @@ class AcmstWorkflowEngine(models.Model):
             try:
                 self.process_workflow(file)
                 processed_count += 1
+            except (ValidationError, UserError) as e:
+                error_count += 1
+                _logger.error(f'Validation error processing file {file.name} with workflow {self.name}: {str(e)}')
             except Exception as e:
                 error_count += 1
-                _logger.error(f'Error processing file {file.name} with workflow {self.name}: {str(e)}')
+                _logger.error(f'Unexpected error processing file {file.name} with workflow {self.name}: {str(e)}')
         
         message = _('Workflow "%s" processed %d files successfully.' % (self.name, processed_count))
         if error_count > 0:
@@ -376,23 +393,70 @@ class AcmstWorkflowRule(models.Model):
         return True
 
     def _evaluate_custom_condition(self, admission_file):
-        """Evaluate custom Python conditions"""
+        """Evaluate custom Python conditions using safe evaluation"""
         if not self.condition_expression:
             return True
         
         try:
-            # Create a safe evaluation context
+            # Use ast.literal_eval for safer evaluation of simple expressions
+            import ast
+            
+            # Only allow safe operations - basic comparisons and field access
+            # This is a simplified version that only supports basic field comparisons
+            # For more complex conditions, consider using a proper rule engine
+            
+            # Parse the expression to check if it's safe
+            try:
+                parsed = ast.parse(self.condition_expression, mode='eval')
+            except SyntaxError:
+                _logger.warning(f'Invalid syntax in condition expression: {self.condition_expression}')
+                return False
+            
+            # Check if the expression only contains safe operations
+            if not self._is_safe_expression(parsed):
+                _logger.warning(f'Unsafe condition expression: {self.condition_expression}')
+                return False
+            
+            # Create a safe evaluation context with limited access
             context = {
                 'admission_file': admission_file,
-                'fields': fields,
                 'datetime': datetime,
                 'date': date,
                 'timedelta': timedelta,
             }
             
-            return eval(self.condition_expression, context)
+            # Use eval with restricted globals and locals
+            return eval(self.condition_expression, {"__builtins__": {}}, context)
+        except (ValidationError, UserError) as e:
+            _logger.error(f'Validation error evaluating custom condition: {str(e)}')
+            return False
         except Exception as e:
-            _logger.error(f'Error evaluating custom condition: {str(e)}')
+            _logger.error(f'Unexpected error evaluating custom condition: {str(e)}')
+            return False
+    
+    def _is_safe_expression(self, node):
+        """Check if an AST node represents a safe expression"""
+        if isinstance(node, ast.Expression):
+            return self._is_safe_expression(node.body)
+        elif isinstance(node, ast.Compare):
+            return all(self._is_safe_expression(child) for child in [node.left] + node.comparators)
+        elif isinstance(node, ast.Attribute):
+            return self._is_safe_expression(node.value) and node.attr in ['state', 'name', 'create_date', 'write_date']
+        elif isinstance(node, ast.Name):
+            return node.id in ['admission_file', 'datetime', 'date', 'timedelta']
+        elif isinstance(node, ast.Constant):
+            return True
+        elif isinstance(node, ast.Str):  # Python < 3.8 compatibility
+            return True
+        elif isinstance(node, ast.Num):  # Python < 3.8 compatibility
+            return True
+        elif isinstance(node, (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Mod)):
+            return True
+        elif isinstance(node, (ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE, ast.Is, ast.IsNot, ast.In, ast.NotIn)):
+            return True
+        elif isinstance(node, (ast.And, ast.Or, ast.Not)):
+            return all(self._is_safe_expression(child) for child in node.values) if hasattr(node, 'values') else self._is_safe_expression(node.operand)
+        else:
             return False
 
     def validate_conditions(self, admission_file):
@@ -421,8 +485,12 @@ class AcmstWorkflowRule(models.Model):
                 # Create pending email instead of skipping
                 _logger.warning(f'No active mail server configured. Creating pending email for workflow notification.')
                 self._create_pending_email(admission_file)
+        except (ValidationError, UserError) as e:
+            _logger.error(f'Validation error sending notification for file {admission_file.name}: {str(e)}')
+            # Create pending email for failed attempts too
+            self._create_pending_email(admission_file)
         except Exception as e:
-            _logger.error(f'Error sending notification for file {admission_file.name}: {str(e)}')
+            _logger.error(f'Unexpected error sending notification for file {admission_file.name}: {str(e)}')
             # Create pending email for failed attempts too
             self._create_pending_email(admission_file)
 
@@ -442,8 +510,10 @@ class AcmstWorkflowRule(models.Model):
                     'created_by': self.env.user.id,
                 })
                 _logger.info(f'Created pending email for workflow notification on file {admission_file.name}')
+        except (ValidationError, UserError) as e:
+            _logger.error(f'Validation error creating pending email for workflow notification: {str(e)}')
         except Exception as e:
-            _logger.error(f'Failed to create pending email for workflow notification: {str(e)}')
+            _logger.error(f'Unexpected error creating pending email for workflow notification: {str(e)}')
 
     @api.constrains('from_state', 'to_state')
     def _check_state_transition(self):

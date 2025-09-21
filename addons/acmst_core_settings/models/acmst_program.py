@@ -223,12 +223,17 @@ class AcmstProgram(models.Model):
         for record in self:
             record.batch_count = len(record.batch_ids.filtered('active'))
     
-    @api.depends('batch_ids')  # Will be updated when student module is available
+    @api.depends('batch_ids.admission_file_ids', 'batch_ids.admission_file_ids.state')
     def _compute_student_count(self):
         """Compute the number of students under this program"""
         for record in self:
-            # Placeholder - will be implemented when student module is available
-            record.student_count = 0
+            # Count all admission files across all batches as students
+            total_students = 0
+            for batch in record.batch_ids:
+                total_students += len(batch.admission_file_ids.filtered(
+                    lambda f: f.state in ['draft', 'submitted', 'under_review', 'approved']
+                ))
+            record.student_count = total_students
     
     @api.depends('college_id', 'program_type_id')
     def _compute_course_count(self):

@@ -149,12 +149,18 @@ class AcmstProgramType(models.Model):
         for record in self:
             record.program_count = len(record.program_ids.filtered('active'))
     
-    @api.depends('program_ids.batch_ids')  # Will be updated when student module is available
+    @api.depends('program_ids.batch_ids.admission_file_ids', 'program_ids.batch_ids.admission_file_ids.state')
     def _compute_student_count(self):
         """Compute the number of students in programs of this type"""
         for record in self:
-            # Placeholder - will be implemented when student module is available
-            record.student_count = 0
+            # Count all admission files across all batches in programs of this type
+            total_students = 0
+            for program in record.program_ids:
+                for batch in program.batch_ids:
+                    total_students += len(batch.admission_file_ids.filtered(
+                        lambda f: f.state in ['draft', 'submitted', 'under_review', 'approved']
+                    ))
+            record.student_count = total_students
     
     @api.constrains('code')
     def _check_code_unique(self):

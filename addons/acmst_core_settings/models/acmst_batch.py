@@ -192,25 +192,30 @@ class AcmstBatch(models.Model):
         help="Batch progress percentage"
     )
     
-    @api.depends()  # Will be updated when student module is available
+    @api.depends('admission_file_ids', 'admission_file_ids.state')
     def _compute_current_students(self):
         """Compute the current number of students in this batch"""
         for record in self:
-            # Placeholder - will be implemented when student module is available
-            record.current_students = 0
+            # Count active admission files as current students
+            record.current_students = len(record.admission_file_ids.filtered(
+                lambda f: f.state in ['draft', 'submitted', 'under_review', 'approved']
+            ))
     
-    @api.depends()  # Will be updated when student module is available
+    @api.depends('admission_file_ids', 'admission_file_ids.state')
     def _compute_enrolled_students(self):
         """Compute the number of enrolled students"""
         for record in self:
-            # Placeholder - will be implemented when student module is available
-            record.enrolled_students = 0
+            # Count approved admission files as enrolled students
+            record.enrolled_students = len(record.admission_file_ids.filtered(
+                lambda f: f.state == 'approved'
+            ))
     
-    @api.depends()  # Will be updated when student module is available
+    @api.depends('admission_file_ids', 'admission_file_ids.state')
     def _compute_graduated_students(self):
         """Compute the number of graduated students"""
         for record in self:
-            # Placeholder - will be implemented when student module is available
+            # Count graduated students (when student module is available)
+            # For now, use a placeholder that can be updated later
             record.graduated_students = 0
     
     @api.depends('current_students', 'max_students')
