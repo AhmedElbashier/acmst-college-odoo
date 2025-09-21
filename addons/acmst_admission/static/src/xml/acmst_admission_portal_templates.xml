@@ -1079,5 +1079,23 @@
             </div>
         </template>
 
+        <!-- Tooltip System -->
+        <template id="tooltip_system" name="Tooltip System">
+            <div class="acmst-tooltip" id="acmst-tooltip">
+                <div class="tooltip-arrow"></div>
+                <div class="tooltip-content">
+                    <div class="tooltip-title"></div>
+                    <div class="tooltip-text"></div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Help Button Template -->
+        <template id="help_button" name="Help Button">
+            <button class="acmst-help-btn" t-att-data-help-text="helpText" t-att-data-help-title="helpTitle">
+                <i class="fa fa-question-circle"></i>
+            </button>
+        </template>
+
     </data>
 </odoo>

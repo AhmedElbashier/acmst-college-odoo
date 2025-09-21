@@ -129,6 +129,41 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
                     self._clearFieldError($(this));
                 }
             });
+            
+            // Real-time character counters
+            this.$('textarea[name="address"]').on('input', function() {
+                var value = $(this).val();
+                var maxLength = $(this).attr('maxlength') || 500;
+                var remaining = maxLength - value.length;
+                
+                var $counter = $(this).siblings('.character-counter');
+                if (!$counter.length) {
+                    $counter = $('<div class="character-counter text-muted small"></div>');
+                    $(this).after($counter);
+                }
+                
+                $counter.text(remaining + ' characters remaining');
+                
+                if (remaining < 50) {
+                    $counter.removeClass('text-muted').addClass('text-warning');
+                } else if (remaining < 0) {
+                    $counter.removeClass('text-warning').addClass('text-danger');
+                } else {
+                    $counter.removeClass('text-warning text-danger').addClass('text-muted');
+                }
+            });
+            
+            // Real-time field completion indicators
+            this.$('input[required], select[required], textarea[required]').on('input change', function() {
+                self._updateFieldCompletion($(this));
+            });
+            
+            // Form field focus effects
+            this.$('input, select, textarea').on('focus', function() {
+                $(this).closest('.form-group, .mb-3').addClass('focused');
+            }).on('blur', function() {
+                $(this).closest('.form-group, .mb-3').removeClass('focused');
+            });
         },
 
         _setupFileUpload: function () {
@@ -566,6 +601,52 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
             var progress = Math.round((filledFields / totalFields) * 100);
             $progressBar.css('width', progress + '%');
             $progressBar.attr('aria-valuenow', progress);
+        },
+
+        _updateFieldCompletion: function ($field) {
+            var value = $field.val().trim();
+            var isRequired = $field.prop('required');
+            var $fieldGroup = $field.closest('.form-group, .mb-3');
+            
+            if (isRequired) {
+                if (value !== '') {
+                    $fieldGroup.addClass('field-completed');
+                    $fieldGroup.removeClass('field-empty');
+                } else {
+                    $fieldGroup.removeClass('field-completed');
+                    $fieldGroup.addClass('field-empty');
+                }
+            }
+            
+            // Update overall progress
+            this._updateProgress();
+            
+            // Show smart notifications
+            this._showSmartNotifications();
+        },
+
+        _showSmartNotifications: function () {
+            var totalFields = this.$('input[required], select[required], textarea[required]').length;
+            var filledFields = this.$('input[required], select[required], textarea[required]').filter(function() {
+                return $(this).val() && $(this).val().trim() !== '';
+            }).length;
+            
+            var percentage = Math.round((filledFields / totalFields) * 100);
+            
+            // Show progress notifications at key milestones
+            if (percentage === 25 && filledFields === 1) {
+                this._getNotificationSystem().showFormTip('Great start! Make sure to fill in your personal information completely.');
+            } else if (percentage === 50) {
+                this._getNotificationSystem().showFormTip('Halfway there! Don\'t forget to select your preferred program and batch.');
+            } else if (percentage === 75) {
+                this._getNotificationSystem().showFormTip('Almost done! Upload your supporting documents to complete the application.');
+            } else if (percentage === 100) {
+                this._getNotificationSystem().showFormProgress(filledFields, totalFields);
+            }
+        },
+
+        _getNotificationSystem: function () {
+            return publicWidget.registry.acmstNotificationSystem.prototype;
         },
 
         _updateFileUploadDisplay: function (file) {
@@ -1258,6 +1339,24 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
             };
             
             this._showNotification(notification);
+        },
+
+        // Form completion notifications
+        showFormTip: function (message) {
+            this.showNotification('info', 'Form Tip', message, 'lightbulb');
+        },
+
+        showFormProgress: function (completed, total) {
+            var percentage = Math.round((completed / total) * 100);
+            var message = `You've completed ${completed} of ${total} required fields (${percentage}%)`;
+            
+            if (percentage === 100) {
+                this.showNotification('success', 'Form Complete!', 'All required fields have been filled. You can now proceed to the next step.', 'check-circle');
+            } else if (percentage >= 75) {
+                this.showNotification('info', 'Almost There!', message + '. Just a few more fields to go!', 'clock');
+            } else if (percentage >= 50) {
+                this.showNotification('info', 'Good Progress', message + '. Keep going!', 'thumbs-up');
+            }
         }
     });
 

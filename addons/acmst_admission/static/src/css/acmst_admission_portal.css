@@ -1088,6 +1088,331 @@
     display: block;
 }
 
+/* Field Completion Indicators */
+.field-completed {
+    position: relative;
+}
+
+.field-completed::after {
+    content: '✓';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #28a745;
+    font-weight: bold;
+    font-size: 16px;
+    z-index: 10;
+}
+
+.field-completed .form-control {
+    padding-right: 40px;
+    border-color: #28a745;
+    background-color: #f8fff8;
+}
+
+.field-empty .form-control {
+    border-color: #ffc107;
+    background-color: #fffef7;
+}
+
+.field-empty::after {
+    content: '⚠';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ffc107;
+    font-weight: bold;
+    font-size: 16px;
+    z-index: 10;
+}
+
+/* Focus Effects */
+.form-group.focused,
+.mb-3.focused {
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+.form-group.focused .form-control,
+.mb-3.focused .form-control {
+    box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+    border-color: #1976d2;
+}
+
+/* Character Counter */
+.character-counter {
+    text-align: right;
+    margin-top: 5px;
+    font-size: 12px;
+    transition: color 0.3s ease;
+}
+
+.character-counter.text-warning {
+    color: #ffc107 !important;
+}
+
+.character-counter.text-danger {
+    color: #dc3545 !important;
+}
+
+/* Enhanced Form Styling */
+.form-control:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+    background-color: #fff;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    transition: color 0.3s ease;
+}
+
+.form-group.focused .form-label,
+.mb-3.focused .form-label {
+    color: #1976d2;
+}
+
+/* Required Field Indicator */
+.form-label.required::after {
+    content: ' *';
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Form Group Animations */
+.form-group,
+.mb-3 {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.form-group:hover,
+.mb-3:hover {
+    transform: translateY(-1px);
+}
+
+/* Textarea Enhancements */
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+textarea.form-control:focus {
+    min-height: 120px;
+}
+
+/* Tooltip System */
+.acmst-tooltip {
+    position: absolute;
+    z-index: 10001;
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    max-width: 250px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.acmst-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.tooltip-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+}
+
+.tooltip-arrow.top {
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-color: #333;
+}
+
+.tooltip-arrow.bottom {
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-color: #333;
+}
+
+.tooltip-arrow.left {
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left-color: #333;
+}
+
+.tooltip-arrow.right {
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right-color: #333;
+}
+
+.tooltip-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #fff;
+}
+
+.tooltip-text {
+    color: #e0e0e0;
+    line-height: 1.4;
+}
+
+/* Help Button */
+.acmst-help-btn {
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.acmst-help-btn:hover {
+    background: #e9ecef;
+    color: #1976d2;
+    transform: scale(1.1);
+}
+
+.acmst-help-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.25);
+}
+
+/* Form Field Help */
+.form-group .acmst-help-btn,
+.mb-3 .acmst-help-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+}
+
+.form-group .form-control,
+.mb-3 .form-control {
+    padding-right: 40px;
+}
+
+/* Enhanced Form Labels with Help */
+.form-label-with-help {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.form-label-with-help .form-label {
+    margin-bottom: 0;
+    flex: 1;
+}
+
+/* Smart Form Hints */
+.form-hint {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 4px;
+    padding: 6px 8px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border-left: 3px solid #1976d2;
+    display: none;
+}
+
+.form-hint.show {
+    display: block;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form Field States */
+.form-field-valid {
+    border-color: #28a745 !important;
+    background-color: #f8fff8 !important;
+}
+
+.form-field-invalid {
+    border-color: #dc3545 !important;
+    background-color: #fff5f5 !important;
+}
+
+.form-field-warning {
+    border-color: #ffc107 !important;
+    background-color: #fffef7 !important;
+}
+
+/* Progress Indicators */
+.form-progress-indicator {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-progress-indicator .progress {
+    height: 8px;
+    border-radius: 4px;
+    background: #e9ecef;
+    overflow: hidden;
+}
+
+.form-progress-indicator .progress-bar {
+    background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+    transition: width 0.5s ease;
+    position: relative;
+}
+
+.form-progress-indicator .progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.3) 50%,
+        transparent 100%
+    );
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
 /* Loading States */
 .wizard-loading {
     position: absolute;
