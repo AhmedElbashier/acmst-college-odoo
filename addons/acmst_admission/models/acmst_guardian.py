@@ -9,27 +9,27 @@ class AcmstGuardian(models.Model):
     _description = 'Guardian Information'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(string='Guardian Name', required=True)
+    name = fields.Char(string=_('Guardian Name'), required=True)
     relationship = fields.Selection([
-        ('father', 'Father'),
-        ('mother', 'Mother'),
-        ('brother', 'Brother'),
-        ('sister', 'Sister'),
-        ('uncle', 'Uncle'),
-        ('aunt', 'Aunt'),
-        ('grandfather', 'Grandfather'),
-        ('grandmother', 'Grandmother'),
-        ('legal_guardian', 'Legal Guardian'),
-        ('other', 'Other'),
-    ], string='Relationship', required=True)
-    phone = fields.Char(string='Phone', required=True)
-    email = fields.Char(string='Email')
-    is_default = fields.Boolean(string='Default Guardian', default=False, help='Only one guardian can be marked as default')
-    is_active = fields.Boolean(string='Active', default=True)
+        ('father', _('Father')),
+        ('mother', _('Mother')),
+        ('brother', _('Brother')),
+        ('sister', _('Sister')),
+        ('uncle', _('Uncle')),
+        ('aunt', _('Aunt')),
+        ('grandfather', _('Grandfather')),
+        ('grandmother', _('Grandmother')),
+        ('legal_guardian', _('Legal Guardian')),
+        ('other', _('Other')),
+    ], string=_('Relationship'), required=True)
+    phone = fields.Char(string=_('Phone'), required=True)
+    email = fields.Char(string=_('Email'))
+    is_default = fields.Boolean(string=_('Default Guardian'), default=False, help=_('Only one guardian can be marked as default'))
+    is_active = fields.Boolean(string=_('Active'), default=True)
 
     # Relationships
-    portal_application_id = fields.Many2one('acmst.portal.application', string='Portal Application', ondelete='cascade')
-    admission_file_id = fields.Many2one('acmst.admission.file', string='Admission File', ondelete='cascade')
+    portal_application_id = fields.Many2one('acmst.portal.application', string=_('Portal Application'), ondelete='cascade')
+    admission_file_id = fields.Many2one('acmst.admission.file', string=_('Admission File'), ondelete='cascade')
 
     @api.constrains('is_default')
     def _check_default_guardian(self):

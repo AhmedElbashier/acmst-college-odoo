@@ -15,39 +15,39 @@ class AcmstDocument(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(
-        string='Document Name',
+        string=_('Document Name'),
         required=True,
-        help='Name of the document'
+        help=_('Name of the document')
     )
     document_type = fields.Selection([
-        ('id_document', 'ID Document'),
-        ('academic_certificate', 'Academic Certificate'),
-        ('transcript', 'Transcript'),
-        ('support_document', 'Support Document'),
-        ('medical_report', 'Medical Report'),
-        ('other', 'Other')
-    ], string='Document Type', required=True, help='Type of document')
+        ('id_document', _('ID Document')),
+        ('academic_certificate', _('Academic Certificate')),
+        ('transcript', _('Transcript')),
+        ('support_document', _('Support Document')),
+        ('medical_report', _('Medical Report')),
+        ('other', _('Other'))
+    ], string=_('Document Type'), required=True, help=_('Type of document'))
 
     file = fields.Binary(
-        string='File',
+        string=_('File'),
         required=True,
         attachment=True,
-        help='Document file'
+        help=_('Document file')
     )
     filename = fields.Char(
-        string='Filename',
-        help='Original filename of the document'
+        string=_('Filename'),
+        help=_('Original filename of the document')
     )
 
     # Relations
     portal_application_id = fields.Many2one(
         'acmst.portal.application',
-        string='Portal Application',
-        help='Portal application this document belongs to'
+        string=_('Portal Application'),
+        help=_('Portal application this document belongs to')
     )
     admission_file_id = fields.Many2one(
         'acmst.admission.file',
-        string='Admission File',
+        string=_('Admission File'),
         help='Admission file this document belongs to'
     )
 

@@ -19,27 +19,27 @@ class AcmstBatchCreationWizard(models.TransientModel):
     # Program Selection
     program_id = fields.Many2one(
         'acmst.program',
-        string='Program',
+        string=_('Program'),
         required=True,
-        help="Program to create batches for"
+        help=_("Program to create batches for")
     )
     college_id = fields.Many2one(
         related='program_id.college_id',
-        string='College',
+        string=_('College'),
         readonly=True
     )
     university_id = fields.Many2one(
         related='program_id.university_id',
-        string='University',
+        string=_('University'),
         readonly=True
     )
     
     # Academic Year Selection
     academic_year_id = fields.Many2one(
         'acmst.academic.year',
-        string='Academic Year',
+        string=_('Academic Year'),
         required=True,
-        help="Academic year for the batches"
+        help=_("Academic year for the batches")
     )
     
     # Batch Configuration

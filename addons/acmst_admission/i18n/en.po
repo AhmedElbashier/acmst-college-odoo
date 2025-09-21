@@ -96,6 +96,91 @@ msgid "Phone"
 msgstr "Phone"
 
 #. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__guardian_name
+msgid "Guardian Name"
+msgstr "Guardian Name"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Father"
+msgstr "Father"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Mother"
+msgstr "Mother"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Brother"
+msgstr "Brother"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Sister"
+msgstr "Sister"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Uncle"
+msgstr "Uncle"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Aunt"
+msgstr "Aunt"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Grandfather"
+msgstr "Grandfather"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Grandmother"
+msgstr "Grandmother"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Legal Guardian"
+msgstr "Legal Guardian"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Other"
+msgstr "Other"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__relationship
+msgid "Relationship"
+msgstr "Relationship"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__email
+msgid "Email"
+msgstr "Email"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__is_default
+msgid "Default Guardian"
+msgstr "Default Guardian"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__is_active
+msgid "Active"
+msgstr "Active"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__portal_application_id
+msgid "Portal Application"
+msgstr "Portal Application"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__admission_file_id
+msgid "Admission File"
+msgstr "Admission File"
+
+#. module: acmst_admission
 #: model:ir.model.fields,field_description:acmst_admission.field_acmst_admission_file__nationality
 msgid "Nationality"
 msgstr "Nationality"

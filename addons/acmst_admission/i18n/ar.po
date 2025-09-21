@@ -96,6 +96,91 @@ msgid "Phone"
 msgstr "الهاتف"
 
 #. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__guardian_name
+msgid "Guardian Name"
+msgstr "اسم الوصي"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Father"
+msgstr "الأب"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Mother"
+msgstr "الأم"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Brother"
+msgstr "الأخ"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Sister"
+msgstr "الأخت"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Uncle"
+msgstr "العم"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Aunt"
+msgstr "العمة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Grandfather"
+msgstr "الجد"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Grandmother"
+msgstr "الجدة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Legal Guardian"
+msgstr "الوصي القانوني"
+
+#. module: acmst_admission
+#: model:ir.model.fields,selection:acmst_admission.field_acmst_guardian__relationship
+msgid "Other"
+msgstr "أخرى"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__relationship
+msgid "Relationship"
+msgstr "القرابة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__email
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__is_default
+msgid "Default Guardian"
+msgstr "الوصي الافتراضي"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__is_active
+msgid "Active"
+msgstr "نشط"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__portal_application_id
+msgid "Portal Application"
+msgstr "طلب البوابة"
+
+#. module: acmst_admission
+#: model:ir.model.fields,field_description:acmst_admission.field_acmst_guardian__admission_file_id
+msgid "Admission File"
+msgstr "ملف القبول"
+
+#. module: acmst_admission
 #: model:ir.model.fields,selection:acmst_admission.field_acmst_admission_file__state
 msgid "New Application"
 msgstr "طلب جديد"
