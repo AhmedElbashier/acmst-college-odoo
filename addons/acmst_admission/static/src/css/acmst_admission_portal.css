@@ -1413,6 +1413,143 @@ textarea.form-control:focus {
     100% { transform: translateX(100%); }
 }
 
+/* Notification Preferences */
+.acmst-card-body {
+    padding: 20px;
+}
+
+.form-check {
+    margin-bottom: 12px;
+}
+
+.form-check-input {
+    margin-top: 0.25rem;
+}
+
+.form-check-label {
+    font-weight: 500;
+    color: #495057;
+    margin-left: 8px;
+}
+
+.form-check-input:checked + .form-check-label {
+    color: #1976d2;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+}
+
+/* Notification Settings Sections */
+.acmst-card-body h5 {
+    color: #1976d2;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.acmst-card-body .form-select {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.acmst-card-body .form-select:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+}
+
+/* Notification Test Button */
+#test-notifications {
+    background: linear-gradient(45deg, #17a2b8, #20c997);
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+#test-notifications:hover {
+    background: linear-gradient(45deg, #138496, #1ea085);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+}
+
+/* Enhanced Form Styling for Preferences */
+.acmst-card-body .row {
+    margin-bottom: 20px;
+}
+
+.acmst-card-body .row:last-child {
+    margin-bottom: 0;
+}
+
+/* Notification Status Indicators */
+.notification-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.notification-status.enabled {
+    background: #d4edda;
+    color: #155724;
+}
+
+.notification-status.disabled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Notification Test Results */
+.notification-test-result {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    display: none;
+}
+
+.notification-test-result.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.notification-test-result.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Mobile Responsive for Notification Preferences */
+@media (max-width: 768px) {
+    .acmst-card-body {
+        padding: 15px;
+    }
+    
+    .acmst-card-body .row {
+        margin-bottom: 15px;
+    }
+    
+    .acmst-card-body h5 {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+    
+    .form-check {
+        margin-bottom: 10px;
+    }
+    
+    .form-check-label {
+        font-size: 14px;
+    }
+}
+
 /* Loading States */
 .wizard-loading {
     position: absolute;
@@ -1628,6 +1765,150 @@ textarea.form-control:focus {
     transition: width 0.5s ease;
 }
 
+/* Application Meta Information */
+.acmst-application-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.meta-item i {
+    color: #1976d2;
+    width: 16px;
+}
+
+/* Progress Summary */
+.acmst-progress-summary {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.progress-label {
+    font-size: 12px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.progress-percentage {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1976d2;
+}
+
+.progress-bar-mini {
+    width: 100%;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+/* Live Status Updates */
+.acmst-live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #28a745;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    background: #28a745;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.acmst-status-updates {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.status-update-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.status-update-item:last-child {
+    border-bottom: none;
+}
+
+.update-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e3f2fd;
+    color: #1976d2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.update-content {
+    flex: 1;
+}
+
+.update-title {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.update-message {
+    color: #6c757d;
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 4px;
+}
+
+.update-time {
+    font-size: 11px;
+    color: #adb5bd;
+}
+
+/* Timeline Controls */
+.acmst-timeline-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 /* Timeline Styles */
 .acmst-timeline {
     position: relative;
@@ -1714,6 +1995,37 @@ textarea.form-control:focus {
 
 .timeline-content small {
     font-size: 12px;
+}
+
+.timeline-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.timeline-duration {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.timeline-item.completed .timeline-duration {
+    background: #d4edda;
+    color: #155724;
+}
+
+.timeline-item.active .timeline-duration {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.timeline-item .timeline-duration {
+    background: #f8f9fa;
+    color: #6c757d;
 }
 
 /* Information Sections */

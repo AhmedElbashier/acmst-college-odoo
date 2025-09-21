@@ -1008,6 +1008,7 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
         start: function () {
             this._super.apply(this, arguments);
             this._loadApplicationStatus();
+            this._setupRealTimeUpdates();
         },
 
         _loadApplicationStatus: function () {
@@ -1082,6 +1083,96 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
         _showError: function (message) {
             var $error = $('<div class="acmst-alert acmst-alert-danger">' + message + '</div>');
             this.$el.prepend($error);
+        },
+
+        _setupRealTimeUpdates: function () {
+            var self = this;
+            
+            // Set up periodic status updates
+            this.statusUpdateInterval = setInterval(function() {
+                self._checkStatusUpdates();
+            }, 30000); // Check every 30 seconds
+        },
+
+        _checkStatusUpdates: function () {
+            var self = this;
+            var applicationId = this.$el.data('application-id');
+            
+            if (!applicationId) return;
+            
+            ajax.jsonRpc('/admission/status/check', 'call', {
+                application_id: applicationId
+            }).then(function(result) {
+                if (result.success) {
+                    self._updateStatusData(result.data);
+                }
+            }).catch(function(error) {
+                console.error('Error checking status updates:', error);
+            });
+        },
+
+        _updateStatusData: function (data) {
+            // Update progress percentage
+            if (data.progress_percentage !== undefined) {
+                this.$('.progress-percentage').text(data.progress_percentage + '%');
+                this.$('.progress-fill').css('width', data.progress_percentage + '%');
+            }
+            
+            // Update status badge
+            if (data.state) {
+                this.$('.acmst-status').removeClass().addClass('acmst-status acmst-status-' + data.state).text(data.state);
+            }
+            
+            // Add status update to live updates
+            if (data.status_update) {
+                this._addStatusUpdate(data.status_update);
+            }
+        },
+
+        _addStatusUpdate: function (update) {
+            var $updatesContainer = this.$('#status-updates');
+            if (!$updatesContainer.length) return;
+            
+            var $updateItem = $('<div class="status-update-item">' +
+                '<div class="update-icon">' +
+                    '<i class="fa fa-' + (update.icon || 'info-circle') + '"></i>' +
+                '</div>' +
+                '<div class="update-content">' +
+                    '<div class="update-title">' + update.title + '</div>' +
+                    '<div class="update-message">' + update.message + '</div>' +
+                    '<div class="update-time">' + update.timestamp + '</div>' +
+                '</div>' +
+            '</div>');
+            
+            $updatesContainer.prepend($updateItem);
+            
+            // Remove old updates if too many
+            var $allUpdates = $updatesContainer.find('.status-update-item');
+            if ($allUpdates.length > 10) {
+                $allUpdates.slice(10).remove();
+            }
+            
+            // Show notification if it's important
+            if (update.important) {
+                this._getNotificationSystem().showNotification(
+                    update.type || 'info',
+                    update.title,
+                    update.message,
+                    update.icon || 'info-circle'
+                );
+            }
+        },
+
+        _getNotificationSystem: function () {
+            return publicWidget.registry.acmstNotificationSystem.prototype;
+        },
+
+        destroy: function () {
+            // Clean up intervals
+            if (this.statusUpdateInterval) {
+                clearInterval(this.statusUpdateInterval);
+            }
+            this._super.apply(this, arguments);
         }
     });
 
@@ -1357,6 +1448,99 @@ odoo.define('acmst_admission.portal', ['web.public.widget', 'web.ajax', 'web.cor
             } else if (percentage >= 50) {
                 this.showNotification('info', 'Good Progress', message + '. Keep going!', 'thumbs-up');
             }
+        },
+
+        // Notification preferences management
+        setupNotificationPreferences: function () {
+            var self = this;
+            
+            // Load saved preferences
+            this._loadNotificationPreferences();
+            
+            // Handle form submission
+            $('#notification-preferences-form').on('submit', function(e) {
+                e.preventDefault();
+                self._saveNotificationPreferences();
+            });
+            
+            // Handle test notifications
+            $('#test-notifications').on('click', function(e) {
+                e.preventDefault();
+                self._testNotifications();
+            });
+        },
+
+        _loadNotificationPreferences: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/notifications/preferences', 'call')
+                .then(function(result) {
+                    if (result.success) {
+                        self._populatePreferencesForm(result.preferences);
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error loading notification preferences:', error);
+                });
+        },
+
+        _populatePreferencesForm: function (preferences) {
+            // Populate form with saved preferences
+            Object.keys(preferences).forEach(function(key) {
+                var $element = $('#' + key);
+                if ($element.length) {
+                    if ($element.is(':checkbox')) {
+                        $element.prop('checked', preferences[key]);
+                    } else {
+                        $element.val(preferences[key]);
+                    }
+                }
+            });
+        },
+
+        _saveNotificationPreferences: function () {
+            var self = this;
+            var preferences = {
+                notify_app_status: $('#notify-app-status').is(':checked'),
+                notify_documents: $('#notify-documents').is(':checked'),
+                notify_deadlines: $('#notify-deadlines').is(':checked'),
+                email_status: $('#email-status').is(':checked'),
+                email_reminders: $('#email-reminders').is(':checked'),
+                email_weekly: $('#email-weekly').is(':checked'),
+                sms_urgent: $('#sms-urgent').is(':checked'),
+                sms_approval: $('#sms-approval').is(':checked'),
+                notification_frequency: $('#notification-frequency').val()
+            };
+            
+            ajax.jsonRpc('/admission/notifications/preferences/save', 'call', {
+                preferences: preferences
+            }).then(function(result) {
+                if (result.success) {
+                    self.showNotification('success', 'Preferences Saved', 'Your notification preferences have been updated successfully.', 'check-circle');
+                } else {
+                    self.showNotification('error', 'Save Failed', 'There was an error saving your preferences. Please try again.', 'exclamation-triangle');
+                }
+            }).catch(function(error) {
+                console.error('Error saving notification preferences:', error);
+                self.showNotification('error', 'Save Failed', 'There was an error saving your preferences. Please try again.', 'exclamation-triangle');
+            });
+        },
+
+        _testNotifications: function () {
+            var self = this;
+            
+            ajax.jsonRpc('/admission/notifications/test', 'call')
+                .then(function(result) {
+                    if (result.success) {
+                        self.showNotification('success', 'Test Sent', 'Test notifications have been sent to your registered email and phone.', 'paper-plane');
+                    } else {
+                        self.showNotification('error', 'Test Failed', 'There was an error sending test notifications. Please check your contact information.', 'exclamation-triangle');
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error sending test notifications:', error);
+                    self.showNotification('error', 'Test Failed', 'There was an error sending test notifications. Please try again later.', 'exclamation-triangle');
+                });
         }
     });
 

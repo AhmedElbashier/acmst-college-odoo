@@ -570,10 +570,33 @@
                                 <div class="col-md-8">
                                     <h1><i class="fa fa-file-alt"></i> Application Details</h1>
                                     <p class="mb-0">Application Number: <strong t-esc="application.name"/></p>
+                                    <div class="acmst-application-meta">
+                                        <span class="meta-item">
+                                            <i class="fa fa-calendar"></i>
+                                            Submitted: <strong t-esc="application.submission_date"/>
+                                        </span>
+                                        <span class="meta-item">
+                                            <i class="fa fa-clock"></i>
+                                            Last Updated: <strong t-esc="application.write_date"/>
+                                        </span>
+                                        <span class="meta-item">
+                                            <i class="fa fa-user"></i>
+                                            Program: <strong t-esc="application.program_id.name"/>
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="col-md-4 text-end">
                                     <div class="acmst-status-badge">
                                         <span class="acmst-status acmst-status-application.state" t-esc="application.state"/>
+                                    </div>
+                                    <div class="acmst-progress-summary">
+                                        <div class="progress-text">
+                                            <span class="progress-label">Overall Progress</span>
+                                            <span class="progress-percentage" t-esc="application.progress_percentage + '%'"/>
+                                        </div>
+                                        <div class="progress-bar-mini">
+                                            <div class="progress-fill" t-att-style="'width: ' + application.progress_percentage + '%'"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -582,10 +605,38 @@
                     
                     <div class="row">
                         <div class="col-md-8">
+                            <!-- Real-time Status Updates -->
+                            <div class="acmst-card">
+                                <div class="acmst-card-header">
+                                    <h3><i class="fa fa-sync-alt"></i> Real-time Status Updates</h3>
+                                    <div class="acmst-live-indicator">
+                                        <span class="live-dot"></span>
+                                        <span class="live-text">Live Updates</span>
+                                    </div>
+                                </div>
+                                <div class="acmst-status-updates" id="status-updates">
+                                    <div class="status-update-item">
+                                        <div class="update-icon">
+                                            <i class="fa fa-info-circle"></i>
+                                        </div>
+                                        <div class="update-content">
+                                            <div class="update-title">Application Status Check</div>
+                                            <div class="update-message">Your application is being processed. We'll notify you of any changes.</div>
+                                            <div class="update-time">Just now</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Application Progress Timeline -->
                             <div class="acmst-card">
                                 <div class="acmst-card-header">
                                     <h3><i class="fa fa-timeline"></i> Application Progress</h3>
+                                    <div class="acmst-timeline-controls">
+                                        <button class="btn btn-sm btn-outline-primary" id="refresh-timeline">
+                                            <i class="fa fa-refresh"></i> Refresh
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="acmst-timeline">
                                     <div class="timeline-item completed">
@@ -595,7 +646,10 @@
                                         <div class="timeline-content">
                                             <h5>Application Submitted</h5>
                                             <p>Your application has been successfully submitted</p>
-                                            <small class="text-muted" t-esc="application.submission_date"/>
+                                            <div class="timeline-meta">
+                                                <small class="text-muted" t-esc="application.submission_date"/>
+                                                <span class="timeline-duration">Completed</span>
+                                            </div>
                                         </div>
                                     </div>
                                     
@@ -606,9 +660,16 @@
                                         <div class="timeline-content">
                                             <h5>Ministry Approval</h5>
                                             <p>Waiting for ministry approval</p>
-                                            <t t-if="application.state == 'ministry_approved'">
-                                                <small class="text-success">Approved by Ministry</small>
-                                            </t>
+                                            <div class="timeline-meta">
+                                                <t t-if="application.state == 'ministry_approved'">
+                                                    <small class="text-success">Approved by Ministry</small>
+                                                    <span class="timeline-duration">Completed</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <small class="text-muted">Estimated: 3-5 business days</small>
+                                                    <span class="timeline-duration">In Progress</span>
+                                                </t>
+                                            </div>
                                         </div>
                                     </div>
                                     
@@ -619,9 +680,16 @@
                                         <div class="timeline-content">
                                             <h5>Health Check</h5>
                                             <p>Medical assessment required</p>
-                                            <t t-if="application.state == 'health_approved'">
-                                                <small class="text-success">Health check completed</small>
-                                            </t>
+                                            <div class="timeline-meta">
+                                                <t t-if="application.state == 'health_approved'">
+                                                    <small class="text-success">Health check completed</small>
+                                                    <span class="timeline-duration">Completed</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <small class="text-muted">Estimated: 1-2 business days</small>
+                                                    <span class="timeline-duration">Pending</span>
+                                                </t>
+                                            </div>
                                         </div>
                                     </div>
                                     
@@ -632,12 +700,20 @@
                                         <div class="timeline-content">
                                             <h5>Academic Review</h5>
                                             <p>Program coordinator review</p>
-                                            <t t-if="application.state == 'coordinator_approved'">
-                                                <small class="text-success">Approved by Coordinator</small>
-                                            </t>
-                                            <t t-if="application.state == 'coordinator_conditional'">
-                                                <small class="text-warning">Conditional approval</small>
-                                            </t>
+                                            <div class="timeline-meta">
+                                                <t t-if="application.state == 'coordinator_approved'">
+                                                    <small class="text-success">Approved by Coordinator</small>
+                                                    <span class="timeline-duration">Completed</span>
+                                                </t>
+                                                <t t-if="application.state == 'coordinator_conditional'">
+                                                    <small class="text-warning">Conditional approval</small>
+                                                    <span class="timeline-duration">Completed</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <small class="text-muted">Estimated: 2-3 business days</small>
+                                                    <span class="timeline-duration">In Progress</span>
+                                                </t>
+                                            </div>
                                         </div>
                                     </div>
                                     
@@ -648,9 +724,16 @@
                                         <div class="timeline-content">
                                             <h5>Final Approval</h5>
                                             <p>Admission manager final review</p>
-                                            <t t-if="application.state == 'manager_approved'">
-                                                <small class="text-success">Final approval granted</small>
-                                            </t>
+                                            <div class="timeline-meta">
+                                                <t t-if="application.state == 'manager_approved'">
+                                                    <small class="text-success">Final approval granted</small>
+                                                    <span class="timeline-duration">Completed</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <small class="text-muted">Estimated: 1-2 business days</small>
+                                                    <span class="timeline-duration">Pending</span>
+                                                </t>
+                                            </div>
                                         </div>
                                     </div>
                                     
@@ -1095,6 +1178,98 @@
             <button class="acmst-help-btn" t-att-data-help-text="helpText" t-att-data-help-title="helpTitle">
                 <i class="fa fa-question-circle"></i>
             </button>
+        </template>
+
+        <!-- Notification Preferences Template -->
+        <template id="notification_preferences" name="Notification Preferences">
+            <div class="acmst-card">
+                <div class="acmst-card-header">
+                    <h3><i class="fa fa-bell"></i> Notification Preferences</h3>
+                    <p class="text-muted">Choose how you want to be notified about your application status</p>
+                </div>
+                <div class="acmst-card-body">
+                    <form id="notification-preferences-form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>In-App Notifications</h5>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notify-app-status" checked>
+                                    <label class="form-check-label" for="notify-app-status">
+                                        Application status changes
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notify-documents" checked>
+                                    <label class="form-check-label" for="notify-documents">
+                                        Document requirements
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notify-deadlines" checked>
+                                    <label class="form-check-label" for="notify-deadlines">
+                                        Important deadlines
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Email Notifications</h5>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="email-status" checked>
+                                    <label class="form-check-label" for="email-status">
+                                        Status change emails
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="email-reminders" checked>
+                                    <label class="form-check-label" for="email-reminders">
+                                        Reminder emails
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="email-weekly" checked>
+                                    <label class="form-check-label" for="email-weekly">
+                                        Weekly summary
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h5>SMS Notifications</h5>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="sms-urgent" checked>
+                                    <label class="form-check-label" for="sms-urgent">
+                                        Urgent updates only
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="sms-approval">
+                                    <label class="form-check-label" for="sms-approval">
+                                        Final approval notification
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Notification Frequency</h5>
+                                <select class="form-select" id="notification-frequency">
+                                    <option value="immediate">Immediate</option>
+                                    <option value="hourly">Hourly digest</option>
+                                    <option value="daily" selected>Daily digest</option>
+                                    <option value="weekly">Weekly digest</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <button type="submit" class="acmst-btn acmst-btn-primary">
+                                <i class="fa fa-save"></i> Save Preferences
+                            </button>
+                            <button type="button" class="acmst-btn acmst-btn-secondary ms-2" id="test-notifications">
+                                <i class="fa fa-paper-plane"></i> Test Notifications
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </template>
 
     </data>
